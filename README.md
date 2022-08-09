@@ -16,7 +16,7 @@ User and developer [documentation of liitos](https://codes.dilettant.life/docs/l
 
 ## Bug Tracker
 
-Feature requests and bug reports are bested entered in the [todos of liitos](https://todo.sr.ht/~sthagen/liitos).
+Feature requests and bug reports are best entered in the [todos of liitos](https://todo.sr.ht/~sthagen/liitos).
 
 ## Primary Source repository
 
