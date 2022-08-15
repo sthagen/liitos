@@ -20,8 +20,12 @@ Feature requests and bug reports are best entered in the [todos of liitos](https
 
 ## Primary Source repository
 
-The primary source repository of [liitos is at sourcehut](https://git.sr.ht/~sthagen/liitos)
-a collection of tools useful for software development.
+The primary source of `liitos` lives somewhere on a mountain in Central Switzerland.
+But, we use decentralized version control (git), so any clone can become the source to everyone's benefit, no central only code.
+Anyway, the preferred public clones of `liitos` are:
+
+* [on codeberg](https://codeberg.org/sthagen/liitos) - a collaboration platform and git hosting for free and open source software, content and projects.
+* [at sourcehut](https://git.sr.ht/~sthagen/liitos) - a collection of tools useful for software development.
 
 # Status
 
