@@ -1,0 +1,11 @@
+abc:
+- mn:
+    approvals: approvals.json
+    bind: bind-mn.txt
+    changes: changes.json
+    meta: meta-mn.md
+- opq:
+    approvals: approvals.json
+    bind: bind-opq.txt
+    changes: changes.json
+    meta: meta-opq.md

@@ -1,0 +1,16 @@
+{
+  "columns": [
+    "issue",
+    "author",
+    "date",
+    "summary"
+  ],
+  "rows": [
+    [
+      "01",
+      "One Author",
+      "31.12.2024",
+      "Initial Issue"
+    ]
+  ]
+}

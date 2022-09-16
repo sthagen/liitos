@@ -1,0 +1,8 @@
+{
+  "columns": ["Approvals", "Name"],
+  "rows": [
+    ["Author", "One Author"],
+    ["Review", "One Reviewer"],
+    ["Approved", "One Approver"]
+  ]
+}
