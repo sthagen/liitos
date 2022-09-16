@@ -23,7 +23,7 @@ Verification = Tuple[bool, str]
 def load_structure(path: PathLike = 'structure.yml') -> Structure:
     """Load the structure information and content links from the YAML file per convention."""
     with open(path, 'rt', encoding=ENCODING) as handle:
-        return yaml.safe_load(handle)
+        return yaml.safe_load(handle)  # type: ignore
 
 
 def targets(structure: Structure) -> Targets:
@@ -38,7 +38,7 @@ def facets(structure: Structure) -> Facets:
 
 def assets(structure: Structure) -> Assets:
     """Map the assets to facets of targets."""
-    return {target: {f: asset for fd in cnt for f, asset in fd.items()} for target, cnt in structure.items()}
+    return {t: {f: asset for fd in cnt for f, asset in fd.items()} for t, cnt in structure.items()}  # type: ignore
 
 
 def verify_target(name: str, targets: Targets) -> Verification:
