@@ -137,3 +137,35 @@ def test_binder_link_missing():
     binder, message = gather.binder(TEST_FACET, TEST_TARGET, assets)
     assert message
     assert not binder
+
+
+def test_verify_target():
+    targets = set([TEST_TARGET])
+    predicate, message = gather.verify_target(TEST_TARGET, targets)
+    assert not message
+    assert predicate
+
+
+def test_verify_target_not():
+    targets = set([TEST_TARGET])
+    predicate, message = gather.verify_target(f'{TEST_MAKE_MISSING}{TEST_TARGET}', targets)
+    assert message == f'ERROR: target ({TEST_MAKE_MISSING}{TEST_TARGET}) not in {sorted(targets)}'
+    assert not predicate
+
+
+def test_verify_facet():
+    facets = {TEST_TARGET: set([TEST_FACET])}
+    predicate, message = gather.verify_facet(TEST_FACET, TEST_TARGET, facets)
+    assert not message
+    assert predicate
+
+
+def test_verify_facet_not():
+    facets = {TEST_TARGET: set([TEST_FACET])}
+    predicate, message = gather.verify_facet(f'{TEST_MAKE_MISSING}{TEST_FACET}', TEST_TARGET, facets)
+    expected = (
+        f'ERROR: facet ({TEST_MAKE_MISSING}{TEST_FACET})'
+        f' of target ({TEST_TARGET}) not in {sorted(facets[TEST_TARGET])}'
+    )
+    assert message == expected
+    assert not predicate
