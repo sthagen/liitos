@@ -68,6 +68,18 @@ def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
     return False, f'ERROR: keys in {sorted(KEYS_REQUIRED)} for facet ({facet}) of target ({target}) are missing'
 
 
+def verify_asset_links(facet: str, target: str, assets: Assets) -> Verification:
+    """Verify presence of asset links for facet of target yielding predicate and message (in case of failure)."""
+    predicate, message = verify_assets(facet, target, assets)
+    if not predicate:
+        return predicate, message
+    for key in KEYS_REQUIRED:
+        link = pathlib.Path(assets[target][facet][key])
+        if not link.is_file() or not link.stat().st_size:
+            return False, f'ERROR: {key} asset link ({link}) for facet ({facet}) of target ({target}) is invalid'
+    return True, ''
+
+
 def error_context(
     payload: Payload, label: str, facet: str, target: str, path: PathLike, err: Union[FileNotFoundError, KeyError]
 ) -> Tuple[Payload, str]:
