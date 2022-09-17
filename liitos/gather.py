@@ -65,7 +65,7 @@ def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
     """Verify presence of required keys for facet of target yielding predicate and message (in case of failure)."""
     if all(key in assets[target][facet] for key in KEYS_REQUIRED):
         return True, ''
-    return False, f'ERROR: Keys in  {sorted(KEYS_REQUIRED)} for facet ({facet}) of target ({target}) are missing'
+    return False, f'ERROR: keys in {sorted(KEYS_REQUIRED)} for facet ({facet}) of target ({target}) are missing'
 
 
 def error_context(
