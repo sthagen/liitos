@@ -79,7 +79,7 @@ def binder(facet: str, target: str, assets: Assets) -> Tuple[Binder, str]:
     try:
         path = pathlib.Path(assets[target][facet]['bind'])
     except KeyError as err:
-        return error_context([], 'Binder', facet, target, path, err)  # type: ignore
+        return error_context([], 'Binder', facet, target, '', err)  # type: ignore
     return load_binder(facet, target, path)
 
 
@@ -97,8 +97,17 @@ def meta(facet: str, target: str, assets: Assets) -> Tuple[Meta, str]:
     try:
         path = pathlib.Path(assets[target][facet]['meta'])
     except KeyError as err:
-        return error_context({}, 'Metadata', facet, target, path, err)  # type: ignore
+        return error_context({}, 'Metadata', facet, target, '', err)  # type: ignore
     return load_meta(facet, target, path)
+
+
+def load_approvals(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
+    """Yield the approvals for facet of target from path and message (in case of failure)."""
+    try:
+        with open(path, 'rt', encoding=ENCODING) as handle:
+            return json.load(handle), ''
+    except FileNotFoundError as err:
+        return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
 
 
 def approvals(facet: str, target: str, assets: Assets) -> Tuple[Approvals, str]:
@@ -106,12 +115,17 @@ def approvals(facet: str, target: str, assets: Assets) -> Tuple[Approvals, str]:
     try:
         path = pathlib.Path(assets[target][facet]['approvals'])
     except KeyError as err:
-        return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
+        return error_context({}, 'Approvals', facet, target, '', err)  # type: ignore
+    return load_approvals(facet, target, path)
+
+
+def load_changes(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
+    """Yield the changes for facet of target from path and message (in case of failure)."""
     try:
         with open(path, 'rt', encoding=ENCODING) as handle:
             return json.load(handle), ''
     except FileNotFoundError as err:
-        return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
+        return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
 
 
 def changes(facet: str, target: str, assets: Assets) -> Tuple[Changes, str]:
@@ -119,9 +133,5 @@ def changes(facet: str, target: str, assets: Assets) -> Tuple[Changes, str]:
     try:
         path = pathlib.Path(assets[target][facet]['changes'])
     except KeyError as err:
-        return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
-    try:
-        with open(path, 'rt', encoding=ENCODING) as handle:
-            return json.load(handle), ''
-    except FileNotFoundError as err:
-        return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
+        return error_context({}, 'Changes', facet, target, '', err)  # type: ignore
+    return load_changes(facet, target, path)

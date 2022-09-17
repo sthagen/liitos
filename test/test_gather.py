@@ -48,6 +48,15 @@ def test_changes():
     }
 
 
+def test_changes_key_missing():
+    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    assets = gather.assets(structure)
+    del assets['abc']['mn']['changes']
+    changes, message = gather.changes('mn', 'abc', assets)
+    assert message
+    assert not changes
+
+
 def test_approvals():
     structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
     assets = gather.assets(structure)
