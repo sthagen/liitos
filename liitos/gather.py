@@ -59,9 +59,9 @@ def error_context(
 ) -> Tuple[Payload, str]:
     """Provide harmonized context for the error situation as per parameters."""
     if isinstance(err, FileNotFoundError):
-        return payload, f'ERROR: {label} not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+        return payload, f'ERROR: {label} link not found at ({path}) or invalid for facet ({facet}) of target ({target})'
     if isinstance(err, KeyError):
-        return [], f'ERROR:  {label} not found in assets for facet ({facet}) of target ({target})'
+        return [], f'ERROR: {label} not found in assets for facet ({facet}) of target ({target})'
     raise NotImplementedError(f'error context not implemented for error ({err})')
 
 
@@ -78,45 +78,50 @@ def binder(facet: str, target: str, assets: Assets) -> Tuple[Binder, str]:
     """Yield the binder for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(assets[target][facet]['bind'])
-    except KeyError:
-        return [], f'ERROR: Binder link not found in assets for facet ({facet}) of target ({target})'
+    except KeyError as err:
+        return error_context([], 'Binder', facet, target, path, err)  # type: ignore
     return load_binder(facet, target, path)
+
+
+def load_meta(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
+    """Yield the metadata for facet of target from path and message (in case of failure)."""
+    try:
+        with open(path, 'rt', encoding=ENCODING) as handle:
+            return yaml.safe_load(handle), ''
+    except FileNotFoundError as err:
+        return error_context({}, 'Metadata', facet, target, path, err)  # type: ignore
 
 
 def meta(facet: str, target: str, assets: Assets) -> Tuple[Meta, str]:
     """Yield the metadata for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(assets[target][facet]['meta'])
-    except KeyError:
-        return {}, f'ERROR: Metadata link not found in assets for facet ({facet}) of target ({target})'
-    try:
-        with open(path, 'rt', encoding=ENCODING) as handle:
-            return yaml.safe_load(handle), ''
-    except FileNotFoundError:
-        return {}, f'ERROR: Metadata not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+    except KeyError as err:
+        return error_context({}, 'Metadata', facet, target, path, err)  # type: ignore
+    return load_meta(facet, target, path)
 
 
 def approvals(facet: str, target: str, assets: Assets) -> Tuple[Approvals, str]:
     """Yield the approvals for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(assets[target][facet]['approvals'])
-    except KeyError:
-        return {}, f'ERROR: Approvals link not found in assets for facet ({facet}) of target ({target})'
+    except KeyError as err:
+        return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
     try:
         with open(path, 'rt', encoding=ENCODING) as handle:
             return json.load(handle), ''
-    except FileNotFoundError:
-        return {}, f'ERROR: Approvals not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+    except FileNotFoundError as err:
+        return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
 
 
 def changes(facet: str, target: str, assets: Assets) -> Tuple[Changes, str]:
     """Yield the changes for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(assets[target][facet]['changes'])
-    except KeyError:
-        return {}, f'ERROR: Changes link not found in assets for facet ({facet}) of target ({target})'
+    except KeyError as err:
+        return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
     try:
         with open(path, 'rt', encoding=ENCODING) as handle:
             return json.load(handle), ''
-    except FileNotFoundError:
-        return {}, f'ERROR: Changes not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+    except FileNotFoundError as err:
+        return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
