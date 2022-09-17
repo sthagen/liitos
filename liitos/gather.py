@@ -25,6 +25,7 @@ KEY_APPROVALS = 'approvals'
 KEY_BIND = 'bind'
 KEY_CHANGES = 'changes'
 KEY_META = 'meta'
+KEYS_REQUIRED = (KEY_APPROVALS, KEY_BIND, KEY_CHANGES, KEY_META)
 
 
 def load_structure(path: PathLike = DEFAULT_STRUCTURE_NAME) -> Structure:
@@ -58,6 +59,13 @@ def verify_facet(name: str, target: str, facets: Facets) -> Verification:
     if name in facets[target]:
         return True, ''
     return False, f'ERROR: facet ({name}) of target ({target}) not in {sorted(facets[target])}'
+
+
+def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
+    """Verify presence of required keys for facet of target yielding predicate and message (in case of failure)."""
+    if all(key in assets[target][facet] for key in KEYS_REQUIRED):
+        return True, ''
+    return False, f'ERROR: Keys in  {sorted(KEYS_REQUIRED)} for facet ({facet}) of target ({target}) are missing'
 
 
 def error_context(
