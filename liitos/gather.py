@@ -17,6 +17,7 @@ Meta = Dict[str, str]
 Structure = Dict[str, List[Dict[str, str]]]
 Targets = Set[str]
 Facets = Dict[str, Targets]
+Payload = Union[Approvals, Binder, Changes, Meta]
 Verification = Tuple[bool, str]
 
 
@@ -53,13 +54,24 @@ def verify_facet(name: str, target: str, facets: Facets) -> Verification:
     return False, f'ERROR: facet ({name}) of target ({target}) not in {sorted(facets[target])}'
 
 
+def error_context(
+    payload: Payload, label: str, facet: str, target: str, path: PathLike, err: Union[FileNotFoundError, KeyError]
+) -> Tuple[Payload, str]:
+    """Provide harmonized context for the error situation as per parameters."""
+    if isinstance(err, FileNotFoundError):
+        return payload, f'ERROR: {label} not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+    if isinstance(err, KeyError):
+        return [], f'ERROR:  {label} not found in assets for facet ({facet}) of target ({target})'
+    raise NotImplementedError(f'error context not implemented for error ({err})')
+
+
 def load_binder(facet: str, target: str, path: PathLike) -> Tuple[Binder, str]:
     """Yield the binder for facet of target from path and message (in case of failure)."""
     try:
         with open(path, 'rt', encoding=ENCODING) as handle:
             return [line.strip() for line in handle.readlines() if line.strip()], ''
-    except FileNotFoundError:
-        return [], f'ERROR: Binder not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+    except FileNotFoundError as err:
+        return error_context([], 'Binder', facet, target, path, err)  # type: ignore
 
 
 def binder(facet: str, target: str, assets: Assets) -> Tuple[Binder, str]:
