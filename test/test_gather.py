@@ -57,6 +57,15 @@ def test_changes_key_missing():
     assert not changes
 
 
+def test_changes_link_missing():
+    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    assets = gather.assets(structure)
+    assets['abc']['mn']['changes'] = str(TEST_PREFIX / 'missing-this-file-for-changes.json')
+    changes, message = gather.changes('mn', 'abc', assets)
+    assert message
+    assert not changes
+
+
 def test_approvals():
     structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
     assets = gather.assets(structure)
