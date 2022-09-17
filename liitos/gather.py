@@ -53,17 +53,22 @@ def verify_facet(name: str, target: str, facets: Facets) -> Verification:
     return False, f'ERROR: facet ({name}) of target ({target}) not in {sorted(facets[target])}'
 
 
+def load_binder(facet: str, target: str, path: PathLike) -> Tuple[Binder, str]:
+    """Yield the binder for facet of target from path and message (in case of failure)."""
+    try:
+        with open(path, 'rt', encoding=ENCODING) as handle:
+            return [line.strip() for line in handle.readlines() if line.strip()], ''
+    except FileNotFoundError:
+        return [], f'ERROR: Binder not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+
+
 def binder(facet: str, target: str, assets: Assets) -> Tuple[Binder, str]:
     """Yield the binder for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(assets[target][facet]['bind'])
     except KeyError:
         return [], f'ERROR: Binder link not found in assets for facet ({facet}) of target ({target})'
-    try:
-        with open(path, 'rt', encoding=ENCODING) as handle:
-            return [line.strip() for line in handle.readlines() if line.strip()], ''
-    except FileNotFoundError:
-        return [], f'ERROR: Binder not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+    return load_binder(facet, target, path)
 
 
 def meta(facet: str, target: str, assets: Assets) -> Tuple[Meta, str]:
