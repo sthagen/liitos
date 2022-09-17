@@ -171,6 +171,25 @@ def test_verify_facet_not():
     assert not predicate
 
 
+def test_verify_assets():
+    assets = {**TEST_STRUCTURE}
+    predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
+    assert not message
+    assert predicate
+
+
+def test_verify_assets_not():
+    assets = {**TEST_STRUCTURE}
+    del assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND]
+    predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
+    expected = (
+        f'ERROR: keys in {sorted(gather.KEYS_REQUIRED)}'
+        f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
+    )
+    assert message == expected
+    assert not predicate
+
+
 def test_binder():
     structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
