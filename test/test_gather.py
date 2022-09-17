@@ -3,44 +3,51 @@ import pathlib
 import liitos.gather as gather
 
 TEST_PREFIX = pathlib.Path('test', 'fixtures', 'basic')
+DEFAULT_STRUCTURE_PATH = TEST_PREFIX / gather.DEFAULT_STRUCTURE_NAME
+TEST_TARGET = 'abc'
+TEST_FACET = 'mn'
+TEST_STRUCTURE = {
+    TEST_TARGET: {
+        TEST_FACET: {
+            gather.KEY_APPROVALS: 'approvals.json',
+            gather.KEY_BIND: 'bind-mn.txt',
+            gather.KEY_CHANGES: 'changes.json',
+            gather.KEY_META: 'meta-mn.md',
+        }
+    }
+}
+TEST_MAKE_MISSING = 'missing-this-file-for-'
 
 
 def test_load_structure():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
-    assert 'abc' in structure
-    assert {
-        'mn': {'approvals': 'approvals.json', 'bind': 'bind-mn.txt', 'changes': 'changes.json', 'meta': 'meta-mn.md'}
-    } in structure['abc']
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
+    assert TEST_TARGET in structure
+    assert TEST_STRUCTURE[TEST_TARGET] in structure[TEST_TARGET]
 
 
 def test_targets():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     targets = gather.targets(structure)
-    assert targets == set(['abc'])
+    assert targets == set([TEST_TARGET])
 
 
 def test_facets():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     facets = gather.facets(structure)
-    assert facets == {'abc': {'opq', 'mn'}}
+    assert facets == {TEST_TARGET: {'opq', TEST_FACET}}
 
 
 def test_assets():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
-    assert assets['abc']['mn'] == {
-        'approvals': 'approvals.json',
-        'bind': 'bind-mn.txt',
-        'changes': 'changes.json',
-        'meta': 'meta-mn.md',
-    }
+    assert assets[TEST_TARGET][TEST_FACET] == TEST_STRUCTURE[TEST_TARGET][TEST_FACET]
 
 
 def test_changes():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
-    assets['abc']['mn']['changes'] = str(TEST_PREFIX / 'changes.json')
-    changes, message = gather.changes('mn', 'abc', assets)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_CHANGES] = str(TEST_PREFIX / 'changes.json')
+    changes, message = gather.changes(TEST_FACET, TEST_TARGET, assets)
     assert not message
     assert changes == {
         'columns': ['issue', 'author', 'date', 'summary'],
@@ -49,28 +56,28 @@ def test_changes():
 
 
 def test_changes_key_missing():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
-    del assets['abc']['mn']['changes']
-    changes, message = gather.changes('mn', 'abc', assets)
+    del assets[TEST_TARGET][TEST_FACET][gather.KEY_CHANGES]
+    changes, message = gather.changes(TEST_FACET, TEST_TARGET, assets)
     assert message
     assert not changes
 
 
 def test_changes_link_missing():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
-    assets['abc']['mn']['changes'] = str(TEST_PREFIX / 'missing-this-file-for-changes.json')
-    changes, message = gather.changes('mn', 'abc', assets)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_CHANGES] = str(TEST_PREFIX / f'{TEST_MAKE_MISSING}changes.json')
+    changes, message = gather.changes(TEST_FACET, TEST_TARGET, assets)
     assert message
     assert not changes
 
 
 def test_approvals():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
-    assets['abc']['mn']['approvals'] = str(TEST_PREFIX / 'approvals.json')
-    approvals, message = gather.approvals('mn', 'abc', assets)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_APPROVALS] = str(TEST_PREFIX / 'approvals.json')
+    approvals, message = gather.approvals(TEST_FACET, TEST_TARGET, assets)
     assert not message
     assert approvals == {
         'columns': ['Approvals', 'Name'],
@@ -79,18 +86,54 @@ def test_approvals():
 
 
 def test_approvals_key_missing():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
-    del assets['abc']['mn']['approvals']
-    approvals, message = gather.approvals('mn', 'abc', assets)
+    del assets[TEST_TARGET][TEST_FACET][gather.KEY_APPROVALS]
+    approvals, message = gather.approvals(TEST_FACET, TEST_TARGET, assets)
     assert message
     assert not approvals
 
 
 def test_approvals_link_missing():
-    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     assets = gather.assets(structure)
-    assets['abc']['mn']['approvals'] = str(TEST_PREFIX / 'missing-this-file-for-approvals.json')
-    approvals, message = gather.approvals('mn', 'abc', assets)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_APPROVALS] = str(TEST_PREFIX / f'{TEST_MAKE_MISSING}approvals.json')
+    approvals, message = gather.approvals(TEST_FACET, TEST_TARGET, assets)
     assert message
     assert not approvals
+
+
+def test_meta_key_missing():
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
+    assets = gather.assets(structure)
+    del assets[TEST_TARGET][TEST_FACET][gather.KEY_META]
+    meta, message = gather.meta(TEST_FACET, TEST_TARGET, assets)
+    assert message
+    assert not meta
+
+
+def test_meta_link_missing():
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
+    assets = gather.assets(structure)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_META] = str(TEST_PREFIX / f'{TEST_MAKE_MISSING}meta.json')
+    meta, message = gather.meta(TEST_FACET, TEST_TARGET, assets)
+    assert message
+    assert not meta
+
+
+def test_binder_key_missing():
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
+    assets = gather.assets(structure)
+    del assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND]
+    binder, message = gather.binder(TEST_FACET, TEST_TARGET, assets)
+    assert message
+    assert not binder
+
+
+def test_binder_link_missing():
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
+    assets = gather.assets(structure)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND] = str(TEST_PREFIX / f'{TEST_MAKE_MISSING}bind-mn.txt')
+    binder, message = gather.binder(TEST_FACET, TEST_TARGET, assets)
+    assert message
+    assert not binder
