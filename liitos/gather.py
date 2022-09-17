@@ -20,8 +20,14 @@ Facets = Dict[str, Targets]
 Payload = Union[Approvals, Binder, Changes, Meta]
 Verification = Tuple[bool, str]
 
+DEFAULT_STRUCTURE_NAME = 'structure.yml'
+KEY_APPROVALS = 'approvals'
+KEY_BIND = 'bind'
+KEY_CHANGES = 'changes'
+KEY_META = 'meta'
 
-def load_structure(path: PathLike = 'structure.yml') -> Structure:
+
+def load_structure(path: PathLike = DEFAULT_STRUCTURE_NAME) -> Structure:
     """Load the structure information and content links from the YAML file per convention."""
     with open(path, 'rt', encoding=ENCODING) as handle:
         return yaml.safe_load(handle)  # type: ignore
@@ -77,7 +83,7 @@ def load_binder(facet: str, target: str, path: PathLike) -> Tuple[Binder, str]:
 def binder(facet: str, target: str, assets: Assets) -> Tuple[Binder, str]:
     """Yield the binder for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet]['bind'])
+        path = pathlib.Path(assets[target][facet][KEY_BIND])
     except KeyError as err:
         return error_context([], 'Binder', facet, target, '', err)  # type: ignore
     return load_binder(facet, target, path)
@@ -95,7 +101,7 @@ def load_meta(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
 def meta(facet: str, target: str, assets: Assets) -> Tuple[Meta, str]:
     """Yield the metadata for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet]['meta'])
+        path = pathlib.Path(assets[target][facet][KEY_META])
     except KeyError as err:
         return error_context({}, 'Metadata', facet, target, '', err)  # type: ignore
     return load_meta(facet, target, path)
@@ -113,7 +119,7 @@ def load_approvals(facet: str, target: str, path: PathLike) -> Tuple[Approvals, 
 def approvals(facet: str, target: str, assets: Assets) -> Tuple[Approvals, str]:
     """Yield the approvals for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet]['approvals'])
+        path = pathlib.Path(assets[target][facet][KEY_APPROVALS])
     except KeyError as err:
         return error_context({}, 'Approvals', facet, target, '', err)  # type: ignore
     return load_approvals(facet, target, path)
@@ -131,7 +137,7 @@ def load_changes(facet: str, target: str, path: PathLike) -> Tuple[Approvals, st
 def changes(facet: str, target: str, assets: Assets) -> Tuple[Changes, str]:
     """Yield the changes for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet]['changes'])
+        path = pathlib.Path(assets[target][facet][KEY_CHANGES])
     except KeyError as err:
         return error_context({}, 'Changes', facet, target, '', err)  # type: ignore
     return load_changes(facet, target, path)
