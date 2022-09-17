@@ -76,3 +76,21 @@ def test_approvals():
         'columns': ['Approvals', 'Name'],
         'rows': [['Author', 'One Author'], ['Review', 'One Reviewer'], ['Approved', 'One Approver']],
     }
+
+
+def test_approvals_key_missing():
+    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    assets = gather.assets(structure)
+    del assets['abc']['mn']['approvals']
+    approvals, message = gather.approvals('mn', 'abc', assets)
+    assert message
+    assert not approvals
+
+
+def test_approvals_link_missing():
+    structure = gather.load_structure(TEST_PREFIX / 'structure.yml')
+    assets = gather.assets(structure)
+    assets['abc']['mn']['approvals'] = str(TEST_PREFIX / 'missing-this-file-for-approvals.json')
+    approvals, message = gather.approvals('mn', 'abc', assets)
+    assert message
+    assert not approvals
