@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://github.com/sthagen/pilli/blob/default/sbom.json) with SHA256 checksum ([df024d52 ...](https://raw.githubusercontent.com/sthagen/pilli/default/sbom.json.sha256 "sha256:df024d52a44860be6687a63335abb924c4708e3d54176057acf2c0302a839f28")).
-<!--[[[end]]] (checksum: 9c33f17a381f41cc2d1d1c9a5d198e8f)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://github.com/sthagen/pilli/blob/default/sbom.json) with SHA256 checksum ([30b8a058 ...](https://raw.githubusercontent.com/sthagen/pilli/default/sbom.json.sha256 "sha256:30b8a0585b8f192c5cc61700211cbde44cc98a65c8e2005505f7dbe5db24a44c")).
+<!--[[[end]]] (checksum: 517bfafee7af76ea306f0cb917b39e2b)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -12,8 +12,9 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 <!--[[[fill direct_dependencies_table()]]]-->
 | Name                                       | Version                                        | License     | Author            | Description (from packaging data)                                  |
 |:-------------------------------------------|:-----------------------------------------------|:------------|:------------------|:-------------------------------------------------------------------|
-| [typer](https://github.com/tiangolo/typer) | [0.4.2](https://pypi.org/project/typer/0.4.2/) | MIT License | Sebastián Ramírez | Typer, build great CLIs. Easy to code. Based on Python type hints. |
-<!--[[[end]]] (checksum: 5ac75a28e0476b9a0208aa71188fb159)-->
+| [PyYAML](https://pyyaml.org/)              | [6.0](https://pypi.org/project/PyYAML/6.0/)    | MIT License | Kirill Simonov    | YAML parser and emitter for Python                                 |
+| [typer](https://github.com/tiangolo/typer) | [0.6.1](https://pypi.org/project/typer/0.6.1/) | MIT License | Sebastián Ramírez | Typer, build great CLIs. Easy to code. Based on Python type hints. |
+<!--[[[end]]] (checksum: 2cbd9167abfa69505798af7ad0916e5c)-->
 
 ### Indirect Dependencies
 
@@ -37,7 +38,8 @@ Base graphviz file in dot format: [Trees of the direct dependencies](package-dep
 
 <!--[[[fill dependency_tree_console_text()]]]-->
 ````console
-typer==0.4.2
+PyYAML==6.0
+typer==0.6.1
   - click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
 ````
-<!--[[[end]]] (checksum: 8d01c79cc883a6902d63bfd83f452885)-->
+<!--[[[end]]] (checksum: 02796995333dbf7df09e445adae7be69)-->

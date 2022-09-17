@@ -1,9 +1,16 @@
 [
     {
+        "key": "pyyaml",
+        "package_name": "PyYAML",
+        "installed_version": "6.0",
+        "required_version": "6.0",
+        "dependencies": []
+    },
+    {
         "key": "typer",
         "package_name": "typer",
-        "installed_version": "0.4.2",
-        "required_version": "0.4.2",
+        "installed_version": "0.6.1",
+        "required_version": "0.6.1",
         "dependencies": [
             {
                 "key": "click",
