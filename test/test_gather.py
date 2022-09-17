@@ -1,3 +1,5 @@
+import copy
+import os
 import pathlib
 
 import liitos.gather as gather
@@ -172,19 +174,59 @@ def test_verify_facet_not():
 
 
 def test_verify_assets():
-    assets = {**TEST_STRUCTURE}
+    assets = copy.deepcopy(TEST_STRUCTURE)
     predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
     assert not message
     assert predicate
 
 
 def test_verify_assets_not():
-    assets = {**TEST_STRUCTURE}
+    assets = copy.deepcopy(TEST_STRUCTURE)
     del assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND]
     predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
     expected = (
         f'ERROR: keys in {sorted(gather.KEYS_REQUIRED)}'
         f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
+    )
+    assert message == expected
+    assert not predicate
+
+
+def test_verify_asset_links():
+    assets = copy.deepcopy(TEST_STRUCTURE)
+    ole_place = pathlib.Path.cwd()
+    os.chdir(TEST_PREFIX)
+    predicate, message = gather.verify_asset_links(TEST_FACET, TEST_TARGET, assets)
+    os.chdir(ole_place)
+    assert not message
+    assert predicate
+
+
+def test_verify_asset_links_no_key():
+    assets = copy.deepcopy(TEST_STRUCTURE)
+    del assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND]
+    ole_place = pathlib.Path.cwd()
+    os.chdir(TEST_PREFIX)
+    predicate, message = gather.verify_asset_links(TEST_FACET, TEST_TARGET, assets)
+    os.chdir(ole_place)
+    expected = (
+        f'ERROR: keys in {sorted(gather.KEYS_REQUIRED)}'
+        f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
+    )
+    assert message == expected
+    assert not predicate
+
+
+def test_verify_asset_links_no_link():
+    assets = copy.deepcopy(TEST_STRUCTURE)
+    bad_link_value = f'{TEST_MAKE_MISSING}bind-{TEST_FACET}.txt'
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND] = bad_link_value
+    ole_place = pathlib.Path.cwd()
+    os.chdir(TEST_PREFIX)
+    predicate, message = gather.verify_asset_links(TEST_FACET, TEST_TARGET, assets)
+    os.chdir(ole_place)
+    expected = (
+        f'ERROR: bind asset link ({bad_link_value})' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
     )
     assert message == expected
     assert not predicate
