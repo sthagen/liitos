@@ -1,6 +1,9 @@
 """Gather the structure and discover the content."""
+import argparse
 import json
+import os
 import pathlib
+import sys
 from typing import Dict, List, Set, Tuple, Union
 
 import yaml
@@ -181,3 +184,32 @@ def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
         if not asset:
             return False, f'ERROR: {key} asset for facet ({facet}) of target ({target}) is invalid'
     return True, ''
+
+
+def verify(options: argparse.Namespace) -> int:
+    """Drive the verification."""
+    doc_root = pathlib.Path(options.doc_root)
+    os.chdir(doc_root)
+    facet = options.facet
+    target = options.target
+    structure = load_structure(options.structure)
+    target_set = targets(structure)
+    facet_map = facets(structure)
+    asset_map = assets(structure)
+
+    predicate, message = verify_target(target, target_set)
+    if not predicate:
+        print(message, file=sys.stderr)
+        return 1
+
+    predicate, message = verify_facet(facet, target, facet_map)
+    if not predicate:
+        print(message, file=sys.stderr)
+        return 1
+
+    predicate, message = verify_assets(facet, target, asset_map)
+    if not predicate:
+        print(message, file=sys.stderr)
+        return 1
+
+    return 0
