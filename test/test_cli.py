@@ -1,3 +1,5 @@
+import logging
+import os
 import pathlib
 
 import pytest
@@ -89,4 +91,15 @@ def test_main_empty(capsys):
     assert not code
     out, err = capsys.readouterr()
     assert 'Root of the document tree to visit.' in out
+    assert not err
+
+
+def test_main(capsys, caplog):
+    ole_wd = pathlib.Path.cwd()
+    with caplog.at_level(logging.INFO):
+        assert cli.main([f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc']) == 0
+    os.chdir(ole_wd)
+    assert 'Successful verification' in caplog.text
+    out, err = capsys.readouterr()
+    assert not out
     assert not err
