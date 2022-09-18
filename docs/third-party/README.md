@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://github.com/sthagen/pilli/blob/default/sbom.json) with SHA256 checksum ([30b8a058 ...](https://raw.githubusercontent.com/sthagen/pilli/default/sbom.json.sha256 "sha256:30b8a0585b8f192c5cc61700211cbde44cc98a65c8e2005505f7dbe5db24a44c")).
-<!--[[[end]]] (checksum: 517bfafee7af76ea306f0cb917b39e2b)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://github.com/sthagen/pilli/blob/default/sbom.json) with SHA256 checksum ([467aa8de ...](https://raw.githubusercontent.com/sthagen/pilli/default/sbom.json.sha256 "sha256:467aa8deb18f5e6126d2c7269725bde153222a5d9fa9ac33df089b05351bcbea")).
+<!--[[[end]]] (checksum: d7b39eb1e253c5946845b0bbc3e6401c)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
