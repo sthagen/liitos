@@ -116,3 +116,15 @@ def test_main_wrong_target(capsys, caplog):
     out, err = capsys.readouterr()
     assert not out
     assert not err
+
+
+def test_main_wrong_facet(capsys, caplog):
+    ole_wd = pathlib.Path.cwd()
+    with caplog.at_level(logging.ERROR):
+        code = cli.main([f'{TEST_PREFIX}', '-f', 'no-facet', '-t', 'abc'])
+    os.chdir(ole_wd)
+    assert code == 1
+    assert 'facet (no-facet) of target (abc) not in' in caplog.text
+    out, err = capsys.readouterr()
+    assert not out
+    assert not err
