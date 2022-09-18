@@ -23,12 +23,47 @@ TEST_MAKE_MISSING = 'missing-this-file-for-'
 
 
 def test_parse_request(capsys):
+    options = cli.parse_request(['-f', 'mn', '-t', 'abc'])
+    assert options.doc_root_pos == ''  # type: ignore
+    assert options.doc_root == str(pathlib.Path.cwd())  # type: ignore
+    out, err = capsys.readouterr()
+    assert not out
+    assert not err
+
+def test_parse_request_doc_root_option(capsys):
     options = cli.parse_request(['-d', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
     assert options.doc_root_pos == ''  # type: ignore
     assert options.doc_root == f'{TEST_PREFIX}'  # type: ignore
     out, err = capsys.readouterr()
     assert not out
     assert not err
+
+
+def test_parse_request_pos(capsys):
+    options = cli.parse_request([f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
+    assert options.doc_root_pos == f'{TEST_PREFIX}'  # type: ignore
+    assert options.doc_root == options.doc_root_pos  # type: ignore
+    out, err = capsys.readouterr()
+    assert not out
+    assert not err
+
+
+def test_parse_request_pos_doc_root_not_present(capsys):
+    with pytest.raises(SystemExit) as err:
+        cli.parse_request([f'{TEST_MAKE_MISSING}{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
+    assert err.value.code == 2
+    out, err = capsys.readouterr()
+    assert not out
+    assert f'liitos: error: requested tree root at ({TEST_MAKE_MISSING}{TEST_PREFIX}) does not exist' in err
+
+
+def test_parse_request_pos_doc_root_no_folder(capsys):
+    with pytest.raises(SystemExit) as err:
+        cli.parse_request([f'{TEST_PREFIX}/{gather.DEFAULT_STRUCTURE_NAME}', '-f', 'mn', '-t', 'abc'])
+    assert err.value.code == 2
+    out, err = capsys.readouterr()
+    assert not out
+    assert f'liitos: error: requested tree root at ({TEST_PREFIX}/{gather.DEFAULT_STRUCTURE_NAME}) is not a folder' in err
 
 
 def test_parse_request_help(capsys):

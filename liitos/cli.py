@@ -36,7 +36,7 @@ def parse_request(argv: List[str]) -> Union[int, argparse.Namespace]:
         required=False,
     )
     parser.add_argument(
-        'doc_root_pos', nargs='?', default='', help='Root of the document tree to visit. Optional (default: PWD)'
+        'doc_root_pos', nargs='?', default='', help='Root of the document tree to visit. Optional\n(default: empty for PWD)'
     )
     parser.add_argument(
         '--structure',
