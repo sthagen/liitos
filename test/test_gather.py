@@ -284,7 +284,20 @@ def test_verify_assets_no_link():
     predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
     os.chdir(ole_place)
     expected = (
-        f'ERROR: bind asset link ({bad_link_value})' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
+        f'ERROR: bind asset link ({bad_link_value}) for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
     )
+    assert message == expected
+    assert not predicate
+
+
+def test_verify_assets_empty_changes():
+    assets = copy.deepcopy(TEST_STRUCTURE)
+    link_value_to_bad_content = 'no-changes.json'
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_CHANGES] = link_value_to_bad_content
+    ole_place = pathlib.Path.cwd()
+    os.chdir(TEST_PREFIX)
+    predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
+    os.chdir(ole_place)
+    expected = f'ERROR: changes asset for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
     assert message == expected
     assert not predicate
