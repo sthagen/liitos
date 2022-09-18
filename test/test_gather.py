@@ -141,6 +141,24 @@ def test_binder_link_missing():
     assert not binder
 
 
+def test_binder():
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
+    assets = gather.assets(structure)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND] = str(TEST_PREFIX / f'bind-{TEST_FACET}.txt')
+    binder, message = gather.binder(TEST_FACET, TEST_TARGET, assets)
+    assert not message
+    assert binder == ['head.md', 'body.md']
+
+
+def test_meta():
+    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
+    assets = gather.assets(structure)
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_META] = str(TEST_PREFIX / f'meta-{TEST_FACET}.md')
+    meta, message = gather.meta(TEST_FACET, TEST_TARGET, assets)
+    assert not message
+    assert meta == {'setting': 'value'}
+
+
 def test_verify_target():
     targets = set([TEST_TARGET])
     predicate, message = gather.verify_target(TEST_TARGET, targets)
@@ -232,19 +250,11 @@ def test_verify_asset_links_no_link():
     assert not predicate
 
 
-def test_binder():
-    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
-    assets = gather.assets(structure)
-    assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND] = str(TEST_PREFIX / f'bind-{TEST_FACET}.txt')
-    binder, message = gather.binder(TEST_FACET, TEST_TARGET, assets)
+def test_verify_assetss():
+    assets = copy.deepcopy(TEST_STRUCTURE)
+    ole_place = pathlib.Path.cwd()
+    os.chdir(TEST_PREFIX)
+    predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
+    os.chdir(ole_place)
     assert not message
-    assert binder == ['head.md', 'body.md']
-
-
-def test_meta():
-    structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
-    assets = gather.assets(structure)
-    assets[TEST_TARGET][TEST_FACET][gather.KEY_META] = str(TEST_PREFIX / f'meta-{TEST_FACET}.md')
-    meta, message = gather.meta(TEST_FACET, TEST_TARGET, assets)
-    assert not message
-    assert meta == {'setting': 'value'}
+    assert predicate

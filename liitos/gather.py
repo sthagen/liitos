@@ -61,25 +61,6 @@ def verify_facet(name: str, target: str, facets: Facets) -> Verification:
     return False, f'ERROR: facet ({name}) of target ({target}) not in {sorted(facets[target])}'
 
 
-def verify_asset_keys(facet: str, target: str, assets: Assets) -> Verification:
-    """Verify presence of required keys for facet of target yielding predicate and message (in case of failure)."""
-    if all(key in assets[target][facet] for key in KEYS_REQUIRED):
-        return True, ''
-    return False, f'ERROR: keys in {sorted(KEYS_REQUIRED)} for facet ({facet}) of target ({target}) are missing'
-
-
-def verify_asset_links(facet: str, target: str, assets: Assets) -> Verification:
-    """Verify presence of asset links for facet of target yielding predicate and message (in case of failure)."""
-    predicate, message = verify_asset_keys(facet, target, assets)
-    if not predicate:
-        return predicate, message
-    for key in KEYS_REQUIRED:
-        link = pathlib.Path(assets[target][facet][key])
-        if not link.is_file() or not link.stat().st_size:
-            return False, f'ERROR: {key} asset link ({link}) for facet ({facet}) of target ({target}) is invalid'
-    return True, ''
-
-
 def error_context(
     payload: Payload, label: str, facet: str, target: str, path: PathLike, err: Union[FileNotFoundError, KeyError]
 ) -> Tuple[Payload, str]:
@@ -161,3 +142,42 @@ def changes(facet: str, target: str, assets: Assets) -> Tuple[Changes, str]:
     except KeyError as err:
         return error_context({}, 'Changes', facet, target, '', err)  # type: ignore
     return load_changes(facet, target, path)
+
+
+def verify_asset_keys(facet: str, target: str, assets: Assets) -> Verification:
+    """Verify presence of required keys for facet of target yielding predicate and message (in case of failure)."""
+    if all(key in assets[target][facet] for key in KEYS_REQUIRED):
+        return True, ''
+    return False, f'ERROR: keys in {sorted(KEYS_REQUIRED)} for facet ({facet}) of target ({target}) are missing'
+
+
+def verify_asset_links(facet: str, target: str, assets: Assets) -> Verification:
+    """Verify presence of asset links for facet of target yielding predicate and message (in case of failure)."""
+    predicate, message = verify_asset_keys(facet, target, assets)
+    if not predicate:
+        return predicate, message
+    for key in KEYS_REQUIRED:
+        link = pathlib.Path(assets[target][facet][key])
+        if not link.is_file() or not link.stat().st_size:
+            return False, f'ERROR: {key} asset link ({link}) for facet ({facet}) of target ({target}) is invalid'
+    return True, ''
+
+
+ASSET_KEY_ACTION = {
+    KEY_APPROVALS: approvals,
+    KEY_BIND: binder,
+    KEY_CHANGES: changes,
+    KEY_META: meta,
+}
+
+
+def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
+    """Verify assets for facet of target yielding predicate and message (in case of failure)."""
+    predicate, message = verify_asset_links(facet, target, assets)
+    if not predicate:
+        return predicate, message
+    for key, action in ASSET_KEY_ACTION.items():
+        asset, message = action(facet, target, assets)
+        if not asset:
+            return False, f'ERROR: {key} asset for facet ({facet}) of target ({target}) is invalid'
+    return True, ''
