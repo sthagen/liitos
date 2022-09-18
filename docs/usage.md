@@ -24,7 +24,7 @@ options:
                         structure mapping file (default: structure.yml)
 ```
 
-## Validation Example
+## Verification Example
 
 All good:
 
