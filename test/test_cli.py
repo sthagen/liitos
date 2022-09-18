@@ -97,9 +97,22 @@ def test_main_empty(capsys):
 def test_main(capsys, caplog):
     ole_wd = pathlib.Path.cwd()
     with caplog.at_level(logging.INFO):
-        assert cli.main([f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc']) == 0
+        code = cli.main([f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
     os.chdir(ole_wd)
+    assert not code
     assert 'Successful verification' in caplog.text
+    out, err = capsys.readouterr()
+    assert not out
+    assert not err
+
+
+def test_main_wrong_target(capsys, caplog):
+    ole_wd = pathlib.Path.cwd()
+    with caplog.at_level(logging.ERROR):
+        code = cli.main([f'{TEST_PREFIX}', '-f', 'mn', '-t', 'no-target'])
+    os.chdir(ole_wd)
+    assert code == 1
+    assert 'target (no-target) not in' in caplog.text
     out, err = capsys.readouterr()
     assert not out
     assert not err
