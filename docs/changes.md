@@ -1,8 +1,9 @@
 # Changes
 
-## 2022.9.17
+## 2022.9.18
 
-* Added gatherer functionality
+* Added command line verification script
+* Added documentation
 * Added PyYAML dependency
 
 ## 2022.8.1
