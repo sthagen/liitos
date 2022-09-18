@@ -273,3 +273,18 @@ def test_verify_assets_no_key():
     )
     assert message == expected
     assert not predicate
+
+
+def test_verify_assets_no_link():
+    assets = copy.deepcopy(TEST_STRUCTURE)
+    bad_link_value = f'{TEST_MAKE_MISSING}bind-{TEST_FACET}.txt'
+    assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND] = bad_link_value
+    ole_place = pathlib.Path.cwd()
+    os.chdir(TEST_PREFIX)
+    predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
+    os.chdir(ole_place)
+    expected = (
+        f'ERROR: bind asset link ({bad_link_value})' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
+    )
+    assert message == expected
+    assert not predicate
