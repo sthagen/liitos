@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.4.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
-  "serialNumber": "urn:uuid:f6d527fe-db49-41e1-8bd6-e652ec58299a",
+  "serialNumber": "urn:uuid:1cf06445-70b0-4ba8-9ea0-77b0b4b5afdf",
   "version": 1,
   "metadata": {
-    "timestamp": "2022-09-17T10:26:26.104464+00:00",
+    "timestamp": "2022-09-18T12:14:09.896908+00:00",
     "tools": [
       {
         "vendor": "CycloneDX",
@@ -56,14 +56,14 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "ea5261ea-2c97-4932-8bc9-a6e36c12a502",
+      "bom-ref": "a570aade-acea-436e-8704-fd6b3dfd8f7e",
       "name": "PyYAML",
       "version": "6.0",
       "purl": "pkg:pypi/pyyaml@6.0"
     },
     {
       "type": "library",
-      "bom-ref": "244d4f07-ef63-410c-b335-3ae9cfb8d04b",
+      "bom-ref": "847b1d85-2e7a-43a1-ba45-01774a5fbc67",
       "name": "typer",
       "version": "0.6.1",
       "purl": "pkg:pypi/typer@0.6.1"
@@ -71,11 +71,11 @@
   ],
   "dependencies": [
     {
-      "ref": "ea5261ea-2c97-4932-8bc9-a6e36c12a502",
+      "ref": "a570aade-acea-436e-8704-fd6b3dfd8f7e",
       "dependsOn": []
     },
     {
-      "ref": "244d4f07-ef63-410c-b335-3ae9cfb8d04b",
+      "ref": "847b1d85-2e7a-43a1-ba45-01774a5fbc67",
       "dependsOn": []
     }
   ]
