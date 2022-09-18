@@ -1,6 +1,5 @@
 """Command line interface for splice (Finnish liitos) contributions."""
 import argparse
-import os
 import pathlib
 import sys
 from typing import List, Union
