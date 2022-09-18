@@ -258,3 +258,18 @@ def test_verify_assets():
     os.chdir(ole_place)
     assert not message
     assert predicate
+
+
+def test_verify_assets_no_key():
+    assets = copy.deepcopy(TEST_STRUCTURE)
+    del assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND]
+    ole_place = pathlib.Path.cwd()
+    os.chdir(TEST_PREFIX)
+    predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
+    os.chdir(ole_place)
+    expected = (
+        f'ERROR: keys in {sorted(gather.KEYS_REQUIRED)}'
+        f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
+    )
+    assert message == expected
+    assert not predicate
