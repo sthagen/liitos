@@ -61,7 +61,7 @@ def verify_facet(name: str, target: str, facets: Facets) -> Verification:
     return False, f'ERROR: facet ({name}) of target ({target}) not in {sorted(facets[target])}'
 
 
-def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
+def verify_asset_keys(facet: str, target: str, assets: Assets) -> Verification:
     """Verify presence of required keys for facet of target yielding predicate and message (in case of failure)."""
     if all(key in assets[target][facet] for key in KEYS_REQUIRED):
         return True, ''
@@ -70,7 +70,7 @@ def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
 
 def verify_asset_links(facet: str, target: str, assets: Assets) -> Verification:
     """Verify presence of asset links for facet of target yielding predicate and message (in case of failure)."""
-    predicate, message = verify_assets(facet, target, assets)
+    predicate, message = verify_asset_keys(facet, target, assets)
     if not predicate:
         return predicate, message
     for key in KEYS_REQUIRED:
