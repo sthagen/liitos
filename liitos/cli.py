@@ -8,7 +8,7 @@ import liitos.gather as api
 from liitos import APP_ALIAS, APP_NAME
 
 
-def parse_request(argv: List[str]) -> argparse.Namespace:
+def parse_request(argv: List[str]) -> Union[int, argparse.Namespace]:
     """DRY."""
     parser = argparse.ArgumentParser(
         prog=APP_ALIAS, description=APP_NAME, formatter_class=argparse.RawTextHelpFormatter
@@ -45,6 +45,10 @@ def parse_request(argv: List[str]) -> argparse.Namespace:
         default=api.DEFAULT_STRUCTURE_NAME,
         help=f'structure mapping file (default: {api.DEFAULT_STRUCTURE_NAME})',
     )
+    if not argv:
+        parser.print_help()
+        return 0
+
     options = parser.parse_args(argv)
 
     if not options.doc_root:
@@ -65,5 +69,7 @@ def parse_request(argv: List[str]) -> argparse.Namespace:
 def main(argv: Union[List[str], None] = None) -> int:
     """Delegate processing to functional module."""
     argv = sys.argv[1:] if argv is None else argv
-
-    return api.verify(parse_request(argv))
+    options = parse_request(argv)
+    if isinstance(options, int):
+        return 0
+    return api.verify(options)

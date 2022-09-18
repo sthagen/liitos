@@ -3,7 +3,7 @@ import datetime as dti
 import logging
 import os
 import pathlib
-from typing import List,  no_type_check
+from typing import List, no_type_check
 
 # [[[fill git_describe()]]]
 __version__ = '2022.8.1+parent.eb3805a3'
@@ -35,9 +35,9 @@ TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'
 
 
 @no_type_check
-def formatTime_RFC3339(self, record, datefmt=None):
+def formatTime_RFC3339(self, record, datefmt=None):  # noqa
     """HACK A DID ACK we could inject .astimezone() to localize ..."""
-    return dti.datetime.fromtimestamp(record.created, dti.timezone.utc).isoformat()
+    return dti.datetime.fromtimestamp(record.created, dti.timezone.utc).isoformat()  # pragma: no cover
 
 
 @no_type_check

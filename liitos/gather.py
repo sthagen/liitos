@@ -3,7 +3,6 @@ import argparse
 import json
 import os
 import pathlib
-import sys
 from typing import Dict, List, Set, Tuple, Union
 
 import yaml
@@ -194,8 +193,7 @@ def verify(options: argparse.Namespace) -> int:
     target = options.target
     structure_name = options.structure
     job_description = (
-        f'facet ({facet}) for target ({target}) with structure map ({structure_name})'
-        f' in document root ({doc_root})'
+        f'facet ({facet}) for target ({target}) with structure map ({structure_name})' f' in document root ({doc_root})'
     )
     log.info(f'Starting verification of {job_description}')
     structure = load_structure(structure_name)
@@ -221,5 +219,5 @@ def verify(options: argparse.Namespace) -> int:
         return 1
     log.info(f'- assets ({", ".join(sorted(KEYS_REQUIRED))}) for facet ({facet}) of target ({target}) OK')
 
-    log.info(f'Successful verification')
+    log.info('Successful verification')
     return 0
