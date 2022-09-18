@@ -169,7 +169,7 @@ def test_verify_target():
 def test_verify_target_not():
     targets = set([TEST_TARGET])
     predicate, message = gather.verify_target(f'{TEST_MAKE_MISSING}{TEST_TARGET}', targets)
-    assert message == f'ERROR: target ({TEST_MAKE_MISSING}{TEST_TARGET}) not in {sorted(targets)}'
+    assert message == f'target ({TEST_MAKE_MISSING}{TEST_TARGET}) not in {sorted(targets)}'
     assert not predicate
 
 
@@ -184,8 +184,7 @@ def test_verify_facet_not():
     facets = {TEST_TARGET: set([TEST_FACET])}
     predicate, message = gather.verify_facet(f'{TEST_MAKE_MISSING}{TEST_FACET}', TEST_TARGET, facets)
     expected = (
-        f'ERROR: facet ({TEST_MAKE_MISSING}{TEST_FACET})'
-        f' of target ({TEST_TARGET}) not in {sorted(facets[TEST_TARGET])}'
+        f'facet ({TEST_MAKE_MISSING}{TEST_FACET})' f' of target ({TEST_TARGET}) not in {sorted(facets[TEST_TARGET])}'
     )
     assert message == expected
     assert not predicate
@@ -203,8 +202,7 @@ def test_verify_asset_keys_not():
     del assets[TEST_TARGET][TEST_FACET][gather.KEY_BIND]
     predicate, message = gather.verify_asset_keys(TEST_FACET, TEST_TARGET, assets)
     expected = (
-        f'ERROR: keys in {sorted(gather.KEYS_REQUIRED)}'
-        f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
+        f'keys in {sorted(gather.KEYS_REQUIRED)}' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
     )
     assert message == expected
     assert not predicate
@@ -228,8 +226,7 @@ def test_verify_asset_links_no_key():
     predicate, message = gather.verify_asset_links(TEST_FACET, TEST_TARGET, assets)
     os.chdir(ole_place)
     expected = (
-        f'ERROR: keys in {sorted(gather.KEYS_REQUIRED)}'
-        f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
+        f'keys in {sorted(gather.KEYS_REQUIRED)}' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
     )
     assert message == expected
     assert not predicate
@@ -243,9 +240,7 @@ def test_verify_asset_links_no_link():
     os.chdir(TEST_PREFIX)
     predicate, message = gather.verify_asset_links(TEST_FACET, TEST_TARGET, assets)
     os.chdir(ole_place)
-    expected = (
-        f'ERROR: bind asset link ({bad_link_value})' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
-    )
+    expected = f'bind asset link ({bad_link_value})' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
     assert message == expected
     assert not predicate
 
@@ -268,8 +263,7 @@ def test_verify_assets_no_key():
     predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
     os.chdir(ole_place)
     expected = (
-        f'ERROR: keys in {sorted(gather.KEYS_REQUIRED)}'
-        f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
+        f'keys in {sorted(gather.KEYS_REQUIRED)}' f' for facet ({TEST_FACET}) of target ({TEST_TARGET}) are missing'
     )
     assert message == expected
     assert not predicate
@@ -283,9 +277,7 @@ def test_verify_assets_no_link():
     os.chdir(TEST_PREFIX)
     predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
     os.chdir(ole_place)
-    expected = (
-        f'ERROR: bind asset link ({bad_link_value}) for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
-    )
+    expected = f'bind asset link ({bad_link_value}) for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
     assert message == expected
     assert not predicate
 
@@ -298,6 +290,6 @@ def test_verify_assets_empty_changes():
     os.chdir(TEST_PREFIX)
     predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
     os.chdir(ole_place)
-    expected = f'ERROR: changes asset for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
+    expected = f'changes asset for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
     assert message == expected
     assert not predicate
