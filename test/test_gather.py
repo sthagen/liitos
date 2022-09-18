@@ -250,7 +250,7 @@ def test_verify_asset_links_no_link():
     assert not predicate
 
 
-def test_verify_assetss():
+def test_verify_assets():
     assets = copy.deepcopy(TEST_STRUCTURE)
     ole_place = pathlib.Path.cwd()
     os.chdir(TEST_PREFIX)
