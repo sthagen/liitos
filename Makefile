@@ -1,7 +1,8 @@
 .DEFAULT_GOAL := all
 isort = isort liitos test
 black = black -S -l 120 --target-version py39 liitos test
-
+mypy = mypy liitos
+pytest = pytest --asyncio-mode=strict --cov=liitos --cov-report term-missing:skip-covered --cov-branch --log-format="%(levelname)s %(message)s"
 .PHONY: install
 install:
 	pip install -U pip wheel
@@ -29,13 +30,13 @@ lint:
 	$(isort) --check-only --df
 	$(black) --check --diff
 
-.PHONY: mypy
-mypy:
-	mypy liitos
+.PHONY: types
+types:
+	$(mypy)
 
 .PHONY: test
 test: clean
-	pytest --asyncio-mode=strict --cov=liitos --cov-report term-missing:skip-covered --cov-branch --log-format="%(levelname)s %(message)s"
+	$(pytest)
 
 .PHONY: testcov
 testcov: test
@@ -43,7 +44,7 @@ testcov: test
 	@coverage html
 
 .PHONY: all
-all: lint mypy testcov
+all: lint types testcov
 
 .PHONY: sbom
 sbom:
