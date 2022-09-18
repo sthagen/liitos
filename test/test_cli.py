@@ -47,3 +47,11 @@ def test_parse_request_empty(capsys):
     out, err = capsys.readouterr()
     assert 'Root of the document tree to visit.' in out
     assert not err
+
+
+def test_main_empty(capsys):
+    code = cli.main([])
+    assert not code
+    out, err = capsys.readouterr()
+    assert 'Root of the document tree to visit.' in out
+    assert not err
