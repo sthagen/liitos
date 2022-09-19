@@ -32,6 +32,7 @@ def test_parse_request(capsys):
     assert not out
     assert not err
 
+
 def test_parse_request_doc_root_option(capsys):
     options = cli.parse_request(['-d', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
     assert options.doc_root_pos == ''  # type: ignore
@@ -60,12 +61,13 @@ def test_parse_request_pos_doc_root_not_present(capsys):
 
 
 def test_parse_request_pos_doc_root_no_folder(capsys):
+    bad_location = f'{TEST_PREFIX}/{gather.DEFAULT_STRUCTURE_NAME}'
     with pytest.raises(SystemExit) as err:
-        cli.parse_request([f'{TEST_PREFIX}/{gather.DEFAULT_STRUCTURE_NAME}', '-f', 'mn', '-t', 'abc'])
+        cli.parse_request([bad_location, '-f', 'mn', '-t', 'abc'])
     assert err.value.code == 2
     out, err = capsys.readouterr()
     assert not out
-    assert f'liitos: error: requested tree root at ({TEST_PREFIX}/{gather.DEFAULT_STRUCTURE_NAME}) is not a folder' in err
+    assert f'liitos: error: requested tree root at ({bad_location}) is not a folder' in err
 
 
 def test_parse_request_help(capsys):
