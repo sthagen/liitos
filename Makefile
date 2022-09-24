@@ -1,8 +1,9 @@
 .DEFAULT_GOAL := all
 isort = isort liitos test
 black = black -S -l 120 --target-version py39 liitos test
-mypy = mypy liitos
+flake8 = flake8 liitos test
 pytest = pytest --asyncio-mode=strict --cov=liitos --cov-report term-missing:skip-covered --cov-branch --log-format="%(levelname)s %(message)s"
+types = mypy liitos
 .PHONY: install
 install:
 	pip install -U pip wheel
@@ -26,13 +27,13 @@ format:
 .PHONY: lint
 lint:
 	python setup.py check -ms
-	flake8 liitos/ test/
+	$(flake8) 
 	$(isort) --check-only --df
 	$(black) --check --diff
 
 .PHONY: types
 types:
-	$(mypy)
+	$(types)
 
 .PHONY: test
 test: clean
