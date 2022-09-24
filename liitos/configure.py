@@ -112,4 +112,4 @@ th { font-weight: bold; }
 }
 """
 
-DEFAULT_CONFIG = yaml.load(DEFAULT_YAML, Loader=yaml.Loader)
+DEFAULT_CONFIG = yaml.safe_load(DEFAULT_YAML, Loader=yaml.Loader)
