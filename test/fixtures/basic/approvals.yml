@@ -1,0 +1,8 @@
+---
+approvals:
+- role: Author
+  name: One Author
+- role: Review
+  name: One Reviewer
+- role: Approved
+  name: One Approver
