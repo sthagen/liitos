@@ -36,7 +36,7 @@ def test_targets():
 def test_facets():
     structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
     facets = gather.facets(structure)
-    assert facets == {TEST_TARGET: {'opq', TEST_FACET}}
+    assert facets == {TEST_TARGET: {'missing', 'opq', TEST_FACET}}
 
 
 def test_assets():

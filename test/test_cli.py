@@ -135,10 +135,10 @@ def test_main_wrong_facet(capsys, caplog):
 def test_main_missing_asset(capsys, caplog):
     ole_wd = pathlib.Path.cwd()
     with caplog.at_level(logging.ERROR):
-        code = cli.main([f'{TEST_PREFIX}', '-f', 'opq', '-t', 'abc'])
+        code = cli.main([f'{TEST_PREFIX}', '-f', 'missing', '-t', 'abc'])
     os.chdir(ole_wd)
     assert code == 1
-    assert 'Failed verification with' in caplog.text and 'for facet (opq) of target (abc) is invalid' in caplog.text
+    assert 'Failed verification with' in caplog.text and 'for facet (missing) of target (abc) is invalid' in caplog.text
     out, err = capsys.readouterr()
     assert not out
     assert not err
