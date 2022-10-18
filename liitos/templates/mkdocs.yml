@@ -1,0 +1,86 @@
+site_name: NAME
+site_description: "TITLE."
+
+docs_dir: SOURCE
+site_dir: site/FUNCTION
+
+theme:
+  name: 'material'
+  logo: assets/logo.png
+  favicon: images/favicon.svg
+  font: false
+  features:
+    - navigation.expand
+    - toc.integrate
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+
+extra:
+  generator: false
+  homepage: https://example.com/doc/root/
+  social:
+    - icon: fontawesome/brands/bitbucket
+      link: https://vcs.example.com/orga/repo/
+
+extra_css:
+  - stylesheets/extra.css
+copyright: Copyright &copy; 2022 Organization - All rights reserved.
+
+repo_name: gm/msd-liasion
+repo_url: https://vcs.example.com/orga/repo/
+edit_uri: ""
+
+plugins:
+  - search
+  - mkdocstrings
+  - exclude:
+      glob:
+        - attic/*
+        - render/*
+        - "*.tex"
+        - "*.pdf"
+        - "*.json"
+  - enumerate-headings
+
+nav:
+  - Document:
+    - Web: document.md
+    - PDF: /path/to/function/
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - tables
+  - toc:
+      permalink: '∞'
+  - mkautodoc
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+
+extra_javascript:

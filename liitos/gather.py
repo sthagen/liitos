@@ -71,6 +71,8 @@ def error_context(
         return payload, f'{label} link not found at ({path}) or invalid for facet ({facet}) of target ({target})'
     if isinstance(err, KeyError):
         return [], f'{label} not found in assets for facet ({facet}) of target ({target})'
+    if isinstance(err, ValueError):
+        return [], f'{label} requires json or yaml format in assets for facet ({facet}) of target ({target})'
     raise NotImplementedError(f'error context not implemented for error ({err})')
 
 
@@ -112,11 +114,20 @@ def meta(facet: str, target: str, assets: Assets) -> Tuple[Meta, str]:
 
 def load_approvals(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
     """Yield the approvals for facet of target from path and message (in case of failure)."""
-    try:
-        with open(path, 'rt', encoding=ENCODING) as handle:
-            return json.load(handle), ''
-    except FileNotFoundError as err:
-        return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
+    if str(path).lower().endswith('json'):
+        try:
+            with open(path, 'rt', encoding=ENCODING) as handle:
+                return json.load(handle), ''
+        except FileNotFoundError as err:
+            return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
+    elif str(path).lower().endswith(('yaml', 'yml')):
+        try:
+            with open(path, 'rt', encoding=ENCODING) as handle:
+                return yaml.safe_load(handle), ''
+        except FileNotFoundError as err:
+            return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
+
+    return error_context({}, 'Approvals', facet, target, path, ValueError('json or yaml required'))  # type: ignore
 
 
 def approvals(facet: str, target: str, assets: Assets) -> Tuple[Approvals, str]:
@@ -130,11 +141,20 @@ def approvals(facet: str, target: str, assets: Assets) -> Tuple[Approvals, str]:
 
 def load_changes(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
     """Yield the changes for facet of target from path and message (in case of failure)."""
-    try:
-        with open(path, 'rt', encoding=ENCODING) as handle:
-            return json.load(handle), ''
-    except FileNotFoundError as err:
-        return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
+    if str(path).lower().endswith('json'):
+        try:
+            with open(path, 'rt', encoding=ENCODING) as handle:
+                return json.load(handle), ''
+        except FileNotFoundError as err:
+            return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
+    elif str(path).lower().endswith(('yaml', 'yml')):
+        try:
+            with open(path, 'rt', encoding=ENCODING) as handle:
+                return yaml.safe_load(handle), ''
+        except FileNotFoundError as err:
+            return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
+
+    return error_context({}, 'Changes', facet, target, path, ValueError('json or yaml required'))  # type: ignore
 
 
 def changes(facet: str, target: str, assets: Assets) -> Tuple[Changes, str]:
@@ -219,5 +239,13 @@ def verify(options: argparse.Namespace) -> int:
         return 1
     log.info(f'- assets ({", ".join(sorted(KEYS_REQUIRED))}) for facet ({facet}) of target ({target}) OK')
 
+    signatures_path = asset_map[target][facet][KEY_APPROVALS]
+    log.info(f'Loading signatures from {signatures_path=}')
+    signatures = load_approvals(facet, target, signatures_path)
+    log.info(f'{signatures=}')
+    history_path = asset_map[target][facet][KEY_CHANGES]
+    log.info(f'Loading history from {history_path=}')
+    history = load_changes(facet, target, history_path)
+    log.info(f'{history=}')
     log.info('Successful verification')
     return 0
