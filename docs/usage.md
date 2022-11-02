@@ -4,12 +4,13 @@
 
 ```console
 ❯ liitos --help
-usage: liitos [-h] --facet FACET --target TARGET [--document-root DOC_ROOT] [--structure STRUCTURE] [doc_root_pos]
+usage: liitos [-h] --facet FACET --target TARGET [--document-root DOC_ROOT] [--structure STRUCTURE] [--verbose] [doc_root_pos]
 
 Splice (Finnish liitos) contributions.
 
 positional arguments:
-  doc_root_pos          Root of the document tree to visit. Optional (default: PWD)
+  doc_root_pos          Root of the document tree to visit. Optional
+                        (default: empty for PWD)
 
 options:
   -h, --help            show this help message and exit
@@ -22,7 +23,8 @@ options:
                         (default: positional tree root value)
   --structure STRUCTURE, -s STRUCTURE
                         structure mapping file (default: structure.yml)
-```
+  --verbose, -v         work logging more information along the way (default: False)
+  ```
 
 ## Verification Example
 
