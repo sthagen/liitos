@@ -54,7 +54,7 @@ def parse_request(argv: List[str]) -> Union[int, argparse.Namespace]:
         dest='verbose',
         default=False,
         action='store_true',
-        help='work logging more information along the way (default: False)',
+        help='work logging more information along the way\n(default: False)',
     )
     if not argv:
         parser.print_help()
