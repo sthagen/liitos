@@ -11,7 +11,6 @@ __version__ = '2022.10.18+parent.1f25c2a3'
 __version_info__ = tuple(
     e if '-' not in e else e.split('-')[0] for part in __version__.split('+') for e in part.split('.') if e != 'parent'
 )
-__all__: List[str] = []
 
 APP_NAME = 'Splice (Finnish liitos) contributions.'
 APP_ALIAS = 'liitos'
@@ -32,6 +31,11 @@ LOG_LEVEL = logging.INFO
 
 TS_FORMAT_LOG = '%Y-%m-%dT%H:%M:%S'
 TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'
+
+__all__: List[str] = [
+    'ENCODING',
+    'log',
+]
 
 
 @no_type_check
