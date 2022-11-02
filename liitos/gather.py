@@ -1,6 +1,7 @@
 """Gather the structure and discover the content."""
 import argparse
 import json
+import logging
 import os
 import pathlib
 from typing import Dict, List, Set, Tuple, Union
@@ -180,6 +181,7 @@ def verify_asset_links(facet: str, target: str, asset_struct: Assets) -> Verific
         return predicate, message
     for key in KEYS_REQUIRED:
         link = pathlib.Path(asset_struct[target][facet][key])
+        log.debug(f'  + verifying: {pathlib.Path.cwd() / link}')
         if not link.is_file() or not link.stat().st_size:
             return False, f'{key} asset link ({link}) for facet ({facet}) of target ({target}) is invalid'
     return True, ''
@@ -208,6 +210,9 @@ def verify_assets(facet: str, target: str, asset_struct: Assets) -> Verification
 def verify(options: argparse.Namespace) -> int:
     """Drive the verification."""
     doc_root = pathlib.Path(options.doc_root)
+    verbose = options.verbose
+    if verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
     os.chdir(doc_root)
     facet = options.facet
     target = options.target
