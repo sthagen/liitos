@@ -48,6 +48,14 @@ def parse_request(argv: List[str]) -> Union[int, argparse.Namespace]:
         default=api.DEFAULT_STRUCTURE_NAME,
         help=f'structure mapping file (default: {api.DEFAULT_STRUCTURE_NAME})',
     )
+    parser.add_argument(
+        '--verbose',
+        '-v',
+        dest='verbose',
+        default=False,
+        action='store_true',
+        help='work logging more information along the way (default: False)',
+    )
     if not argv:
         parser.print_help()
         return 0
