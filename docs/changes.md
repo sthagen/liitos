@@ -1,5 +1,10 @@
 # Changes
 
+## 2022.11.2
+
+* Added meta data parsing
+* Added verbosity flag
+
 ## 2022.10.18
 
 * Added YAML format readers for approvals and changes
