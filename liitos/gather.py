@@ -252,5 +252,9 @@ def verify(options: argparse.Namespace) -> int:
     log.info(f'Loading history from {history_path=}')
     history = load_changes(facet, target, history_path)
     log.info(f'{history=}')
+    metadata_path = asset_map[target][facet][KEY_META]
+    log.info(f'Loading metadata from {metadata_path=}')
+    info = load_meta(facet, target, metadata_path)
+    log.info(f'{info=}')
     log.info('Successful verification')
     return 0
