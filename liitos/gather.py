@@ -51,16 +51,16 @@ def assets(structure: Structure) -> Assets:
     return {t: {f: asset for fd in cnt for f, asset in fd.items()} for t, cnt in structure.items()}  # type: ignore
 
 
-def verify_target(name: str, targets: Targets) -> Verification:
+def verify_target(name: str, target_set: Targets) -> Verification:
     """Verify presence of target yielding predicate and message (in case of failure)."""
-    return (True, '') if name in targets else (False, f'target ({name}) not in {sorted(targets)}')
+    return (True, '') if name in target_set else (False, f'target ({name}) not in {sorted(target_set)}')
 
 
-def verify_facet(name: str, target: str, facets: Facets) -> Verification:
+def verify_facet(name: str, target: str, facet_map: Facets) -> Verification:
     """Verify presence of facet for target yielding predicate and message (in case of failure)."""
-    if name in facets[target]:
+    if name in facet_map[target]:
         return True, ''
-    return False, f'facet ({name}) of target ({target}) not in {sorted(facets[target])}'
+    return False, f'facet ({name}) of target ({target}) not in {sorted(facet_map[target])}'
 
 
 def error_context(
@@ -85,10 +85,10 @@ def load_binder(facet: str, target: str, path: PathLike) -> Tuple[Binder, str]:
         return error_context([], 'Binder', facet, target, path, err)  # type: ignore
 
 
-def binder(facet: str, target: str, assets: Assets) -> Tuple[Binder, str]:
+def binder(facet: str, target: str, asset_struct: Assets) -> Tuple[Binder, str]:
     """Yield the binder for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet][KEY_BIND])
+        path = pathlib.Path(asset_struct[target][facet][KEY_BIND])
     except KeyError as err:
         return error_context([], 'Binder', facet, target, '', err)  # type: ignore
     return load_binder(facet, target, path)
@@ -103,10 +103,10 @@ def load_meta(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
         return error_context({}, 'Metadata', facet, target, path, err)  # type: ignore
 
 
-def meta(facet: str, target: str, assets: Assets) -> Tuple[Meta, str]:
+def meta(facet: str, target: str, asset_struct: Assets) -> Tuple[Meta, str]:
     """Yield the metadata for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet][KEY_META])
+        path = pathlib.Path(asset_struct[target][facet][KEY_META])
     except KeyError as err:
         return error_context({}, 'Metadata', facet, target, '', err)  # type: ignore
     return load_meta(facet, target, path)
@@ -130,10 +130,10 @@ def load_approvals(facet: str, target: str, path: PathLike) -> Tuple[Approvals, 
     return error_context({}, 'Approvals', facet, target, path, ValueError('json or yaml required'))  # type: ignore
 
 
-def approvals(facet: str, target: str, assets: Assets) -> Tuple[Approvals, str]:
+def approvals(facet: str, target: str, asset_struct: Assets) -> Tuple[Approvals, str]:
     """Yield the approvals for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet][KEY_APPROVALS])
+        path = pathlib.Path(asset_struct[target][facet][KEY_APPROVALS])
     except KeyError as err:
         return error_context({}, 'Approvals', facet, target, '', err)  # type: ignore
     return load_approvals(facet, target, path)
@@ -157,29 +157,29 @@ def load_changes(facet: str, target: str, path: PathLike) -> Tuple[Approvals, st
     return error_context({}, 'Changes', facet, target, path, ValueError('json or yaml required'))  # type: ignore
 
 
-def changes(facet: str, target: str, assets: Assets) -> Tuple[Changes, str]:
+def changes(facet: str, target: str, asset_struct: Assets) -> Tuple[Changes, str]:
     """Yield the changes for facet of target from link in assets and message (in case of failure)."""
     try:
-        path = pathlib.Path(assets[target][facet][KEY_CHANGES])
+        path = pathlib.Path(asset_struct[target][facet][KEY_CHANGES])
     except KeyError as err:
         return error_context({}, 'Changes', facet, target, '', err)  # type: ignore
     return load_changes(facet, target, path)
 
 
-def verify_asset_keys(facet: str, target: str, assets: Assets) -> Verification:
+def verify_asset_keys(facet: str, target: str, asset_struct: Assets) -> Verification:
     """Verify presence of required keys for facet of target yielding predicate and message (in case of failure)."""
-    if all(key in assets[target][facet] for key in KEYS_REQUIRED):
+    if all(key in asset_struct[target][facet] for key in KEYS_REQUIRED):
         return True, ''
     return False, f'keys in {sorted(KEYS_REQUIRED)} for facet ({facet}) of target ({target}) are missing'
 
 
-def verify_asset_links(facet: str, target: str, assets: Assets) -> Verification:
+def verify_asset_links(facet: str, target: str, asset_struct: Assets) -> Verification:
     """Verify presence of asset links for facet of target yielding predicate and message (in case of failure)."""
-    predicate, message = verify_asset_keys(facet, target, assets)
+    predicate, message = verify_asset_keys(facet, target, asset_struct)
     if not predicate:
         return predicate, message
     for key in KEYS_REQUIRED:
-        link = pathlib.Path(assets[target][facet][key])
+        link = pathlib.Path(asset_struct[target][facet][key])
         if not link.is_file() or not link.stat().st_size:
             return False, f'{key} asset link ({link}) for facet ({facet}) of target ({target}) is invalid'
     return True, ''
@@ -193,13 +193,13 @@ ASSET_KEY_ACTION = {
 }
 
 
-def verify_assets(facet: str, target: str, assets: Assets) -> Verification:
+def verify_assets(facet: str, target: str, asset_struct: Assets) -> Verification:
     """Verify assets for facet of target yielding predicate and message (in case of failure)."""
-    predicate, message = verify_asset_links(facet, target, assets)
+    predicate, message = verify_asset_links(facet, target, asset_struct)
     if not predicate:
         return predicate, message
     for key, action in ASSET_KEY_ACTION.items():
-        asset, message = action(facet, target, assets)
+        asset, message = action(facet, target, asset_struct)
         if not asset:
             return False, f'{key} asset for facet ({facet}) of target ({target}) is invalid'
     return True, ''
