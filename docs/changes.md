@@ -1,5 +1,9 @@
 # Changes
 
+## 2022.11.3
+
+* Made the liitos.templates package an explicit member (YAGNI)
+
 ## 2022.11.2
 
 * Added meta data parsing to verifier
