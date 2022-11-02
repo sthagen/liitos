@@ -42,7 +42,7 @@ extra_css:
   - stylesheets/extra.css
 copyright: Copyright &copy; 2022 Organization - All rights reserved.
 
-repo_name: gm/msd-liasion
+repo_name: orga/repo
 repo_url: https://vcs.example.com/orga/repo/
 edit_uri: ""
 
