@@ -1,0 +1,16 @@
+---
+document:
+  short_title: The Y
+  long_title: The Real Y
+  sub_title: null
+  type: Engineering Document
+  id: ID-X-1234-00
+  issue: '01'
+  revision: '00'
+  head_iss_rev: Iss @issue, Rev @revision
+  date: 21 OCT 2022
+  blurb_header: Some Comp. Proprietary Information
+  page_count_prefix: Page
+  toc: true
+  lof: false
+  lot: false
