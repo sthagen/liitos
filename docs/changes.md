@@ -2,7 +2,7 @@
 
 ## 2022.11.2
 
-* Added meta data parsing
+* Added meta data parsing to verifier
 * Added verbosity flag
 
 ## 2022.10.18
