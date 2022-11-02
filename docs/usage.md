@@ -32,11 +32,17 @@ All good:
 
 ```console
 ❯ liitos -d test/fixtures/basic -f mn -t abc
-2022-09-18T13:38:29.354682+00:00 INFO [LIITOS]: Starting verification of facet (mn) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
-2022-09-18T13:38:29.355733+00:00 INFO [LIITOS]: - target (abc) OK
-2022-09-18T13:38:29.355759+00:00 INFO [LIITOS]: - facet (mn) of target (abc) OK
-2022-09-18T13:38:29.356057+00:00 INFO [LIITOS]: - assets (approvals, bind, changes, meta) for facet (mn) of target (abc) OK
-2022-09-18T13:38:29.356078+00:00 INFO [LIITOS]: Successful verification
+2022-11-02T21:16:48.477818+00:00 INFO [LIITOS]: Starting verification of facet (mn) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
+2022-11-02T21:16:48.479516+00:00 INFO [LIITOS]: - target (abc) OK
+2022-11-02T21:16:48.479546+00:00 INFO [LIITOS]: - facet (mn) of target (abc) OK
+2022-11-02T21:16:48.481667+00:00 INFO [LIITOS]: - assets (approvals, bind, changes, meta) for facet (mn) of target (abc) OK
+2022-11-02T21:16:48.481692+00:00 INFO [LIITOS]: Loading signatures from signatures_path='approvals.json'
+2022-11-02T21:16:48.481741+00:00 INFO [LIITOS]: signatures=({'columns': ['Approvals', 'Name'], 'rows': [['Author', 'One Author'], ['Review', 'One Reviewer'], ['Approved', 'One Approver']]}, '')
+2022-11-02T21:16:48.481760+00:00 INFO [LIITOS]: Loading history from history_path='changes.json'
+2022-11-02T21:16:48.481801+00:00 INFO [LIITOS]: history=({'columns': ['issue', 'author', 'date', 'summary'], 'rows': [['01', 'One Author', '31.12.2024', 'Initial Issue']]}, '')
+2022-11-02T21:16:48.481819+00:00 INFO [LIITOS]: Loading metadata from metadata_path='meta-mn.yml'
+2022-11-02T21:16:48.482799+00:00 INFO [LIITOS]: info=({'document': {'short_title': 'The Y', 'long_title': 'The Real Y', 'sub_title': None, 'type': 'Engineering Document', 'id': 'ID-X-1234-00', 'issue': '01', 'revision': '00', 'head_iss_rev': 'Iss @issue, Rev @revision', 'date': '21 OCT 2022', 'blurb_header': 'Some Comp. Proprietary Information', 'page_count_prefix': 'Page', 'toc': True, 'lof': False, 'lot': False}}, '')
+2022-11-02T21:16:48.482822+00:00 INFO [LIITOS]: Successful verification
 ```
 
 Target document key not present in structure (map):
