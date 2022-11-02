@@ -14,7 +14,7 @@ TEST_STRUCTURE = {
             gather.KEY_APPROVALS: 'approvals.json',
             gather.KEY_BIND: 'bind-mn.txt',
             gather.KEY_CHANGES: 'changes.json',
-            gather.KEY_META: 'meta-mn.md',
+            gather.KEY_META: 'meta-mn.yml',
         }
     }
 }
