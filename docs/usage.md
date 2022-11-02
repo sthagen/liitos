@@ -4,7 +4,8 @@
 
 ```console
 ❯ liitos --help
-usage: liitos [-h] --facet FACET --target TARGET [--document-root DOC_ROOT] [--structure STRUCTURE] [--verbose] [doc_root_pos]
+usage: liitos [-h] --facet FACET --target TARGET [--document-root DOC_ROOT]
+              [--structure STRUCTURE] [--verbose] [doc_root_pos]
 
 Splice (Finnish liitos) contributions.
 
@@ -23,8 +24,9 @@ options:
                         (default: positional tree root value)
   --structure STRUCTURE, -s STRUCTURE
                         structure mapping file (default: structure.yml)
-  --verbose, -v         work logging more information along the way (default: False)
-  ```
+  --verbose, -v         work logging more information along the way
+                        (default: False)
+```
 
 ## Verification Example
 
