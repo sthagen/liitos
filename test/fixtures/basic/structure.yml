@@ -3,7 +3,7 @@ abc:
     approvals: approvals.json
     bind: bind-mn.txt
     changes: changes.json
-    meta: meta-mn.md
+    meta: meta-mn.yml
 - opq:
     approvals: approvals.yml
     bind: bind-opq.txt
