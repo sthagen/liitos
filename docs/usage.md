@@ -64,7 +64,7 @@ Facet key for target document not present in structure (map):
 2022-09-18T13:38:48.085371+00:00 ERROR [LIITOS]: Failed verification with: facet (no-facet) of target (abc) not in ['mn', 'opq']
 ```
 
-Infvalid asset link of facet for target document key:
+Invalid asset link of facet for target document key:
 
 ```console
 ❯ liitos -d test/fixtures/basic -f opq -t abc
