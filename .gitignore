@@ -134,6 +134,7 @@ dmypy.json
 *.log
 local_publi.sh
 local_*
+local/
 gist/
 .vscode/
 current-bandit.json
