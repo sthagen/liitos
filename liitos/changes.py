@@ -20,7 +20,7 @@ COLUMNS_EXPECTED = ['issue', 'author', 'date', 'summary']
 FORMAT_DATE = '%d %b %Y'
 
 
-def weave_changes():
+def weave() -> None:
     """Later alligator."""
     today = dti.datetime.today()
     publication_date = today.strftime(FORMAT_DATE).upper()
