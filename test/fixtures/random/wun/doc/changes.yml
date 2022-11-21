@@ -1,0 +1,10 @@
+---
+changes:
+- issue: '01'
+  author: One Author
+  date: 12 JAN 2022
+  summary: Initial Issue
+- issue: '02'
+  author: Another Author
+  date: PUBLICATIONDATE
+  summary: Second Issue
