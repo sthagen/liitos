@@ -1,0 +1,6 @@
+---
+document:
+  import: meta-default.yml
+  patch:
+    id: abc
+
