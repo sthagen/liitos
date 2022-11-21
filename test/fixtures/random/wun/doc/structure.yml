@@ -1,0 +1,12 @@
+doc:
+- default:
+    approvals: approvals.yml
+    bind: bind-default.txt
+    changes: changes.yml
+    meta: meta-default.yml
+- special:
+    approvals: approvals.yml
+    bind: bind-default.txt
+    changes: changes.yml
+    meta: meta-special.yml
+
