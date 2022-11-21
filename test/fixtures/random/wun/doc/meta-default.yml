@@ -1,0 +1,20 @@
+---
+document:
+  common:
+    title: Long Title
+    abbrv_title: Short Title
+    sub_title: null
+    type: Engineering Document
+    id: 123-444-jaja
+    issue: '01'
+    revision: '00'
+    head_iss_rev: Iss @issue, Rev @revision
+    date: 04 NOV 2022
+    blurb_header: Or Maybe Footer
+    page_count_prefix: Page
+    font_folder_path: fonts/
+    toc:
+      display: true
+      level: 3
+    lof: false
+    lot: false
