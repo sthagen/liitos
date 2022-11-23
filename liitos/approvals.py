@@ -24,7 +24,7 @@ FORMAT_DATE = '%d %b %Y'
 
 
 def weave(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str:bool]
+    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
     doc_root = pathlib.Path(doc_root)
