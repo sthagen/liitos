@@ -1,0 +1,37 @@
+%% first titlepage (book front matter)
+\mbox{}\vskip 10em
+\begin{flushleft}{%%
+  \setstretch{2}
+  \vskip 4em
+  \noindent {\huge \hskip 0em \theBoxedTitle}
+  \vskip 1em
+  \noindent {\Large \hskip 0em \textsf{\theBoxedSubTitle}}
+  \vskip 10em%fill
+}
+\end{flushleft}
+
+\vskip 14.5em
+\vskip 2em% if only 4
+\vskip 2em% if only 3
+\vskip 1em
+\begin{large}
+\addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
+\addtolength\belowrulesep{0.35ex}
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4000}}|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4800}}|}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\ \mbox{\textbf{Approvals}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{Name}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{Date and Signature}}
+\end{minipage} \\[0.5ex]
+\hline
+\ \mbox{THEROLE} & \mbox{THENAME} & \mbox{} \\[0.5ex]
+\hline
+\end{longtable}
+\end{large}
+

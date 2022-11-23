@@ -1,6 +1,6 @@
 import sys
 
-from liitos.cli import main
+from liitos.cli import app
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv[1:]))  # pragma: no cover
+    sys.exit(app(prog_name='liitos'))  # pragma: no cover

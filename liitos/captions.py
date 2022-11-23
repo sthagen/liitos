@@ -1,42 +1,45 @@
-#!/usr/bin/env python3
-# sucht innerhalb von longtable's nach
-# \caption{...}\tabularnewline und verschiebt
-# diesen Text an das Tabellenende
+from collections.abc import Iterable
 
-import sys
+from liitos import log
 
-modus = 'copy'
-for line in sys.stdin:
-    if modus == 'copy':
-        if line.startswith(r'\begin{longtable}'):
-            # eine neue Tabelle startet, Text zwischenspeichern
-            modus = 'table'
-            table = line
-            caption = ''
-        else:
-            # im Copy-Modus Zeile einfach wieder ausgeben
-            sys.stdout.write(line)
 
-    elif modus == 'table':
-        if line.startswith(r'\caption{'):
-            # Beginn der Überschrift gefunden, zwischenspeichern
-            caption = line
-            if not caption.strip().endswith(r'}\tabularnewline'):
-                # Überschrift geht noch weiter
-                modus = 'caption'
-        elif line.startswith(r'\end{longtable}'):
-            # Ende der Tabelle gefunden
-            sys.stdout.write(table)
-            sys.stdout.write(r'\rowcolor{white}')
-            sys.stdout.write(caption)
-            sys.stdout.write(line)
-            modus = 'copy'
-        else:
-            # Tabelle geht weiter
-            table += line
+def weave(incoming: Iterable[str]) -> list[str]:
+    """Later alligator."""
+    outgoing = []
+    modus = 'copy'
+    table, caption = '', ''
+    for line in incoming:
+        if modus == 'copy':
+            if line.startswith(r'\begin{longtable}'):
+                log.debug('within a table environment')
+                modus = 'table'
+                table = line
+                caption = ''
+            else:
+                outgoing.append(line)
 
-    elif modus == 'caption':
-        caption += line
-        if line.strip().endswith(r'}\tabularnewline'):
-            # Überschrift ist fertig
-            modus = 'table'
+        elif modus == 'table':
+            if line.startswith(r'\caption{'):
+                log.debug('- found the caption start')
+                caption = line
+                if not caption.strip().endswith(r'}\tabularnewline'):
+                    log.debug('- multi line caption')
+                    modus = 'caption'
+            elif line.startswith(r'\end{longtable}'):
+                log.debug('end of table env detected')
+                outgoing.append(table)
+                outgoing.append(r'\rowcolor{white}')
+                outgoing.append(caption)
+                outgoing.append(line)
+                modus = 'copy'
+            else:
+                log.debug('- table continues')
+                table += line
+
+        elif modus == 'caption':
+            caption += line
+            if line.strip().endswith(r'}\tabularnewline'):
+                log.debug('- caption read')
+                modus = 'table'
+
+    return outgoing

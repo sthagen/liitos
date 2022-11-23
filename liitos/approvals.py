@@ -1,10 +1,12 @@
 """Weave the content of the approvals data file into the output structure (for now LaTeX)."""
 import datetime as dti
+import logging
+import os
 import pathlib
-import sys
 
 import yaml
 
+import liitos.gather as gat
 from liitos import log
 
 APPROVALS_PATH = pathlib.Path('approvals.yml')
@@ -14,15 +16,37 @@ PUB_DATE_GREP_TOKEN = r'\newcommand{\theMetaDate}{'
 BOOKMATTER_TEMPLATE_PATH = pathlib.Path('bookmatter.tex.in')
 BOOKMATTER_PATH = pathlib.Path('bookmatter.tex')
 ENCODING = 'utf-8'
-TOKEN = r'\theMetaIssCode & \theMetaRevCode & \theMetaDate & \theChangeLogEntryDesc \\'
-ROW_TEMPLATE = r'issue & 00 & date & summary \\'
+TOKEN = r'\ \mbox{THEROLE} & \mbox{THENAME} & \mbox{} \\[0.5ex]'
+ROW_TEMPLATE = r'role & name & \mbox{} \\'
 GLUE = '\n\\hline\n'
 COLUMNS_EXPECTED = ['role', 'name']
 FORMAT_DATE = '%d %b %Y'
 
 
-def weave() -> None:
+def weave(
+    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str:bool]
+) -> int:
     """Later alligator."""
+    doc_root = pathlib.Path(doc_root)
+    verbose = options['verbose']
+    if verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+    os.chdir(doc_root)
+    facet = facet_key
+    target = target_key
+    structure_name = structure_name
+    job_description = (
+        f'facet ({facet}) for target ({target}) with structure map ({structure_name})' f' in document root ({doc_root})'
+    )
+    log.info(f'Starting verification of {job_description}')
+    structure = gat.load_structure(structure_name)
+    asset_map = gat.assets(structure)
+
+    signatures_path = asset_map[target][facet][gat.KEY_APPROVALS]
+    log.info(f'Loading signatures from {signatures_path=}')
+    signatures = gat.load_approvals(facet, target, signatures_path)
+    log.info(f'{signatures=}')
+
     today = dti.datetime.today()
     publication_date = today.strftime(FORMAT_DATE).upper()
     log.info(f'Setting default publication date to today ({publication_date}) ...')
@@ -51,33 +75,30 @@ def weave() -> None:
             log.info(f'- publication date ({publication_date}) is valid')
         else:
             log.info(f'ERROR: full cycle conversion of found date ({publication_date}) is not the date itself ({ref})')
-            sys.exit(1)
+            return 1
     except Exception as err:
         log.info(f'ERROR: full cycle conversion of found date ({publication_date}) failed with: {err}')
-        sys.exit(1)
+        return 1
 
-    log.info(f'Reading changes data from ({APPROVALS_PATH}) ...')
-    with open(APPROVALS_PATH, 'rt', encoding=ENCODING) as handle:
-        approvals = yaml.safe_load(handle)
-
-    log.info('Plausibility tests for changes ...')
-    for slot, approval in enumerate(approvals['approvals'], start=1):
+    log.info('Plausibility tests for approvals ...')
+    for slot, approval in enumerate(signatures[0]['approvals'], start=1):
+        log.debug(f'{slot=}, {approval=}')
         if sorted(approval) != sorted(COLUMNS_EXPECTED):
             log.info('ERROR: Unexpected column model!')
             log.info(f'-  expected: ({COLUMNS_EXPECTED})')
             log.info(f'- but found: ({approval}) for entry #{slot}')
-            sys.exit(1)
+            return 1
 
     rows = []
-    for approval in approvals['approvals']:
-        role = approval['role']
-        author = approval['author']
-        rows.append(ROW_TEMPLATE.replace('role', role).replace('author', author))
+    for approval in signatures[0]['approvals']:
+        role = approval['role']  # type: ignore
+        name = approval['name']  # type: ignore
+        rows.append(ROW_TEMPLATE.replace('role', role).replace('name', name))
 
     with open(BOOKMATTER_TEMPLATE_PATH, 'rt', encoding=ENCODING) as handle:
         lines = [line.rstrip() for line in handle.readlines()]
 
-    log.info('Weaving in the changes ...')
+    log.info('Weaving in the approvals ...')
     for n, line in enumerate(lines):
         if line.strip() == TOKEN:
             lines[n] = GLUE.join(rows)
@@ -86,3 +107,4 @@ def weave() -> None:
         lines.append('\n')
     with open(BOOKMATTER_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
+    return 0

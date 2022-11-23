@@ -207,16 +207,18 @@ def verify_assets(facet: str, target: str, asset_struct: Assets) -> Verification
     return True, ''
 
 
-def verify(options: argparse.Namespace) -> int:
+def verify(
+    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
+) -> int:
     """Drive the verification."""
-    doc_root = pathlib.Path(options.doc_root)
-    verbose = options.verbose
+    doc_root = pathlib.Path(doc_root)
+    verbose = options['verbose']
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
     os.chdir(doc_root)
-    facet = options.facet
-    target = options.target
-    structure_name = options.structure
+    facet = facet_key
+    target = target_key
+    structure_name = structure_name
     job_description = (
         f'facet ({facet}) for target ({target}) with structure map ({structure_name})' f' in document root ({doc_root})'
     )
