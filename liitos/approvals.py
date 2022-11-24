@@ -4,8 +4,6 @@ import logging
 import os
 import pathlib
 
-import yaml
-
 import liitos.gather as gat
 from liitos import log
 
