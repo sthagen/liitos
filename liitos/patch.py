@@ -2,31 +2,24 @@
 """Apply all pairs in patch module on document."""
 import pathlib
 
-from liitos import log
+import yaml
 
-try:
-    import patches  # type: ignore
-except ImportError:
-    log.warning('please provide a patches.py file on python path (or local folder) if you want patches to be applied.')
-
-    class patches:  # type: ignore
-        pairs: list[tuple[str, str]] = []
-
-    log.info('provided dummy patches')
+from liitos import ENCODING, log
 
 DOCUMENT = pathlib.Path('document.tex')
-ENCODING = 'utf-8'
 
 
 def apply() -> None:
     """Later alligator."""
-    lines = []
+    with open('patches.yml', 'rt', encoding=ENCODING) as handle:
+        patches = yaml.safe_load(handle)
+
     log.info(f'reading document ({DOCUMENT}) for patching')
     with open(DOCUMENT, 'rt', encoding=ENCODING) as handle:
         lines = [line.strip() for line in handle.readlines()]
 
     log.info(f'applying patches to {len(lines)} lines of text')
-    for this, that in patches.pairs:
+    for this, that in patches['pairs']:
         log.info(f' - trying ({this}) --> ({that}) ...')
         for n, text in enumerate(lines):
             if this in text:
