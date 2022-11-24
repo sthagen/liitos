@@ -1,0 +1,32 @@
+\hypertarget{status-and-change-log}{%
+\section*{Status and Change Log}\label{status-and-change-log}}
+
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1600}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.6900}}|}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogNameIss}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogNameRev}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+\textbf{\theChangeLogNameDate}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogNameDesc}
+\end{minipage} \\
+\hline
+\theMetaIssCode & \theMetaRevCode & \theMetaAuthor & \theChangeLogEntryDesc \\
+\hline
+\end{longtable}
+
+\vskip 14em
+
+\hypertarget{proprietary-information}{%
+\section*{Proprietary Information}\label{proprietary-information}}
+
+The IP blurb.
+
+\pagenumbering{arabic}
+
