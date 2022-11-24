@@ -19,9 +19,9 @@ classifiers = [
 keywords = ["developer-tools", "validation", "verification"]
 dependencies = [
     "PyYAML >= 6.0",
-    "typer >= 0.6.1",
+    "typer >= 0.7.0",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 [project.optional-dependencies]
 dev = ["black", "coverage", "flake8", "hypothesis", "mypy", "pytest", "pytest-cov", "pytest-flake8"]
