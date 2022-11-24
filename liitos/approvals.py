@@ -19,15 +19,13 @@ def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
-    doc_root = pathlib.Path(doc_root)
-    os.chdir(doc_root)
-    job_description = (
-        f'facet ({facet_key}) for target ({target_key}) with structure map ({structure_name})'
-        f' in document root ({doc_root})'
+    structure, asset_map = gat.prelude(
+        doc_root=doc_root,
+        structure_name=structure_name,
+        target_key=target_key,
+        facet_key=facet_key,
+        command='approvals',
     )
-    log.info(f'Starting verification of {job_description}')
-    structure = gat.load_structure(structure_name)
-    asset_map = gat.assets(structure)
 
     signatures_path = asset_map[target_key][facet_key][gat.KEY_APPROVALS]
     log.info(f'Loading signatures from {signatures_path=}')
