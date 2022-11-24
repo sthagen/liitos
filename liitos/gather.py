@@ -212,9 +212,6 @@ def verify(
 ) -> int:
     """Drive the verification."""
     doc_root = pathlib.Path(doc_root)
-    verbose = options['verbose']
-    if verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
     os.chdir(doc_root)
     facet = facet_key
     target = target_key
