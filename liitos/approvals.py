@@ -8,7 +8,7 @@ from liitos import ENCODING, log
 APPROVALS_PATH = pathlib.Path('approvals.yml')
 BOOKMATTER_TEMPLATE_PATH = pathlib.Path('bookmatter.tex.in')
 BOOKMATTER_PATH = pathlib.Path('bookmatter.tex')
-TOKEN = r'\ \mbox{THEROLE} & \mbox{THENAME} & \mbox{} \\[0.5ex]'
+TOKEN = r'\ \mbox{THEROLE} & \mbox{THENAME} & \mbox{} \\[0.5ex]'  # nosec B105
 ROW_TEMPLATE = r'role & name & \mbox{} \\'
 GLUE = '\n\\hline\n'
 COLUMNS_EXPECTED = ['role', 'name']

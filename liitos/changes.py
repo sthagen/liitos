@@ -8,7 +8,7 @@ from liitos import ENCODING, log
 CHANGES_PATH = pathlib.Path('changes.yml')
 PUBLISHER_TEMPLATE_PATH = pathlib.Path('publisher.tex.in')
 PUBLISHER_PATH = pathlib.Path('publisher.tex')
-TOKEN = r'\theMetaIssCode & \theMetaRevCode & \theMetaAuthor & \theChangeLogEntryDesc \\'
+TOKEN = r'\theMetaIssCode & \theMetaRevCode & \theMetaAuthor & \theChangeLogEntryDesc \\'  # nosec B105
 ROW_TEMPLATE = r'issue & 00 & author & summary \\'
 GLUE = '\n\\hline\n'
 COLUMNS_EXPECTED = ['issue', 'author', 'date', 'summary']
