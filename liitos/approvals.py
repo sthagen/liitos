@@ -3,12 +3,11 @@ import os
 import pathlib
 
 import liitos.gather as gat
-from liitos import log
+from liitos import ENCODING, log
 
 APPROVALS_PATH = pathlib.Path('approvals.yml')
 BOOKMATTER_TEMPLATE_PATH = pathlib.Path('bookmatter.tex.in')
 BOOKMATTER_PATH = pathlib.Path('bookmatter.tex')
-ENCODING = 'utf-8'
 TOKEN = r'\ \mbox{THEROLE} & \mbox{THENAME} & \mbox{} \\[0.5ex]'
 ROW_TEMPLATE = r'role & name & \mbox{} \\'
 GLUE = '\n\\hline\n'

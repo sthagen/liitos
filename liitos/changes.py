@@ -3,12 +3,11 @@ import os
 import pathlib
 
 import liitos.gather as gat
-from liitos import log
+from liitos import ENCODING, log
 
 CHANGES_PATH = pathlib.Path('changes.yml')
 PUBLISHER_TEMPLATE_PATH = pathlib.Path('publisher.tex.in')
 PUBLISHER_PATH = pathlib.Path('publisher.tex')
-ENCODING = 'utf-8'
 TOKEN = r'\theMetaIssCode & \theMetaRevCode & \theMetaAuthor & \theChangeLogEntryDesc \\'
 ROW_TEMPLATE = r'issue & 00 & author & summary \\'
 GLUE = '\n\\hline\n'
