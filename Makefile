@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := all
 isort = isort liitos test
-black = black -S -l 120 --target-version py39 liitos test
+black = black -S -l 120 --target-version py311 liitos test
 flake8 = flake8 --ignore E203,N801 liitos test
 pytest = pytest --asyncio-mode=strict --cov=liitos --cov-report term-missing:skip-covered --cov-branch --log-format="%(levelname)s %(message)s"
 types = mypy liitos
