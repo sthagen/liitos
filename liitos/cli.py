@@ -124,7 +124,7 @@ def verify(  # noqa
     code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
     if code:
         log.error(message)
-        return 2
+        return code
 
     return sys.exit(
         gat.verify(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
