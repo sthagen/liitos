@@ -207,7 +207,9 @@ def verify_assets(facet: str, target: str, asset_struct: Assets) -> Verification
     return True, ''
 
 
-def prelude(doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, command: str):
+def prelude(
+    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, command: str
+) -> tuple[Structure, Assets]:
     """DRY."""
     doc_root = pathlib.Path(doc_root)
     os.chdir(doc_root)
