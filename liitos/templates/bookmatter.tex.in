@@ -1,0 +1,34 @@
+%% first titlepage (book front matter)
+\mbox{}\vskip 10em
+\begin{flushleft}{%%
+  \setstretch{2}
+  \vskip 4em
+  \noindent {\huge \hskip 0em \theBoxedTitle}
+  \vskip 1em
+  \noindent {\Large \hskip 0em \textsf{\theBoxedSubTitle}}
+  \vskip 10em%fill
+}
+\end{flushleft}
+
+\vskip 2.5em
+\vskip \ExtraPushdown
+\begin{large}
+\addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
+\addtolength\belowrulesep{0.35ex}
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4000}}|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4800}}|}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\ \mbox{\textbf{VALUE.SLOT}}%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{VALUE.SLOT}}%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{VALUE.SLOT}}%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%
+\end{minipage} \\[0.5ex]
+\hline
+\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]
+\hline
+\end{longtable}
+\end{large}

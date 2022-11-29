@@ -1,0 +1,20 @@
+% Variables from meta data:
+\newcommand{\theMetaTitle}{VALUE.SLOT}%%_PATCH_%_HEADER_%_TITLE_%%
+\newcommand{\theBoxedTitle}{\textbf{\textsf{VALUE.SLOT}}}%%_PATCH_%_MAIN_%_TITLE_%%
+\newcommand{\theBoxedSubTitle}{VALUE.SLOT}%%_PATCH_%_SUB_%_TITLE_%%
+\newcommand{\theMetaType}{VALUE.SLOT}%%_PATCH_%_TYPE_%%
+\newcommand{\theMetaDocId}{VALUE.SLOT}%%_PATCH_%_ID_%%
+\newcommand{\theMetaIssCode}{VALUE.SLOT}%%_PATCH_%_ISSUE_%%
+\newcommand{\theMetaRevCode}{VALUE.SLOT}%%_PATCH_%_REVISION_%%
+\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%
+\newcommand{\theMetaPropInfo}{VALUE.SLOT}%%_PATCH_%_FRAME_%_NOTE_%%
+\newcommand{\theMetaPageNumPrefix}{VALUE.SLOT}%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%
+\newcommand{\theChangeLogIssLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%
+\newcommand{\theChangeLogRevLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%
+\newcommand{\theChangeLogDateLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%
+\newcommand{\theChangeLogAuthorLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%
+\newcommand{\theChangeLogDescLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%
+% Combinations exposed to runtime override:
+\newcommand{\theMetaIssRev}{Iss \theMetaIssCode, Rev \theMetaRevCode}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%
+% The blurb:
+\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%

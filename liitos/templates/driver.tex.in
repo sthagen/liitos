@@ -1,0 +1,34 @@
+\input{setup.tex}
+
+\usepackage{xassoccnt}
+\NewTotalDocumentCounter{totalfigures}
+\NewTotalDocumentCounter{totaltables}
+\NewTotalDocumentCounter{appendixchapters}
+\DeclareAssociatedCounters{figure}{totalfigures}
+\DeclareAssociatedCounters{table}{totaltables}
+
+\begin{document}
+\include{bookmatter.tex}
+
+\pagestyle{liitos-header-footer}
+\newpage
+\include{publisher.tex}
+
+\newpage
+\renewcommand*\contentsname{Table of Contents}
+{
+\setcounter{tocdepth}{VALUE.SLOT}%%_PATCH_%_TOC_%_LEVEL_%%
+\tableofcontents
+}
+
+VALUE.SLOT\newpage\listoffigures%%_PATCH_%_LOF_%%
+%%DEBUG There are \TotalValue{totalfigures} figures in this document
+
+VALUE.SLOT\newpage\listoftables%%_PATCH_%_LOT_%%
+%%DEBUG There are \TotalValue{totaltables} tables in this document
+%%Note: Subtract 2 from value to get real entry count for lot
+
+\newpage
+\include{document.tex}
+
+\end{document}
