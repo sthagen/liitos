@@ -1,0 +1,86 @@
+#! /usr/bin/env python
+"""Weave the content of the approvals.json or approval.yml file into the output structure (for now LaTeX)."""
+import json
+import pathlib
+import sys
+
+import yaml
+
+BOOKMATTER_TEMPLATE_PATH = pathlib.Path('bookmatter.tex.in')
+BOOKMATTER_PATH = pathlib.Path('bookmatter.tex')
+ENCODING = 'utf-8'
+TOKEN = r'\ \mbox{THEROLE} & \mbox{THENAME} & \mbox{} \\[0.5ex]'
+ROW_TEMPLATE = r'\ \mbox{role} & \mbox{name} & \mbox{} \\[0.5ex]'
+GLUE = '\n\\hline\n'
+TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'
+EXTRA_OFFSET_EM = 24
+
+JSON_CHANNEL = 'json'
+YAML_CHANNEL = 'yaml'
+
+CHANNEL = YAML_CHANNEL
+COLUMNS_EXPECTED = ['name', 'role']
+
+APPROVALS_PATH = pathlib.Path('approvals.yml')
+if not APPROVALS_PATH.is_file() or not APPROVALS_PATH.stat().st_size:
+    APPROVALS_PATH = pathlib.Path('approvals.yaml')
+    if not APPROVALS_PATH.is_file() or not APPROVALS_PATH.stat().st_size:
+        CHANNEL = JSON_CHANNEL
+        COLUMNS_EXPECTED = ['Approvals', 'Name']
+        APPROVALS_PATH = pathlib.Path('approvals.json')
+        if not APPROVALS_PATH.is_file() or not APPROVALS_PATH.stat().st_size:
+            raise ValueError(
+                'approvals data file missing or empty - tried approvals.(json,yml,yaml)'
+            )
+
+print(f'Detected approvals channel ({CHANNEL}) weaving in from ({APPROVALS_PATH})')
+
+with open(APPROVALS_PATH, 'rt', encoding=ENCODING) as handle:
+    approvals = json.load(handle) if CHANNEL == JSON_CHANNEL else yaml.safe_load(handle)
+
+with open(BOOKMATTER_TEMPLATE_PATH, 'rt', encoding=ENCODING) as handle:
+    lines = [line.strip() for line in handle.readlines()]
+
+rows = []
+if CHANNEL == JSON_CHANNEL:
+    if approvals['columns'] != COLUMNS_EXPECTED:
+        print('ERROR: Unexpected column model!')
+        print(f'-  expected: ({COLUMNS_EXPECTED})')
+        print(f'- but found: ({approvals["columns"]})')
+        sys.exit(1)
+
+    for role, name in approvals['rows']:
+        rows.append(ROW_TEMPLATE.replace('role', role).replace('name', name))
+else:
+    for slot, entry in enumerate(approvals['approvals'], start=1):
+        if sorted(entry) != COLUMNS_EXPECTED:
+            print('ERROR: Unexpected column model!')
+            print(f'-  expected: ({COLUMNS_EXPECTED})')
+            print(f'- but found: ({sorted(entry)}) in slot {slot}')
+            sys.exit(1)
+
+    for entry in approvals['approvals']:
+        role = entry['role']
+        name = entry['name']
+        rows.append(ROW_TEMPLATE.replace('role', role).replace('name', name))
+
+
+pushdown = EXTRA_OFFSET_EM - 2 * len(rows)
+print(f'Calculated extra pushdown to be {pushdown}em')
+with open(BOOKMATTER_TEMPLATE_PATH, 'rt', encoding=ENCODING) as handle:
+    lines = [line.strip() for line in handle.readlines()]
+
+print(f'Weaving in the approvals from {APPROVALS_PATH}...')
+for n, line in enumerate(lines):
+    if TOKEN_EXTRA_PUSHDOWN in line:
+        lines[n] = line.replace(TOKEN_EXTRA_PUSHDOWN, f'{pushdown}em')
+        continue
+    if line == TOKEN:
+        lines[n] = GLUE.join(rows)
+        break
+
+if lines[-1]:
+    lines.append('\n')
+
+with open(BOOKMATTER_PATH, 'wt', encoding=ENCODING) as handle:
+    handle.write('\n'.join(lines))

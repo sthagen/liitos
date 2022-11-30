@@ -1,0 +1,94 @@
+#! /usr/bin/env python
+"""Weave the content of the changes.json file into the output structure (for now LaTeX)."""
+import datetime as dti
+import json
+import pathlib
+import sys
+
+import yaml
+
+MAGIC_OF_TODAY = 'PUBLICATIONDATE'
+METADATATEX_PATH = pathlib.Path('metadata.tex')
+PUB_DATE_GREP_TOKEN = r'\newcommand{\theMetaDate}{'
+PUBLISHER_TEMPLATE_PATH = pathlib.Path('publisher.tex.in')
+PUBLISHER_PATH = pathlib.Path('publisher.tex')
+ENCODING = 'utf-8'
+TOKEN = r'\theMetaIssCode & \theMetaRevCode & \theMetaAuthor & \theChangeLogEntryDesc \\'
+ROW_TEMPLATE = r'issue & 00 & author & summary \\'
+GLUE = '\n\\hline\n'
+
+JSON_CHANNEL = 'json'
+YAML_CHANNEL = 'yaml'
+
+CHANNEL = YAML_CHANNEL
+COLUMNS_EXPECTED = ['issue', 'author', 'date', 'summary']
+
+today = dti.datetime.today()
+publication_date = today.strftime('%d %b %Y').upper()
+with open(METADATATEX_PATH, 'rt', encoding=ENCODING) as handle:
+    for line in handle.readlines():
+        line = line.strip()
+        if line.startswith(PUB_DATE_GREP_TOKEN):
+            publication_date_found = line.split(PUB_DATE_GREP_TOKEN, 1)[1].split('}', 1)[0].strip().upper()
+            print(f'Extracted publication date from metadata as ({publication_date_found})')
+            if publication_date_found == MAGIC_OF_TODAY:
+                print(f'Extracted publication date from metadata is magic -> ({publication_date})')
+            else:
+                publication_date = publication_date_found
+
+CHANGES_PATH = pathlib.Path('changes.yml')
+if not CHANGES_PATH.is_file() or not CHANGES_PATH.stat().st_size:
+    CHANGES_PATH = pathlib.Path('changes.yaml')
+    if not CHANGES_PATH.is_file() or not CHANGES_PATH.stat().st_size:
+        CHANNEL = JSON_CHANNEL
+        CHANGES_PATH = pathlib.Path('changes.json')
+        if not CHANGES_PATH.is_file() or not CHANGES_PATH.stat().st_size:
+            raise ValueError(
+                'changes data file missing or empty - tried changes.(json,yml,yaml)'
+            )
+
+print(f'Detected approvals channel ({CHANNEL}) weaving in from ({CHANGES_PATH})')
+
+with open(CHANGES_PATH, 'rt', encoding=ENCODING) as handle:
+    changes = json.load(handle) if CHANNEL == JSON_CHANNEL else yaml.safe_load(handle)
+
+rows = []
+if CHANNEL == JSON_CHANNEL:
+    if changes['columns'] != COLUMNS_EXPECTED:
+        print('ERROR: Unexpected column model!')
+        print(f'-  expected: ({COLUMNS_EXPECTED})')
+        print(f'- but found: ({changes["columns"]})')
+        sys.exit(1)
+
+    for issue, author, date, summary in changes['rows']:
+        date_rep = publication_date if date == MAGIC_OF_TODAY else date
+        rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
+else:
+    for slot, entry in enumerate(changes['changes'], start=1):
+        model = sorted(entry.keys())
+        if model != sorted(COLUMNS_EXPECTED):
+            print('ERROR: Unexpected column model!')
+            print(f'-  expected: ({COLUMNS_EXPECTED})')
+            print(f'- but found: ({model}) in slot {slot}')
+            sys.exit(1)
+
+    for entry in changes['changes']:
+        author = entry['author']
+        date = ['date']
+        issue = entry['issue']
+        summary = entry['summary']
+        date_rep = publication_date if date == MAGIC_OF_TODAY else date
+        rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
+
+with open(PUBLISHER_TEMPLATE_PATH, 'rt', encoding=ENCODING) as handle:
+    lines = [line.strip() for line in handle.readlines()]
+
+print(f'Weaving in the changes from {CHANGES_PATH}...')
+for n, line in enumerate(lines):
+    if line == TOKEN:
+        lines[n] = GLUE.join(rows)
+        break
+if lines[-1]:
+    lines.append('\n')
+with open(PUBLISHER_PATH, 'wt', encoding=ENCODING) as handle:
+    handle.write('\n'.join(lines))
