@@ -1,0 +1,6 @@
+prod_kind:
+- deep:
+    approvals: approvals.yml
+    bind: bind.txt
+    changes: changes.yml
+    meta: meta-deep.yml

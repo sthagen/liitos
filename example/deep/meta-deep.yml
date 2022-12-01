@@ -1,0 +1,5 @@
+---
+document:
+  import: meta-base.yml
+  patch:
+    id: P99999

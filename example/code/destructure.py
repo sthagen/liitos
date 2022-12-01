@@ -165,6 +165,7 @@ if len(targets) == 1:
         yaml.dump(metadata, handle, default_flow_style=False)
 
     print('Processing binder ...')
+    print('-' * 79)
     root_path = str(pathlib.Path.cwd().resolve()).rstrip('/') + '/'
     documents = {}
     refs = {}
@@ -208,8 +209,6 @@ if len(targets) == 1:
                     begin, end = 0, 0
                     include = ''
 
-        print(f'{insert_regions[entry]=}')
-
         for coords, include in insert_regions[entry]:  # include is anchored on DOC_BASE
             ref_path = DOC_BASE / include
             print(f'  + {include} as {ref_path}')
@@ -247,7 +246,6 @@ if len(targets) == 1:
                         in_region = False
                         begin, end = 0, 0
                         sub_include = ''
-            print(f'{include}: {insert_regions[include]}')
 
             for coords, sub_include in insert_regions[include]:
                 ref_path = DOC_BASE / sub_include
@@ -286,7 +284,6 @@ if len(targets) == 1:
                             in_region = False
                             begin, end = 0, 0
                             sub_sub_include = ''
-                print(f'{include}: {insert_regions[sub_include]}')
 
                 for coords, sub_sub_include in insert_regions[sub_include]:
                     ref_path = DOC_BASE / sub_sub_include
@@ -325,14 +322,32 @@ if len(targets) == 1:
                                 in_region = False
                                 begin, end = 0, 0
                                 sub_sub_sub_include = ''
-                    print(f'{include}: {insert_regions[sub_sub_include]}')
+    print('-' * 79)
+    print('insert_regions')
+    print('- ' * 39)
+    print(json.dumps(insert_regions, indent=2))
+    print('refs')
+    print('- ' * 39)
+    print(json.dumps(refs, indent=2))
+    print('documents')
+    print('- ' * 39)
+    print(json.dumps(documents, indent=2))
+    print('img_collector')
+    print('- ' * 39)
+    print(json.dumps(img_collector, indent=2))
+    print('documents.keys()')
+    print('- ' * 39)
+    print(json.dumps(list(documents.keys()), indent=2))
+    print('- ' * 39)
 
-        print(f'{insert_regions=}')
-        print(f'{refs=}')
-        print(f'{documents=}')
-        print(f'{img_collector=}')
-        print(f'{list(documents.keys())}')
-
+    """
+    concat = []
+    for bind in binder:
+    for key, regions in insert_regions.items():
+        print(f'{key} -------')
+        for line in lines:
+            print(line)
+    """
     print('OK or so')
     sys.exit(0)
 
