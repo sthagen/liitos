@@ -242,7 +242,7 @@ if len(targets) == 1:
                         end = slot
                         # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
                         insert_regions[include].append(((begin, end), sub_include))
-                        refs[entry][include] = {}
+                        refs[entry][include][sub_include] = {}
                         in_region = False
                         begin, end = 0, 0
                         sub_include = ''
@@ -280,7 +280,7 @@ if len(targets) == 1:
                             end = slot
                             # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
                             insert_regions[sub_include].append(((begin, end), sub_sub_include))
-                            refs[entry][include][sub_include] = {}
+                            refs[entry][include][sub_include][sub_sub_include] = {}
                             in_region = False
                             begin, end = 0, 0
                             sub_sub_include = ''
@@ -313,22 +313,58 @@ if len(targets) == 1:
                             if line.startswith(READ_SLOT_CONTEXT_BEGIN):
                                 # PROTOBUG print(f'<<<<< ({line})')
                                 sub_sub_sub_include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
-                                sub_sub_sub_include = str(pathlib.Path(sub_include).parent / sub_sub_sub_include)
+                                sub_sub_sub_include = str(pathlib.Path(sub_sub_include).parent / sub_sub_sub_include)
                             elif line.startswith(READ_SLOT_FENCE_END):
                                 end = slot
                                 # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
                                 insert_regions[sub_sub_include].append(((begin, end), sub_sub_sub_include))
-                                refs[entry][include][sub_include][sub_sub_include] = {}
+                                refs[entry][include][sub_include][sub_sub_include][sub_sub_sub_include] = {}
                                 in_region = False
                                 begin, end = 0, 0
                                 sub_sub_sub_include = ''
+
+                    for coords, sub_sub_sub_include in insert_regions[sub_include]:
+                        ref_path = DOC_BASE / sub_sub_sub_include
+                        print(f'    * {sub_sub_sub_include} as {ref_path}')
+                        with open(ref_path, 'rt', encoding=ENCODING) as handle:
+                            documents[sub_sub_sub_include] = [line.rstrip() for line in handle.readlines()]
+                        insert_regions[sub_sub_sub_include] = []
+                        in_region = False
+                        begin, end = 0, 0
+                        sub_sub_sub_sub_include = ''
+                        for slot, line in enumerate(documents[sub_sub_sub_include]):
+                            if line.startswith(IMG_LINE_STARTSWITH):
+                                before, xtr = line.split('](', 1)
+                                has_caption = True if ' ' in xtr else False
+                                img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
+                                img_path = str((pathlib.Path(sub_sub_sub_include).parent / img).resolve()).replace(root_path, '')
+                                img_collector.append(img_path)
+                                line = f'{before}]({img}{" " if has_caption else ")"}{after}'
+                                documents[sub_sub_sub_include][slot] = line
+                            print(f'{slot :02d}|{line.rstrip()}')
+                            if not in_region:
+                                if line.startswith(READ_SLOT_FENCE_BEGIN):
+                                    in_region = True
+                                    begin = slot
+                                    continue
+                            if in_region:
+                                if line.startswith(READ_SLOT_CONTEXT_BEGIN):
+                                    # PROTOBUG print(f'<<<<< ({line})')
+                                    sub_sub_sub_sub_include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                                    sub_sub_sub_sub_include = str(pathlib.Path(sub_sub_sub_include).parent / sub_sub_sub_sub_include)
+                                elif line.startswith(READ_SLOT_FENCE_END):
+                                    end = slot
+                                    # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
+                                    insert_regions[sub_sub_sub_include].append(((begin, end), sub_sub_sub_include))
+                                    refs[entry][include][sub_include][sub_sub_sub_include][sub_sub_sub_sub_include] = {}
+                                    in_region = False
+                                    begin, end = 0, 0
+                                    sub_sub_sub_sub_include = ''
+
     print('-' * 79)
     print('insert_regions')
     print('- ' * 39)
     print(json.dumps(insert_regions, indent=2))
-    print('refs')
-    print('- ' * 39)
-    print(json.dumps(refs, indent=2))
     print('documents')
     print('- ' * 39)
     print(json.dumps(documents, indent=2))
@@ -339,15 +375,16 @@ if len(targets) == 1:
     print('- ' * 39)
     print(json.dumps(list(documents.keys()), indent=2))
     print('- ' * 39)
+    print('refs')
+    print('- ' * 39)
+    print(json.dumps(refs, indent=2))
 
-    """
-    concat = []
-    for bind in binder:
+    concats = {}
     for key, regions in insert_regions.items():
         print(f'{key} -------')
-        for line in lines:
-            print(line)
-    """
+        for region in regions:
+            print(region)
+
     print('OK or so')
     sys.exit(0)
 
