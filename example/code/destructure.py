@@ -2,6 +2,7 @@
 # destructure the structure YAML file for target and facet
 import json
 import pathlib
+import shutil
 import sys
 
 import yaml
@@ -25,6 +26,13 @@ READ_SLOT_FENCE_BEGIN = '```{.python .cb.run}'
 READ_SLOT_CONTEXT_BEGIN = 'with open('
 READ_SLOT_FENCE_END = '```'
 
+"""
+![Alt Text Red](images/red.png "Caption Text Red")
+![Alt Text Dot Dot Lime](../images/lime.png "Caption Text Dot Dot Lime")
+![Alt Text Blue](images/blue.png "Caption Text Blue")
+![Alt Text Sting Red](other/images/red.png "Caption Text Sting Red")
+"""
+IMG_LINE_STARTSWITH = '!['
 
 if len(sys.argv[1:]) != 2:
     print(f'destructure expected target and facet arguments but received {sys.argv[1:]}', file=sys.stderr)
@@ -157,9 +165,11 @@ if len(targets) == 1:
         yaml.dump(metadata, handle, default_flow_style=False)
 
     print('Processing binder ...')
+    root_path = str(pathlib.Path.cwd().resolve()).rstrip('/') + '/'
     documents = {}
     refs = {}
     insert_regions = {}
+    img_collector = []
     for entry in binder:
         path = DOC_BASE / entry
         print(f'- {entry} as {path}')
@@ -171,6 +181,14 @@ if len(targets) == 1:
         include = ''
         refs[entry] = {}
         for slot, line in enumerate(documents[entry]):
+            if line.startswith(IMG_LINE_STARTSWITH):
+                before, xtr = line.split('](', 1)
+                has_caption = True if ' ' in xtr else False
+                img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
+                img_path = str((pathlib.Path(entry).parent / img).resolve()).replace(root_path, '')
+                img_collector.append(img_path)
+                line = f'{before}]({img}{" " if has_caption else ")"}{after}'
+                documents[entry][slot] = line
             print(f'{slot :02d}|{line.rstrip()}')
             if not in_region:
                 if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -202,6 +220,14 @@ if len(targets) == 1:
             begin, end = 0, 0
             sub_include = ''
             for slot, line in enumerate(documents[include]):
+                if line.startswith(IMG_LINE_STARTSWITH):
+                    before, xtr = line.split('](', 1)
+                    has_caption = True if ' ' in xtr else False
+                    img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
+                    img_path = str((pathlib.Path(include).parent / img).resolve()).replace(root_path, '')
+                    img_collector.append(img_path)
+                    line = f'{before}]({img}{" " if has_caption else ")"}{after}'
+                    documents[include][slot] = line
                 print(f'{slot :02d}|{line.rstrip()}')
                 if not in_region:
                     if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -233,6 +259,14 @@ if len(targets) == 1:
                 begin, end = 0, 0
                 sub_sub_include = ''
                 for slot, line in enumerate(documents[sub_include]):
+                    if line.startswith(IMG_LINE_STARTSWITH):
+                        before, xtr = line.split('](', 1)
+                        has_caption = True if ' ' in xtr else False
+                        img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
+                        img_path = str((pathlib.Path(sub_include).parent / img).resolve()).replace(root_path, '')
+                        img_collector.append(img_path)
+                        line = f'{before}]({img}{" " if has_caption else ")"}{after}'
+                        documents[sub_include][slot] = line
                     print(f'{slot :02d}|{line.rstrip()}')
                     if not in_region:
                         if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -263,7 +297,15 @@ if len(targets) == 1:
                     in_region = False
                     begin, end = 0, 0
                     sub_sub_sub_include = ''
-                    for slot, line in enumerate(documents[sub_include]):
+                    for slot, line in enumerate(documents[sub_sub_include]):
+                        if line.startswith(IMG_LINE_STARTSWITH):
+                            before, xtr = line.split('](', 1)
+                            has_caption = True if ' ' in xtr else False
+                            img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
+                            img_path = str((pathlib.Path(sub_sub_include).parent / img).resolve()).replace(root_path, '')
+                            img_collector.append(img_path)
+                            line = f'{before}]({img}{" " if has_caption else ")"}{after}'
+                            documents[sub_sub_include][slot] = line
                         print(f'{slot :02d}|{line.rstrip()}')
                         if not in_region:
                             if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -288,8 +330,8 @@ if len(targets) == 1:
         print(f'{insert_regions=}')
         print(f'{refs=}')
         print(f'{documents=}')
-
-
+        print(f'{img_collector=}')
+        print(f'{list(documents.keys())}')
 
     print('OK or so')
     sys.exit(0)
