@@ -9,6 +9,8 @@ with open('a1.md') as fp:
 
 ## Aa
 
+Some text to better verify the blank line handling.
+
 ```{.python .cb.run}
 with open('sub/as.md') as fp:
     print(fp.read())

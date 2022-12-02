@@ -165,7 +165,7 @@ if len(targets) == 1:
         yaml.dump(metadata, handle, default_flow_style=False)
 
     print('Processing binder ...')
-    print('-' * 79)
+    # PROTOBUG print('-' * 79)
     root_path = str(pathlib.Path.cwd().resolve()).rstrip('/') + '/'
     documents = {}
     refs = {}
@@ -173,7 +173,7 @@ if len(targets) == 1:
     img_collector = []
     for entry in binder:
         path = DOC_BASE / entry
-        print(f'- {entry} as {path}')
+        # PROTOBUG print(f'- {entry} as {path}')
         with open(path, 'rt', encoding=ENCODING) as handle:
             documents[entry] = [line.rstrip() for line in handle.readlines()]
         insert_regions[entry] = []
@@ -183,14 +183,17 @@ if len(targets) == 1:
         refs[entry] = {}
         for slot, line in enumerate(documents[entry]):
             if line.startswith(IMG_LINE_STARTSWITH):
+                # PROTOBUG print(line)
                 before, xtr = line.split('](', 1)
                 has_caption = True if ' ' in xtr else False
                 img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
                 img_path = str((pathlib.Path(entry).parent / img).resolve()).replace(root_path, '')
+                # PROTOBUG print(img_path)
                 img_collector.append(img_path)
-                line = f'{before}]({img}{" " if has_caption else ")"}{after}'
+                line = f'{before}]({img_path}{" " if has_caption else ")"}{after}'
                 documents[entry][slot] = line
-            print(f'{slot :02d}|{line.rstrip()}')
+                # PROTOBUG print(' --- level include')
+            # PROTOBUG print(f'{slot :02d}|{line.rstrip()}')
             if not in_region:
                 if line.startswith(READ_SLOT_FENCE_BEGIN):
                     in_region = True
@@ -211,7 +214,7 @@ if len(targets) == 1:
 
         for coords, include in insert_regions[entry]:  # include is anchored on DOC_BASE
             ref_path = DOC_BASE / include
-            print(f'  + {include} as {ref_path}')
+            # PROTOBUG print(f'  + {include} as {ref_path}')
             with open(ref_path, 'rt', encoding=ENCODING) as handle:
                 documents[include] = [line.rstrip() for line in handle.readlines()]
             insert_regions[include] = []
@@ -227,7 +230,8 @@ if len(targets) == 1:
                     img_collector.append(img_path)
                     line = f'{before}]({img}{" " if has_caption else ")"}{after}'
                     documents[include][slot] = line
-                print(f'{slot :02d}|{line.rstrip()}')
+                    # PROTOBUG print(' --- level sub_include')
+                # PROTOBUG print(f'{slot :02d}|{line.rstrip()}')
                 if not in_region:
                     if line.startswith(READ_SLOT_FENCE_BEGIN):
                         in_region = True
@@ -249,7 +253,7 @@ if len(targets) == 1:
 
             for coords, sub_include in insert_regions[include]:
                 ref_path = DOC_BASE / sub_include
-                print(f'    * {sub_include} as {ref_path}')
+                # PROTOBUG print(f'    * {sub_include} as {ref_path}')
                 with open(ref_path, 'rt', encoding=ENCODING) as handle:
                     documents[sub_include] = [line.rstrip() for line in handle.readlines()]
                 insert_regions[sub_include] = []
@@ -265,7 +269,8 @@ if len(targets) == 1:
                         img_collector.append(img_path)
                         line = f'{before}]({img}{" " if has_caption else ")"}{after}'
                         documents[sub_include][slot] = line
-                    print(f'{slot :02d}|{line.rstrip()}')
+                        # PROTOBUG print(' --- level sub_sub_include')
+                    # PROTOBUG print(f'{slot :02d}|{line.rstrip()}')
                     if not in_region:
                         if line.startswith(READ_SLOT_FENCE_BEGIN):
                             in_region = True
@@ -287,7 +292,7 @@ if len(targets) == 1:
 
                 for coords, sub_sub_include in insert_regions[sub_include]:
                     ref_path = DOC_BASE / sub_sub_include
-                    print(f'    * {sub_sub_include} as {ref_path}')
+                    # PROTOBUG print(f'    * {sub_sub_include} as {ref_path}')
                     with open(ref_path, 'rt', encoding=ENCODING) as handle:
                         documents[sub_sub_include] = [line.rstrip() for line in handle.readlines()]
                     insert_regions[sub_sub_include] = []
@@ -303,7 +308,8 @@ if len(targets) == 1:
                             img_collector.append(img_path)
                             line = f'{before}]({img}{" " if has_caption else ")"}{after}'
                             documents[sub_sub_include][slot] = line
-                        print(f'{slot :02d}|{line.rstrip()}')
+                            # PROTOBUG print(' --- level sub_sub_sub_include')
+                        # PROTOBUG print(f'{slot :02d}|{line.rstrip()}')
                         if not in_region:
                             if line.startswith(READ_SLOT_FENCE_BEGIN):
                                 in_region = True
@@ -325,7 +331,7 @@ if len(targets) == 1:
 
                     for coords, sub_sub_sub_include in insert_regions[sub_include]:
                         ref_path = DOC_BASE / sub_sub_sub_include
-                        print(f'    * {sub_sub_sub_include} as {ref_path}')
+                        # PROTOBUG print(f'    * {sub_sub_sub_include} as {ref_path}')
                         with open(ref_path, 'rt', encoding=ENCODING) as handle:
                             documents[sub_sub_sub_include] = [line.rstrip() for line in handle.readlines()]
                         insert_regions[sub_sub_sub_include] = []
@@ -341,7 +347,8 @@ if len(targets) == 1:
                                 img_collector.append(img_path)
                                 line = f'{before}]({img}{" " if has_caption else ")"}{after}'
                                 documents[sub_sub_sub_include][slot] = line
-                            print(f'{slot :02d}|{line.rstrip()}')
+                                # PROTOBUG print(' --- level sub_sub_sub_sub_include')
+                            # PROTOBUG print(f'{slot :02d}|{line.rstrip()}')
                             if not in_region:
                                 if line.startswith(READ_SLOT_FENCE_BEGIN):
                                     in_region = True
@@ -361,13 +368,13 @@ if len(targets) == 1:
                                     begin, end = 0, 0
                                     sub_sub_sub_sub_include = ''
 
-    print('-' * 79)
-    print('insert_regions')
-    print('- ' * 39)
-    print(json.dumps(insert_regions, indent=2))
-    print('documents')
-    print('- ' * 39)
-    print(json.dumps(documents, indent=2))
+    # PROTOBUG print('-' * 79)
+    # PROTOBUG print('insert_regions')
+    # PROTOBUG print('- ' * 39)
+    # PROTOBUG print(json.dumps(insert_regions, indent=2))
+    # PROTOBUG print('documents')
+    # PROTOBUG print('- ' * 39)
+    # PROTOBUG print(json.dumps(documents, indent=2))
     print('img_collector')
     print('- ' * 39)
     print(json.dumps(img_collector, indent=2))
@@ -379,13 +386,235 @@ if len(targets) == 1:
     print('- ' * 39)
     print(json.dumps(refs, indent=2))
 
-    concats = {}
+    dfs = {key: [] for key in refs}
+
+    import collections.abc
+
+
+    def is_dict(d):
+        return isinstance(d, collections.abc.Mapping)
+
+
+    def is_atom_or_flat(d):
+        return not is_dict(d) or not any(is_dict(v) for v in d.values())
+
+
+    def extract_leaf_paths(the_map, stop_here=is_atom_or_flat):
+        """Yield dict of only the entries between the root and the leaf."""
+        for k, v in the_map.items():
+            if stop_here(v):
+                yield {k: v}
+            else:
+                for part in extract_leaf_paths(v):
+                    yield {k: part}
+
+    leaf_paths = list(extract_leaf_paths(refs))
+    # PROTOBUG print('leaf_paths')
+    # PROTOBUG print(leaf_paths)
+
+    def x_path(a_map, collected):
+        """Collect all paths in map from the root to any leaf."""
+        if not a_map:
+            return [collected]
+        temp = []
+        for k in a_map:
+            temp.extend(x_path(a_map[k], collected + [k]))
+        return temp
+
+    def invert_to_map(a_map):
+        """Do invert to map."""
+        every_path = x_path(a_map, [])
+        inverted_path = {}
+        for p in every_path:
+            top = inverted_path
+            for el in p[::-1]:
+                if el not in top:
+                    top[el] = {}
+                top = top[el]
+        return inverted_path
+
+    def invert_to_seq(a_map):
+        """Do invert to sequence."""
+        every_path = x_path(a_map, [])
+        inverted_path = []
+        for p in every_path:
+            top = inverted_path
+            for el in p[::-1]:
+                if el not in top:
+                    top.append(el)
+                # top = top[el]
+        return inverted_path
+
+    # PROTOBUG for num, leaf_path in enumerate(leaf_paths):
+    # PROTOBUG     print('map chain of leaf_path', num)
+    # PROTOBUG     print(invert_to_map(leaf_path))
+
+    for num, leaf_path in enumerate(leaf_paths):
+        print('seq chain of leaf_path', num)
+        print(invert_to_seq(leaf_path))
+
+    concat = {}
     for key, regions in insert_regions.items():
         print(f'{key} -------')
         for region in regions:
             print(region)
+        if not regions:  # No includes
+            concat[key] = '\n'.join(documents[key]) + '\n'
+            print('no includes in', key)
 
-    print('OK or so')
+    chains = [invert_to_seq(leaf_path) for leaf_path in leaf_paths]
+    # PROTOBUG print(chains)
+
+    remaining = []
+    for chain in chains:
+        those = []
+        for job in chain:
+            if job not in concat.keys():
+                those.append(job)
+                # PROTOBUG print('keep', job)
+            # PROTOBUG else:
+            # PROTOBUG     print('skip', job)
+
+        remaining.append(those)
+
+    # PROTOBUG print(remaining)
+    tackle = set(those[0] for those in remaining if those)
+    for that in tackle:
+        # PROTOBUG print(that, insert_regions[that])
+        buf = []
+        for slot, line in enumerate(documents[that]):
+            special = False
+            the_first = False
+            the_include = ''
+            for pair, include in insert_regions[that]:
+                low, high = pair
+                if low <= slot <= high:
+                    special = True
+                if low == slot:
+                    the_first = True
+                    the_include = include
+            if not special:
+                buf.append(line)
+                continue
+            if the_first:
+                buf.append(concat[the_include])
+        concat[that] = '\n'.join(buf) + '\n'
+    # PROTOBUG print(json.dumps(concat, indent=2))
+
+    still = []
+    for chain in remaining:
+        those = []
+        for job in chain:
+            if job not in concat.keys():
+                those.append(job)
+                # PROTOBUG print('2 keep', job)
+            # PROTOBUG else:
+            # PROTOBUG     print('2 skip', job)
+
+        still.append(those)
+    # PROTOBUG print(still)
+
+    tackle = set(those[0] for those in still if those)
+    for that in tackle:
+        # PROTOBUG print(that, insert_regions[that])
+        buf = []
+        for slot, line in enumerate(documents[that]):
+            special = False
+            the_first = False
+            the_include = ''
+            for pair, include in insert_regions[that]:
+                low, high = pair
+                if low <= slot <= high:
+                    special = True
+                if low == slot:
+                    the_first = True
+                    the_include = include
+            if not special:
+                buf.append(line)
+                continue
+            if the_first:
+                buf.append(concat[the_include])
+        concat[that] = '\n'.join(buf) + '\n'
+    # PROTOBUG print(json.dumps(concat, indent=2))
+
+    more = []
+    for chain in still:
+        those = []
+        for job in chain:
+            if job not in concat.keys():
+                those.append(job)
+                # PROTOBUG print('3 keep', job)
+            # PROTOBUG else:
+            # PROTOBUG     print('3 skip', job)
+
+        more.append(those)
+    # PROTOBUG print(more)
+
+    tackle = set(those[0] for those in more if those)
+    for that in tackle:
+        # PROTOBUG print(that, insert_regions[that])
+        buf = []
+        for slot, line in enumerate(documents[that]):
+            special = False
+            the_first = False
+            the_include = ''
+            for pair, include in insert_regions[that]:
+                low, high = pair
+                if low <= slot <= high:
+                    special = True
+                if low == slot:
+                    the_first = True
+                    the_include = include
+            if not special:
+                buf.append(line)
+                continue
+            if the_first:
+                buf.append(concat[the_include])
+        concat[that] = '\n'.join(buf) + '\n'
+    # PROTOBUG print(json.dumps(concat, indent=2))
+
+    done = []
+    for chain in more:
+        those = []
+        for job in chain:
+            if job not in concat.keys():
+                those.append(job)
+                # PROTOBUG print('4 keep', job)
+            # PROTOBUG else:
+            # PROTOBUG     print('4 skip', job)
+
+        done.append(those)
+    # PROTOBUG print(done)
+
+    tackle = set(those[0] for those in done if those)
+    print(tackle)
+
+    # PROTOBUG print('= ' * 39)
+    # PROTOBUG for bind in binder:
+    # PROTOBUG     print(concat[bind])
+    # PROTOBUG print('= ' * 39)
+
+    print('Writing concat markdown to document.md')
+    with open('document.md', 'wt', encoding=ENCODING) as handle:
+        handle.write('\n'.join(concat[bind] for bind in binder) + '\n')
+
+    print('collecting assets (images and diagrams)')
+    images = pathlib.Path("images/")
+    images.mkdir(parents=True, exist_ok=True)
+    diagrams = pathlib.Path("diagrams/")
+    diagrams.mkdir(parents=True, exist_ok=True)
+    for img_path in img_collector:
+        if 'images/' in img_path:
+            source_asset = DOC_BASE / img_path
+            target_asset = images / pathlib.Path(img_path).name
+            shutil.copy(source_asset, target_asset)
+            continue
+        if 'diagrams/' in img_path:
+            source_asset = DOC_BASE / img_path
+            target_asset = diagrams / pathlib.Path(img_path).name
+            shutil.copy(source_asset, target_asset)
+
+    print('OK')
     sys.exit(0)
 
 print(f'structure data files with other than one target currently not supported - found targets ({targets})', file=sys.stderr)
