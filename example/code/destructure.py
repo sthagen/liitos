@@ -183,17 +183,28 @@ if len(targets) == 1:
         refs[entry] = {}
         for slot, line in enumerate(documents[entry]):
             if line.startswith(IMG_LINE_STARTSWITH):
-                # PROTOBUG print(line)
+                # PROTOBUG
+                print(line)
                 before, xtr = line.split('](', 1)
                 has_caption = True if ' ' in xtr else False
                 img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
                 img_path = str((pathlib.Path(entry).parent / img).resolve()).replace(root_path, '')
-                # PROTOBUG print(img_path)
+                # PROTOBUG
+                print(img_path)
                 img_collector.append(img_path)
-                line = f'{before}]({img_path}{" " if has_caption else ")"}{after}'
+                img_hack = img_path
+                if '/images/' in img_path:
+                    img_hack = 'images/' + img_path.split('/images/', 1)[1]
+                elif '/diagrams/' in img_path:
+                    img_hack = 'diagrams/' + img_path.split('/diagrams/', 1)[1]
+                if img_hack != img_path:
+                    print(img_hack, '<--- OK?')
+                line = f'{before}]({img_hack}{" " if has_caption else ")"}{after}'
                 documents[entry][slot] = line
-                # PROTOBUG print(' --- level include')
-            # PROTOBUG print(f'{slot :02d}|{line.rstrip()}')
+                # PROTOBUG
+                print(' --- level include')
+            # PROTOBUG
+            print(f'{slot :02d}|{line.rstrip()}')
             if not in_region:
                 if line.startswith(READ_SLOT_FENCE_BEGIN):
                     in_region = True
