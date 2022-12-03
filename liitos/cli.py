@@ -226,7 +226,14 @@ def render(  # noqa
 
     idem = os.getcwd()
     doc = '../../'
+    log.info(f'before met.weave(): {os.getcwd()} set doc ({doc})')
+    code = met.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    if code:
+        return code
+
     log.info(f'before sig.weave(): {os.getcwd()} set doc ({doc})')
+    os.chdir(idem)
+    log.info(f'relocated for sig.weave(): {os.getcwd()} with doc ({doc})')
     code = sig.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     if code:
         return code

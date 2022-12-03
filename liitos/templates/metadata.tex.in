@@ -15,6 +15,6 @@
 \newcommand{\theChangeLogAuthorLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%
 \newcommand{\theChangeLogDescLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%
 % Combinations exposed to runtime override:
-\newcommand{\theMetaIssRev}{Iss \theMetaIssCode, Rev \theMetaRevCode}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%
+\newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%
 % The blurb:
 \newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%
