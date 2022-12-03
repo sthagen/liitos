@@ -15,6 +15,8 @@ from liitos import ENCODING, log
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 SLASH = '/'
+IMAGES_FOLDER = 'images/'
+DIAGRAMS_FOLDER = 'diagrams/'
 
 """
 ```{.python .cb.run}
@@ -160,10 +162,10 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
     img_path = str((pathlib.Path(upstream).parent / img).resolve()).replace(root, '')
     collector.append(img_path)
     img_hack = img_path
-    if '/images/' in img_path:
-        img_hack = 'images/' + img_path.split('/images/', 1)[1]
-    elif '/diagrams/' in img_path:
-        img_hack = 'diagrams/' + img_path.split('/diagrams/', 1)[1]
+    if f'/{IMAGES_FOLDER}' in img_path:
+        img_hack = IMAGES_FOLDER + img_path.split(f'/{IMAGES_FOLDER}', 1)[1]
+    elif f'/{DIAGRAMS_FOLDER}' in img_path:
+        img_hack = DIAGRAMS_FOLDER + img_path.split(f'/{DIAGRAMS_FOLDER}', 1)[1]
     if img_hack != img_path:
         log.debug(f'{img_hack} <--- OK? --- {img_path}')
     return f'{before}]({img_hack}{" " if has_caption else ")"}{after}'
@@ -216,6 +218,24 @@ def rollup(
         flat[that] = '\n'.join(buf) + '\n'
 
     return [[job for job in chain if job not in flat] for chain in jobs]
+
+
+def collect_assets(collector: list[str]) -> None:
+    """TODO"""
+    images = pathlib.Path(IMAGES_FOLDER)
+    images.mkdir(parents=True, exist_ok=True)
+    diagrams = pathlib.Path(DIAGRAMS_FOLDER)
+    diagrams.mkdir(parents=True, exist_ok=True)
+    for img_path in collector:
+        if IMAGES_FOLDER in img_path:
+            source_asset = DOC_BASE / img_path
+            target_asset = images / pathlib.Path(img_path).name
+            shutil.copy(source_asset, target_asset)
+            continue
+        if DIAGRAMS_FOLDER in img_path:
+            source_asset = DOC_BASE / img_path
+            target_asset = diagrams / pathlib.Path(img_path).name
+            shutil.copy(source_asset, target_asset)
 
 
 def concatenate(
@@ -299,14 +319,14 @@ def concatenate(
         if isinstance(metadata, int):
             return 1
 
-        log.info('processing binder ...')
-        root_path = str(pathlib.Path.cwd().resolve()).rstrip('/') + '/'
-        documents = {}
-        tree = treelib.Tree()
         root = SLASH
+        root_path = str(pathlib.Path.cwd().resolve()).rstrip(SLASH) + SLASH
+        tree = treelib.Tree()
         tree.create_node(root, root)
+        documents = {}
         insert_regions = {}
         img_collector = []
+        log.info('processing binder ...')
         for entry in binder:
             path = DOC_BASE / entry
             log.debug(f'- {entry} as {path}')
@@ -513,21 +533,7 @@ def concatenate(
             handle.write('\n'.join(concat[bind] for bind in binder) + '\n')
 
         log.info('collecting assets (images and diagrams)')
-        images = pathlib.Path("images/")
-        images.mkdir(parents=True, exist_ok=True)
-        diagrams = pathlib.Path("diagrams/")
-        diagrams.mkdir(parents=True, exist_ok=True)
-        for img_path in img_collector:
-            if 'images/' in img_path:
-                source_asset = DOC_BASE / img_path
-                target_asset = images / pathlib.Path(img_path).name
-                shutil.copy(source_asset, target_asset)
-                continue
-            if 'diagrams/' in img_path:
-                source_asset = DOC_BASE / img_path
-                target_asset = diagrams / pathlib.Path(img_path).name
-                shutil.copy(source_asset, target_asset)
-
+        collect_assets(img_collector)
         log.info(f'concat result document (document.md) and artifacts are within folder ({os.getcwd()}/)')
         log.info('processing complete - SUCCESS')
         return 0
