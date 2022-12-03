@@ -57,6 +57,101 @@ class RedirectedStdout:
         return self._string_io.getvalue()
 
 
+def process_approvals(aspects: str) -> gat.Approvals | int:
+    """TODO."""
+    approvals_path = DOC_BASE / aspects[gat.KEY_APPROVALS]
+    if not approvals_path.is_file() or not approvals_path.stat().st_size:
+        log.error(f'destructure failed to find non-empty approvals file at {approvals_path}')
+        return 1
+    if approvals_path.suffix.lower() not in ('.json', '.yaml', '.yml'):
+        log.error(f'approvals file format per suffix ({approvals_path.suffix}) not supported')
+        return 1
+    approvals_channel = 'yaml' if approvals_path.suffix.lower() in ('.yaml', '.yml') else 'json'
+    with open(approvals_path, 'rt', encoding=ENCODING) as handle:
+        approvals = yaml.safe_load(handle) if approvals_channel == 'yaml' else json.load(handle)
+    if not approvals:
+        log.error(f'empty approvals file? Please add approvals to ({approvals_path})')
+        return 1
+    if approvals_channel == 'yaml':
+        with open('approvals.yml', 'wt', encoding=ENCODING) as handle:
+            yaml.dump(approvals, handle, default_flow_style=False)
+    else:
+        with open('approvals.json', 'wt', encoding=ENCODING) as handle:
+            json.dump(approvals, handle, indent=2)
+    return approvals
+
+
+def process_binder(aspects: str) -> gat.Binder | int:
+    """TODO."""
+    bind_path = DOC_BASE / aspects[gat.KEY_BIND]
+    if not bind_path.is_file() or not bind_path.stat().st_size:
+        log.error(f'destructure failed to find non-empty bind file at {bind_path}')
+        return 1
+    if bind_path.suffix.lower() not in ('.txt',):
+        log.error(f'bind file format per suffix ({bind_path.suffix}) not supported')
+        return 1
+    with open(bind_path, 'rt', encoding=ENCODING) as handle:
+        binder = [line.strip() for line in handle.readlines() if line.strip()]
+    if not binder:
+        log.error(f'empty bind file? Please add component paths to ({bind_path})')
+        return 1
+    with open('bind.txt', 'wt', encoding=ENCODING) as handle:
+        handle.write('\n'.join(binder) + '\n')
+    return binder
+
+def process_changes(aspects: str) -> gat.Changes | int:
+    """TODO."""
+    changes_path = DOC_BASE / aspects[gat.KEY_CHANGES]
+    if not changes_path.is_file() or not changes_path.stat().st_size:
+        log.error(f'destructure failed to find non-empty changes file at {changes_path}')
+        return 1
+    if changes_path.suffix.lower() not in ('.json', '.yaml', '.yml'):
+        log.error(f'changes file format per suffix ({changes_path.suffix}) not supported')
+        return 1
+    changes_channel = 'yaml' if changes_path.suffix.lower() in ('.yaml', '.yml') else 'json'
+    with open(changes_path, 'rt', encoding=ENCODING) as handle:
+        changes = yaml.safe_load(handle) if changes_channel == 'yaml' else json.load(handle)
+    if not changes:
+        log.error(f'empty changes file? Please add changes data to ({changes_path})')
+        return 1
+    if changes_channel == 'yaml':
+        with open('changes.yml', 'wt', encoding=ENCODING) as handle:
+            yaml.dump(changes, handle, default_flow_style=False)
+    else:
+        with open('changes.json', 'wt', encoding=ENCODING) as handle:
+            json.dump(changes, handle, indent=2)
+    return changes
+
+def process_meta(aspects: str) -> gat.Meta | int:
+    """TODO."""
+    meta_path = DOC_BASE / aspects[gat.KEY_META]
+    if not meta_path.is_file() or not meta_path.stat().st_size:
+        log.error(f'destructure failed to find non-empty meta file at {meta_path}')
+        return 1
+    if meta_path.suffix.lower() not in ('.yaml', '.yml'):
+        log.error(f'meta file format per suffix ({meta_path.suffix}) not supported')
+        return 1
+    with open(meta_path, 'rt', encoding=ENCODING) as handle:
+        metadata = yaml.safe_load(handle)
+    if not metadata:
+        log.error(f'empty metadata file? Please add metadata to ({meta_path})')
+        return 1
+    if 'import' in metadata['document']:
+        base_meta_path = DOC_BASE / metadata['document']['import']
+        if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
+            log.error(
+                f'metadata declares import of base data from ({base_meta_path.name}) but failed to find non-empty base file at {base_meta_path}')
+            return 1
+        with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
+            base_data = yaml.safe_load(handle)
+        for key, value in metadata['document']['patch'].items():
+            base_data['document']['common'][key] = value
+        metadata = base_data
+    with open('metadata.yml', 'wt', encoding=ENCODING) as handle:
+        yaml.dump(metadata, handle, default_flow_style=False)
+    return metadata
+
+
 def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) -> str:
     """YES."""
     before, xtr = text_line.split('](', 1)
@@ -191,85 +286,18 @@ def concatenate(
             )
             log.warning(f'- found the following aspects instead:                   {sorted(aspect_map.keys())} instead')
 
-        approvals_path = DOC_BASE / aspect_map[gat.KEY_APPROVALS]
-        if not approvals_path.is_file() or not approvals_path.stat().st_size:
-            log.error(f'destructure failed to find non-empty approvals file at {approvals_path}')
+        approvals = process_approvals(aspect_map)
+        if isinstance(approvals, int):
             return 1
-        if approvals_path.suffix.lower() not in ('.json', '.yaml', '.yml'):
-            log.error(f'approvals file format per suffix ({approvals_path.suffix}) not supported')
+        binder = process_binder(aspect_map)
+        if isinstance(binder, int):
             return 1
-        approvals_channel = 'yaml' if approvals_path.suffix.lower() in ('.yaml', '.yml') else 'json'
-        with open(approvals_path, 'rt', encoding=ENCODING) as handle:
-            approvals = yaml.safe_load(handle) if approvals_channel == 'yaml' else json.load(handle)
-        if not approvals:
-            log.error(f'empty approvals file? Please add approvals to ({approvals_path})')
+        changes = process_changes(aspect_map)
+        if isinstance(changes, int):
             return 1
-        if approvals_channel == 'yaml':
-            with open('approvals.yml', 'wt', encoding=ENCODING) as handle:
-                yaml.dump(approvals, handle, default_flow_style=False)
-        else:
-            with open('approvals.json', 'wt', encoding=ENCODING) as handle:
-                json.dump(approvals, handle, indent=2)
-
-        bind_path = DOC_BASE / aspect_map[gat.KEY_BIND]
-        if not bind_path.is_file() or not bind_path.stat().st_size:
-            log.error(f'destructure failed to find non-empty bind file at {bind_path}')
+        metadata = process_meta(aspect_map)
+        if isinstance(metadata, int):
             return 1
-        if bind_path.suffix.lower() not in ('.txt',):
-            log.error(f'bind file format per suffix ({bind_path.suffix}) not supported')
-            return 1
-        with open(bind_path, 'rt', encoding=ENCODING) as handle:
-            binder = [line.strip() for line in handle.readlines() if line.strip()]
-        if not binder:
-            log.error(f'empty bind file? Please add component paths to ({bind_path})')
-            return 1
-        with open('bind.txt', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(binder) + '\n')
-
-        changes_path = DOC_BASE / aspect_map[gat.KEY_CHANGES]
-        if not changes_path.is_file() or not changes_path.stat().st_size:
-            log.error(f'destructure failed to find non-empty changes file at {changes_path}')
-            return 1
-        if changes_path.suffix.lower() not in ('.json', '.yaml', '.yml'):
-            log.error(f'changes file format per suffix ({changes_path.suffix}) not supported')
-            return 1
-        changes_channel = 'yaml' if changes_path.suffix.lower() in ('.yaml', '.yml') else 'json'
-        with open(changes_path, 'rt', encoding=ENCODING) as handle:
-            changes = yaml.safe_load(handle) if changes_channel == 'yaml' else json.load(handle)
-        if not changes:
-            log.error(f'empty changes file? Please add changes data to ({changes_path})')
-            return 1
-        if changes_channel == 'yaml':
-            with open('changes.yml', 'wt', encoding=ENCODING) as handle:
-                yaml.dump(changes, handle, default_flow_style=False)
-        else:
-            with open('changes.json', 'wt', encoding=ENCODING) as handle:
-                json.dump(changes, handle, indent=2)
-
-        meta_path = DOC_BASE / aspect_map[gat.KEY_META]
-        if not meta_path.is_file() or not meta_path.stat().st_size:
-            log.error(f'destructure failed to find non-empty meta file at {meta_path}')
-            return 1
-        if meta_path.suffix.lower() not in ('.yaml', '.yml'):
-            log.error(f'meta file format per suffix ({meta_path.suffix}) not supported')
-            return 1
-        with open(meta_path, 'rt', encoding=ENCODING) as handle:
-            metadata = yaml.safe_load(handle)
-        if not metadata:
-            log.error(f'empty metadata file? Please add metadata to ({meta_path})')
-            return 1
-        if 'import' in metadata['document']:
-            base_meta_path = DOC_BASE / metadata['document']['import']
-            if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
-                log.error(f'metadata declares import of base data from ({base_meta_path.name}) but failed to find non-empty base file at {base_meta_path}')
-                return 1
-            with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
-                base_data = yaml.safe_load(handle)
-            for key, value in metadata['document']['patch'].items():
-                base_data['document']['common'][key] = value
-            metadata = base_data
-        with open('metadata.yml', 'wt', encoding=ENCODING) as handle:
-            yaml.dump(metadata, handle, default_flow_style=False)
 
         log.info('processing binder ...')
         root_path = str(pathlib.Path.cwd().resolve()).rstrip('/') + '/'
