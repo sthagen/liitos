@@ -5,14 +5,19 @@ import pathlib
 import liitos.gather as gat
 from liitos import ENCODING, log
 
+MAGIC_OF_TODAY = 'PUBLICATIONDATE'
 CHANGES_PATH = pathlib.Path('changes.yml')
+METADATATEX_PATH = pathlib.Path('metadata.tex')
+PUB_DATE_GREP_TOKEN = r'\newcommand{\theMetaDate}{'
 PUBLISHER_TEMPLATE_PATH = pathlib.Path('publisher.tex.in')
 PUBLISHER_PATH = pathlib.Path('publisher.tex')
-TOKEN = r'\theMetaIssCode & \theMetaRevCode & \theMetaAuthor & \theChangeLogEntryDesc \\'  # nosec B105
+TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 ROW_TEMPLATE = r'issue & 00 & author & summary \\'
 GLUE = '\n\\hline\n'
-COLUMNS_EXPECTED = ['issue', 'author', 'date', 'summary']
 FORMAT_DATE = '%d %b %Y'
+JSON_CHANNEL = 'json'
+YAML_CHANNEL = 'yaml'
+COLUMNS_EXPECTED = ['issue', 'author', 'date', 'summary']
 
 
 def weave(
@@ -23,28 +28,50 @@ def weave(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='changes'
     )
 
+    channel = YAML_CHANNEL
+    columns_expected = COLUMNS_EXPECTED
     changes_path = asset_map[target_key][facet_key][gat.KEY_CHANGES]
-    log.info(f'Loading changes from {changes_path=}')
+    if str(changes_path).endswith('.json'):
+        channel = JSON_CHANNEL
+
+    log.info(f'detected changes channel ({channel}) weaving in from ({changes_path})')
+    log.info(f'loading changes from {changes_path=}')
     changes = gat.load_changes(facet_key, target_key, changes_path)
     log.info(f'{changes=}')
 
-    log.info('Plausibility tests for changes ...')
-    for slot, change in enumerate(changes[0]['changes'], start=1):
-        if sorted(change) != sorted(COLUMNS_EXPECTED):
-            log.error('Unexpected column model!')
-            log.error(f'-  expected: ({COLUMNS_EXPECTED})')
-            log.error(f'- but found: ({change}) for entry #{slot}')
-            return 1
+    log.info('plausibility tests for changes ...')
 
     rows = []
-    for change in changes[0]['changes']:
-        issue, author, summary = change['issue'], change['author'], change['summary']  # type: ignore
-        rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
+    if channel == JSON_CHANNEL:
+        for slot, change in enumerate(changes[0]['changes'], start=1):
+            if sorted(change) != sorted(columns_expected):
+                log.error('unexpected column model!')
+                log.error(f'-  expected: ({columns_expected})')
+                log.error(f'- but found: ({change}) for entry #{slot}')
+                return 1
+
+        for change in changes[0]['changes']:
+            issue, author, summary = change['issue'], change['author'], change['summary']  # type: ignore
+            rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
+    else:
+        for slot, change in enumerate(changes[0]['changes'], start=1):
+            model = sorted(change.keys())
+            if model != sorted(COLUMNS_EXPECTED):
+                log.error('unexpected column model!')
+                log.error(f'-  expected: ({COLUMNS_EXPECTED})')
+                log.error(f'- but found: ({model}) in slot {slot}')
+                return 1
+
+        for change in changes[0]['changes']:
+            author = change['author']
+            issue = change['issue']
+            summary = change['summary']
+            rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
 
     with open(PUBLISHER_TEMPLATE_PATH, 'rt', encoding=ENCODING) as handle:
         lines = [line.rstrip() for line in handle.readlines()]
 
-    log.info('Weaving in the changes ...')
+    log.info('weaving in the changes ...')
     for n, line in enumerate(lines):
         if line.strip() == TOKEN:
             lines[n] = GLUE.join(rows)
