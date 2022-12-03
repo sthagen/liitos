@@ -4,6 +4,7 @@ import json
 import pathlib
 import shutil
 import sys
+from treelib import Node, Tree
 
 import yaml
 
@@ -50,6 +51,15 @@ with open(STRUCTURE_PATH, 'rt', encoding=ENCODING) as handle:
 
 # PROTOBUG print(json.dumps(structure, indent=2))
 targets = sorted(structure.keys())
+
+if not targets:
+    print(f'Structure at ({STRUCTURE_PATH}) does not provide any targets', file=sys.stderr)
+    sys.exit(1)
+
+if target_code not in targets:
+    print(f'Structure does not provide ({target_code})', file=sys.stderr)
+    sys.exit(1)
+
 if len(targets) == 1:
     target = targets[0]
     facets = sorted(list(facet.keys())[0] for facet in structure[target])
