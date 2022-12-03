@@ -113,27 +113,35 @@ def concatenate(
             if facet_code in data:
                 aspect_map = data[facet_code]
                 break
-        if sorted(aspect_map.keys()) != ASPECT_KEYS:
+        missing_keys = [key for key in gat.KEYS_REQUIRED if key not in aspect_map]
+        if missing_keys:
             log.error(
-                f'Structure does not provide the expected aspects ({ASPECT_KEYS})'
+                f'Structure does not provide all expected aspects {sorted(gat.KEYS_REQUIRED)}'
                 f' for target ({target_code}) and facet ({facet_code})'
             )
-            log.error(f'- found the following aspects instead:          ({sorted(aspect_map.keys())}) instead')
+            log.error(f'- the found aspects: {sorted(aspect_map.keys())}')
+            log.error(f'- missing aspects:   {sorted(missing_keys)}')
             return 1
+        if sorted(aspect_map.keys()) != sorted(gat.KEYS_REQUIRED):
+            log.warning(
+                f'Structure does not strictly provide the expected aspects {sorted(gat.KEYS_REQUIRED)}'
+                f' for target ({target_code}) and facet ({facet_code})'
+            )
+            log.warning(f'- found the following aspects instead:                   {sorted(aspect_map.keys())} instead')
 
-        approvals_path = DOC_BASE / aspect_map[APPROVALS_KEY]
+        approvals_path = DOC_BASE / aspect_map[gat.KEY_APPROVALS]
         if not approvals_path.is_file() or not approvals_path.stat().st_size:
             log.error(f'destructure failed to find non-empty approvals file at {approvals_path}')
             return 1
-        bind_path = DOC_BASE / aspect_map[BIND_KEY]
+        bind_path = DOC_BASE / aspect_map[gat.KEY_BIND]
         if not bind_path.is_file() or not bind_path.stat().st_size:
             log.error(f'destructure failed to find non-empty bind file at {bind_path}')
             return 1
-        changes_path = DOC_BASE / aspect_map[CHANGES_KEY]
+        changes_path = DOC_BASE / aspect_map[gat.KEY_CHANGES]
         if not changes_path.is_file() or not changes_path.stat().st_size:
             log.error(f'destructure failed to find non-empty changes file at {changes_path}')
             return 1
-        meta_path = DOC_BASE / aspect_map[META_KEY]
+        meta_path = DOC_BASE / aspect_map[gat.KEY_META]
         if not meta_path.is_file() or not meta_path.stat().st_size:
             log.error(f'destructure failed to find non-empty meta file at {meta_path}')
             return 1

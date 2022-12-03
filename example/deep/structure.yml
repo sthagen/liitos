@@ -4,3 +4,4 @@ prod_kind:
     bind: bind.txt
     changes: changes.yml
     meta: meta-deep.yml
+    render: true
