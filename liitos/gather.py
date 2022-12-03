@@ -212,10 +212,11 @@ def prelude(
 ) -> tuple[Structure, Assets]:
     """DRY."""
     doc_root = pathlib.Path(doc_root)
+    idem = os.getcwd()
     os.chdir(doc_root)
     job_description = (
         f'facet ({facet_key}) of target ({target_key}) with structure map ({structure_name})'
-        f' in document root ({doc_root})'
+        f' in document root ({doc_root}) coming from ({idem})'
     )
     log.info(f'executing prelude of command ({command}) for {job_description}')
     structure = load_structure(structure_name)

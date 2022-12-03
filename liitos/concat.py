@@ -260,7 +260,7 @@ def concatenate(
     log.info(f'concatenate (this processor) teleported into the render/pdf location ({os.getcwd()}/)')
 
     if not STRUCTURE_PATH.is_file() or not STRUCTURE_PATH.stat().st_size:
-        log.error(f'destructure failed to find non-empty structure file at {STRUCTURE_PATH}')
+        log.error(f'concat failed to find non-empty structure file at {STRUCTURE_PATH}')
         return 1
 
     with open(STRUCTURE_PATH, 'rt', encoding=ENCODING) as handle:

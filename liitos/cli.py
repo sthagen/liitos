@@ -1,5 +1,6 @@
 """Command line interface for splice (Finnish liitos) contributions."""
 import logging
+import os
 import pathlib
 import sys
 
@@ -198,6 +199,43 @@ def concat(  # noqa
 
     return sys.exit(
         cat.concatenate(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    )
+
+
+@app.command('render')
+def render(  # noqa
+    doc_root_pos: str = typer.Argument(''),
+    doc_root: str = DocumentRoot,
+    structure: str = StructureName,
+    target: str = TargetName,
+    facet: str = FacetName,
+    verbose: bool = Verbosity,
+    strict: bool = Strictness,
+) -> int:
+    """
+    Render the markdown tree for facet of target within render/pdf below document root.
+    """
+    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
+    if code:
+        log.error(message)
+        return 2
+
+    code = cat.concatenate(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    if code:
+        return code
+
+    idem = os.getcwd()
+    doc = '../../'
+    log.info(f'before sig.weave(): {os.getcwd()} set doc ({doc})')
+    code = sig.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    if code:
+        return code
+
+    log.info(f'before chg.weave(): {os.getcwd()} set doc ({doc})')
+    os.chdir(idem)
+    log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
+    return sys.exit(
+        chg.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     )
 
 

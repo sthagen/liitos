@@ -3,18 +3,18 @@ import os
 import pathlib
 
 import liitos.gather as gat
+import liitos.template_loader as template
 from liitos import ENCODING, log
 
-MAGIC_OF_TODAY = 'PUBLICATIONDATE'
-CHANGES_PATH = pathlib.Path('changes.yml')
-METADATATEX_PATH = pathlib.Path('metadata.tex')
-PUB_DATE_GREP_TOKEN = r'\newcommand{\theMetaDate}{'
-PUBLISHER_TEMPLATE_PATH = pathlib.Path('publisher.tex.in')
-PUBLISHER_PATH = pathlib.Path('publisher.tex')
+PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
+PUBLISHER_TEMPLATE_IS_EXTERNAL = bool(PUBLISHER_TEMPLATE)
+if not PUBLISHER_TEMPLATE:
+    PUBLISHER_TEMPLATE = 'templates/publisher.tex.in'
+
+PUBLISHER_PATH = pathlib.Path('render/pdf/publisher.tex')
 TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 ROW_TEMPLATE = r'issue & 00 & author & summary \\'
 GLUE = '\n\\hline\n'
-FORMAT_DATE = '%d %b %Y'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
 COLUMNS_EXPECTED = ['issue', 'author', 'date', 'summary']
@@ -68,8 +68,8 @@ def weave(
             summary = change['summary']
             rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
 
-    with open(PUBLISHER_TEMPLATE_PATH, 'rt', encoding=ENCODING) as handle:
-        lines = [line.rstrip() for line in handle.readlines()]
+    publisher_template = template.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
+    lines = [line.rstrip() for line in publisher_template.split('\n')]
 
     log.info('weaving in the changes ...')
     for n, line in enumerate(lines):

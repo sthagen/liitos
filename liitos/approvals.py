@@ -3,10 +3,15 @@ import os
 import pathlib
 
 import liitos.gather as gat
+import liitos.template_loader as template
 from liitos import ENCODING, log
 
-BOOKMATTER_TEMPLATE_PATH = pathlib.Path('bookmatter.tex.in')
-BOOKMATTER_PATH = pathlib.Path('bookmatter.tex')
+BOOKMATTER_TEMPLATE = os.getenv('LIITOS_BOOKMATTER_TEMPLATE', '')
+BOOKMATTER_TEMPLATE_IS_EXTERNAL = bool(BOOKMATTER_TEMPLATE)
+if not BOOKMATTER_TEMPLATE:
+    BOOKMATTER_TEMPLATE = 'templates/bookmatter.tex.in'
+
+BOOKMATTER_PATH = pathlib.Path('render/pdf/bookmatter.tex')
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'
 EXTRA_OFFSET_EM = 24
 TOKEN = r'\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]'  # nosec B105
@@ -70,8 +75,8 @@ def weave(
     pushdown = EXTRA_OFFSET_EM - 2 * len(rows)
     log.info(f'calculated extra pushdown to be {pushdown}em')
 
-    with open(BOOKMATTER_TEMPLATE_PATH, 'rt', encoding=ENCODING) as handle:
-        lines = [line.rstrip() for line in handle.readlines()]
+    bookmatter_template = template.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_EXTERNAL)
+    lines = [line.rstrip() for line in bookmatter_template.split('\n')]
 
     log.info(f'weaving in the approvals from {signatures_path}...')
     for n, line in enumerate(lines):
