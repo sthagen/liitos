@@ -251,7 +251,7 @@ def concatenate(
     log.info(f'parsed target ({target_code}) and facet ({facet_code}) from request')
 
     structure, asset_map = gat.prelude(
-        doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='changes'
+        doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='concat'
     )
     log.info(f'prelude teleported processor into the document root at ({os.getcwd()}/)')
     rel_concat_folder_path = pathlib.Path("render/pdf/")

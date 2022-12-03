@@ -217,7 +217,7 @@ def prelude(
         f'facet ({facet_key}) of target ({target_key}) with structure map ({structure_name})'
         f' in document root ({doc_root})'
     )
-    log.info(f'Executing prelude of command ({command}) for {job_description}')
+    log.info(f'executing prelude of command ({command}) for {job_description}')
     structure = load_structure(structure_name)
     asset_map = assets(structure)
     return structure, asset_map
@@ -235,7 +235,7 @@ def verify(
     job_description = (
         f'facet ({facet}) for target ({target}) with structure map ({structure_name})' f' in document root ({doc_root})'
     )
-    log.info(f'Starting verification of {job_description}')
+    log.info(f'starting verification of {job_description}')
     structure = load_structure(structure_name)
     target_set = targets(structure)
     facet_map = facets(structure)
@@ -243,33 +243,33 @@ def verify(
 
     predicate, message = verify_target(target, target_set)
     if not predicate:
-        log.error(f'Failed verification with: {message}')
+        log.error(f'failed verification with: {message}')
         return 1
     log.info(f'- target ({target}) OK')
 
     predicate, message = verify_facet(facet, target, facet_map)
     if not predicate:
-        log.error(f'Failed verification with: {message}')
+        log.error(f'failed verification with: {message}')
         return 1
     log.info(f'- facet ({facet}) of target ({target}) OK')
 
     predicate, message = verify_assets(facet, target, asset_map)
     if not predicate:
-        log.error(f'Failed verification with: {message}')
+        log.error(f'failed verification with: {message}')
         return 1
     log.info(f'- assets ({", ".join(sorted(KEYS_REQUIRED))}) for facet ({facet}) of target ({target}) OK')
 
     signatures_path = asset_map[target][facet][KEY_APPROVALS]
-    log.info(f'Loading signatures from {signatures_path=}')
+    log.info(f'loading signatures from {signatures_path=}')
     signatures = load_approvals(facet, target, signatures_path)
     log.info(f'{signatures=}')
     history_path = asset_map[target][facet][KEY_CHANGES]
-    log.info(f'Loading history from {history_path=}')
+    log.info(f'loading history from {history_path=}')
     history = load_changes(facet, target, history_path)
     log.info(f'{history=}')
     metadata_path = asset_map[target][facet][KEY_META]
-    log.info(f'Loading metadata from {metadata_path=}')
+    log.info(f'loading metadata from {metadata_path=}')
     info = load_meta(facet, target, metadata_path)
     log.info(f'{info=}')
-    log.info('Successful verification')
+    log.info('successful verification')
     return 0
