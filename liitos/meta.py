@@ -125,68 +125,122 @@ def weave(
     lines = [line.rstrip() for line in metadata_template.split('\n')]
 
     log.info('weaving in the meta data ...')
+    common = metadata['document']['common']
     for n, line in enumerate(lines):
         if line.rstrip().endswith('%%_PATCH_%_HEADER_%_TITLE_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['header_title'])
+            if common.get('header_title'):
+                lines[n] = line.replace(VALUE_SLOT, common['header_title'])
+            else:
+                log.warning('header_title value missing ... setting default (the title value)')
+                lines[n] = line.replace(VALUE_SLOT, common['title'])
             continue
         if line.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['title'])
+            lines[n] = line.replace(VALUE_SLOT, common['title'])
             continue
         if line.rstrip().endswith('%%_PATCH_%_SUB_%_TITLE_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['sub_title'])
+            if common.get('sub_title'):
+                lines[n] = line.replace(VALUE_SLOT, common['sub_title'])
+            else:
+                log.warning('sub_title value missing ... setting default (single space)')
+                lines[n] = line.replace(VALUE_SLOT, ' ')
             continue
         if line.rstrip().endswith('%%_PATCH_%_TYPE_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['header_type'])
+            if common.get('header_type'):
+                lines[n] = line.replace(VALUE_SLOT, common['header_type'])
+            else:
+                log.warning('header_type value missing ... setting default (Engineering Document)')
+                lines[n] = line.replace(VALUE_SLOT, 'Engineering Document')
             continue
         if line.rstrip().endswith('%%_PATCH_%_ID_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['header_id'])
+            if common.get('header_id'):
+                lines[n] = line.replace(VALUE_SLOT, common['header_id'])
+            else:
+                log.warning('header_id value missing ... setting default (P99999)')
+                lines[n] = line.replace(VALUE_SLOT, 'P99999')
             continue
         if line.rstrip().endswith('%%_PATCH_%_ISSUE_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['issue'])
+            if common.get('issue'):
+                lines[n] = line.replace(VALUE_SLOT, common['issue'])
+            else:
+                log.warning('issue value missing ... setting default (01)')
+                lines[n] = line.replace(VALUE_SLOT, '01')
             continue
         if line.rstrip().endswith('%%_PATCH_%_REVISION_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['revision'])
+            if common.get('revision'):
+                lines[n] = line.replace(VALUE_SLOT, common['revision'])
+            else:
+                log.warning('revision value missing ... setting default (00)')
+                lines[n] = line.replace(VALUE_SLOT, '00')
             continue
         if line.rstrip().endswith('%%_PATCH_%_DATE_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['header_date'])
+            if common.get('header_date'):
+                lines[n] = line.replace(VALUE_SLOT, common['header_date'])
+            else:
+                log.warning('header_date value missing ... setting default (DD MON YYYY)')
+                lines[n] = line.replace(VALUE_SLOT, 'DD MON YYYY')
             continue
         if line.rstrip().endswith('%%_PATCH_%_FRAME_%_NOTE_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['footer_frame_note'])
+            if common.get('footer_frame_note'):
+                lines[n] = line.replace(VALUE_SLOT, common['footer_frame_note'])
+            else:
+                log.warning('footer_frame_note value missing ... setting default (VERY CONSEQUENTIAL)')
+                lines[n] = line.replace(VALUE_SLOT, 'VERY CONSEQUENTIAL')
             continue
         if line.rstrip().endswith('%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%'):
-            if metadata['document']['common']['footer_page_number_prefix']:
-                lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['footer_page_number_prefix'])
+            if common.get('footer_page_number_prefix'):
+                lines[n] = line.replace(VALUE_SLOT, common['footer_page_number_prefix'])
             else:
-                log.warning('footer_page_number_prefix value missing ... setting default')
+                log.warning('footer_page_number_prefix value missing ... setting default (Page)')
                 lines[n] = line.replace(VALUE_SLOT, 'Page')
             continue
         if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['change_log_issue_label'])
+            if common.get('change_log_issue_label'):
+                lines[n] = line.replace(VALUE_SLOT, common['change_log_issue_label'])
+            else:
+                log.warning('change_log_issue_label value missing ... setting default (Iss.)')
+                lines[n] = line.replace(VALUE_SLOT, 'Iss.')
             continue
         if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['change_log_revision_label'])
+            if common.get('change_log_revision_label'):
+                lines[n] = line.replace(VALUE_SLOT, common['change_log_revision_label'])
+            else:
+                log.warning('change_log_revision_label value missing ... setting default (Rev.)')
+                lines[n] = line.replace(VALUE_SLOT, 'Rev.')
             continue
         if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['change_log_date_label'])
+            if common.get('change_log_date_label'):
+                lines[n] = line.replace(VALUE_SLOT, common['change_log_date_label'])
+            else:
+                log.warning('change_log_date_label value missing ... setting default (Date)')
+                lines[n] = line.replace(VALUE_SLOT, 'Date')
             continue
         if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['change_log_author_label'])
+            if common.get('change_log_author_label'):
+                lines[n] = line.replace(VALUE_SLOT, common['change_log_author_label'])
+            else:
+                log.warning('change_log_author_label value missing ... setting default (Author)')
+                lines[n] = line.replace(VALUE_SLOT, 'Author')
             continue
         if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%'):
-            lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['change_log_description_label'])
+            if common.get('change_log_description_label'):
+                lines[n] = line.replace(VALUE_SLOT, common['change_log_description_label'])
+            else:
+                log.warning('change_log_description_label value missing ... setting default (Description)')
+                lines[n] = line.replace(VALUE_SLOT, 'Description')
             continue
         if line.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'):
-            if metadata['document']['common']['header_issue_revision_combined']:
-                lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['header_issue_revision_combined'])
+            if common.get('header_issue_revision_combined'):
+                lines[n] = line.replace(VALUE_SLOT, common['header_issue_revision_combined'])
             else:
-                log.warning('footer_page_number_prefix value missing ... setting default')
+                log.warning('footer_page_number_prefix value missing ... setting default (Iss \\theMetaIssCode, Rev \\theMetaRevCode)')
                 lines[n] = line.replace(VALUE_SLOT, r'Iss \theMetaIssCode, Rev \theMetaRevCode')
             continue
         if line.rstrip().endswith('%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'):
-            if metadata['document']['common']['proprietary_information']:
-                lines[n] = line.replace(VALUE_SLOT, metadata['document']['common']['proprietary_information'])
+            if common.get('proprietary_information'):
+                lines[n] = line.replace(VALUE_SLOT, common['proprietary_information'])
             else:
-                log.warning('proprietary_information value missing ...')
+                log.warning('proprietary_information value missing ... setting default (Proprietary Information MISSING)')
+                lines[n] = line.replace(VALUE_SLOT, 'Proprietary Information MISSING')
             continue
     if lines[-1]:
         lines.append('\n')
