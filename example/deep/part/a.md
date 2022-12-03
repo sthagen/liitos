@@ -9,12 +9,9 @@ with open('a1.md') as fp:
 
 ## Aa
 
-Some text to better verify the blank line handling.
+Some text per the simplified include mechanism to also better verify the blank line handling.
 
-```{.python .cb.run}
-with open('sub/as.md') as fp:
-    print(fp.read())
-```
+\include{sub/as.md}
 
 ## Ab
 

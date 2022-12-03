@@ -27,6 +27,11 @@ READ_SLOT_FENCE_BEGIN = '```{.python .cb.run}'
 READ_SLOT_CONTEXT_BEGIN = 'with open('
 READ_SLOT_FENCE_END = '```'
 
+r"""
+\include{markdown_file_path}
+"""
+INCLUDE_SLOT = '\\include{'
+
 """
 ![Alt Text Red](images/red.png "Caption Text Red")
 ![Alt Text Dot Dot Lime](../images/lime.png "Caption Text Dot Dot Lime")
@@ -219,6 +224,12 @@ if len(targets) == 1:
                     in_region = True
                     begin = slot
                     continue
+                if line.startswith(INCLUDE_SLOT):
+                    include = line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
+                    insert_regions[entry].append(((slot, slot), include))
+                    tree.create_node(include, include, parent=entry)
+                    include = ''
+                    continue
             if in_region:
                 if line.startswith(READ_SLOT_CONTEXT_BEGIN):
                     # PROTOBUG print(f'<<<<< ({line})')
@@ -256,6 +267,13 @@ if len(targets) == 1:
                     if line.startswith(READ_SLOT_FENCE_BEGIN):
                         in_region = True
                         begin = slot
+                        continue
+                    if line.startswith(INCLUDE_SLOT):
+                        sub_include = line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
+                        sub_include = str(pathlib.Path(include).parent / sub_include)
+                        insert_regions[include].append(((slot, slot), sub_include))
+                        tree.create_node(sub_include, sub_include, parent=include)
+                        sub_include = ''
                         continue
                 if in_region:
                     if line.startswith(READ_SLOT_CONTEXT_BEGIN):
@@ -296,6 +314,13 @@ if len(targets) == 1:
                             in_region = True
                             begin = slot
                             continue
+                        if line.startswith(INCLUDE_SLOT):
+                            sub_sub_include = line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
+                            sub_sub_include = str(pathlib.Path(sub_include).parent / sub_sub_include)
+                            insert_regions[sub_include].append(((slot, slot), sub_sub_include))
+                            tree.create_node(sub_sub_include, sub_sub_include, parent=sub_include)
+                            sub_sub_include = ''
+                            continue
                     if in_region:
                         if line.startswith(READ_SLOT_CONTEXT_BEGIN):
                             # PROTOBUG print(f'<<<<< ({line})')
@@ -335,6 +360,13 @@ if len(targets) == 1:
                                 in_region = True
                                 begin = slot
                                 continue
+                            if line.startswith(INCLUDE_SLOT):
+                                sub_sub_sub_include = line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
+                                sub_sub_sub_include = str(pathlib.Path(sub_sub_include).parent / sub_sub_sub_include)
+                                insert_regions[sub_sub_include].append(((slot, slot), sub_sub_sub_include))
+                                tree.create_node(sub_sub_sub_include, sub_sub_sub_include, parent=sub_sub_include)
+                                sub_sub_sub_include = ''
+                                continue
                         if in_region:
                             if line.startswith(READ_SLOT_CONTEXT_BEGIN):
                                 # PROTOBUG print(f'<<<<< ({line})')
@@ -373,6 +405,15 @@ if len(targets) == 1:
                                 if line.startswith(READ_SLOT_FENCE_BEGIN):
                                     in_region = True
                                     begin = slot
+                                    continue
+                                if line.startswith(INCLUDE_SLOT):
+                                    sub_sub_sub_sub_include = line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
+                                    sub_sub_sub_sub_include = str(
+                                        pathlib.Path(sub_sub_sub_include).parent / sub_sub_sub_sub_include
+                                    )
+                                    insert_regions[sub_sub_sub_sub_include].append(((slot, slot), sub_sub_sub_sub_include))
+                                    tree.create_node(sub_sub_sub_sub_include, sub_sub_sub_sub_include, parent=sub_sub_sub_include)
+                                    sub_sub_sub_sub_include = ''
                                     continue
                             if in_region:
                                 if line.startswith(READ_SLOT_CONTEXT_BEGIN):
