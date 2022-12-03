@@ -2,4 +2,4 @@
 document:
   import: meta-base.yml
   patch:
-    id: P99999
+    header_id: P99999
