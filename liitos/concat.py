@@ -99,12 +99,12 @@ def rollup(
     flat: dict[str, str],
 ) -> list[list[str]]:
     """TODO."""
-    tackle = [those[0] for those in jobs if those]
+    tackle = [those[0] for those in jobs if those and those[0] != '/']
     if tackle:
         log.info(f'  Insertion ongoing with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
+    else:
+        return [[]]
     for that in tackle:
-        if that == '/':
-            continue
         buf = []
         for slot, line in enumerate(docs[that]):
             special = False
@@ -182,7 +182,7 @@ def concatenate(
         missing_keys = [key for key in gat.KEYS_REQUIRED if key not in aspect_map]
         if missing_keys:
             log.error(
-                f'Structure does not provide all expected aspects {sorted(gat.KEYS_REQUIRED)}'
+                f'structure does not provide all expected aspects {sorted(gat.KEYS_REQUIRED)}'
                 f' for target ({target_code}) and facet ({facet_code})'
             )
             log.error(f'- the found aspects: {sorted(aspect_map.keys())}')
@@ -190,7 +190,7 @@ def concatenate(
             return 1
         if sorted(aspect_map.keys()) != sorted(gat.KEYS_REQUIRED):
             log.warning(
-                f'Structure does not strictly provide the expected aspects {sorted(gat.KEYS_REQUIRED)}'
+                f'structure does not strictly provide the expected aspects {sorted(gat.KEYS_REQUIRED)}'
                 f' for target ({target_code}) and facet ({facet_code})'
             )
             log.warning(f'- found the following aspects instead:                   {sorted(aspect_map.keys())} instead')
@@ -240,16 +240,16 @@ def concatenate(
             metadata = yaml.safe_load(handle)
 
         if not approvals:
-            log.error(f'Empty approvals file? Please add approvals to ({approvals_path})')
+            log.error(f'empty approvals file? Please add approvals to ({approvals_path})')
             return 1
         if not binder:
-            log.error(f'Empty bind file? Please add component paths to ({bind_path})')
+            log.error(f'empty bind file? Please add component paths to ({bind_path})')
             return 1
         if not changes:
-            log.error(f'Empty changes file? Please add changes data to ({changes_path})')
+            log.error(f'empty changes file? Please add changes data to ({changes_path})')
             return 1
         if not approvals:
-            log.error(f'Empty metadata file? Please add metadata to ({meta_path})')
+            log.error(f'empty metadata file? Please add metadata to ({meta_path})')
             return 1
 
         if approvals_channel == 'yaml':
@@ -488,13 +488,14 @@ def concatenate(
 
         chains = [leaf_path for leaf_path in bottom_up_paths]
         log.info(f'starting insertions bottom up for the {len(chains)} inclusion chains:')
-        remaining = [[job for job in chain if job not in concat] for chain in chains]
-        still = rollup(remaining, documents, insert_regions, concat)
-        more = rollup(still, documents, insert_regions, concat)
-        done = rollup(more, documents, insert_regions, concat)
-        tackle = set(those[0] for those in done if those)
-        if tackle and len(tackle) >= 1 and tuple(tackle)[0] != '/':
-            log.warning(f' Insertion incomplete with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
+        todo = [[job for job in chain if job not in concat] for chain in chains]
+        while todo != [[]]:
+            todo = rollup(todo, documents, insert_regions, concat)
+        # more = rollup(still, documents, insert_regions, concat)
+        # done = rollup(more, documents, insert_regions, concat)
+        # tackle = set(those[0] for those in done if those)
+        # if tackle and len(tackle) >= 1 and tuple(tackle)[0] != '/':
+        #     log.warning(f' Insertion incomplete with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
 
         log.info('writing final concat markdown to document.md')
         with open('document.md', 'wt', encoding=ENCODING) as handle:
