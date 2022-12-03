@@ -14,11 +14,7 @@ from liitos import ENCODING, log
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
-APPROVALS_KEY = 'approvals'
-BIND_KEY = 'bind'
-CHANGES_KEY = 'changes'
-META_KEY = 'meta'
-ASPECT_KEYS = sorted((APPROVALS_KEY, BIND_KEY, CHANGES_KEY, META_KEY))
+SLASH = '/'
 
 """
 ```{.python .cb.run}
@@ -99,7 +95,7 @@ def rollup(
     flat: dict[str, str],
 ) -> list[list[str]]:
     """TODO."""
-    tackle = [those[0] for those in jobs if those and those[0] != '/']
+    tackle = [those[0] for those in jobs if those and those[0] != SLASH]
     if tackle:
         log.info(f'  Insertion ongoing with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
     else:
@@ -199,59 +195,15 @@ def concatenate(
         if not approvals_path.is_file() or not approvals_path.stat().st_size:
             log.error(f'destructure failed to find non-empty approvals file at {approvals_path}')
             return 1
-        bind_path = DOC_BASE / aspect_map[gat.KEY_BIND]
-        if not bind_path.is_file() or not bind_path.stat().st_size:
-            log.error(f'destructure failed to find non-empty bind file at {bind_path}')
-            return 1
-        changes_path = DOC_BASE / aspect_map[gat.KEY_CHANGES]
-        if not changes_path.is_file() or not changes_path.stat().st_size:
-            log.error(f'destructure failed to find non-empty changes file at {changes_path}')
-            return 1
-        meta_path = DOC_BASE / aspect_map[gat.KEY_META]
-        if not meta_path.is_file() or not meta_path.stat().st_size:
-            log.error(f'destructure failed to find non-empty meta file at {meta_path}')
-            return 1
-
         if approvals_path.suffix.lower() not in ('.json', '.yaml', '.yml'):
             log.error(f'approvals file format per suffix ({approvals_path.suffix}) not supported')
             return 1
         approvals_channel = 'yaml' if approvals_path.suffix.lower() in ('.yaml', '.yml') else 'json'
-
-        if bind_path.suffix.lower() not in ('.txt',):
-            log.error(f'bind file format per suffix ({bind_path.suffix}) not supported')
-            return 1
-
-        if changes_path.suffix.lower() not in ('.json', '.yaml', '.yml'):
-            log.error(f'changes file format per suffix ({changes_path.suffix}) not supported')
-            return 1
-        changes_channel = 'yaml' if changes_path.suffix.lower() in ('.yaml', '.yml') else 'json'
-
-        if meta_path.suffix.lower() not in ('.yaml', '.yml'):
-            log.error(f'meta file format per suffix ({meta_path.suffix}) not supported')
-            return 1
-
         with open(approvals_path, 'rt', encoding=ENCODING) as handle:
             approvals = yaml.safe_load(handle) if approvals_channel == 'yaml' else json.load(handle)
-        with open(bind_path, 'rt', encoding=ENCODING) as handle:
-            binder = [line.strip() for line in handle.readlines() if line.strip()]
-        with open(changes_path, 'rt', encoding=ENCODING) as handle:
-            changes = yaml.safe_load(handle) if changes_channel == 'yaml' else json.load(handle)
-        with open(meta_path, 'rt', encoding=ENCODING) as handle:
-            metadata = yaml.safe_load(handle)
-
         if not approvals:
             log.error(f'empty approvals file? Please add approvals to ({approvals_path})')
             return 1
-        if not binder:
-            log.error(f'empty bind file? Please add component paths to ({bind_path})')
-            return 1
-        if not changes:
-            log.error(f'empty changes file? Please add changes data to ({changes_path})')
-            return 1
-        if not approvals:
-            log.error(f'empty metadata file? Please add metadata to ({meta_path})')
-            return 1
-
         if approvals_channel == 'yaml':
             with open('approvals.yml', 'wt', encoding=ENCODING) as handle:
                 yaml.dump(approvals, handle, default_flow_style=False)
@@ -259,9 +211,34 @@ def concatenate(
             with open('approvals.json', 'wt', encoding=ENCODING) as handle:
                 json.dump(approvals, handle, indent=2)
 
+        bind_path = DOC_BASE / aspect_map[gat.KEY_BIND]
+        if not bind_path.is_file() or not bind_path.stat().st_size:
+            log.error(f'destructure failed to find non-empty bind file at {bind_path}')
+            return 1
+        if bind_path.suffix.lower() not in ('.txt',):
+            log.error(f'bind file format per suffix ({bind_path.suffix}) not supported')
+            return 1
+        with open(bind_path, 'rt', encoding=ENCODING) as handle:
+            binder = [line.strip() for line in handle.readlines() if line.strip()]
+        if not binder:
+            log.error(f'empty bind file? Please add component paths to ({bind_path})')
+            return 1
         with open('bind.txt', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(binder) + '\n')
 
+        changes_path = DOC_BASE / aspect_map[gat.KEY_CHANGES]
+        if not changes_path.is_file() or not changes_path.stat().st_size:
+            log.error(f'destructure failed to find non-empty changes file at {changes_path}')
+            return 1
+        if changes_path.suffix.lower() not in ('.json', '.yaml', '.yml'):
+            log.error(f'changes file format per suffix ({changes_path.suffix}) not supported')
+            return 1
+        changes_channel = 'yaml' if changes_path.suffix.lower() in ('.yaml', '.yml') else 'json'
+        with open(changes_path, 'rt', encoding=ENCODING) as handle:
+            changes = yaml.safe_load(handle) if changes_channel == 'yaml' else json.load(handle)
+        if not changes:
+            log.error(f'empty changes file? Please add changes data to ({changes_path})')
+            return 1
         if changes_channel == 'yaml':
             with open('changes.yml', 'wt', encoding=ENCODING) as handle:
                 yaml.dump(changes, handle, default_flow_style=False)
@@ -269,6 +246,18 @@ def concatenate(
             with open('changes.json', 'wt', encoding=ENCODING) as handle:
                 json.dump(changes, handle, indent=2)
 
+        meta_path = DOC_BASE / aspect_map[gat.KEY_META]
+        if not meta_path.is_file() or not meta_path.stat().st_size:
+            log.error(f'destructure failed to find non-empty meta file at {meta_path}')
+            return 1
+        if meta_path.suffix.lower() not in ('.yaml', '.yml'):
+            log.error(f'meta file format per suffix ({meta_path.suffix}) not supported')
+            return 1
+        with open(meta_path, 'rt', encoding=ENCODING) as handle:
+            metadata = yaml.safe_load(handle)
+        if not metadata:
+            log.error(f'empty metadata file? Please add metadata to ({meta_path})')
+            return 1
         if 'import' in metadata['document']:
             base_meta_path = DOC_BASE / metadata['document']['import']
             if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
@@ -279,7 +268,6 @@ def concatenate(
             for key, value in metadata['document']['patch'].items():
                 base_data['document']['common'][key] = value
             metadata = base_data
-
         with open('metadata.yml', 'wt', encoding=ENCODING) as handle:
             yaml.dump(metadata, handle, default_flow_style=False)
 
@@ -287,7 +275,7 @@ def concatenate(
         root_path = str(pathlib.Path.cwd().resolve()).rstrip('/') + '/'
         documents = {}
         tree = treelib.Tree()
-        root = '/'
+        root = SLASH
         tree.create_node(root, root)
         insert_regions = {}
         img_collector = []
@@ -491,11 +479,6 @@ def concatenate(
         todo = [[job for job in chain if job not in concat] for chain in chains]
         while todo != [[]]:
             todo = rollup(todo, documents, insert_regions, concat)
-        # more = rollup(still, documents, insert_regions, concat)
-        # done = rollup(more, documents, insert_regions, concat)
-        # tackle = set(those[0] for those in done if those)
-        # if tackle and len(tackle) >= 1 and tuple(tackle)[0] != '/':
-        #     log.warning(f' Insertion incomplete with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
 
         log.info('writing final concat markdown to document.md')
         with open('document.md', 'wt', encoding=ENCODING) as handle:
