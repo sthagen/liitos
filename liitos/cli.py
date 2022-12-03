@@ -7,6 +7,7 @@ import typer
 
 import liitos.approvals as sig
 import liitos.captions as cap
+import liitos.concat as cat
 import liitos.changes as chg
 import liitos.figures as fig
 import liitos.gather as gat
@@ -174,6 +175,29 @@ def changes(  # noqa
 
     return sys.exit(
         chg.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    )
+
+
+@app.command('concat')
+def concat(  # noqa
+    doc_root_pos: str = typer.Argument(''),
+    doc_root: str = DocumentRoot,
+    structure: str = StructureName,
+    target: str = TargetName,
+    facet: str = FacetName,
+    verbose: bool = Verbosity,
+    strict: bool = Strictness,
+) -> int:
+    """
+    Concatenate the markdown tree for facet of target within render/pdf below document root.
+    """
+    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
+    if code:
+        log.error(message)
+        return 2
+
+    return sys.exit(
+        cat.concatenate(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     )
 
 
