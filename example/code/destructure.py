@@ -173,7 +173,8 @@ if len(targets) == 1:
     img_collector = []
     for entry in binder:
         path = DOC_BASE / entry
-        # PROTOBUG print(f'- {entry} as {path}')
+        # PROTOBUG
+        print(f'- {entry} as {path}')
         with open(path, 'rt', encoding=ENCODING) as handle:
             documents[entry] = [line.rstrip() for line in handle.readlines()]
         insert_regions[entry] = []
@@ -183,14 +184,12 @@ if len(targets) == 1:
         refs[entry] = {}
         for slot, line in enumerate(documents[entry]):
             if line.startswith(IMG_LINE_STARTSWITH):
-                # PROTOBUG
-                print(line)
+                # PROTOBUG print(line)
                 before, xtr = line.split('](', 1)
                 has_caption = True if ' ' in xtr else False
                 img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
                 img_path = str((pathlib.Path(entry).parent / img).resolve()).replace(root_path, '')
-                # PROTOBUG
-                print(img_path)
+                # PROTOBUG print(img_path)
                 img_collector.append(img_path)
                 img_hack = img_path
                 if '/images/' in img_path:
@@ -198,13 +197,11 @@ if len(targets) == 1:
                 elif '/diagrams/' in img_path:
                     img_hack = 'diagrams/' + img_path.split('/diagrams/', 1)[1]
                 if img_hack != img_path:
-                    print(img_hack, '<--- OK?')
+                    pass  # PROTOBUG print(img_hack, '<--- OK?')
                 line = f'{before}]({img_hack}{" " if has_caption else ")"}{after}'
                 documents[entry][slot] = line
-                # PROTOBUG
-                print(' --- level include')
-            # PROTOBUG
-            print(f'{slot :02d}|{line.rstrip()}')
+                # PROTOBUG print(' --- level include')
+            # PROTOBUG print(f'{slot :02d}|{line.rstrip()}')
             if not in_region:
                 if line.startswith(READ_SLOT_FENCE_BEGIN):
                     in_region = True
@@ -386,13 +383,13 @@ if len(targets) == 1:
     # PROTOBUG print('documents')
     # PROTOBUG print('- ' * 39)
     # PROTOBUG print(json.dumps(documents, indent=2))
-    print('img_collector')
-    print('- ' * 39)
-    print(json.dumps(img_collector, indent=2))
-    print('documents.keys()')
-    print('- ' * 39)
-    print(json.dumps(list(documents.keys()), indent=2))
-    print('- ' * 39)
+    # PROTOBUG print('img_collector')
+    # PROTOBUG print('- ' * 39)
+    # PROTOBUG print(json.dumps(img_collector, indent=2))
+    # PROTOBUG print('documents.keys()')
+    # PROTOBUG print('- ' * 39)
+    # PROTOBUG print(json.dumps(list(documents.keys()), indent=2))
+    # PROTOBUG print('- ' * 39)
     print('refs')
     print('- ' * 39)
     print(json.dumps(refs, indent=2))
@@ -460,21 +457,33 @@ if len(targets) == 1:
     # PROTOBUG     print('map chain of leaf_path', num)
     # PROTOBUG     print(invert_to_map(leaf_path))
 
+    print(f'Provisioning chains for the {len(leaf_paths)} bottom up leaf paths:')
     for num, leaf_path in enumerate(leaf_paths):
-        print('seq chain of leaf_path', num)
-        print(invert_to_seq(leaf_path))
+        seq = invert_to_seq(leaf_path)
+        the_way_up = f'|-> {seq[0]}' if len(seq) == 1 else f'{" -> ".join(seq)}'
+        print(f'{num :2d}: {the_way_up}')
 
     concat = {}
+    print()
+    print(f'Dependencies for the {len(insert_regions)} document parts:')
     for key, regions in insert_regions.items():
-        print(f'{key} -------')
+        num_in = len(regions)
+        dashes = "-" * num_in
+        incl_disp = f'( {num_in} include{"" if num_in == 1 else "s"} )'
+        indicator = '(no includes)' if not regions else f'<{dashes + incl_disp + dashes}'
+        print(f'- part {key} {indicator}')
         for region in regions:
-            print(region)
+            between = f'between lines {region[0][0] :3d} and {region[0][1] :3d}'
+            insert = f'include fragment {region[1]}'
+            print(f'  + {between} {insert}')
         if not regions:  # No includes
             concat[key] = '\n'.join(documents[key]) + '\n'
-            print('no includes in', key)
+            print(f'  * did concat {key} document for insertion')
 
     chains = [invert_to_seq(leaf_path) for leaf_path in leaf_paths]
     # PROTOBUG print(chains)
+    print()
+    print(f'Starting insertions bootom up for the {len(chains)} inclusion chains:')
 
     remaining = []
     for chain in chains:
@@ -490,6 +499,8 @@ if len(targets) == 1:
 
     # PROTOBUG print(remaining)
     tackle = set(those[0] for those in remaining if those)
+    if tackle:
+        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(tackle))}) remaining')
     for that in tackle:
         # PROTOBUG print(that, insert_regions[that])
         buf = []
@@ -526,6 +537,8 @@ if len(targets) == 1:
     # PROTOBUG print(still)
 
     tackle = set(those[0] for those in still if those)
+    if tackle:
+        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(tackle))}) remaining')
     for that in tackle:
         # PROTOBUG print(that, insert_regions[that])
         buf = []
@@ -562,6 +575,8 @@ if len(targets) == 1:
     # PROTOBUG print(more)
 
     tackle = set(those[0] for those in more if those)
+    if tackle:
+        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(tackle))}) remaining')
     for that in tackle:
         # PROTOBUG print(that, insert_regions[that])
         buf = []
@@ -598,18 +613,21 @@ if len(targets) == 1:
     # PROTOBUG print(done)
 
     tackle = set(those[0] for those in done if those)
-    print(tackle)
+    if tackle:
+        print(f'  WARNING: Insertion incomplete with parts ({", ".join(tuple(tackle))}) remaining')
 
     # PROTOBUG print('= ' * 39)
     # PROTOBUG for bind in binder:
     # PROTOBUG     print(concat[bind])
     # PROTOBUG print('= ' * 39)
 
-    print('Writing concat markdown to document.md')
+    print()
+    print('Writing final concat markdown to document.md')
     with open('document.md', 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(concat[bind] for bind in binder) + '\n')
 
-    print('collecting assets (images and diagrams)')
+    print()
+    print('Collecting assets (images and diagrams)')
     images = pathlib.Path("images/")
     images.mkdir(parents=True, exist_ok=True)
     diagrams = pathlib.Path("diagrams/")
@@ -625,7 +643,8 @@ if len(targets) == 1:
             target_asset = diagrams / pathlib.Path(img_path).name
             shutil.copy(source_asset, target_asset)
 
-    print('OK')
+    print()
+    print('Processing complete - SUCCESS')
     sys.exit(0)
 
 print(f'structure data files with other than one target currently not supported - found targets ({targets})', file=sys.stderr)
