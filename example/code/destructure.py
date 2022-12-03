@@ -4,7 +4,7 @@ import json
 import pathlib
 import shutil
 import sys
-from treelib import Node, Tree
+import treelib
 
 import yaml
 
@@ -178,7 +178,9 @@ if len(targets) == 1:
     # PROTOBUG print('-' * 79)
     root_path = str(pathlib.Path.cwd().resolve()).rstrip('/') + '/'
     documents = {}
-    refs = {}
+    tree = treelib.Tree()
+    root = '/'
+    tree.create_node(root, root)
     insert_regions = {}
     img_collector = []
     for entry in binder:
@@ -191,7 +193,7 @@ if len(targets) == 1:
         in_region = False
         begin, end = 0, 0
         include = ''
-        refs[entry] = {}
+        tree.create_node(entry, entry, parent=root)
         for slot, line in enumerate(documents[entry]):
             if line.startswith(IMG_LINE_STARTSWITH):
                 # PROTOBUG print(line)
@@ -225,7 +227,7 @@ if len(targets) == 1:
                     end = slot
                     # PROTOBUG print(f'>>>>> {entry} -> {include}')
                     insert_regions[entry].append(((begin, end), include))
-                    refs[entry][include] = {}
+                    tree.create_node(include, include, parent=entry)
                     in_region = False
                     begin, end = 0, 0
                     include = ''
@@ -264,7 +266,7 @@ if len(targets) == 1:
                         end = slot
                         # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
                         insert_regions[include].append(((begin, end), sub_include))
-                        refs[entry][include][sub_include] = {}
+                        tree.create_node(sub_include, sub_include, parent=include)
                         in_region = False
                         begin, end = 0, 0
                         sub_include = ''
@@ -303,7 +305,7 @@ if len(targets) == 1:
                             end = slot
                             # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
                             insert_regions[sub_include].append(((begin, end), sub_sub_include))
-                            refs[entry][include][sub_include][sub_sub_include] = {}
+                            tree.create_node(sub_sub_include, sub_sub_include, parent=sub_include)
                             in_region = False
                             begin, end = 0, 0
                             sub_sub_include = ''
@@ -342,7 +344,7 @@ if len(targets) == 1:
                                 end = slot
                                 # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
                                 insert_regions[sub_sub_include].append(((begin, end), sub_sub_sub_include))
-                                refs[entry][include][sub_include][sub_sub_include][sub_sub_sub_include] = {}
+                                tree.create_node(sub_sub_sub_include, sub_sub_sub_include, parent=sub_sub_include)
                                 in_region = False
                                 begin, end = 0, 0
                                 sub_sub_sub_include = ''
@@ -381,96 +383,21 @@ if len(targets) == 1:
                                     end = slot
                                     # PROTOBUG print(f'>>>>> {entry} -> {include} -> {sub_include}')
                                     insert_regions[sub_sub_sub_include].append(((begin, end), sub_sub_sub_include))
-                                    refs[entry][include][sub_include][sub_sub_sub_include][sub_sub_sub_sub_include] = {}
+                                    tree.create_node(sub_sub_sub_sub_include, sub_sub_sub_sub_include, parent=sub_sub_sub_include)
                                     in_region = False
                                     begin, end = 0, 0
                                     sub_sub_sub_sub_include = ''
 
-    # PROTOBUG print('-' * 79)
-    # PROTOBUG print('insert_regions')
-    # PROTOBUG print('- ' * 39)
-    # PROTOBUG print(json.dumps(insert_regions, indent=2))
-    # PROTOBUG print('documents')
-    # PROTOBUG print('- ' * 39)
-    # PROTOBUG print(json.dumps(documents, indent=2))
-    # PROTOBUG print('img_collector')
-    # PROTOBUG print('- ' * 39)
-    # PROTOBUG print(json.dumps(img_collector, indent=2))
-    # PROTOBUG print('documents.keys()')
-    # PROTOBUG print('- ' * 39)
-    # PROTOBUG print(json.dumps(list(documents.keys()), indent=2))
-    # PROTOBUG print('- ' * 39)
-    print('refs')
-    print('- ' * 39)
-    print(json.dumps(refs, indent=2))
-
-    dfs = {key: [] for key in refs}
-
-    import collections.abc
+    top_down_paths = tree.paths_to_leaves()
+    bottom_up_paths = [list(reversed(td_p)) for td_p in top_down_paths]
+    print()
+    print('Resulting Tree:')
+    tree.show()
 
 
-    def is_dict(d):
-        return isinstance(d, collections.abc.Mapping)
-
-
-    def is_atom_or_flat(d):
-        return not is_dict(d) or not any(is_dict(v) for v in d.values())
-
-
-    def extract_leaf_paths(the_map, stop_here=is_atom_or_flat):
-        """Yield dict of only the entries between the root and the leaf."""
-        for k, v in the_map.items():
-            if stop_here(v):
-                yield {k: v}
-            else:
-                for part in extract_leaf_paths(v):
-                    yield {k: part}
-
-    leaf_paths = list(extract_leaf_paths(refs))
-    # PROTOBUG print('leaf_paths')
-    # PROTOBUG print(leaf_paths)
-
-    def x_path(a_map, collected):
-        """Collect all paths in map from the root to any leaf."""
-        if not a_map:
-            return [collected]
-        temp = []
-        for k in a_map:
-            temp.extend(x_path(a_map[k], collected + [k]))
-        return temp
-
-    def invert_to_map(a_map):
-        """Do invert to map."""
-        every_path = x_path(a_map, [])
-        inverted_path = {}
-        for p in every_path:
-            top = inverted_path
-            for el in p[::-1]:
-                if el not in top:
-                    top[el] = {}
-                top = top[el]
-        return inverted_path
-
-    def invert_to_seq(a_map):
-        """Do invert to sequence."""
-        every_path = x_path(a_map, [])
-        inverted_path = []
-        for p in every_path:
-            top = inverted_path
-            for el in p[::-1]:
-                if el not in top:
-                    top.append(el)
-                # top = top[el]
-        return inverted_path
-
-    # PROTOBUG for num, leaf_path in enumerate(leaf_paths):
-    # PROTOBUG     print('map chain of leaf_path', num)
-    # PROTOBUG     print(invert_to_map(leaf_path))
-
-    print(f'Provisioning chains for the {len(leaf_paths)} bottom up leaf paths:')
-    for num, leaf_path in enumerate(leaf_paths):
-        seq = invert_to_seq(leaf_path)
-        the_way_up = f'|-> {seq[0]}' if len(seq) == 1 else f'{" -> ".join(seq)}'
+    print(f'Provisioning chains for the {len(bottom_up_paths)} bottom up leaf paths:')
+    for num, leaf_path in enumerate(bottom_up_paths):
+        the_way_up = f'|-> {leaf_path[0]}' if len(leaf_path) == 1 else f'{" -> ".join(leaf_path)}'
         print(f'{num :2d}: {the_way_up}')
 
     concat = {}
@@ -490,10 +417,10 @@ if len(targets) == 1:
             concat[key] = '\n'.join(documents[key]) + '\n'
             print(f'  * did concat {key} document for insertion')
 
-    chains = [invert_to_seq(leaf_path) for leaf_path in leaf_paths]
+    chains = [leaf_path for leaf_path in bottom_up_paths]
     # PROTOBUG print(chains)
     print()
-    print(f'Starting insertions bootom up for the {len(chains)} inclusion chains:')
+    print(f'Starting insertions bottom up for the {len(chains)} inclusion chains:')
 
     remaining = []
     for chain in chains:
@@ -508,10 +435,12 @@ if len(targets) == 1:
         remaining.append(those)
 
     # PROTOBUG print(remaining)
-    tackle = set(those[0] for those in remaining if those)
+    tackle = [those[0] for those in remaining if those]
     if tackle:
-        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(tackle))}) remaining')
+        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
     for that in tackle:
+        if that == '/':
+            continue
         # PROTOBUG print(that, insert_regions[that])
         buf = []
         for slot, line in enumerate(documents[that]):
@@ -548,8 +477,10 @@ if len(targets) == 1:
 
     tackle = set(those[0] for those in still if those)
     if tackle:
-        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(tackle))}) remaining')
+        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
     for that in tackle:
+        if that == '/':
+            continue
         # PROTOBUG print(that, insert_regions[that])
         buf = []
         for slot, line in enumerate(documents[that]):
@@ -586,8 +517,10 @@ if len(targets) == 1:
 
     tackle = set(those[0] for those in more if those)
     if tackle:
-        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(tackle))}) remaining')
+        print(f'  INFO: Insertion ongoing with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
     for that in tackle:
+        if that == '/':
+            continue
         # PROTOBUG print(that, insert_regions[that])
         buf = []
         for slot, line in enumerate(documents[that]):
@@ -623,8 +556,8 @@ if len(targets) == 1:
     # PROTOBUG print(done)
 
     tackle = set(those[0] for those in done if those)
-    if tackle:
-        print(f'  WARNING: Insertion incomplete with parts ({", ".join(tuple(tackle))}) remaining')
+    if tackle and len(tackle) >= 1 and tuple(tackle)[0] != '/':
+        print(f'  WARNING: Insertion incomplete with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
 
     # PROTOBUG print('= ' * 39)
     # PROTOBUG for bind in binder:
