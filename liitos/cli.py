@@ -15,6 +15,7 @@ import liitos.gather as gat
 import liitos.labels as lab
 import liitos.meta as met
 import liitos.patch as pat
+import liitos.render as ren
 import liitos.tables as tab
 from liitos import APP_ALIAS, APP_NAME, DEBUG, QUIET, VERBOSE, __version__ as APP_VERSION, log
 
@@ -241,8 +242,15 @@ def render(  # noqa
     log.info(f'before chg.weave(): {os.getcwd()} set doc ({doc})')
     os.chdir(idem)
     log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
+    code = chg.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    if code:
+        return code
+
+    log.info(f'before chg.weave(): {os.getcwd()} set doc ({doc})')
+    os.chdir(idem)
+    log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
     return sys.exit(
-        chg.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+        ren.der(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     )
 
 
