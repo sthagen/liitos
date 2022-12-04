@@ -7,6 +7,21 @@
         "dependencies": []
     },
     {
+        "key": "treelib",
+        "package_name": "treelib",
+        "installed_version": "1.6.1",
+        "required_version": "1.6.1",
+        "dependencies": [
+            {
+                "key": "future",
+                "package_name": "future",
+                "installed_version": "0.18.2",
+                "required_version": "Any",
+                "dependencies": []
+            }
+        ]
+    },
+    {
         "key": "typer",
         "package_name": "typer",
         "installed_version": "0.7.0",
