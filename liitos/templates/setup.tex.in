@@ -87,7 +87,7 @@
 \def\languageshorthands#1{}
 \usepackage{selnolig}  % disable illegal ligatures
 
-\include{metadata.tex}%% Job specific variable values used for the specific document target
+\input{metadata.tex}%% Job specific variable values used for the specific document target
 
 \setcounter{table}{-2}%% give some leeway (invisibly) to signature and change history table
 \renewcommand{\thetable}{\arabic{table}}
