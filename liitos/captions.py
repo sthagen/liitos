@@ -7,29 +7,29 @@ def weave(incoming: Iterable[str]) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'
-    table, caption = [], ''
-    for line in incoming:
+    table, caption = [], []
+    for slot, line in enumerate(incoming):
         if modus == 'copy':
             if line.startswith(r'\begin{longtable}'):
-                log.debug('within a table environment')
+                log.info(f'start of a table environment at line #{slot + 1}')
                 modus = 'table'
-                table.append(line)
-                caption = ''
+                table = [line]
+                caption = []
             else:
                 outgoing.append(line)
 
         elif modus == 'table':
             if line.startswith(r'\caption{'):
-                log.debug('- found the caption start')
-                caption = line
-                if not caption.strip().endswith(r'}\tabularnewline'):
-                    log.debug('- multi line caption')
+                log.info(f'- found the caption start at line #{slot + 1}')
+                caption.append(line)
+                if not line.strip().endswith(r'}\tabularnewline'):
+                    log.info(f'- multi line caption at line #{slot + 1}')
                     modus = 'caption'
             elif line.startswith(r'\end{longtable}'):
-                log.debug('end of table env detected')
+                log.info(f'end of table env detected at line #{slot + 1}')
                 outgoing.extend(table)
                 outgoing.append(r'\rowcolor{white}')
-                outgoing.append(caption)
+                outgoing.extend(caption)
                 outgoing.append(line)
                 modus = 'copy'
             else:
@@ -37,9 +37,9 @@ def weave(incoming: Iterable[str]) -> list[str]:
                 table.append(line)
 
         elif modus == 'caption':
-            caption += line
+            caption.append(line)
             if line.strip().endswith(r'}\tabularnewline'):
-                log.debug('- caption read')
+                log.info(f'- caption read at line #{slot + 1}')
                 modus = 'table'
 
     return outgoing
