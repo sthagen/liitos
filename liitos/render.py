@@ -46,7 +46,19 @@ def hash_file(path: pathlib.Path, hasher = None) -> str:
 
 def log_subprocess_output(pipe, prefix: str):
     for line in iter(pipe.readline, b''):  # b'\n'-separated lines
-        log.info(f'{prefix}: %s', line.decode(encoding=ENCODING).rstrip())
+        cand = line.decode(encoding=ENCODING).rstrip()
+        if cand.strip().strip('[])yex'):
+            if any([
+                'microtype' in cand,
+                'xassoccnt' in cand,
+                'texlive/2022/texmf-dist/tex/' in cand,
+                cand == 'erns.sty)',
+                cand == '(see the transcript file for additional information)',
+                cand.startswith('Overfull \hbox ') and cand.endswith('pt too wide) has occurred while \output is active')
+            ]):
+                log.debug(f'{prefix}: %s', cand)
+            else:
+                log.info(f'{prefix}: %s', cand)
 
 
 def der(
