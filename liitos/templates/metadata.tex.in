@@ -14,6 +14,9 @@
 \newcommand{\theChangeLogDateLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%
 \newcommand{\theChangeLogAuthorLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%
 \newcommand{\theChangeLogDescLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%
+\newcommand{\theApprovalsRoleLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%
+\newcommand{\theApprovalsNameLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%
+\newcommand{\theApprovalsDateAndSignatureLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%
 % Combinations exposed to runtime override:
 \newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%
 % The blurb:
