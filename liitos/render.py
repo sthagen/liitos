@@ -18,7 +18,7 @@ import hashlib
 import os
 import pathlib
 import shutil
-import subprocess
+import subprocess  # nosec B404
 
 
 import yaml
@@ -145,7 +145,7 @@ def der(
                 if svg.is_file() and svg.suffix == '.svg':
                     png = str(svg).replace('.svg', '.png')
                     svg_to_png_command = ['svgexport', svg,  png, '100%']
-                    process = subprocess.Popen(svg_to_png_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    process = subprocess.Popen(svg_to_png_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
                     with process.stdout:
                         log_subprocess_output(process.stdout, 'svg-to-png')
                     return_code = process.wait()
@@ -183,7 +183,7 @@ def der(
         ]
         log.info(separator)
         log.info('pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter ...')
-        process = subprocess.Popen(markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
             log_subprocess_output(process.stdout, 'markdown-to-latex')
         return_code = process.wait()
@@ -234,7 +234,7 @@ def der(
         latex_to_pdf_command = ['lualatex', '--shell-escape', 'this.tex']
         log.info(separator)
         log.info('1/3) lualatex --shell-escape this.tex ...')
-        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
             log_subprocess_output(process.stdout, 'latex-to-pdf(1/3)')
         return_code = process.wait()
@@ -245,7 +245,7 @@ def der(
 
         log.info(separator)
         log.info('2/3) lualatex --shell-escape this.tex ...')
-        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
             log_subprocess_output(process.stdout, 'latex-to-pdf(2/3)')
         return_code = process.wait()
@@ -256,7 +256,7 @@ def der(
 
         log.info(separator)
         log.info('3/3) lualatex --shell-escape this.tex ...')
-        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
             log_subprocess_output(process.stdout, 'latex-to-pdf(3/3)')
         return_code = process.wait()
@@ -294,7 +294,7 @@ def der(
         log.info('  + Fonts:')
 
         pdffonts_command = ['pdffonts', target_asset]
-        process = subprocess.Popen(pdffonts_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(pdffonts_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
             log_subprocess_output(process.stdout, '    pdffonts')
         return_code = process.wait()
