@@ -25,6 +25,7 @@ import yaml
 
 import liitos.captions as cap
 import liitos.gather as gat
+import liitos.labels as lab
 from liitos import ENCODING, log
 
 DOC_BASE = pathlib.Path('..', '..')
@@ -194,7 +195,7 @@ def der(
         log.info('move any captions below tables ...')
         with open('document.tex', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
-        doc_before_caps_patch = 'document-before-caps-pazch.tex.txt'
+        doc_before_caps_patch = 'document-before-caps-patch.tex.txt'
         with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
         caps_below = cap.weave(lines)
@@ -202,7 +203,15 @@ def der(
             handle.write('\n'.join(caps_below))
 
         log.info(separator)
-        log.info('./inject-stem-label < document.tex > injected-stem-labels.tex ...')
+        log.info('inject stem (derived from file name) labels ...')
+        with open('document.tex', 'rt', encoding=ENCODING) as handle:
+            lines = [line.rstrip() for line in handle.readlines()]
+        doc_before_label_patch = 'document-before-inject-stem-label-patch.tex.txt'
+        with open(doc_before_label_patch, 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(lines))
+        inject_stem_label = lab.inject(lines)
+        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(inject_stem_label))
 
         log.info(separator)
         log.info('./scale-figures < document.tex > scaled-figures.tex ...')
