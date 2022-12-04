@@ -52,7 +52,8 @@ def process_meta(aspects: str) -> gat.Meta | int:
         base_meta_path = DOC_BASE / metadata['document']['import']
         if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
             log.error(
-                f'metadata declares import of base data from ({base_meta_path.name}) but failed to find non-empty base file at {base_meta_path}')
+                f'metadata declares import of base data from ({base_meta_path.name})'
+                f' but failed to find non-empty base file at {base_meta_path}')
             return 1
         with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
             base_data = yaml.safe_load(handle)
@@ -64,9 +65,236 @@ def process_meta(aspects: str) -> gat.Meta | int:
     return metadata
 
 
-def weave_metadata(meta_map: gat.Meta, latex: list[str]) -> None:
+def weave_meta_setup(meta_map: gat.Meta, latex: list[str]) -> None:
     """TODO."""
-    log.info('weaving in the meta data ...')
+    log.info('weaving in the meta data per setup.tex.in into setup.tex ...')
+
+    defaults = {
+        'font_path': '/opt/fonts/',
+        'font_suffix': '.otf',
+        'bold_font': 'ITCFranklinGothicStd-Demi',
+        'italic_font': 'ITCFranklinGothicStd-BookIt',
+        'bold_italic_font': 'ITCFranklinGothicStd-DemiIt',
+        'main_font': 'ITCFranklinGothicStd-Book',
+        'fixed_font_package': 'sourcecodepro',
+        'code_fontsize': r'\scriptsize',
+        'chosen_logo': '/opt/logo/liitos-logo.png',
+    }
+    eff_font_folder = ''
+    eff_font_suffix = ''
+    common = meta_map['document']['common']
+    for n, line in enumerate(latex):
+        if line.rstrip().endswith('%%_PATCH_%_FONT_%_PATH_%%'):
+            if common.get('font_path'):
+                font_path = common.get('font_path')
+                if not pathlib.Path(font_path).is_dir():
+                    log.warning(
+                        f'font_path ({font_path}) is no directory on this system - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, font_path)
+                eff_font_folder = font_path
+            else:
+                log.warning(f'font_path value missing ... setting default ({defaults["font_path"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['font_path'])
+                eff_font_folder = defaults['font_path']
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_FONT_%_SUFFIX_%%'):
+            if common.get('font_suffix'):
+                font_suffix = common.get('font_suffix')
+                if font_suffix not in ('.otf', '.ttf'):
+                    log.warning(
+                        f'font_suffix ({font_suffix}) is unexpected - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, font_suffix)
+                eff_font_suffix = font_suffix
+            else:
+                log.warning(f'font_suffix value missing ... setting default ({defaults["font_suffix"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['font_suffix'])
+                eff_font_suffix = defaults['font_suffix']
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_BOLD_%_FONT_%%'):
+            if common.get('bold_font'):
+                bold_font = common.get('bold_font')
+                font_path = pathlib.Path(eff_font_folder) / f'{bold_font}{eff_font_suffix}'
+                if not font_path.is_file():
+                    log.warning(
+                        f'bold_font ({bold_font}) is not found'
+                        f' as ({font_path}) on this system - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, bold_font)
+            else:
+                log.warning(f'bold_font value missing ... setting default ({defaults["bold_font"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['bold_font'])
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_ITALIC_%_FONT_%%'):
+            if common.get('italic_font'):
+                italic_font = common.get('italic_font')
+                font_path = pathlib.Path(eff_font_folder) / f'{italic_font}{eff_font_suffix}'
+                if not font_path.is_file():
+                    log.warning(
+                        f'italic_font ({italic_font}) is not found'
+                        f' as ({font_path}) on this system - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, italic_font)
+            else:
+                log.warning(f'italic_font value missing ... setting default ({defaults["italic_font"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['italic_font'])
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_BOLDITALIC_%_FONT_%%'):
+            if common.get('bold_italic_font'):
+                bold_italic_font = common.get('bold_italic_font')
+                font_path = pathlib.Path(eff_font_folder) / f'{bold_italic_font}{eff_font_suffix}'
+                if not font_path.is_file():
+                    log.warning(
+                        f'bold_italic_font ({bold_italic_font}) is not found'
+                        f' as ({font_path}) on this system - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, bold_italic_font)
+            else:
+                log.warning(f'bold_italic_font value missing ... setting default ({defaults["bold_italic_font"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['bold_italic_font'])
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_MAIN_%_FONT_%%'):
+            if common.get('main_font'):
+                main_font = common.get('main_font')
+                font_path = pathlib.Path(eff_font_folder) / f'{main_font}{eff_font_suffix}'
+                if not font_path.is_file():
+                    log.warning(
+                        f'main_font ({main_font}) is not found'
+                        f' as ({font_path}) on this system - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, main_font)
+            else:
+                log.warning(f'main_font value missing ... setting default ({defaults["main_font"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['main_font'])
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%'):
+            if common.get('fixed_font_package'):
+                fixed_font_package = common.get('fixed_font_package')
+                if fixed_font_package != defaults['fixed_font_package']:
+                    log.warning(
+                        f'fixed_font_package ({fixed_font_package}) has not'
+                        ' been tested on this system - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, fixed_font_package)
+            else:
+                log.warning(f'fixed_font_package value missing ... setting default ({defaults["fixed_font_package"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['fixed_font_package'])
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_CODE_%_FONTSIZE_%%'):
+            if common.get('code_fontsize'):
+                code_fontsize = common.get('code_fontsize')
+                valid_code_font_sizes = (
+                    r'\Huge',
+                    r'\huge',
+                    r'\LARGE',
+                    r'\Large',
+                    r'\large',
+                    r'\normalsize',
+                    r'\small',
+                    r'\footnotesize',
+                    r'\scriptsize',
+                    r'\tiny',
+                )
+                bs = '\\'
+                sizes = tuple(size[1:] for size in valid_code_font_sizes)
+                if code_fontsize.startswith(r'\\'):
+                    code_fontsize = code_fontsize[1:]
+                if code_fontsize not in valid_code_font_sizes:
+                    log.error(
+                        f'code_fontsize ({code_fontsize}) is not a valid font size value'
+                        ' - rendering would not work as intended'
+                    )
+                    log.info(f'valid values for code_fontsize must be in {bs}{(", " + bs).join(sizes)}')
+                    log.warning(
+                        f'overriding code font size value with the (working) default of ({defaults["code_fontsize"]})'
+                        f' - in config that would be {defaults["code_fontsize"]}')
+                    latex[n] = line.replace(VALUE_SLOT, defaults['code_fontsize'])
+                else:
+                    latex[n] = line.replace(VALUE_SLOT, code_fontsize)
+            else:
+                log.warning(
+                    f'code_fontsize value missing ... setting default ({defaults["code_fontsize"]})'
+                    f' - in config that would be {defaults["code_fontsize"]}')
+                latex[n] = line.replace(VALUE_SLOT, defaults['code_fontsize'])
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_CHOSEN_%_LOGO_%%'):
+            if common.get('chosen_logo'):
+                chosen_logo = common.get('chosen_logo')
+                logo_path = pathlib.Path(chosen_logo)
+                if not logo_path.is_file():
+                    log.warning(
+                        f'chosen_logo ({chosen_logo}) is not found'
+                        f' as ({logo_path}) on this system - rendering may not work as intended'
+                    )
+                latex[n] = line.replace(VALUE_SLOT, chosen_logo)
+            else:
+                log.warning(f'chosen_logo value missing ... setting default ({defaults["chosen_logo"]})')
+                latex[n] = line.replace(VALUE_SLOT, defaults['chosen_logo'])
+            continue
+
+    if latex[-1]:
+        latex.append('\n')
+
+
+def weave_meta_driver(meta_map: gat.Meta, latex: list[str]) -> None:
+    """TODO."""
+    log.info('weaving in the meta data per driver.tex.in into driver.tex ...')
+    common = meta_map['document']['common']
+    for n, line in enumerate(latex):
+        if line.rstrip().endswith('%%_PATCH_%_TOC_%_LEVEL_%%'):
+            toc_level = 2
+            if common.get('toc_level'):
+                try:
+                    toc_level = int(common['toc_level'])
+                    toc_level = toc_level if 0 < toc_level < 5 else 2
+                except ValueError as err:
+                    toc_level = 2
+                    log.warning(
+                        f'toc_level ({common["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})'
+                    )
+                    log.error(f'error detail: {err}')
+            else:
+                log.warning(f'toc_level value missing ... setting default ({toc_level})')
+            latex[n] = line.replace(VALUE_SLOT, str(toc_level))
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_LOF_%%'):
+            if common.get('list_of_figures', None) is not None:
+                lof = common['list_of_figures']
+                if lof in ('', '%'):
+                    latex[n] = line.replace(VALUE_SLOT, str(lof))
+                else:
+                    lof = '%'
+                    log.warning(
+                        f"list_of_figures ({common['list_of_figures']}) not in ('', '%')"
+                        f" - resorting to default ({lof}) i.e. commenting out the list of figures"
+                    )
+            else:
+                log.warning('list_of_figures value missing ... setting default (comment out the lof per %)')
+                latex[n] = line.replace(VALUE_SLOT, '%')
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_LOT_%%'):
+            if common.get('list_of_tables', None) is not None:
+                lof = common['list_of_tables']
+                if lof in ('', '%'):
+                    latex[n] = line.replace(VALUE_SLOT, str(lof))
+                else:
+                    lof = '%'
+                    log.warning(
+                        f"list_of_tables ({common['list_of_tables']}) not in ('', '%')"
+                        f" - resorting to default ({lof}) i.e. commenting out the list of tables"
+                    )
+            else:
+                log.warning('list_of_tables value missing ... setting default (comment out the lot per %)')
+                latex[n] = line.replace(VALUE_SLOT, '%')
+            continue
+    if latex[-1]:
+        latex.append('\n')
+
+
+def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> None:
+    """TODO."""
+    log.info('weaving in the meta data per metadata.tex.in into metadata.tex ...')
     common = meta_map['document']['common']
     for n, line in enumerate(latex):
         if line.rstrip().endswith('%%_PATCH_%_HEADER_%_TITLE_%%'):
@@ -174,14 +402,31 @@ def weave_metadata(meta_map: gat.Meta, latex: list[str]) -> None:
             if common.get('header_issue_revision_combined'):
                 latex[n] = line.replace(VALUE_SLOT, common['header_issue_revision_combined'])
             else:
-                log.warning('footer_page_number_prefix value missing ... setting default (Iss \\theMetaIssCode, Rev \\theMetaRevCode)')
+                log.info(
+                    'header_issue_revision_combined value missing ... setting'
+                    ' default (Iss \\theMetaIssCode, Rev \\theMetaRevCode)'
+                )
                 latex[n] = line.replace(VALUE_SLOT, r'Iss \theMetaIssCode, Rev \theMetaRevCode')
             continue
         if line.rstrip().endswith('%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'):
             if common.get('proprietary_information'):
-                latex[n] = line.replace(VALUE_SLOT, common['proprietary_information'])
+                prop_info = common['proprietary_information']
+                if pathlib.Path(prop_info).is_file():
+                    try:
+                        prop_info_from_file = pathlib.Path(prop_info).open().read()
+                        prop_info = prop_info_from_file
+                    except (OSError, UnicodeDecodeError) as err:
+                        log.error(
+                            f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}'
+                        )
+                        log.warning(f'using value ({prop_info}) directly for proprietary_information')
+                else:
+                    log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
+                latex[n] = line.replace(VALUE_SLOT, prop_info)
             else:
-                log.warning('proprietary_information value missing ... setting default (Proprietary Information MISSING)')
+                log.warning(
+                    'proprietary_information value missing ... setting default (Proprietary Information MISSING)'
+                )
                 latex[n] = line.replace(VALUE_SLOT, 'Proprietary Information MISSING')
             continue
     if latex[-1]:
@@ -262,9 +507,20 @@ def weave(
 
     metadata_template = template.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in metadata_template.split('\n')]
-
-    weave_metadata(metadata, lines)
+    weave_meta_meta(metadata, lines)
     with open(METADATA_PATH, 'wt', encoding=ENCODING) as handle:
+        handle.write('\n'.join(lines))
+
+    driver_template = template.load_resource(DRIVER_TEMPLATE, DRIVER_TEMPLATE_IS_EXTERNAL)
+    lines = [line.rstrip() for line in driver_template.split('\n')]
+    weave_meta_driver(metadata, lines)
+    with open(DRIVER_PATH, 'wt', encoding=ENCODING) as handle:
+        handle.write('\n'.join(lines))
+
+    setup_template = template.load_resource(SETUP_TEMPLATE, SETUP_TEMPLATE_IS_EXTERNAL)
+    lines = [line.rstrip() for line in setup_template.split('\n')]
+    weave_meta_setup(metadata, lines)
+    with open(SETUP_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
     return 0
