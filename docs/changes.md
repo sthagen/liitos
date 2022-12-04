@@ -1,5 +1,16 @@
 # Changes
 
+## 2022.12.3
+
+* Added concat command with prototype level implementation (WIP) - works already with the example/deep prod_kind target and deep facet
+* Added meta weave for partial meta data
+* Added mixed processing of future simplified include strategy
+* Added more timely and more precise basic validation of request versus structure
+* Added template handling
+* Extended changes and approvals implementation to deal with channel dependent topologies
+* Migrated to treelib and streamlined intermediate logging
+* Removed outdated prototype code
+
 ## 2022.11.3
 
 * Made the liitos.templates package an explicit member (YAGNI)
