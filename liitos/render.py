@@ -23,6 +23,7 @@ import subprocess
 
 import yaml
 
+import liitos.captions as cap
 import liitos.gather as gat
 from liitos import ENCODING, log
 
@@ -190,7 +191,15 @@ def der(
             log.info(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
 
         log.info(separator)
-        log.info('./captions-below < document.tex > captions-below.tex ...')
+        log.info('move any captions below tables ...')
+        with open('document.tex', 'rt', encoding=ENCODING) as handle:
+            lines = [line.rstrip() for line in handle.readlines()]
+        doc_before_caps_patch = 'document-before-caps-pazch.tex.txt'
+        with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(lines))
+        caps_below = cap.weave(lines)
+        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(caps_below))
 
         log.info(separator)
         log.info('./inject-stem-label < document.tex > injected-stem-labels.tex ...')
