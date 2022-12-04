@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "liitos"
-version = "2022.12.3"
+version = "2022.12.4"
 description = "Splice (Finnish liitos) contributions."
 readme = "README.md"
 authors = [{ name = "Stefan Hagen", email = "stefan@hagen.link" }]
@@ -35,7 +35,7 @@ Source-Code = "https://git.sr.ht/~sthagen/liitos"
 Test-Coverage = "https://codes.dilettant.life/coverage/liitos"
 
 [project.scripts]
-liitos = "liitos.cli:main"
+liitos = "liitos.cli:app"
 
 [tool.setuptools.packages.find]
 include = ["liitos", "liitos.templates", "example"]

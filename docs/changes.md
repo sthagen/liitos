@@ -1,5 +1,9 @@
 # Changes
 
+## 2022.12.4
+
+* Fixed broken console script
+
 ## 2022.12.3
 
 * Added concat command with prototype level implementation (WIP) - works already with the example/deep prod_kind target and deep facet
