@@ -398,6 +398,27 @@ def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> None:
                 log.warning('change_log_description_label value missing ... setting default (Description)')
                 latex[n] = line.replace(VALUE_SLOT, 'Description')
             continue
+        if line.rstrip().endswith('%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%'):
+            if common.get('approvals_role_label'):
+                latex[n] = line.replace(VALUE_SLOT, common['approvals_role_label'])
+            else:
+                log.warning('approvals_role_label value missing ... setting default (Approvals)')
+                latex[n] = line.replace(VALUE_SLOT, 'Approvals')
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%'):
+            if common.get('approvals_name_label'):
+                latex[n] = line.replace(VALUE_SLOT, common['approvals_name_label'])
+            else:
+                log.warning('approvals_name_label value missing ... setting default (Name)')
+                latex[n] = line.replace(VALUE_SLOT, 'Name')
+            continue
+        if line.rstrip().endswith('%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%'):
+            if common.get('approvals_date_and_signature_label'):
+                latex[n] = line.replace(VALUE_SLOT, common['approvals_date_and_signature_label'])
+            else:
+                log.warning('approvals_date_and_signature_label value missing ... setting default (Date and Signature)')
+                latex[n] = line.replace(VALUE_SLOT, 'Date and Signature')
+            continue
         if line.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'):
             if common.get('header_issue_revision_combined'):
                 latex[n] = line.replace(VALUE_SLOT, common['header_issue_revision_combined'])
