@@ -2,10 +2,10 @@
 
 Yes.
 
-![Alt Text Red](images/red.png "Caption Text Red")
+![Caption Text Red](images/red.png "Alt Text Red")
 
-![Alt Text Dot Dot Lime](../images/lime.png "Caption Text Dot Dot Lime")
+![Caption Text Dot Dot Lime](../images/lime.png "Alt Text Dot Dot Lime")
 
 Yes, an SVG file:
 
-![Alt Text for SVG](diagrams/squares-and-edges.svg "Caption Text for SVG")
+![Caption Text for SVG](diagrams/squares-and-edges.svg "Alt Text for SVG")
