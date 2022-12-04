@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.4.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.4",
-  "serialNumber": "urn:uuid:03ba054f-b93b-4127-801d-fdda2b582bb1",
+  "serialNumber": "urn:uuid:5d3a8e11-b024-4ab3-9d62-21b3fd950359",
   "version": 1,
   "metadata": {
-    "timestamp": "2022-11-27T21:19:09.351867+00:00",
+    "timestamp": "2022-12-04T00:15:43.774817+00:00",
     "tools": [
       {
         "vendor": "CycloneDX",
@@ -56,14 +56,21 @@
   "components": [
     {
       "type": "library",
-      "bom-ref": "7331fbe6-1812-4f8d-ad29-b4cb6b1ce6f6",
+      "bom-ref": "f32f490c-bc57-440b-806b-efa4d29ba4ff",
       "name": "PyYAML",
       "version": "6.0",
       "purl": "pkg:pypi/pyyaml@6.0"
     },
     {
       "type": "library",
-      "bom-ref": "7bc52096-e0b5-4c22-9052-a9f3b0b6e081",
+      "bom-ref": "fbde3fe1-fe5e-42b2-865b-4a6efd6f2175",
+      "name": "treelib",
+      "version": "1.6.1",
+      "purl": "pkg:pypi/treelib@1.6.1"
+    },
+    {
+      "type": "library",
+      "bom-ref": "5d052d15-8816-493b-a578-6a1e6567ba04",
       "name": "typer",
       "version": "0.7.0",
       "purl": "pkg:pypi/typer@0.7.0"
@@ -71,11 +78,15 @@
   ],
   "dependencies": [
     {
-      "ref": "7331fbe6-1812-4f8d-ad29-b4cb6b1ce6f6",
+      "ref": "f32f490c-bc57-440b-806b-efa4d29ba4ff",
       "dependsOn": []
     },
     {
-      "ref": "7bc52096-e0b5-4c22-9052-a9f3b0b6e081",
+      "ref": "fbde3fe1-fe5e-42b2-865b-4a6efd6f2175",
+      "dependsOn": []
+    },
+    {
+      "ref": "5d052d15-8816-493b-a578-6a1e6567ba04",
       "dependsOn": []
     }
   ]
