@@ -24,6 +24,7 @@ import subprocess
 import yaml
 
 import liitos.captions as cap
+import liitos.figures as fig
 import liitos.gather as gat
 import liitos.labels as lab
 from liitos import ENCODING, log
@@ -214,7 +215,15 @@ def der(
             handle.write('\n'.join(inject_stem_label))
 
         log.info(separator)
-        log.info('./scale-figures < document.tex > scaled-figures.tex ...')
+        log.info('scale figures ...')
+        with open('document.tex', 'rt', encoding=ENCODING) as handle:
+            lines = [line.rstrip() for line in handle.readlines()]
+        doc_before_figures_patch = 'document-before-scale-figures-patch.tex.txt'
+        with open(doc_before_figures_patch, 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(lines))
+        scale_figures = fig.scale(lines)
+        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(scale_figures))
 
         log.info(separator)
         log.info('cp -a driver.tex this.tex ...')
