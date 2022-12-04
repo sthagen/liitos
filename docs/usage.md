@@ -27,7 +27,7 @@
 ## Version
 
 ```console
-❯ Splice (Finnish liitos) contributions. version 2022.12.4+parent.84710d29
+❯ Splice (Finnish liitos) contributions. version 2022.12.4+parent.9c2292fe
 ```
 
 ## Verification Example
