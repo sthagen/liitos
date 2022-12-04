@@ -7,13 +7,13 @@ def weave(incoming: Iterable[str]) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'
-    table, caption = '', ''
+    table, caption = [], ''
     for line in incoming:
         if modus == 'copy':
             if line.startswith(r'\begin{longtable}'):
                 log.debug('within a table environment')
                 modus = 'table'
-                table = line
+                table.append(line)
                 caption = ''
             else:
                 outgoing.append(line)
@@ -27,14 +27,14 @@ def weave(incoming: Iterable[str]) -> list[str]:
                     modus = 'caption'
             elif line.startswith(r'\end{longtable}'):
                 log.debug('end of table env detected')
-                outgoing.append(table)
+                outgoing.extend(table)
                 outgoing.append(r'\rowcolor{white}')
                 outgoing.append(caption)
                 outgoing.append(line)
                 modus = 'copy'
             else:
                 log.debug('- table continues')
-                table += line
+                table.append(line)
 
         elif modus == 'caption':
             caption += line
