@@ -1,4 +1,5 @@
 """Weave the content of the meta file(s) of metadata.tex.in into the output metadata.tex."""
+import datetime as dti
 import os
 import pathlib
 
@@ -32,6 +33,7 @@ DRIVER_PATH = pathlib.Path('driver.tex')
 VALUE_SLOT = 'VALUE.SLOT'
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
+MAGIC_OF_TODAY = 'PUBLICATIONDATE'
 
 
 def process_meta(aspects: str) -> gat.Meta | int:
@@ -343,11 +345,16 @@ def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> None:
                 latex[n] = line.replace(VALUE_SLOT, '00')
             continue
         if line.rstrip().endswith('%%_PATCH_%_DATE_%%'):
+            today = dti.datetime.today()
+            pub_date_today = today.strftime('%d %b %Y').upper()
             if common.get('header_date'):
-                latex[n] = line.replace(VALUE_SLOT, common['header_date'])
+                pub_date = common['header_date'].strip()
+                if pub_date == MAGIC_OF_TODAY:
+                    pub_date = pub_date_today
+                latex[n] = line.replace(VALUE_SLOT, pub_date)
             else:
-                log.warning('header_date value missing ... setting default (DD MON YYYY)')
-                latex[n] = line.replace(VALUE_SLOT, 'DD MON YYYY')
+                log.warning(f'header_date value missing ... setting default as today({pub_date_today})')
+                latex[n] = line.replace(VALUE_SLOT, pub_date_today)
             continue
         if line.rstrip().endswith('%%_PATCH_%_FRAME_%_NOTE_%%'):
             if common.get('footer_frame_note'):
