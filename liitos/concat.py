@@ -242,6 +242,8 @@ def concatenate(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
+    separator = '- ' * 80
+    log.info(separator)
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():
@@ -326,6 +328,7 @@ def concatenate(
         documents = {}
         insert_regions = {}
         img_collector = []
+        log.info(separator)
         log.info('processing binder ...')
         for entry in binder:
             path = DOC_BASE / entry
@@ -495,18 +498,21 @@ def concatenate(
 
         top_down_paths = tree.paths_to_leaves()
         bottom_up_paths = [list(reversed(td_p)) for td_p in top_down_paths]
+        log.info(separator)
         log.info('resulting tree:')
         with RedirectedStdout() as out:
             tree.show()
             for row in str(out).rstrip('\n').split('\n'):
                 log.info(row)
 
+        log.info(separator)
         log.info(f'provisioning chains for the {len(bottom_up_paths)} bottom up leaf paths:')
         for num, leaf_path in enumerate(bottom_up_paths):
             the_way_up = f'|-> {leaf_path[0]}' if len(leaf_path) == 1 else f'{" -> ".join(leaf_path)}'
             log.info(f'{num :2d}: {the_way_up}')
 
         concat = {}
+        log.info(separator)
         log.info(f'dependencies for the {len(insert_regions)} document parts:')
         for key, regions in insert_regions.items():
             num_in = len(regions)
@@ -523,19 +529,25 @@ def concatenate(
                 log.info(f'  * did concat {key} document for insertion')
 
         chains = [leaf_path for leaf_path in bottom_up_paths]
+        log.info(separator)
         log.info(f'starting insertions bottom up for the {len(chains)} inclusion chains:')
         todo = [[job for job in chain if job not in concat] for chain in chains]
         while todo != [[]]:
             todo = rollup(todo, documents, insert_regions, concat)
 
+        log.info(separator)
         log.info('writing final concat markdown to document.md')
         with open('document.md', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(concat[bind] for bind in binder) + '\n')
 
+        log.info(separator)
         log.info('collecting assets (images and diagrams)')
         collect_assets(img_collector)
+        log.info(separator)
         log.info(f'concat result document (document.md) and artifacts are within folder ({os.getcwd()}/)')
+        log.info(separator)
         log.info('processing complete - SUCCESS')
+        log.info(separator)
         return 0
 
     log.error(f'structure data files with other than one target currently not supported - found targets ({targets})')

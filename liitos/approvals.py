@@ -27,6 +27,8 @@ def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
+    separator = '- ' * 80
+    log.info(separator)
     structure, asset_map = gat.prelude(
         doc_root=doc_root,
         structure_name=structure_name,
@@ -46,6 +48,7 @@ def weave(
     signatures = gat.load_approvals(facet_key, target_key, signatures_path)
     log.info(f'{signatures=}')
 
+    log.info(separator)
     log.info('plausibility tests for approvals ...')
 
     rows = []
@@ -78,6 +81,7 @@ def weave(
     bookmatter_template = template.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in bookmatter_template.split('\n')]
 
+    log.info(separator)
     log.info(f'weaving in the approvals from {signatures_path}...')
     for n, line in enumerate(lines):
         if TOKEN_EXTRA_PUSHDOWN in line:
@@ -92,5 +96,6 @@ def weave(
 
     with open(BOOKMATTER_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
+    log.info(separator)
 
     return 0

@@ -13,6 +13,8 @@ lualatex --shell-escape this.tex
 lualatex --shell-escape this.tex
 lualatex --shell-escape this.tex
 """
+import datetime as dti
+import hashlib
 import os
 import pathlib
 import shutil
@@ -28,12 +30,31 @@ DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 IMAGES_FOLDER = 'images/'
 DIAGRAMS_FOLDER = 'diagrams/'
+CHUNK_SIZE = 2 << 15
+TS_FORMAT = '%Y-%m-%d %H:%M:%S.%f +00:00'
+
+def hash_file(path: pathlib.Path, hasher = None) -> str:
+    """Return the SHA512 hex digest of the data from file."""
+    if hasher is None:
+        hasher = hashlib.sha512
+    hash = hasher()
+    with open(path, 'rb') as handle:
+        while chunk := handle.read(CHUNK_SIZE):
+            hash.update(chunk)
+    return hash.hexdigest()
+
+
+def log_subprocess_output(pipe, prefix: str):
+    for line in iter(pipe.readline, b''):  # b'\n'-separated lines
+        log.info(f'{prefix}: %s', line.decode(encoding=ENCODING).rstrip())
 
 
 def der(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
+    separator = '- ' * 80
+    log.info(separator)
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():
@@ -102,96 +123,150 @@ def der(
             log.warning(f'we will not render ...')
             return 0
 
+        log.info(separator)
         log.info('transforming SVG assets to high resolution PNG bitmaps ...')
         for path_to_dir in (IMAGES_FOLDER, DIAGRAMS_FOLDER):
             for svg in pathlib.Path(path_to_dir).iterdir():
                 if svg.is_file() and svg.suffix == '.svg':
                     png = str(svg).replace('.svg', '.png')
-                    command = f'svgexport "{svg}" "{png}" 100%'
-                    try:
-                        return_code = subprocess.call(command, shell=True)
-                        if return_code < 0:
-                            log.error(f'svg-to-png process ({command}) was terminated by signal {-return_code}')
-                        else:
-                            log.info(f'svg-to-png process ({command}) returned {return_code}')
-                    except OSError as err:
-                        print(f'execution of svg-to-png process ({command}) failed: {err}')
+                    svg_to_png_command = ['svgexport', svg,  png, '100%']
+                    process = subprocess.Popen(svg_to_png_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                    with process.stdout:
+                        log_subprocess_output(process.stdout, 'svg-to-png')
+                    return_code = process.wait()
+                    if return_code < 0:
+                        log.error(
+                            f'svg-to-png process ({svg_to_png_command}) was terminated by signal {-return_code}')
+                    else:
+                        log.info(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
 
+        log.info(separator)
         log.info('rewriting src attribute values of SVG to PNG sources ...')
         with open('document.md', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
         for slot, line in enumerate(lines):
             if '.drawio.svg' in line:
-                lines[slot] = line.replace('.drawio.svg', '.png')
+                fine = line.replace('.drawio.svg', '.png')
+                log.info(f'transform[#{slot + 1}]: {line}')
+                log.info(f'     into[#{slot + 1}]: {fine}')
+                lines[slot] = fine
                 continue
             if '.svg' in line:
-                lines[slot] = line.replace('.svg', '.png')
+                fine = line.replace('.svg', '.png')
+                log.info(f'transform[#{slot + 1}]: {line}')
+                log.info(f'     into[#{slot + 1}]: {fine}')
+                lines[slot] = fine
                 continue
         with open('document.md', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
 
+        fmt_spec = 'markdown+link_attributes'
+        in_doc = 'document.md'
+        out_doc = 'document.tex'
+        markdown_to_latex_command = [
+            'pandoc', '--verbose', '-f', fmt_spec, '-t', 'latex', in_doc, '-o', out_doc, '--filter', 'mermaid-filter'
+        ]
+        log.info(separator)
         log.info('pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter ...')
-        command = 'pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter'
-        try:
-            return_code = subprocess.call(command, shell=True)
-            if return_code < 0:
-                log.error(f'md-to-tex process ({command}) was terminated by signal {-return_code}')
-            else:
-                log.info(f'md-to-tex process ({command}) returned {return_code}')
-        except OSError as err:
-            print(f'execution of md-to-tex process ({command}) failed: {err}')
+        process = subprocess.Popen(markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        with process.stdout:
+            log_subprocess_output(process.stdout, 'markdown-to-latex')
+        return_code = process.wait()
+        if return_code < 0:
+            log.error(f'markdown-to-latex process ({markdown_to_latex_command}) was terminated by signal {-return_code}')
+        else:
+            log.info(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
 
+        log.info(separator)
         log.info('./captions-below < document.tex > captions-below.tex ...')
+
+        log.info(separator)
         log.info('./inject-stem-label < document.tex > injected-stem-labels.tex ...')
+
+        log.info(separator)
         log.info('./scale-figures < document.tex > scaled-figures.tex ...')
 
+        log.info(separator)
         log.info('cp -a driver.tex this.tex ...')
         source_asset = 'driver.tex'
         target_asset = 'this.tex'
         shutil.copy(source_asset, target_asset)
 
-
-        def log_subprocess_output(pipe, prefix: str):
-            for line in iter(pipe.readline, b''):  # b'\n'-separated lines
-                log.info(f'{prefix}: %r', line)
-
-
         latex_to_pdf_command = ['lualatex', '--shell-escape', 'this.tex']
+        log.info(separator)
         log.info('1/3) lualatex --shell-escape this.tex ...')
         process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         with process.stdout:
             log_subprocess_output(process.stdout, 'latex-to-pdf(1/3)')
-        return_code = process.wait()  # 0 means success
+        return_code = process.wait()
         if return_code < 0:
             log.error(f'latex-to-pdf process 1/3 ({latex_to_pdf_command}) was terminated by signal {-return_code}')
         else:
             log.info(f'latex-to-pdf process 1/3  ({latex_to_pdf_command}) returned {return_code}')
 
+        log.info(separator)
         log.info('2/3) lualatex --shell-escape this.tex ...')
         process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         with process.stdout:
             log_subprocess_output(process.stdout, 'latex-to-pdf(2/3)')
-        return_code = process.wait()  # 0 means success
+        return_code = process.wait()
         if return_code < 0:
             log.error(f'latex-to-pdf process 2/3 ({latex_to_pdf_command}) was terminated by signal {-return_code}')
         else:
             log.info(f'latex-to-pdf process 2/3  ({latex_to_pdf_command}) returned {return_code}')
 
+        log.info(separator)
         log.info('3/3) lualatex --shell-escape this.tex ...')
         process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         with process.stdout:
             log_subprocess_output(process.stdout, 'latex-to-pdf(3/3)')
-        return_code = process.wait()  # 0 means success
+        return_code = process.wait()
         if return_code < 0:
             log.error(f'latex-to-pdf process 3/3 ({latex_to_pdf_command}) was terminated by signal {-return_code}')
         else:
             log.info(f'latex-to-pdf process 3/3  ({latex_to_pdf_command}) returned {return_code}')
 
+        log.info(separator)
         log.info('Moving stuff around (result phase) ...')
         source_asset = 'this.pdf'
         target_asset = '../index.pdf'
         shutil.copy(source_asset, target_asset)
 
+        log.info(separator)
+        log.info('Deliverable taxonomy: ...')
+        target_path = pathlib.Path(target_asset)
+        stat = target_path.stat()
+        size_bytes = stat.st_size
+        mod_time = dti.datetime.fromtimestamp(stat.st_ctime, tz=dti.timezone.utc).strftime(TS_FORMAT)
+        sha612_hash = hash_file(target_path, hashlib.sha512)
+        sha256_hash = hash_file(target_path, hashlib.sha256)
+        sha1_hash = hash_file(target_path, hashlib.sha1)
+        md5_hash = hash_file(target_path, hashlib.md5)
+        log.info('- Ephemeral:')
+        log.info(f'  + name: {target_path.name}')
+        log.info(f'  + size: {size_bytes} bytes')
+        log.info(f'  + date: {mod_time}')
+        log.info('- Characteristic:')
+        log.info('  + Checksums:')
+        log.info(f'    sha512:{sha612_hash}')
+        log.info(f'    sha256:{sha256_hash}')
+        log.info(f'      sha1:{sha1_hash}')
+        log.info(f'       md5:{md5_hash}')
+        log.info('  + Fonts:')
+
+        pdffonts_command = ['pdffonts', target_asset]
+        process = subprocess.Popen(pdffonts_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        with process.stdout:
+            log_subprocess_output(process.stdout, '    pdffonts')
+        return_code = process.wait()
+        if return_code < 0:
+            log.error(f'pdffonts process ({pdffonts_command}) was terminated by signal {-return_code}')
+        else:
+            log.info(f'pdffonts process ({pdffonts_command}) returned {return_code}')
+
+
+        log.info(separator)
         log.info('done.')
+        log.info(separator)
 
     return 0
