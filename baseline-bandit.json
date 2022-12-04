@@ -1,6 +1,6 @@
 {
   "errors": [],
-  "generated_at": "2022-11-27T21:18:55Z",
+  "generated_at": "2022-12-04T00:14:34Z",
   "metrics": {
     "_totals": {
       "CONFIDENCE.HIGH": 0,
@@ -11,7 +11,7 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 989,
+      "loc": 1796,
       "nosec": 0,
       "skipped_tests": 3
     },
@@ -50,9 +50,9 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 53,
+      "loc": 80,
       "nosec": 0,
-      "skipped_tests": 1
+      "skipped_tests": 2
     },
     "liitos/captions.py": {
       "CONFIDENCE.HIGH": 0,
@@ -76,7 +76,7 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 47,
+      "loc": 70,
       "nosec": 0,
       "skipped_tests": 1
     },
@@ -89,7 +89,20 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 164,
+      "loc": 224,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "liitos/concat.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 491,
       "nosec": 0,
       "skipped_tests": 0
     },
@@ -128,7 +141,7 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 222,
+      "loc": 223,
       "nosec": 0,
       "skipped_tests": 0
     },
@@ -167,9 +180,9 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 55,
+      "loc": 228,
       "nosec": 0,
-      "skipped_tests": 1
+      "skipped_tests": 0
     },
     "liitos/patch.py": {
       "CONFIDENCE.HIGH": 0,
@@ -194,6 +207,19 @@
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
       "loc": 144,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "liitos/template_loader.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 32,
       "nosec": 0,
       "skipped_tests": 0
     }

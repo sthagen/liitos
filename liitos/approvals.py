@@ -12,7 +12,7 @@ if not BOOKMATTER_TEMPLATE:
     BOOKMATTER_TEMPLATE = 'templates/bookmatter.tex.in'
 
 BOOKMATTER_PATH = pathlib.Path('render/pdf/bookmatter.tex')
-TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'
+TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105
 EXTRA_OFFSET_EM = 24
 TOKEN = r'\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]'  # nosec B105
 ROW_TEMPLATE = r'\ \mbox{role} & \mbox{name} & \mbox{} \\[0.5ex]'
