@@ -5,15 +5,15 @@ from liitos import log
 NO_RESCALE: float | int = 0
 
 
-def inject(incoming: Iterable[str]) -> list[str]:
+def scale(incoming: Iterable[str]) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'
     rescale = NO_RESCALE
-    for line in incoming:
+    for slot, line in enumerate(incoming):
         if modus == 'copy':
             if line.startswith(r'\scale='):
-                log.debug('trigger a scale mod for the next figure environment')
+                log.info(f'trigger a scale mod for the next figure environment at line #{slot + 1}|{line}')
                 modus = 'scale'
                 scale = line  # only for reporting wil not pass the filter
                 try:
@@ -27,7 +27,7 @@ def inject(incoming: Iterable[str]) -> list[str]:
         elif modus == 'scale':
             if line.startswith(r'\includegraphics{'):
                 if rescale != NO_RESCALE:
-                    log.debug('- found the scale target start')
+                    log.info(f'- found the scale target start at line #{slot + 1}|{line}')
                     target = line.replace(r'\includegraphics', '')
                     option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}\\textheight]'
                     outgoing.append(f'\\includegraphics{option}{target}')
