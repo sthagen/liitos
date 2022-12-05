@@ -3,6 +3,9 @@
 ## 2022.12.5
 
 * Added eject command for templates
+* Added user patching to render command
+* Increased the test coverage - way to go
+* Updated user documentation
 
 ## 2022.12.4
 
