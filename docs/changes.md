@@ -1,5 +1,9 @@
 # Changes
 
+## 2022.12.5
+
+* Added eject command for templates
+
 ## 2022.12.4
 
 * Fixed broken console script
