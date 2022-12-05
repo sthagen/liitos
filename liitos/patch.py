@@ -1,5 +1,4 @@
-#! /usr/bin/env python
-"""Apply all pairs in patch module on document."""
+"""Apply all pairs in patch data to specified target."""
 import pathlib
 
 import yaml
