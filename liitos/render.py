@@ -1,18 +1,4 @@
-"""
-for f in images/*.svg; do svgexport "$f" "${f%%.*}.png" 100%; done
-for f in diagrams/*.svg; do svgexport "$f" "${f%%.*}.png" 100%; done
-temp_md="_patched.md"
-sed "s/\.drawio\.svg/.png/g;" < document.md > "${temp_md}" && mv "${temp_md}" document.md
-sed "s/\.svg/.png/g;" < document.md > "${temp_md}" && mv "${temp_md}" document.md
-pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter
-./captions-below < document.tex > captions-below.tex
-./inject-stem-label < document.tex > injected-stem-labels.tex
-./scale-figures < document.tex > scaled-figures.tex
-cp -a driver.tex this.tex
-lualatex --shell-escape this.tex
-lualatex --shell-escape this.tex
-lualatex --shell-escape this.tex
-"""
+"""Render the concat document to pdf."""
 import datetime as dti
 import hashlib
 import os
@@ -57,7 +43,7 @@ def log_subprocess_output(pipe, prefix: str):
                 'texlive/2022/texmf-dist/tex/' in cand,
                 cand == 'erns.sty)',
                 cand == '(see the transcript file for additional information)',
-                cand.startswith('Overfull \hbox ') and cand.endswith('pt too wide) has occurred while \output is active')
+                cand.startswith(r'Overfull \hbox ') and cand.endswith(r'pt too wide) has occurred while \output is active')
             ]):
                 log.debug(f'{prefix}: %s', cand)
             else:
