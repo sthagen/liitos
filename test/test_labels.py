@@ -28,3 +28,29 @@ def test_inject_not_precondition():
         'z',
     ]
     assert labels.inject(partial_matches) == augmented_content
+
+
+def test_inject_precondition_and_include():
+    correct_match = [
+        'a',
+        '',
+        r'\begin{figure}',
+        r'\centering',
+        r'\includegraphics{images/blue.png}',
+        r'\caption{Caption Text Blue}',
+        r'\end{figure}',
+        '',
+        'z',
+    ]
+    injected = [
+        'a',
+        '',
+        r'\begin{figure}',
+        r'\centering',
+        r'\includegraphics{images/blue.png}',
+        r'\caption{Caption Text Blue \label{fig:blue}}',
+        r'\end{figure}',
+        '',
+        'z',
+    ]
+    assert labels.inject(correct_match) == injected
