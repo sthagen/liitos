@@ -476,11 +476,11 @@ Invalid asset link of facet for target document key:
 2022-12-05T19:11:38.438270+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
 
-# Use Cases and Author Info
+## Use Cases and Author Info
 
 The purpose of the package / tool is to encourage convention based authoring in markdown without sacrificing tight control on the rendered results.
 
-## Rendering
+### Rendering
 
 The [example/deep/](https://git.sr.ht/~sthagen/liitos/tree/default/item/example/deep) folder in the source repository 
 shows how documents can be distributed across subfolders and how the linkage per the data files (in this case) works:
@@ -494,7 +494,7 @@ shows how documents can be distributed across subfolders and how the linkage per
 
 How to eject templates for the various data files is demonstrated above.
 
-### Structure
+#### Structure
 
 The `structure.yml` file is the single entry point for discovery and rendering per this tool for publication pipelines:
 
@@ -514,7 +514,7 @@ To link the artificial terms in the example to our names:
 > A document type `PQR` for a product named `ABC` created for a specific audience `XYZ` would have `abc_pqr`instead of `prod_kind` and `xyz` instead of `deep`
 > (the names of the files being values to the keys `approvals`, `bind`, `changes`, and `meta` also differ of course as the authors choose these).
 
-### Approvals
+#### Approvals
 
 The approvals file (can be of course different per facet i.e. in real world cases often "per audience") which in the example `deep` is:
 
@@ -536,7 +536,7 @@ Also note, that the table these approvals (signature loop) entries end up in has
 (namely in the metadata files or if not given there in this application (`liitos`).
 
 
-### Binder
+#### Binder
 
 The binder (bind file) is the top level list of files that bound in sequence (and followed all includes up to some level)
 will result in the intended document target (product of kind) of that facet.
@@ -560,7 +560,7 @@ The example log for the following call can be found further up the page:
 ❯ liitos render deep --target prod_kind --facet deep
 ```
 
-### Changes
+#### Changes
 
 The changes files may of course also differ per facet (in our case often the audience) and in the example `deep` are as follows:
 
@@ -586,7 +586,7 @@ The magical term `PUBLICATIONDATE` results in a valid form of the date of the re
 - in the changes data file as well as
 - in the meta data files (there as value to the key `header_date`)
 
-### Metadata
+#### Metadata
 
 All customizing of the rendering is offered to the authors per the meta data file(s).
 To reduce duplication and thereby the risk of inconsistencies the tool allows to import meta data files within meta data files
@@ -688,7 +688,7 @@ The terseness profits from the defaults chosen in `liitos` that expect many arti
 Leaving out `proprietary_information` would produce warnings (like other left out settings)
 and also inject the text `Proprietary Information MISSING` on the second page of the rendered document.
 
-## Including Markdown Files Inside Markdown Files
+### Including Markdown Files
 
 First things first:
 
@@ -699,31 +699,24 @@ There is an example file in the `deep` folder that demonstrates the two ways to 
 (the binder as top level inclusion is the main way of linking content).
 
 ```console
-❯ cat deep/part/a.md
-# A
+❯ cat deep/part/a.md | filter-includes --magic
 
 Part A with again includes.
 
-```{.python .cb.run}
+\```{.python .cb.run}
 with open('a1.md') as fp:
     print(fp.read())
-```
+\```
 
-## Aa
-
-Some text per the simplified include mechanism to also better verify the blank line handling.
+ - - 8< - - 
 
 \include{sub/as.md}
-
-## Ab
-
-End of part cascade.
 
 ```
 
 ### Applying User Patches
 
-As a last resort it may be necessary to reqrite parts of the final latex file before transforming to pdf.
+As a last resort it may be necessary to rewrite parts of the final latex file before transforming to pdf.
 One way (besides editing and calling lualatex yourself) is to provide pairs of search and replace strings
 in the `patch.yml` file inside the document root as list of two-element lists.
 
