@@ -10,6 +10,7 @@ import liitos.approvals as sig
 import liitos.captions as cap
 import liitos.concat as cat
 import liitos.changes as chg
+import liitos.eject as eje
 import liitos.figures as fig
 import liitos.gather as gat
 import liitos.labels as lab
@@ -251,6 +252,18 @@ def render(  # noqa
     log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
     return sys.exit(
         ren.der(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    )
+
+
+@app.command('eject')
+def eject(  # noqa
+    that: str = typer.Argument(''),
+) -> int:
+    """
+    Eject a template. For now just guess the name ;-)
+    """
+    return sys.exit(
+        eje.this(thing=that)
     )
 
 
