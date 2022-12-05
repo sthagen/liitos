@@ -33,6 +33,7 @@ def inject(incoming: Iterable[str]) -> list[str]:
                     log.info(adhoc_label)
                 except Exception as err:
                     log.error(f'failed to extract generic label from {line.strip()} with err: {err}')
+                outgoing.append('')  # TODO(sthagen) - why do we sometimes received joined strings?
                 outgoing.append(r'\begin{figure}')
                 outgoing.append(r'\centering')
                 outgoing.append(line)
