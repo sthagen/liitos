@@ -21,3 +21,8 @@ def test_this_wrong_thing(caplog):
 def test_this_ambiguous_thing(caplog):
     assert eject.this('meta-') == 2
     assert 'template (meta-) requested - matches (meta-base-yaml, meta-patch-yaml)' in caplog.text
+
+
+def test_this_write_weird_thing(caplog):
+    assert eject.this('meta-b', out='/dev/null') == 0
+    assert 'WARNING requested writing (templates/meta.yml) to file (null)' in caplog.text
