@@ -16,3 +16,8 @@ def test_this_ok(capsys):
 def test_this_wrong_thing(caplog):
     assert eject.this('unknown-thing') == 2
     assert 'unknown-thing' in caplog.text
+
+
+def test_this_ambiguous_thing(caplog):
+    assert eject.this('meta-') == 2
+    assert 'template (meta-) requested - matches (meta-base-yaml, meta-patch-yaml)' in caplog.text
