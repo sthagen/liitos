@@ -475,3 +475,267 @@ Invalid asset link of facet for target document key:
 2022-12-05T19:11:38.438256+00:00 INFO [LIITOS]: done.
 2022-12-05T19:11:38.438270+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
+
+# Use Cases and Author Info
+
+The purpose of the package / tool is to encourage convention based authoring in markdown without sacrificing tight control on the rendered results.
+
+## Rendering
+
+The [example/deep/](https://git.sr.ht/~sthagen/liitos/tree/default/item/example/deep) folder in the source repository 
+shows how documents can be distributed across subfolders and how the linkage per the data files (in this case) works:
+
+- structure.yml
+- approvals.yml
+- bind.txt
+- changes.yml
+- meta-base.yml
+- meta-deep.yml
+
+How to eject templates for the various data files is demonstrated above.
+
+### Structure
+
+The `structure.yml` file is the single entry point for discovery and rendering per this tool for publication pipelines:
+
+```yaml
+prod_kind:
+- deep:
+    approvals: approvals.yml
+    bind: bind.txt
+    changes: changes.yml
+    meta: meta-deep.yml
+    render: true
+```
+
+The entries are paths to files from the folder of the structure data file itself.
+To link the artificial terms in the example to our names:
+
+> A document type `PQR` for a product named `ABC` created for a specific audience `XYZ` would have `abc_pqr`instead of `prod_kind` and `xyz` instead of `deep`
+> (the names of the files being values to the keys `approvals`, `bind`, `changes`, and `meta` also differ of course as the authors choose these).
+
+### Approvals
+
+The approvals file (can be of course different per facet i.e. in real world cases often "per audience") which in the example `deep` is:
+
+```console
+❯ cat deep/approvals.yml
+approvals:
+- name: An Author
+  role: Author
+- name: A Reviewer
+  role: Review
+- name: An App Rover
+  role: Approved
+
+```
+
+The entries should be speaking for themselves.
+Note the spelling (also case) of all keys is fixed and will lead to failures during rendering if not correct.
+Also note, that the table these approvals (signature loop) entries end up in has column labels that are determined elsewhere
+(namely in the metadata files or if not given there in this application (`liitos`).
+
+
+### Binder
+
+The binder (bind file) is the top level list of files that bound in sequence (and followed all includes up to some level)
+will result in the intended document target (product of kind) of that facet.
+In the example the target is `prod_kind` and the facet is `deep`.
+
+bind.txt:
+```
+1.md
+2.md
+other/b.md
+```
+
+The render command of `liitos` first discovers and collates all sub-documents in the order determined by the sequence given in the binder:
+
+This initial phase results are placed in the folder of the rendering which is by default always in the path `render/pdf/` below every document folder in the checkout of a documentation repository.
+In the case of `orga/repo/doctype/` this would be the path `orga/repo/doctype/render/pdf/` and for `orga/repo/doctype/part/` this would be `orga/repo/doctype/part/render/pdf/`.
+
+The example log for the following call can be found further up the page:
+
+```console
+❯ liitos render deep --target prod_kind --facet deep
+```
+
+### Changes
+
+The changes files may of course also differ per facet (in our case often the audience) and in the example `deep` are as follows:
+
+```console
+❯ cat deep/changes.yml
+changes:
+- author: An Author
+  date: PUBLICATIONDATE
+  issue: '01'
+  summary: Initial Issue
+```
+
+Again the keys in spelling and case are significant.
+Also, the table column labels themselves are per meta data file or application default of `liitos`.
+
+In YAML the dash (-) indicates a list item so this example file has only one change log entry.
+Also, please quote strings with special YAML characters (otherwise the parse will fail)
+and also quote strings (the issue number is best seen as an opaque string) with only digits.
+Even more so, when they start with zero (0) as to preserve the leading zero.
+
+The magical term `PUBLICATIONDATE` results in a valid form of the date of the rendering and can occur
+
+- in the changes data file as well as
+- in the meta data files (there as value to the key `header_date`)
+
+### Metadata
+
+All customizing of the rendering is offered to the authors per the meta data file(s).
+To reduce duplication and thereby the risk of inconsistencies the tool allows to import meta data files within meta data files
+(one level only) and override or amend the imported data for an effective metadata set.
+
+The example `deep` demonstrates this by only including `meta-deep.yml` (indicating it has specifics for the facet `deep`):
+
+```console
+❯ cat deep/meta-deep.yml
+---
+document:
+  import: meta-base.yml
+  patch:
+    header_id: P99999
+    header_date: PUBLICATIONDATE
+```
+
+Again the spelling and case of the keys are significant.
+
+The top-level (object) key `document` is fixed (as it relates to the document).
+There are currently the following two supported keys within the document object (dict) of meta data files that import
+(specialize) base metadata files:
+
+import
+:    a valid path from the main document folder to another meta data file
+(please keep the special files for now in the same folder)
+
+patch
+:    ley value pairs to add (or override) in the imported meta data from the path of the `import` key value
+
+We see that in above example we add/overwrite
+
+1. the document id (key `header_id` as it appears only in the header of the rendered document)
+1. the publication date per `header_date` to the magical term `PUBLICATIONDATE` resulting during rendering
+   in the date of rendering displayed as `DD MON YYYY` eg. on 2022-12-04 this would be `04 DEC 2022`
+
+
+The base meta data files (imported by other meta data files or standing for themselves is only one meta data file is needed)
+in the example `deep` provide all known keys to demonstrate the features:
+
+```console
+❯ cat deep/meta-base.yml
+---
+document:
+  common:
+    title: Ttt Tt Tt
+    header_title: Ttt Tt
+    sub_title: The Deep Spec
+    header_type: Engineering Document
+    header_id: null
+    issue: '01'
+    revision: '00'
+    header_date: 01 DEC 2022
+    header_issue_revision_combined: null
+    footer_frame_note: VERY CONSEQUENTIAL
+    footer_page_number_prefix: Page
+    change_log_issue_label: Iss.
+    change_log_revision_label: Rev.
+    change_log_date_label: Date
+    change_log_author_label: Author
+    change_log_description_label: Description
+    approvals_role_label: Approvals
+    approvals_name_label: Name
+    approvals_date_and_signature_label: Date and Signature
+    proprietary_information: /opt/legal/proprietary_information.txt
+    toc_level: 2
+    list_of_figures: '%'  # empty string to enable lof
+    list_of_tables: '%'  # empty string to enable lot
+    font_path: /opt/fonts/
+    font_suffix: .otf
+    bold_font: ITCFranklinGothicStd-Demi
+    italic_font: ITCFranklinGothicStd-BookIt
+    bold_italic_font: ITCFranklinGothicStd-DemiIt
+    main_font: ITCFranklinGothicStd-Book
+    fixed_font_package: sourcecodepro
+    code_fontsize: \scriptsize
+    chosen_logo: /opt/logo/liitos-logo.png
+```
+
+The special value `null` indicates that either a default shall be taken or that the value on the level of the meta data file makes no sense.
+Example for the latter is `header_id` in the above base file as it will be overridden by specific document meta files like `meta-deep.yml`.
+
+All keys below the magic `common` key should be self-explanatory.
+
+A minimal base meta data file could be (untested):
+
+```console
+❯ cat fictitious/meta-minimal.yml
+---
+document:
+  common:
+    title: Ttt Tt Tt
+    footer_frame_note: DISTRIBUTION SCOPE
+    proprietary_information: /opt/legal/proprietary_information.txt
+```
+
+The terseness profits from the defaults chosen in `liitos` that expect many artifacts like fonts or logo at paths available on many systems.
+
+Leaving out `proprietary_information` would produce warnings (like other left out settings)
+and also inject the text `Proprietary Information MISSING` on the second page of the rendered document.
+
+## Including Markdown Files Inside Markdown Files
+
+First things first:
+
+> Please be prepared to save the planet yourself and avoid cyclic includes (a including b which in turn includes a which ...)
+> as we may make the discovery failsafe only later. Thanks.
+
+There is an example file in the `deep` folder that demonstrates the two ways to include markdown files inside other markdown files
+(the binder as top level inclusion is the main way of linking content).
+
+```console
+❯ cat deep/part/a.md
+# A
+
+Part A with again includes.
+
+```{.python .cb.run}
+with open('a1.md') as fp:
+    print(fp.read())
+```
+
+## Aa
+
+Some text per the simplified include mechanism to also better verify the blank line handling.
+
+\include{sub/as.md}
+
+## Ab
+
+End of part cascade.
+
+```
+
+### Applying User Patches
+
+As a last resort it may be necessary to reqrite parts of the final latex file before transforming to pdf.
+One way (besides editing and calling lualatex yourself) is to provide pairs of search and replace strings
+in the `patch.yml` file inside the document root as list of two-element lists.
+
+The example in the provided folder inside the source repository:
+
+```console
+❯ cat example/deep/patch.yml
+---
+- - ',height=\textheight]'
+  - ']'
+```
+
+Demonstrates how to ensure that no naive scaling distorting the aspect of images occurs (setting the width but
+not the height in the markdown source can result in pandoc generating a rectangular scaling that over scales the height
+in case of portrait mode layouts).
