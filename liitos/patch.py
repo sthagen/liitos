@@ -1,33 +1,19 @@
-"""Apply all pairs in patch data to specified target."""
-import pathlib
+"""Apply all pairs in patches to incoming."""
+from collections.abc import Iterable
 
-import yaml
-
-from liitos import ENCODING, log
-
-DOCUMENT = pathlib.Path('document.tex')
+from liitos import log
 
 
-def apply() -> None:
+def apply(patches: list[tuple[str, str]], incoming: Iterable[str]) -> list[str]:
     """Later alligator."""
-    with open('patches.yml', 'rt', encoding=ENCODING) as handle:
-        patches = yaml.safe_load(handle)
+    outgoing = [line for line in incoming]
 
-    log.info(f'reading document ({DOCUMENT}) for patching')
-    with open(DOCUMENT, 'rt', encoding=ENCODING) as handle:
-        lines = [line.strip() for line in handle.readlines()]
-
-    log.info(f'applying patches to {len(lines)} lines of text')
-    for this, that in patches['pairs']:
-        log.info(f' - trying ({this}) --> ({that}) ...')
-        for n, text in enumerate(lines):
+    log.info(f'applying patches to {len(outgoing)} lines of text')
+    for this, that in patches:
+        log.info(f' - replacing any ({this}) with ({that}) ...')
+        for n, text in enumerate(outgoing):
             if this in text:
                 print(f'- found match ({text})')
-                lines[n] = text.replace(this, that)
+                outgoing[n] = text.replace(this, that)
 
-    if lines[-1]:
-        lines.append('')  # Add a guaranteed newline at the end of the file
-
-    log.info(f'writing patched document ({DOCUMENT})')
-    with open(DOCUMENT, 'wt', encoding=ENCODING) as handle:
-        handle.write('\n'.join(lines))
+    return outgoing
