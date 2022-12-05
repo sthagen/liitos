@@ -1,7 +1,7 @@
 ---
 document:
   common:
-    main_title: null
+    title: null
     header_title: null
     sub_title: ' '
     header_type: Engineering Document
@@ -20,7 +20,7 @@ document:
     approvals_role_label: Approvals
     approvals_name_label: Name
     approvals_date_and_signature_label: Date and Signature
-    proprietary_information: null
+    proprietary_information: /opt/legal/proprietary-information.txt
     toc_level: 2
     list_of_figures: '%'  # empty string to enable lof
     list_of_tables: '%'  # empty string to enable lot
@@ -32,4 +32,4 @@ document:
     main_font: ITCFranklinGothicStd-Book
     fixed_font_package: sourcecodepro
     code_fontsize: \scriptsize
-    chosen_logo: liitos-logo.png
+    chosen_logo: /opt/logo/liitos-logo.png
