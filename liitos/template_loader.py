@@ -5,11 +5,16 @@ import pkgutil
 from liitos import ENCODING, log
 
 RESOURCES = (
+    'templates/approvals.yml',
     'templates/bookmatter.tex.in',
-    'templates/publisher.tex.in',
-    'templates/metadata.tex.in',
+    'templates/changes.yml',
     'templates/driver.tex.in',
+    'templates/meta.yml',
+    'templates/meta-patch.yml',
+    'templates/metadata.tex.in',
+    'templates/publisher.tex.in',
     'templates/setup.tex.in',
+    'templates/vocabulary.yml',
 )
 
 
