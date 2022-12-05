@@ -13,6 +13,11 @@ def test_this_ok(capsys):
     assert interpret_as_yaml['document']['patch']['header_date'] == MAGIC_OF_TODAY
 
 
+def test_this_no_thing(caplog):
+    assert eject.this('') == 2
+    assert 'eject of template with no name requested' in caplog.text
+
+
 def test_this_wrong_thing(caplog):
     assert eject.this('unknown-thing') == 2
     assert 'unknown-thing' in caplog.text
@@ -25,4 +30,8 @@ def test_this_ambiguous_thing(caplog):
 
 def test_this_write_weird_thing(caplog):
     assert eject.this('meta-b', out='/dev/null') == 0
-    assert 'WARNING requested writing (templates/meta.yml) to file (null)' in caplog.text
+    assert 'requested writing (templates/meta.yml) to file (null)' in caplog.text
+
+
+def test_this_write_out_thing(caplog):
+    assert eject.this('meta-b', out='/tmp/meta.yml') == 0
