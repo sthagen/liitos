@@ -13,12 +13,14 @@ import liitos.captions as cap
 import liitos.figures as fig
 import liitos.gather as gat
 import liitos.labels as lab
+import liitos.patch as pat
 from liitos import ENCODING, log
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 IMAGES_FOLDER = 'images/'
 DIAGRAMS_FOLDER = 'diagrams/'
+PATCH_SPEC_NAME = 'patch.yml'
 CHUNK_SIZE = 2 << 15
 TS_FORMAT = '%Y-%m-%d %H:%M:%S.%f +00:00'
 
@@ -68,8 +70,45 @@ def der(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='render'
     )
     log.info(f'prelude teleported processor into the document root at ({os.getcwd()}/)')
-    rel_concat_folder_path = pathlib.Path("render/pdf/")
+
+    rel_concat_folder_path = pathlib.Path('render/pdf/')
     rel_concat_folder_path.mkdir(parents=True, exist_ok=True)
+
+    patches = []
+    need_patching = False
+    patch_spec_path = pathlib.Path(PATCH_SPEC_NAME)
+    log.info(f'inspecting any patch spec file ({patch_spec_path}) ...')
+    if patch_spec_path.is_file() and patch_spec_path.stat().st_size:
+        target_path = rel_concat_folder_path / PATCH_SPEC_NAME
+        shutil.copy(patch_spec_path, target_path)
+        try:
+            with open(patch_spec_path, 'rt', encoding=ENCODING) as handle:
+                patch_spec = yaml.safe_load(handle)
+            need_patching = True
+        except (OSError, UnicodeDecodeError) as err:
+            log.error(f'failed to load patch spec from ({patch_spec_path}) with ({err}) - patching will be skipped')
+            need_patching = False
+        if need_patching:
+            try:
+                patches = [(rep, lace) for rep, lace in patch_spec]
+                patch_pair_count = len(patches)
+                if not patch_pair_count:
+                    need_patching = False
+                    log.warning(f'- ignoring empty patch spec')
+                else:
+                    log.info(
+                        f'- loaded {patch_pair_count} patch pair{"" if patch_pair_count == 1 else "s"}'
+                        f' from patch spec file ({patch_spec_path})'
+                    )
+            except ValueError as err:
+                log.error(f'- failed to parse patch spec from ({patch_spec}) with ({err}) - patching will be skipped')
+                need_patching = False
+    else:
+        if patch_spec_path.is_file():
+            log.warning(f'- ignoring empty patch spec file ({patch_spec_path})')
+        else:
+            log.info(f'- no patch spec file ({patch_spec_path}) detected')
+
     os.chdir(rel_concat_folder_path)
     log.info(f'render (this processor) teleported into the render/pdf location ({os.getcwd()}/)')
 
@@ -185,31 +224,40 @@ def der(
         doc_before_caps_patch = 'document-before-caps-patch.tex.txt'
         with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
-        caps_below = cap.weave(lines)
+        lines_in_pipe = cap.weave(lines)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(caps_below))
+            handle.write('\n'.join(lines_in_pipe))
 
         log.info(separator)
         log.info('inject stem (derived from file name) labels ...')
-        with open('document.tex', 'rt', encoding=ENCODING) as handle:
-            lines = [line.rstrip() for line in handle.readlines()]
         doc_before_label_patch = 'document-before-inject-stem-label-patch.tex.txt'
         with open(doc_before_label_patch, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines))
-        inject_stem_label = lab.inject(lines)
+            handle.write('\n'.join(lines_in_pipe))
+        lines_in_pipe = lab.inject(lines_in_pipe)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(inject_stem_label))
+            handle.write('\n'.join(lines_in_pipe))
 
         log.info(separator)
         log.info('scale figures ...')
-        with open('document.tex', 'rt', encoding=ENCODING) as handle:
-            lines = [line.rstrip() for line in handle.readlines()]
         doc_before_figures_patch = 'document-before-scale-figures-patch.tex.txt'
         with open(doc_before_figures_patch, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines))
-        scale_figures = fig.scale(lines)
+            handle.write('\n'.join(lines_in_pipe))
+        lines_in_pipe = fig.scale(lines_in_pipe)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(scale_figures))
+            handle.write('\n'.join(lines_in_pipe))
+
+        if need_patching:
+            log.info(separator)
+            log.info('apply user patches ...')
+            doc_before_user_patch = 'document-before-user-patch.tex.txt'
+            with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
+                handle.write('\n'.join(lines_in_pipe))
+            lines_in_pipe = pat.apply(patches, lines_in_pipe)
+            with open('document.tex', 'wt', encoding=ENCODING) as handle:
+                handle.write('\n'.join(lines_in_pipe))
+        else:
+            log.info(separator)
+            log.info('skipping application of user patches ...')
 
         log.info(separator)
         log.info('cp -a driver.tex this.tex ...')
