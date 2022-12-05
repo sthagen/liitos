@@ -62,6 +62,12 @@ Strictness = typer.Option(
     '--strict',
     help='Ouput noisy warnings on console (default is False)',
 )
+OutputPath = typer.Option(
+    '',
+    '-o',
+    '--output-path',
+    help='Path to output unambiguous content to - like when ejecting a template',
+)
 
 
 @app.callback(invoke_without_command=True)
@@ -258,12 +264,13 @@ def render(  # noqa
 @app.command('eject')
 def eject(  # noqa
     that: str = typer.Argument(''),
+    out: str = OutputPath,
 ) -> int:
     """
-    Eject a template. For now just guess the name ;-)
+    Eject a template. Enter unique part to retrieve, any unknown word to obtain the list of known templates.
     """
     return sys.exit(
-        eje.this(thing=that)
+        eje.this(thing=that, out=out)
     )
 
 
