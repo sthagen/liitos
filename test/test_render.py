@@ -1,9 +1,11 @@
 import hashlib
+import os
 import pathlib
 
 import liitos.render as render
 
 BASIC_FIXTURE_ROOT = pathlib.Path('test', 'fixtures', 'basic')
+EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 
 EMPTY_SHA512 = (
     'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce'
@@ -31,3 +33,16 @@ def test_hash_file_explicit_sha1_on_empty():
 
 def test_hash_file_explicit_md5_on_empty():
     assert render.hash_file(BASIC_FIXTURE_ROOT / 'empty.md', hashlib.md5) == EMPTY_MD5
+
+
+def test_ren_der():
+    parameters = {
+        'doc_root': EXAMPLE_DEEP_DOC_ROOT,
+        'structure_name': 'structure.yml',
+        'target_key': 'prod_kind',
+        'facet_key': 'deep',
+        'options': {},
+    }
+    restore = os.getcwd()
+    assert render.der(**parameters) == 0
+    os.chdir(restore)
