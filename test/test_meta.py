@@ -102,6 +102,20 @@ def test_driver_dispatch_explicit():
         assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
         value_wrapper = f'-VALUE.SLOT+{trigger}'
         assert meta.weave_meta_driver(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
+    # Parked here for now: Not a number for toc level
+    assert meta.weave_driver_toc_level(
+        {'toc_level': 'x'},
+        '-VALUE.SLOT+%%_PATCH_%_TOC_%_LEVEL_%%'
+    ) == '-2+%%_PATCH_%_TOC_%_LEVEL_%%'
+    # Parked here for now: Unaccepted value for switching of list of figures and tables
+    assert meta.weave_driver_list_of_figures(
+        {'list_of_figures': 'x'},
+        '-VALUE.SLOT+%%_PATCH_%_LOF_%%'
+    ) == '-%+%%_PATCH_%_LOF_%%'
+    assert meta.weave_driver_list_of_tables(
+        {'list_of_tables': 'x'},
+        '-VALUE.SLOT+%%_PATCH_%_LOT_%%'
+    ) == '-%+%%_PATCH_%_LOT_%%'
 
 
 def test_setup_dispatch():
