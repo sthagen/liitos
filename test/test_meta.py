@@ -9,6 +9,9 @@ def test_weave_meta_part_proprietary_information_on_value_slot_ok():
     assert meta.weave_meta_part_proprietary_information({}, '-VALUE.SLOT+') == '-Proprietary Information MISSING+'
 
 
+def test_meta_dispatch_no_match_let_pass():
+    assert meta.weave_meta_meta({'document': {'common':{}}}, ['no-match']) == ['no-match', '\n']
+
 def test_meta_dispatch():
     dispatch = {
         '%%_PATCH_%_HEADER_%_TITLE_%%': meta.weave_meta_part_header_title,
