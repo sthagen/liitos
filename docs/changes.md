@@ -2,9 +2,7 @@
 
 ## 2022.12.6
 
-* Boosted test coverage to more than a half
-* Hardened execution and added more fill-in services (eg. valid image resources for broken refs)
-* Provided a broken example to demonstrate handling of typical author lapses
+* Boosted test coverage above 80%
 
 ## 2022.12.5
 
