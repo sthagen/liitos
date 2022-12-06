@@ -62,6 +62,9 @@ def test_meta_dispatch():
         value_wrapper = f'-VALUE.SLOT+{trigger}'
         assert meta.weave_meta_meta(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
 
+def test_driver_dispatch_no_match_let_pass():
+    assert meta.weave_meta_driver({'document': {'common':{}}}, ['no-match']) == ['no-match', '\n']
+
 
 def test_driver_dispatch():
     dispatch = {
