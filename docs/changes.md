@@ -1,5 +1,11 @@
 # Changes
 
+## 2022.12.6
+
+* Boosted test coverage to more than a half
+* Hardened execution and added more fill-in services (eg. valid image resources for broken refs)
+* Provided a broken example to demonstrate handling of typical author lapses
+
 ## 2022.12.5
 
 * Added eject command for templates
