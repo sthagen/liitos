@@ -329,8 +329,12 @@ def weave_driver_toc_level(mapper: dict[str, str | int | bool | None], text: str
     toc_level = 2
     if mapper.get('toc_level'):
         try:
-            toc_level = int(mapper['toc_level'])
-            toc_level = toc_level if 0 < toc_level < 5 else 2
+            toc_level_read = int(mapper['toc_level'])
+            toc_level = toc_level_read if 0 < toc_level_read < 5 else 2
+            if toc_level != toc_level_read:
+                log.warning(
+                    f'ignored toc level ({toc_level_read}) set to default (2) - expected value 0 < toc_level < 5'
+                )
         except ValueError as err:
             toc_level = 2
             log.warning(
