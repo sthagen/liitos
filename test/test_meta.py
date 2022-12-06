@@ -1,4 +1,9 @@
+import os
+import pathlib
+
 import liitos.meta as meta
+
+EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 
 
 def test_weave_meta_part_proprietary_information_on_empty_ok():
@@ -281,3 +286,16 @@ def test_setup_dispatch_explicit():
         assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
         value_wrapper = f'-VALUE.SLOT+{trigger}'
         assert meta.weave_meta_setup(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
+
+
+def test_ren_der():
+    parameters = {
+        'doc_root': EXAMPLE_DEEP_DOC_ROOT,
+        'structure_name': 'structure.yml',
+        'target_key': 'prod_kind',
+        'facet_key': 'deep',
+        'options': {},
+    }
+    restore = os.getcwd()
+    assert meta.weave(**parameters) == 0
+    os.chdir(restore)
