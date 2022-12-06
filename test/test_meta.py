@@ -121,6 +121,10 @@ def test_driver_dispatch_explicit():
     ) == '-%+%%_PATCH_%_LOT_%%'
 
 
+def test_setup_dispatch_no_match_let_pass():
+    assert meta.weave_meta_setup({'document': {'common':{}}}, ['no-match']) == ['no-match', '\n']
+
+
 def test_setup_dispatch():
     dispatch = {
         '%%_PATCH_%_FONT_%_PATH_%%': meta.weave_setup_font_path,
