@@ -552,7 +552,7 @@ def weave_meta_part_proprietary_information(mapper: dict[str, str | int | bool |
         return text.replace(VALUE_SLOT, 'Proprietary Information MISSING')
 
 
-def dispatch_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def dispatch_meta_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
     """Dispatch the weaver by mapping to handled groups per source marker."""
     dispatch = {
         '%%_PATCH_%_HEADER_%_TITLE_%%': weave_meta_part_header_title,
@@ -585,7 +585,7 @@ def dispatch_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> 
 def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> None:
     """TODO."""
     log.info('weaving in the meta data per metadata.tex.in into metadata.tex ...')
-    completed = [dispatch_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
+    completed = [dispatch_meta_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
     if completed and completed[-1]:
         completed.append('\n')
     return completed
