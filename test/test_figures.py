@@ -22,3 +22,14 @@ def test_scale_trigger_complete():
 def test_scale_trigger_complete_plus():
     incoming = ['', r'\scale=90%', '', r'\includegraphics{']
     assert figures.scale(incoming) == ['', '', r'\includegraphics{']
+
+
+def test_scale_copy_through():
+    incoming = ['', 'x', 'y', 'z']
+    assert figures.scale(incoming) == incoming
+
+
+def test_scale_trigger_percent_complete_plus():
+    incoming = ['', r'\scale=90\%', '', 'text', r'\includegraphics{', '', 'x']
+    outgoing = ['', '', 'text', r'\includegraphics[width=0.9\textwidth,height=0.9\textheight]{','', 'x']
+    assert figures.scale(incoming) == outgoing
