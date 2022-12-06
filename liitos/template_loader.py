@@ -34,7 +34,7 @@ def eject(argv: list[str] | None = None) -> int:
     if not into.strip():
         into = 'EJECTED'
     into_path = pathlib.Path(into)
-    into_path.mkdir(parents=True, exist_ok=True)
+    (into_path / 'templates').mkdir(parents=True, exist_ok=True)
     for resource in RESOURCES:
         write_to = into_path / resource
         data = pkgutil.get_data(__package__, resource).decode(encoding=ENCODING)
