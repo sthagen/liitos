@@ -24,7 +24,7 @@ def scale(incoming: Iterable[str]) -> list[str]:
             else:
                 outgoing.append(line)
 
-        elif modus == 'scale':
+        else:  # if modus == 'scale':
             if line.startswith(r'\includegraphics{'):
                 if rescale != NO_RESCALE:
                     log.info(f'- found the scale target start at line #{slot + 1}|{line}')
