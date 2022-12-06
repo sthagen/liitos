@@ -7,10 +7,11 @@ from typer.testing import CliRunner
 
 import liitos
 import liitos.gather as gather
-from liitos.cli import app
+from liitos.cli import app, render
 
 runner = CliRunner()
 
+EXAMPLE_DEEP_PREFIX = pathlib.Path('example', 'deep')
 TEST_PREFIX = pathlib.Path('test', 'fixtures', 'basic')
 DEFAULT_STRUCTURE_PATH = TEST_PREFIX / gather.DEFAULT_STRUCTURE_NAME
 TEST_TARGET = 'abc'
@@ -99,3 +100,31 @@ def test_main_missing_asset():
     result = runner.invoke(app, ['verify', f'{TEST_PREFIX}', '-f', 'missing', '-t', 'abc'])
     assert result.exit_code == 0
     assert 'requested tree root at (test/fixtures/basic) does not exist' in result.stdout
+
+
+def test_command_concat():
+    result = runner.invoke(app, ['concat', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
+    assert result.exit_code == 0
+
+
+def test_command_render_base():
+    result = runner.invoke(app, ['render', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
+    assert result.exit_code == 0
+
+
+def test_command_changes_base():
+    result = runner.invoke(app, ['changes', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
+    assert result.exit_code == 0
+
+
+def test_command_approvals_base():
+    result = runner.invoke(app, ['approvals', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
+    assert result.exit_code == 0
+
+
+def test_command_render_deep():
+    result = runner.invoke(
+        app,
+        ['render', '-d', f'{EXAMPLE_DEEP_PREFIX}', '-f', 'deep',
+         '-s', 'structure.yml', '-t', 'prod_kind', '-v'])
+    assert result.exit_code == 0
