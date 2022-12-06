@@ -9,6 +9,10 @@ def test_weave_meta_part_proprietary_information_on_value_slot_ok():
     assert meta.weave_meta_part_proprietary_information({}, '-VALUE.SLOT+') == '-Proprietary Information MISSING+'
 
 
+def test_meta_dispatch_no_match_let_pass_empty():
+    assert meta.weave_meta_meta({'document': {'common':{}}}, []) == []
+
+
 def test_meta_dispatch_no_match_let_pass():
     assert meta.weave_meta_meta({'document': {'common':{}}}, ['no-match']) == ['no-match', '\n']
 
@@ -69,6 +73,10 @@ def test_driver_dispatch_no_match_let_pass():
     assert meta.weave_meta_driver({'document': {'common':{}}}, ['no-match']) == ['no-match', '\n']
 
 
+def test_driver_dispatch_no_match_let_pass_empty():
+    assert meta.weave_meta_driver({'document': {'common':{}}}, []) == []
+
+
 def test_driver_dispatch():
     dispatch = {
         '%%_PATCH_%_TOC_%_LEVEL_%%': meta.weave_driver_toc_level,
@@ -122,6 +130,10 @@ def test_driver_dispatch_explicit():
         {'list_of_tables': 'x'},
         '-VALUE.SLOT+%%_PATCH_%_LOT_%%'
     ) == '-%+%%_PATCH_%_LOT_%%'
+
+
+def test_setup_dispatch_no_match_let_pass_empty():
+    assert meta.weave_meta_setup({'document': {'common':{}}}, []) == []
 
 
 def test_setup_dispatch_no_match_let_pass():
