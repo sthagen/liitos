@@ -35,6 +35,22 @@ DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 MAGIC_OF_TODAY = 'PUBLICATIONDATE'
 
+WEAVE_DEFAULTS = {
+    'font_path': '/opt/fonts/',
+    'font_suffix': '.otf',
+    'bold_font': 'ITCFranklinGothicStd-Demi',
+    'italic_font': 'ITCFranklinGothicStd-BookIt',
+    'bold_italic_font': 'ITCFranklinGothicStd-DemiIt',
+    'main_font': 'ITCFranklinGothicStd-Book',
+    'fixed_font_package': 'sourcecodepro',
+    'code_fontsize': r'\scriptsize',
+    'chosen_logo': '/opt/logo/liitos-logo.png',
+}
+ACROSS = {
+    'eff_font_folder': '',
+    'eff_font_suffix': '',
+}
+
 
 def process_meta(aspects: str) -> gat.Meta | int:
     """TODO."""
@@ -67,176 +83,242 @@ def process_meta(aspects: str) -> gat.Meta | int:
     return metadata
 
 
+def weave_setup_font_path(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the xxxx from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_FONT_%_PATH_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    if mapper.get('font_path'):
+        font_path = mapper.get('font_path')
+        if not pathlib.Path(font_path).is_dir():
+            log.warning(
+                f'font_path ({font_path}) is no directory on this system - rendering may not work as intended'
+            )
+        ACROSS['eff_font_folder'] = font_path
+        return text.replace(VALUE_SLOT, font_path)
+    else:
+        log.warning(f'font_path value missing ... setting default ({defaults["font_path"]})')
+        ACROSS['eff_font_folder'] = defaults['font_path']
+        return text.replace(VALUE_SLOT, defaults['font_path'])
+
+
+def weave_setup_font_suffix(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the font_suffix from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_FONT_%_SUFFIX_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    if mapper.get('font_suffix'):
+        font_suffix = mapper.get('font_suffix')
+        if font_suffix not in ('.otf', '.ttf'):
+            log.warning(
+                f'font_suffix ({font_suffix}) is unexpected - rendering may not work as intended'
+            )
+        ACROSS['eff_font_suffix'] = font_suffix
+        return text.replace(VALUE_SLOT, font_suffix)
+    else:
+        log.warning(f'font_suffix value missing ... setting default ({defaults["font_suffix"]})')
+        ACROSS['eff_font_suffix'] = defaults['font_suffix']
+        return text.replace(VALUE_SLOT, defaults['font_suffix'])
+
+
+def weave_setup_bold_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the bold_font from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_BOLD_%_FONT_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    eff_font_folder = ACROSS['eff_font_folder']
+    eff_font_suffix = ACROSS['eff_font_suffix']
+    if mapper.get('bold_font'):
+        bold_font = mapper.get('bold_font')
+        font_path = pathlib.Path(eff_font_folder) / f'{bold_font}{eff_font_suffix}'
+        if not font_path.is_file():
+            log.warning(
+                f'bold_font ({bold_font}) is not found'
+                f' as ({font_path}) on this system - rendering may not work as intended'
+            )
+        return text.replace(VALUE_SLOT, bold_font)
+    else:
+        log.warning(f'bold_font value missing ... setting default ({defaults["bold_font"]})')
+        return text.replace(VALUE_SLOT, defaults['bold_font'])
+
+
+def weave_setup_italic_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the italic_font from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_ITALIC_%_FONT_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    eff_font_folder = ACROSS['eff_font_folder']
+    eff_font_suffix = ACROSS['eff_font_suffix']
+    if mapper.get('italic_font'):
+        italic_font = mapper.get('italic_font')
+        font_path = pathlib.Path(eff_font_folder) / f'{italic_font}{eff_font_suffix}'
+        if not font_path.is_file():
+            log.warning(
+                f'italic_font ({italic_font}) is not found'
+                f' as ({font_path}) on this system - rendering may not work as intended'
+            )
+        return text.replace(VALUE_SLOT, italic_font)
+    else:
+        log.warning(f'italic_font value missing ... setting default ({defaults["italic_font"]})')
+        return text.replace(VALUE_SLOT, defaults['italic_font'])
+
+
+def weave_setup_bold_italic_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the bold_italic_font from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_BOLDITALIC_%_FONT_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    eff_font_folder = ACROSS['eff_font_folder']
+    eff_font_suffix = ACROSS['eff_font_suffix']
+    if mapper.get('bold_italic_font'):
+        bold_italic_font = mapper.get('bold_italic_font')
+        font_path = pathlib.Path(eff_font_folder) / f'{bold_italic_font}{eff_font_suffix}'
+        if not font_path.is_file():
+            log.warning(
+                f'bold_italic_font ({bold_italic_font}) is not found'
+                f' as ({font_path}) on this system - rendering may not work as intended'
+            )
+        return text.replace(VALUE_SLOT, bold_italic_font)
+    else:
+        log.warning(f'bold_italic_font value missing ... setting default ({defaults["bold_italic_font"]})')
+        return text.replace(VALUE_SLOT, defaults['bold_italic_font'])
+
+
+def weave_setup_main_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the main_font from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_FONT_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    eff_font_folder = ACROSS['eff_font_folder']
+    eff_font_suffix = ACROSS['eff_font_suffix']
+    if mapper.get('main_font'):
+        main_font = mapper.get('main_font')
+        font_path = pathlib.Path(eff_font_folder) / f'{main_font}{eff_font_suffix}'
+        if not font_path.is_file():
+            log.warning(
+                f'main_font ({main_font}) is not found'
+                f' as ({font_path}) on this system - rendering may not work as intended'
+            )
+        return text.replace(VALUE_SLOT, main_font)
+    else:
+        log.warning(f'main_font value missing ... setting default ({defaults["main_font"]})')
+        return text.replace(VALUE_SLOT, defaults['main_font'])
+
+
+def weave_setup_fixed_font_package(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the fixed_font_package from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    if mapper.get('fixed_font_package'):
+        fixed_font_package = mapper.get('fixed_font_package')
+        if fixed_font_package != defaults['fixed_font_package']:
+            log.warning(
+                f'fixed_font_package ({fixed_font_package}) has not'
+                ' been tested on this system - rendering may not work as intended'
+            )
+        return text.replace(VALUE_SLOT, fixed_font_package)
+    else:
+        log.warning(f'fixed_font_package value missing ... setting default ({defaults["fixed_font_package"]})')
+        return text.replace(VALUE_SLOT, defaults['fixed_font_package'])
+
+
+def weave_setup_code_fontsize(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the code_fontsize from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CODE_%_FONTSIZE_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    if mapper.get('code_fontsize'):
+        code_fontsize = mapper.get('code_fontsize')
+        valid_code_font_sizes = (
+            r'\Huge',
+            r'\huge',
+            r'\LARGE',
+            r'\Large',
+            r'\large',
+            r'\normalsize',
+            r'\small',
+            r'\footnotesize',
+            r'\scriptsize',
+            r'\tiny',
+        )
+        bs = '\\'
+        sizes = tuple(size[1:] for size in valid_code_font_sizes)
+        if code_fontsize.startswith(r'\\'):
+            code_fontsize = code_fontsize[1:]
+        if code_fontsize not in valid_code_font_sizes:
+            log.error(
+                f'code_fontsize ({code_fontsize}) is not a valid font size value'
+                ' - rendering would not work as intended'
+            )
+            log.info(f'valid values for code_fontsize must be in {bs}{(", " + bs).join(sizes)}')
+            log.warning(
+                f'overriding code font size value with the (working) default of ({defaults["code_fontsize"]})'
+                f' - in config that would be {defaults["code_fontsize"]}')
+            return text.replace(VALUE_SLOT, defaults['code_fontsize'])
+        else:
+            return text.replace(VALUE_SLOT, code_fontsize)
+    else:
+        log.warning(
+            f'code_fontsize value missing ... setting default ({defaults["code_fontsize"]})'
+            f' - in config that would be {defaults["code_fontsize"]}')
+        return text.replace(VALUE_SLOT, defaults['code_fontsize'])
+
+
+def weave_setup_chosen_logo(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the chosen_logo from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHOSEN_%_LOGO_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    if mapper.get('chosen_logo'):
+        chosen_logo = mapper.get('chosen_logo')
+        logo_path = pathlib.Path(chosen_logo)
+        if not logo_path.is_file():
+            log.warning(
+                f'chosen_logo ({chosen_logo}) is not found'
+                f' as ({logo_path}) on this system - rendering may not work as intended'
+            )
+        return text.replace(VALUE_SLOT, chosen_logo)
+    else:
+        log.warning(f'chosen_logo value missing ... setting default ({defaults["chosen_logo"]})')
+        return text.replace(VALUE_SLOT, defaults['chosen_logo'])
+
+
+def dispatch_setup_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Dispatch the driver weaver by mapping to handled groups per source marker."""
+    dispatch = {
+        '%%_PATCH_%_FONT_%_PATH_%%': weave_setup_font_path,
+        '%%_PATCH_%_FONT_%_SUFFIX_%%': weave_setup_font_suffix,
+        '%%_PATCH_%_BOLD_%_FONT_%%': weave_setup_bold_font,
+        '%%_PATCH_%_ITALIC_%_FONT_%%': weave_setup_italic_font,
+        '%%_PATCH_%_BOLDITALIC_%_FONT_%%': weave_setup_bold_italic_font,
+        '%%_PATCH_%_MAIN_%_FONT_%%': weave_setup_main_font,
+        '%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%': weave_setup_fixed_font_package,
+        '%%_PATCH_%_CODE_%_FONTSIZE_%%': weave_setup_code_fontsize,
+        '%%_PATCH_%_CHOSEN_%_LOGO_%%': weave_setup_chosen_logo,
+    }
+    for trigger, weaver in dispatch.items():
+        if text.rstrip().endswith(trigger):
+            return weaver(mapper, text)
+    return text
+
+
 def weave_meta_setup(meta_map: gat.Meta, latex: list[str]) -> None:
     """TODO."""
     log.info('weaving in the meta data per setup.tex.in into setup.tex ...')
-
-    defaults = {
-        'font_path': '/opt/fonts/',
-        'font_suffix': '.otf',
-        'bold_font': 'ITCFranklinGothicStd-Demi',
-        'italic_font': 'ITCFranklinGothicStd-BookIt',
-        'bold_italic_font': 'ITCFranklinGothicStd-DemiIt',
-        'main_font': 'ITCFranklinGothicStd-Book',
-        'fixed_font_package': 'sourcecodepro',
-        'code_fontsize': r'\scriptsize',
-        'chosen_logo': '/opt/logo/liitos-logo.png',
-    }
-    eff_font_folder = ''
-    eff_font_suffix = ''
-    common = meta_map['document']['common']
-    for n, line in enumerate(latex):
-        if line.rstrip().endswith('%%_PATCH_%_FONT_%_PATH_%%'):
-            if common.get('font_path'):
-                font_path = common.get('font_path')
-                if not pathlib.Path(font_path).is_dir():
-                    log.warning(
-                        f'font_path ({font_path}) is no directory on this system - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, font_path)
-                eff_font_folder = font_path
-            else:
-                log.warning(f'font_path value missing ... setting default ({defaults["font_path"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['font_path'])
-                eff_font_folder = defaults['font_path']
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_FONT_%_SUFFIX_%%'):
-            if common.get('font_suffix'):
-                font_suffix = common.get('font_suffix')
-                if font_suffix not in ('.otf', '.ttf'):
-                    log.warning(
-                        f'font_suffix ({font_suffix}) is unexpected - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, font_suffix)
-                eff_font_suffix = font_suffix
-            else:
-                log.warning(f'font_suffix value missing ... setting default ({defaults["font_suffix"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['font_suffix'])
-                eff_font_suffix = defaults['font_suffix']
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_BOLD_%_FONT_%%'):
-            if common.get('bold_font'):
-                bold_font = common.get('bold_font')
-                font_path = pathlib.Path(eff_font_folder) / f'{bold_font}{eff_font_suffix}'
-                if not font_path.is_file():
-                    log.warning(
-                        f'bold_font ({bold_font}) is not found'
-                        f' as ({font_path}) on this system - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, bold_font)
-            else:
-                log.warning(f'bold_font value missing ... setting default ({defaults["bold_font"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['bold_font'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_ITALIC_%_FONT_%%'):
-            if common.get('italic_font'):
-                italic_font = common.get('italic_font')
-                font_path = pathlib.Path(eff_font_folder) / f'{italic_font}{eff_font_suffix}'
-                if not font_path.is_file():
-                    log.warning(
-                        f'italic_font ({italic_font}) is not found'
-                        f' as ({font_path}) on this system - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, italic_font)
-            else:
-                log.warning(f'italic_font value missing ... setting default ({defaults["italic_font"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['italic_font'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_BOLDITALIC_%_FONT_%%'):
-            if common.get('bold_italic_font'):
-                bold_italic_font = common.get('bold_italic_font')
-                font_path = pathlib.Path(eff_font_folder) / f'{bold_italic_font}{eff_font_suffix}'
-                if not font_path.is_file():
-                    log.warning(
-                        f'bold_italic_font ({bold_italic_font}) is not found'
-                        f' as ({font_path}) on this system - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, bold_italic_font)
-            else:
-                log.warning(f'bold_italic_font value missing ... setting default ({defaults["bold_italic_font"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['bold_italic_font'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_MAIN_%_FONT_%%'):
-            if common.get('main_font'):
-                main_font = common.get('main_font')
-                font_path = pathlib.Path(eff_font_folder) / f'{main_font}{eff_font_suffix}'
-                if not font_path.is_file():
-                    log.warning(
-                        f'main_font ({main_font}) is not found'
-                        f' as ({font_path}) on this system - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, main_font)
-            else:
-                log.warning(f'main_font value missing ... setting default ({defaults["main_font"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['main_font'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%'):
-            if common.get('fixed_font_package'):
-                fixed_font_package = common.get('fixed_font_package')
-                if fixed_font_package != defaults['fixed_font_package']:
-                    log.warning(
-                        f'fixed_font_package ({fixed_font_package}) has not'
-                        ' been tested on this system - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, fixed_font_package)
-            else:
-                log.warning(f'fixed_font_package value missing ... setting default ({defaults["fixed_font_package"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['fixed_font_package'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_CODE_%_FONTSIZE_%%'):
-            if common.get('code_fontsize'):
-                code_fontsize = common.get('code_fontsize')
-                valid_code_font_sizes = (
-                    r'\Huge',
-                    r'\huge',
-                    r'\LARGE',
-                    r'\Large',
-                    r'\large',
-                    r'\normalsize',
-                    r'\small',
-                    r'\footnotesize',
-                    r'\scriptsize',
-                    r'\tiny',
-                )
-                bs = '\\'
-                sizes = tuple(size[1:] for size in valid_code_font_sizes)
-                if code_fontsize.startswith(r'\\'):
-                    code_fontsize = code_fontsize[1:]
-                if code_fontsize not in valid_code_font_sizes:
-                    log.error(
-                        f'code_fontsize ({code_fontsize}) is not a valid font size value'
-                        ' - rendering would not work as intended'
-                    )
-                    log.info(f'valid values for code_fontsize must be in {bs}{(", " + bs).join(sizes)}')
-                    log.warning(
-                        f'overriding code font size value with the (working) default of ({defaults["code_fontsize"]})'
-                        f' - in config that would be {defaults["code_fontsize"]}')
-                    latex[n] = line.replace(VALUE_SLOT, defaults['code_fontsize'])
-                else:
-                    latex[n] = line.replace(VALUE_SLOT, code_fontsize)
-            else:
-                log.warning(
-                    f'code_fontsize value missing ... setting default ({defaults["code_fontsize"]})'
-                    f' - in config that would be {defaults["code_fontsize"]}')
-                latex[n] = line.replace(VALUE_SLOT, defaults['code_fontsize'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_CHOSEN_%_LOGO_%%'):
-            if common.get('chosen_logo'):
-                chosen_logo = common.get('chosen_logo')
-                logo_path = pathlib.Path(chosen_logo)
-                if not logo_path.is_file():
-                    log.warning(
-                        f'chosen_logo ({chosen_logo}) is not found'
-                        f' as ({logo_path}) on this system - rendering may not work as intended'
-                    )
-                latex[n] = line.replace(VALUE_SLOT, chosen_logo)
-            else:
-                log.warning(f'chosen_logo value missing ... setting default ({defaults["chosen_logo"]})')
-                latex[n] = line.replace(VALUE_SLOT, defaults['chosen_logo'])
-            continue
-
-    if latex[-1]:
-        latex.append('\n')
+    completed = [dispatch_setup_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
+    if completed and completed[-1]:
+        completed.append('\n')
+    return completed
 
 
 def weave_driver_toc_level(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
@@ -704,7 +786,7 @@ def weave(
 
     setup_template = template.load_resource(SETUP_TEMPLATE, SETUP_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in setup_template.split('\n')]
-    weave_meta_setup(metadata, lines)
+    lines = weave_meta_setup(metadata, lines)
     with open(SETUP_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
