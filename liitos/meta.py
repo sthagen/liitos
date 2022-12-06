@@ -294,172 +294,301 @@ def weave_meta_driver(meta_map: gat.Meta, latex: list[str]) -> None:
         latex.append('\n')
 
 
+def weave_meta_part_header_title(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the header_title from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_HEADER_%_TITLE_%%')
+    """
+    if mapper.get('header_title'):
+        return text.replace(VALUE_SLOT, mapper['header_title'])
+    else:
+        log.warning('header_title value missing ... setting default (the title value)')
+        return text.replace(VALUE_SLOT, mapper['title'])
+
+
+def weave_meta_part_title(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the title from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%%')
+    """
+    return text.replace(VALUE_SLOT, mapper['title'])
+
+
+def weave_meta_part_sub_title(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the sub_title from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_SUB_%_TITLE_%%')
+    """
+    if mapper.get('sub_title'):
+        return text.replace(VALUE_SLOT, mapper['sub_title'])
+    else:
+        log.warning('sub_title value missing ... setting default (single space)')
+        return text.replace(VALUE_SLOT, ' ')
+
+
+def weave_meta_part_header_type(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the header_type from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_TYPE_%%')
+    """
+    if mapper.get('header_type'):
+        return text.replace(VALUE_SLOT, mapper['header_type'])
+    else:
+        log.warning('header_type value missing ... setting default (Engineering Document)')
+        return text.replace(VALUE_SLOT, 'Engineering Document')
+
+
+def weave_meta_part_header_id(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the header_id from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_ID_%%')
+    """
+    if mapper.get('header_id'):
+        return text.replace(VALUE_SLOT, mapper['header_id'])
+    else:
+        log.warning('header_id value missing ... setting default (P99999)')
+        return text.replace(VALUE_SLOT, 'P99999')
+
+
+def weave_meta_part_issue(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the issue from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%%')
+    """
+    if mapper.get('issue'):
+        return text.replace(VALUE_SLOT, mapper['issue'])
+    else:
+        log.warning('issue value missing ... setting default (01)')
+        return text.replace(VALUE_SLOT, '01')
+
+
+def weave_meta_part_revision(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the revision from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_REVISION_%%')
+    """
+    if mapper.get('revision'):
+        return text.replace(VALUE_SLOT, mapper['revision'])
+    else:
+        log.warning('revision value missing ... setting default (00)')
+        return text.replace(VALUE_SLOT, '00')
+
+
+def weave_meta_part_header_date(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the header_date from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_DATE_%%')
+    """
+    today = dti.datetime.today()
+    pub_date_today = today.strftime('%d %b %Y').upper()
+    if mapper.get('header_date'):
+        pub_date = mapper['header_date'].strip()
+        if pub_date == MAGIC_OF_TODAY:
+            pub_date = pub_date_today
+        return text.replace(VALUE_SLOT, pub_date)
+    else:
+        log.warning(f'header_date value missing ... setting default as today({pub_date_today})')
+        return text.replace(VALUE_SLOT, pub_date_today)
+
+
+def weave_meta_part_footer_frame_note(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the footer_frame_note from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_FRAME_%_NOTE_%%')
+    """
+    if mapper.get('footer_frame_note'):
+        return text.replace(VALUE_SLOT, mapper['footer_frame_note'])
+    else:
+        log.warning('footer_frame_note value missing ... setting default (VERY CONSEQUENTIAL)')
+        return text.replace(VALUE_SLOT, 'VERY CONSEQUENTIAL')
+
+
+def weave_meta_part_footer_page_number_prefix(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the footer_page_number_prefix from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%')
+    """
+    if mapper.get('footer_page_number_prefix'):
+        return text.replace(VALUE_SLOT, mapper['footer_page_number_prefix'])
+    else:
+        log.warning('footer_page_number_prefix value missing ... setting default (Page)')
+        return text.replace(VALUE_SLOT, 'Page')
+
+
+def weave_meta_part_change_log_issue_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the change_log_issue_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%')
+    """
+    if mapper.get('change_log_issue_label'):
+        return text.replace(VALUE_SLOT, mapper['change_log_issue_label'])
+    else:
+        log.warning('change_log_issue_label value missing ... setting default (Iss.)')
+        return text.replace(VALUE_SLOT, 'Iss.')
+
+
+def weave_meta_part_change_log_revision_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the change_log_revision_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%')
+    """
+    if mapper.get('change_log_revision_label'):
+        return text.replace(VALUE_SLOT, mapper['change_log_revision_label'])
+    else:
+        log.warning('change_log_revision_label value missing ... setting default (Rev.)')
+        return text.replace(VALUE_SLOT, 'Rev.')
+
+
+def weave_meta_part_change_log_date_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the change_log_date_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%')
+    """
+    if mapper.get('change_log_date_label'):
+        return text.replace(VALUE_SLOT, mapper['change_log_date_label'])
+    else:
+        log.warning('change_log_date_label value missing ... setting default (Date)')
+        return text.replace(VALUE_SLOT, 'Date')
+
+
+def weave_meta_part_change_log_author_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the change_log_author_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%')
+    """
+    if mapper.get('change_log_author_label'):
+        return text.replace(VALUE_SLOT, mapper['change_log_author_label'])
+    else:
+        log.warning('change_log_author_label value missing ... setting default (Author)')
+        return text.replace(VALUE_SLOT, 'Author')
+
+
+def weave_meta_part_change_log_description_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the change_log_description_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%')
+    """
+    if mapper.get('change_log_description_label'):
+        return text.replace(VALUE_SLOT, mapper['change_log_description_label'])
+    else:
+        log.warning('change_log_description_label value missing ... setting default (Description)')
+        return text.replace(VALUE_SLOT, 'Description')
+
+
+def weave_meta_part_approvals_role_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the approvals_role_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%')
+    """
+    if mapper.get('approvals_role_label'):
+        return text.replace(VALUE_SLOT, mapper['approvals_role_label'])
+    else:
+        log.warning('approvals_role_label value missing ... setting default (Approvals)')
+        return text.replace(VALUE_SLOT, 'Approvals')
+
+
+def weave_meta_part_approvals_name_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the approvals_name_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%')
+    """
+    if mapper.get('approvals_name_label'):
+        return text.replace(VALUE_SLOT, mapper['approvals_name_label'])
+    else:
+        log.warning('approvals_name_label value missing ... setting default (Name)')
+        return text.replace(VALUE_SLOT, 'Name')
+
+
+def weave_meta_part_approvals_date_and_signature_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the approvals_date_and_signature_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%')
+    """
+    if mapper.get('approvals_date_and_signature_label'):
+        return text.replace(VALUE_SLOT, mapper['approvals_date_and_signature_label'])
+    else:
+        log.warning('approvals_date_and_signature_label value missing ... setting default (Date and Signature)')
+        return text.replace(VALUE_SLOT, 'Date and Signature')
+
+
+def weave_meta_part_header_issue_revision_combined(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the header_issue_revision_combined from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%')
+    """
+    if mapper.get('header_issue_revision_combined'):
+        return text.replace(VALUE_SLOT, mapper['header_issue_revision_combined'])
+    else:
+        log.info(
+            'header_issue_revision_combined value missing ... setting'
+            ' default (Iss \\theMetaIssCode, Rev \\theMetaRevCode)'
+        )
+        return text.replace(VALUE_SLOT, r'Iss \theMetaIssCode, Rev \theMetaRevCode')
+
+
+def weave_meta_part_proprietary_information(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the proprietary_information from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%')
+    """
+    if mapper.get('proprietary_information'):
+        prop_info = mapper['proprietary_information']
+        if pathlib.Path(prop_info).is_file():
+            try:
+                prop_info_from_file = pathlib.Path(prop_info).open().read()
+                prop_info = prop_info_from_file
+            except (OSError, UnicodeDecodeError) as err:
+                log.error(
+                    f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}'
+                )
+                log.warning(f'using value ({prop_info}) directly for proprietary_information')
+        else:
+            log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
+        return text.replace(VALUE_SLOT, prop_info)
+    else:
+        log.warning(
+            'proprietary_information value missing ... setting default (Proprietary Information MISSING)'
+        )
+        return text.replace(VALUE_SLOT, 'Proprietary Information MISSING')
+
+
+def dispatch_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Dispatch the weaver by mapping to handled groups per source marker."""
+    dispatch = {
+        '%%_PATCH_%_HEADER_%_TITLE_%%': weave_meta_part_header_title,
+        '%%_PATCH_%_MAIN_%_TITLE_%%': weave_meta_part_title,
+        '%%_PATCH_%_SUB_%_TITLE_%%': weave_meta_part_sub_title,
+        '%%_PATCH_%_TYPE_%%': weave_meta_part_header_type,
+        '%%_PATCH_%_ID_%%': weave_meta_part_header_id,
+        '%%_PATCH_%_ISSUE_%%': weave_meta_part_issue,
+        '%%_PATCH_%_REVISION_%%': weave_meta_part_revision,
+        '%%_PATCH_%_DATE_%%': weave_meta_part_header_date,
+        '%%_PATCH_%_FRAME_%_NOTE_%%': weave_meta_part_footer_frame_note,
+        '%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%': weave_meta_part_footer_page_number_prefix,
+        '%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%': weave_meta_part_change_log_issue_label,
+        '%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%': weave_meta_part_change_log_revision_label,
+        '%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%': weave_meta_part_change_log_date_label,
+        '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': weave_meta_part_change_log_author_label,
+        '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': weave_meta_part_change_log_description_label,
+        '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': weave_meta_part_approvals_role_label,
+        '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': weave_meta_part_approvals_name_label,
+        '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': weave_meta_part_approvals_date_and_signature_label,
+        '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': weave_meta_part_header_issue_revision_combined,
+        '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': weave_meta_part_proprietary_information,
+    }
+    for trigger, weaver in dispatch.items():
+        if text.rstrip().endswith(trigger):
+            return weaver(mapper, text)
+    return text
+
+
 def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> None:
     """TODO."""
     log.info('weaving in the meta data per metadata.tex.in into metadata.tex ...')
-    common = meta_map['document']['common']
-    for n, line in enumerate(latex):
-        if line.rstrip().endswith('%%_PATCH_%_HEADER_%_TITLE_%%'):
-            if common.get('header_title'):
-                latex[n] = line.replace(VALUE_SLOT, common['header_title'])
-            else:
-                log.warning('header_title value missing ... setting default (the title value)')
-                latex[n] = line.replace(VALUE_SLOT, common['title'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%%'):
-            latex[n] = line.replace(VALUE_SLOT, common['title'])
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_SUB_%_TITLE_%%'):
-            if common.get('sub_title'):
-                latex[n] = line.replace(VALUE_SLOT, common['sub_title'])
-            else:
-                log.warning('sub_title value missing ... setting default (single space)')
-                latex[n] = line.replace(VALUE_SLOT, ' ')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_TYPE_%%'):
-            if common.get('header_type'):
-                latex[n] = line.replace(VALUE_SLOT, common['header_type'])
-            else:
-                log.warning('header_type value missing ... setting default (Engineering Document)')
-                latex[n] = line.replace(VALUE_SLOT, 'Engineering Document')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_ID_%%'):
-            if common.get('header_id'):
-                latex[n] = line.replace(VALUE_SLOT, common['header_id'])
-            else:
-                log.warning('header_id value missing ... setting default (P99999)')
-                latex[n] = line.replace(VALUE_SLOT, 'P99999')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_ISSUE_%%'):
-            if common.get('issue'):
-                latex[n] = line.replace(VALUE_SLOT, common['issue'])
-            else:
-                log.warning('issue value missing ... setting default (01)')
-                latex[n] = line.replace(VALUE_SLOT, '01')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_REVISION_%%'):
-            if common.get('revision'):
-                latex[n] = line.replace(VALUE_SLOT, common['revision'])
-            else:
-                log.warning('revision value missing ... setting default (00)')
-                latex[n] = line.replace(VALUE_SLOT, '00')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_DATE_%%'):
-            today = dti.datetime.today()
-            pub_date_today = today.strftime('%d %b %Y').upper()
-            if common.get('header_date'):
-                pub_date = common['header_date'].strip()
-                if pub_date == MAGIC_OF_TODAY:
-                    pub_date = pub_date_today
-                latex[n] = line.replace(VALUE_SLOT, pub_date)
-            else:
-                log.warning(f'header_date value missing ... setting default as today({pub_date_today})')
-                latex[n] = line.replace(VALUE_SLOT, pub_date_today)
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_FRAME_%_NOTE_%%'):
-            if common.get('footer_frame_note'):
-                latex[n] = line.replace(VALUE_SLOT, common['footer_frame_note'])
-            else:
-                log.warning('footer_frame_note value missing ... setting default (VERY CONSEQUENTIAL)')
-                latex[n] = line.replace(VALUE_SLOT, 'VERY CONSEQUENTIAL')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%'):
-            if common.get('footer_page_number_prefix'):
-                latex[n] = line.replace(VALUE_SLOT, common['footer_page_number_prefix'])
-            else:
-                log.warning('footer_page_number_prefix value missing ... setting default (Page)')
-                latex[n] = line.replace(VALUE_SLOT, 'Page')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%'):
-            if common.get('change_log_issue_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['change_log_issue_label'])
-            else:
-                log.warning('change_log_issue_label value missing ... setting default (Iss.)')
-                latex[n] = line.replace(VALUE_SLOT, 'Iss.')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%'):
-            if common.get('change_log_revision_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['change_log_revision_label'])
-            else:
-                log.warning('change_log_revision_label value missing ... setting default (Rev.)')
-                latex[n] = line.replace(VALUE_SLOT, 'Rev.')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%'):
-            if common.get('change_log_date_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['change_log_date_label'])
-            else:
-                log.warning('change_log_date_label value missing ... setting default (Date)')
-                latex[n] = line.replace(VALUE_SLOT, 'Date')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%'):
-            if common.get('change_log_author_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['change_log_author_label'])
-            else:
-                log.warning('change_log_author_label value missing ... setting default (Author)')
-                latex[n] = line.replace(VALUE_SLOT, 'Author')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%'):
-            if common.get('change_log_description_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['change_log_description_label'])
-            else:
-                log.warning('change_log_description_label value missing ... setting default (Description)')
-                latex[n] = line.replace(VALUE_SLOT, 'Description')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%'):
-            if common.get('approvals_role_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['approvals_role_label'])
-            else:
-                log.warning('approvals_role_label value missing ... setting default (Approvals)')
-                latex[n] = line.replace(VALUE_SLOT, 'Approvals')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%'):
-            if common.get('approvals_name_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['approvals_name_label'])
-            else:
-                log.warning('approvals_name_label value missing ... setting default (Name)')
-                latex[n] = line.replace(VALUE_SLOT, 'Name')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%'):
-            if common.get('approvals_date_and_signature_label'):
-                latex[n] = line.replace(VALUE_SLOT, common['approvals_date_and_signature_label'])
-            else:
-                log.warning('approvals_date_and_signature_label value missing ... setting default (Date and Signature)')
-                latex[n] = line.replace(VALUE_SLOT, 'Date and Signature')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'):
-            if common.get('header_issue_revision_combined'):
-                latex[n] = line.replace(VALUE_SLOT, common['header_issue_revision_combined'])
-            else:
-                log.info(
-                    'header_issue_revision_combined value missing ... setting'
-                    ' default (Iss \\theMetaIssCode, Rev \\theMetaRevCode)'
-                )
-                latex[n] = line.replace(VALUE_SLOT, r'Iss \theMetaIssCode, Rev \theMetaRevCode')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'):
-            if common.get('proprietary_information'):
-                prop_info = common['proprietary_information']
-                if pathlib.Path(prop_info).is_file():
-                    try:
-                        prop_info_from_file = pathlib.Path(prop_info).open().read()
-                        prop_info = prop_info_from_file
-                    except (OSError, UnicodeDecodeError) as err:
-                        log.error(
-                            f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}'
-                        )
-                        log.warning(f'using value ({prop_info}) directly for proprietary_information')
-                else:
-                    log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
-                latex[n] = line.replace(VALUE_SLOT, prop_info)
-            else:
-                log.warning(
-                    'proprietary_information value missing ... setting default (Proprietary Information MISSING)'
-                )
-                latex[n] = line.replace(VALUE_SLOT, 'Proprietary Information MISSING')
-            continue
-    if latex[-1]:
-        latex.append('\n')
-
+    completed = [dispatch_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
+    if completed and completed[-1]:
+        completed.append('\n')
+    return completed
 
 def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
@@ -535,7 +664,7 @@ def weave(
 
     metadata_template = template.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in metadata_template.split('\n')]
-    weave_meta_meta(metadata, lines)
+    lines = weave_meta_meta(metadata, lines)
     with open(METADATA_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
