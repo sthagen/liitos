@@ -9,7 +9,7 @@ def test_weave_meta_part_proprietary_information_on_value_slot_ok():
     assert meta.weave_meta_part_proprietary_information({}, '-VALUE.SLOT+') == '-Proprietary Information MISSING+'
 
 
-def test_dispatch():
+def test_meta_dispatch():
     dispatch = {
         '%%_PATCH_%_HEADER_%_TITLE_%%': meta.weave_meta_part_header_title,
         '%%_PATCH_%_MAIN_%_TITLE_%%': meta.weave_meta_part_title,
@@ -61,3 +61,23 @@ def test_dispatch():
         assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
         value_wrapper = f'-VALUE.SLOT+{trigger}'
         assert meta.weave_meta_meta(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
+
+
+def test_driver_dispatch():
+    dispatch = {
+        '%%_PATCH_%_TOC_%_LEVEL_%%': meta.weave_driver_toc_level,
+        '%%_PATCH_%_LOF_%%': meta.weave_driver_list_of_figures,
+        '%%_PATCH_%_LOT_%%': meta.weave_driver_list_of_tables,
+    }
+    expected = {
+        '%%_PATCH_%_TOC_%_LEVEL_%%': '2',
+        '%%_PATCH_%_LOF_%%': '%',
+        '%%_PATCH_%_LOT_%%': '%',
+    }
+    mapper = {'title': '', 'header_date': '01 FEB 2345'}
+    value_slot_container = '-VALUE.SLOT+'
+    wrapper = {'document': {'common': {**mapper}}}
+    for trigger, weaver in dispatch.items():
+        assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
+        value_wrapper = f'-VALUE.SLOT+{trigger}'
+        assert meta.weave_meta_driver(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']

@@ -244,21 +244,20 @@ def weave_driver_toc_level(mapper: dict[str, str | int | bool | None], text: str
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_TOC_%_LEVEL_%%')
     """
-    if text.rstrip().endswith('%%_PATCH_%_TOC_%_LEVEL_%%'):
-        toc_level = 2
-        if mapper.get('toc_level'):
-            try:
-                toc_level = int(mapper['toc_level'])
-                toc_level = toc_level if 0 < toc_level < 5 else 2
-            except ValueError as err:
-                toc_level = 2
-                log.warning(
-                    f'toc_level ({mapper["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})'
-                )
-                log.error(f'error detail: {err}')
-        else:
-            log.warning(f'toc_level value missing ... setting default ({toc_level})')
-        return text.replace(VALUE_SLOT, str(toc_level))
+    toc_level = 2
+    if mapper.get('toc_level'):
+        try:
+            toc_level = int(mapper['toc_level'])
+            toc_level = toc_level if 0 < toc_level < 5 else 2
+        except ValueError as err:
+            toc_level = 2
+            log.warning(
+                f'toc_level ({mapper["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})'
+            )
+            log.error(f'error detail: {err}')
+    else:
+        log.warning(f'toc_level value missing ... setting default ({toc_level})')
+    return text.replace(VALUE_SLOT, str(toc_level))
 
 
 def weave_driver_list_of_figures(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
@@ -266,20 +265,19 @@ def weave_driver_list_of_figures(mapper: dict[str, str | int | bool | None], tex
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_LOF_%%')
     """
-    if text.rstrip().endswith('%%_PATCH_%_LOF_%%'):
-        if mapper.get('list_of_figures', None) is not None:
-            lof = mapper['list_of_figures']
-            if lof in ('', '%'):
-                return text.replace(VALUE_SLOT, str(lof))
-            else:
-                lof = '%'
-                log.warning(
-                    f"list_of_figures ({mapper['list_of_figures']}) not in ('', '%')"
-                    f" - resorting to default ({lof}) i.e. commenting out the list of figures"
-                )
+    if mapper.get('list_of_figures', None) is not None:
+        lof = mapper['list_of_figures']
+        if lof in ('', '%'):
+            return text.replace(VALUE_SLOT, str(lof))
         else:
-            log.warning('list_of_figures value missing ... setting default (comment out the lof per %)')
-            return text.replace(VALUE_SLOT, '%')
+            lof = '%'
+            log.warning(
+                f"list_of_figures ({mapper['list_of_figures']}) not in ('', '%')"
+                f" - resorting to default ({lof}) i.e. commenting out the list of figures"
+            )
+    else:
+        log.warning('list_of_figures value missing ... setting default (comment out the lof per %)')
+        return text.replace(VALUE_SLOT, '%')
 
 
 def weave_driver_list_of_tables(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
@@ -287,21 +285,19 @@ def weave_driver_list_of_tables(mapper: dict[str, str | int | bool | None], text
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_LOT_%%')
     """
-    if text.rstrip().endswith('%%_PATCH_%_LOT_%%'):
-        if mapper.get('list_of_tables', None) is not None:
-            lof = mapper['list_of_tables']
-            if lof in ('', '%'):
-                return text.replace(VALUE_SLOT, str(lof))
-            else:
-                lof = '%'
-                log.warning(
-                    f"list_of_tables ({mapper['list_of_tables']}) not in ('', '%')"
-                    f" - resorting to default ({lof}) i.e. commenting out the list of tables"
-                )
-                return text
+    if mapper.get('list_of_tables', None) is not None:
+        lof = mapper['list_of_tables']
+        if lof in ('', '%'):
+            return text.replace(VALUE_SLOT, str(lof))
         else:
-            log.warning('list_of_tables value missing ... setting default (comment out the lot per %)')
-            return text.replace(VALUE_SLOT, '%')
+            lof = '%'
+            log.warning(
+                f"list_of_tables ({mapper['list_of_tables']}) not in ('', '%')"
+                f" - resorting to default ({lof}) i.e. commenting out the list of tables"
+            )
+    else:
+        log.warning('list_of_tables value missing ... setting default (comment out the lot per %)')
+        return text.replace(VALUE_SLOT, '%')
 
 
 def dispatch_driver_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
