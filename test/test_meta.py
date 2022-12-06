@@ -1,4 +1,4 @@
-import liitos.meta as meta
+test/test_meta.pyimport liitos.meta as meta
 
 
 def test_weave_meta_part_proprietary_information_on_empty_ok():
@@ -83,6 +83,27 @@ def test_driver_dispatch():
         assert meta.weave_meta_driver(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
 
 
+def test_driver_dispatch_explicit():
+    dispatch = {
+        '%%_PATCH_%_TOC_%_LEVEL_%%': meta.weave_driver_toc_level,
+        '%%_PATCH_%_LOF_%%': meta.weave_driver_list_of_figures,
+        '%%_PATCH_%_LOT_%%': meta.weave_driver_list_of_tables,
+    }
+    expected = {
+        # WARNING ignored toc level (5) set to default (2) - expected value 0 < toc_level < 5:
+        '%%_PATCH_%_TOC_%_LEVEL_%%': '2',
+        '%%_PATCH_%_LOF_%%': '',
+        '%%_PATCH_%_LOT_%%': '%',
+    }
+    mapper = {'toc_level': 5, 'list_of_figures': '', 'list_of_tables': '%'}
+    value_slot_container = '-VALUE.SLOT+'
+    wrapper = {'document': {'common': {**mapper}}}
+    for trigger, weaver in dispatch.items():
+        assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
+        value_wrapper = f'-VALUE.SLOT+{trigger}'
+        assert meta.weave_meta_driver(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
+
+
 def test_setup_dispatch():
     dispatch = {
         '%%_PATCH_%_FONT_%_PATH_%%': meta.weave_setup_font_path,
@@ -108,6 +129,39 @@ def test_setup_dispatch():
         '%%_PATCH_%_CHOSEN_%_LOGO_%%': d['chosen_logo'],
     }
     mapper = {'title': '', 'header_date': '01 FEB 2345'}
+    value_slot_container = '-VALUE.SLOT+'
+    wrapper = {'document': {'common': {**mapper}}}
+    for trigger, weaver in dispatch.items():
+        assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
+        value_wrapper = f'-VALUE.SLOT+{trigger}'
+        assert meta.weave_meta_setup(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
+
+
+def test_setup_dispatch_explicit():
+    dispatch = {
+        '%%_PATCH_%_FONT_%_PATH_%%': meta.weave_setup_font_path,
+        '%%_PATCH_%_FONT_%_SUFFIX_%%': meta.weave_setup_font_suffix,
+        '%%_PATCH_%_BOLD_%_FONT_%%': meta.weave_setup_bold_font,
+        '%%_PATCH_%_ITALIC_%_FONT_%%': meta.weave_setup_italic_font,
+        '%%_PATCH_%_BOLDITALIC_%_FONT_%%': meta.weave_setup_bold_italic_font,
+        '%%_PATCH_%_MAIN_%_FONT_%%': meta.weave_setup_main_font,
+        '%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%': meta.weave_setup_fixed_font_package,
+        '%%_PATCH_%_CODE_%_FONTSIZE_%%': meta.weave_setup_code_fontsize,
+        '%%_PATCH_%_CHOSEN_%_LOGO_%%': meta.weave_setup_chosen_logo,
+    }
+    d = {**meta.WEAVE_DEFAULTS}
+    expected = {
+        '%%_PATCH_%_FONT_%_PATH_%%': d['font_path'],
+        '%%_PATCH_%_FONT_%_SUFFIX_%%': d['font_suffix'],
+        '%%_PATCH_%_BOLD_%_FONT_%%': d['bold_font'],
+        '%%_PATCH_%_ITALIC_%_FONT_%%': d['italic_font'],
+        '%%_PATCH_%_BOLDITALIC_%_FONT_%%': d['bold_italic_font'],
+        '%%_PATCH_%_MAIN_%_FONT_%%': d['main_font'],
+        '%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%': d['fixed_font_package'],
+        '%%_PATCH_%_CODE_%_FONTSIZE_%%': d['code_fontsize'],
+        '%%_PATCH_%_CHOSEN_%_LOGO_%%': d['chosen_logo'],
+    }
+    mapper = {**d}
     value_slot_container = '-VALUE.SLOT+'
     wrapper = {'document': {'common': {**mapper}}}
     for trigger, weaver in dispatch.items():
