@@ -363,7 +363,8 @@ def weave_driver_list_of_figures(mapper: dict[str, str | int | bool | None], tex
             )
     else:
         log.warning('list_of_figures value missing ... setting default (comment out the lof per %)')
-        return text.replace(VALUE_SLOT, '%')
+
+    return text.replace(VALUE_SLOT, '%')
 
 
 def weave_driver_list_of_tables(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
@@ -383,7 +384,8 @@ def weave_driver_list_of_tables(mapper: dict[str, str | int | bool | None], text
             )
     else:
         log.warning('list_of_tables value missing ... setting default (comment out the lot per %)')
-        return text.replace(VALUE_SLOT, '%')
+
+    return text.replace(VALUE_SLOT, '%')
 
 
 def dispatch_driver_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
