@@ -239,59 +239,91 @@ def weave_meta_setup(meta_map: gat.Meta, latex: list[str]) -> None:
         latex.append('\n')
 
 
+def weave_driver_toc_level(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the toc_level from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_TOC_%_LEVEL_%%')
+    """
+    if text.rstrip().endswith('%%_PATCH_%_TOC_%_LEVEL_%%'):
+        toc_level = 2
+        if mapper.get('toc_level'):
+            try:
+                toc_level = int(mapper['toc_level'])
+                toc_level = toc_level if 0 < toc_level < 5 else 2
+            except ValueError as err:
+                toc_level = 2
+                log.warning(
+                    f'toc_level ({mapper["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})'
+                )
+                log.error(f'error detail: {err}')
+        else:
+            log.warning(f'toc_level value missing ... setting default ({toc_level})')
+        return text.replace(VALUE_SLOT, str(toc_level))
+
+
+def weave_driver_list_of_figures(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the list_of_figures from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_LOF_%%')
+    """
+    if text.rstrip().endswith('%%_PATCH_%_LOF_%%'):
+        if mapper.get('list_of_figures', None) is not None:
+            lof = mapper['list_of_figures']
+            if lof in ('', '%'):
+                return text.replace(VALUE_SLOT, str(lof))
+            else:
+                lof = '%'
+                log.warning(
+                    f"list_of_figures ({mapper['list_of_figures']}) not in ('', '%')"
+                    f" - resorting to default ({lof}) i.e. commenting out the list of figures"
+                )
+        else:
+            log.warning('list_of_figures value missing ... setting default (comment out the lof per %)')
+            return text.replace(VALUE_SLOT, '%')
+
+
+def weave_driver_list_of_tables(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Weave in the list_of_tables from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_LOT_%%')
+    """
+    if text.rstrip().endswith('%%_PATCH_%_LOT_%%'):
+        if mapper.get('list_of_tables', None) is not None:
+            lof = mapper['list_of_tables']
+            if lof in ('', '%'):
+                return text.replace(VALUE_SLOT, str(lof))
+            else:
+                lof = '%'
+                log.warning(
+                    f"list_of_tables ({mapper['list_of_tables']}) not in ('', '%')"
+                    f" - resorting to default ({lof}) i.e. commenting out the list of tables"
+                )
+                return text
+        else:
+            log.warning('list_of_tables value missing ... setting default (comment out the lot per %)')
+            return text.replace(VALUE_SLOT, '%')
+
+
+def dispatch_driver_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+    """Dispatch the driver weaver by mapping to handled groups per source marker."""
+    dispatch = {
+        '%%_PATCH_%_TOC_%_LEVEL_%%': weave_driver_toc_level,
+        '%%_PATCH_%_LOF_%%': weave_driver_list_of_figures,
+        '%%_PATCH_%_LOT_%%': weave_driver_list_of_tables,
+    }
+    for trigger, weaver in dispatch.items():
+        if text.rstrip().endswith(trigger):
+            return weaver(mapper, text)
+    return text
+
+
 def weave_meta_driver(meta_map: gat.Meta, latex: list[str]) -> None:
     """TODO."""
     log.info('weaving in the meta data per driver.tex.in into driver.tex ...')
-    common = meta_map['document']['common']
-    for n, line in enumerate(latex):
-        if line.rstrip().endswith('%%_PATCH_%_TOC_%_LEVEL_%%'):
-            toc_level = 2
-            if common.get('toc_level'):
-                try:
-                    toc_level = int(common['toc_level'])
-                    toc_level = toc_level if 0 < toc_level < 5 else 2
-                except ValueError as err:
-                    toc_level = 2
-                    log.warning(
-                        f'toc_level ({common["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})'
-                    )
-                    log.error(f'error detail: {err}')
-            else:
-                log.warning(f'toc_level value missing ... setting default ({toc_level})')
-            latex[n] = line.replace(VALUE_SLOT, str(toc_level))
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_LOF_%%'):
-            if common.get('list_of_figures', None) is not None:
-                lof = common['list_of_figures']
-                if lof in ('', '%'):
-                    latex[n] = line.replace(VALUE_SLOT, str(lof))
-                else:
-                    lof = '%'
-                    log.warning(
-                        f"list_of_figures ({common['list_of_figures']}) not in ('', '%')"
-                        f" - resorting to default ({lof}) i.e. commenting out the list of figures"
-                    )
-            else:
-                log.warning('list_of_figures value missing ... setting default (comment out the lof per %)')
-                latex[n] = line.replace(VALUE_SLOT, '%')
-            continue
-        if line.rstrip().endswith('%%_PATCH_%_LOT_%%'):
-            if common.get('list_of_tables', None) is not None:
-                lof = common['list_of_tables']
-                if lof in ('', '%'):
-                    latex[n] = line.replace(VALUE_SLOT, str(lof))
-                else:
-                    lof = '%'
-                    log.warning(
-                        f"list_of_tables ({common['list_of_tables']}) not in ('', '%')"
-                        f" - resorting to default ({lof}) i.e. commenting out the list of tables"
-                    )
-            else:
-                log.warning('list_of_tables value missing ... setting default (comment out the lot per %)')
-                latex[n] = line.replace(VALUE_SLOT, '%')
-            continue
-    if latex[-1]:
-        latex.append('\n')
+    completed = [dispatch_driver_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
+    if completed and completed[-1]:
+        completed.append('\n')
+    return completed
 
 
 def weave_meta_part_header_title(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
@@ -553,7 +585,7 @@ def weave_meta_part_proprietary_information(mapper: dict[str, str | int | bool |
 
 
 def dispatch_meta_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
-    """Dispatch the weaver by mapping to handled groups per source marker."""
+    """Dispatch the meta weaver by mapping to handled groups per source marker."""
     dispatch = {
         '%%_PATCH_%_HEADER_%_TITLE_%%': weave_meta_part_header_title,
         '%%_PATCH_%_MAIN_%_TITLE_%%': weave_meta_part_title,
@@ -670,7 +702,7 @@ def weave(
 
     driver_template = template.load_resource(DRIVER_TEMPLATE, DRIVER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in driver_template.split('\n')]
-    weave_meta_driver(metadata, lines)
+    lines = weave_meta_driver(metadata, lines)
     with open(DRIVER_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
