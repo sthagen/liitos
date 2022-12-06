@@ -54,5 +54,10 @@ def test_dispatch():
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': r'Iss \theMetaIssCode, Rev \theMetaRevCode',
         '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': 'Proprietary Information MISSING',
     }
+    mapper = {'title': '', 'header_date': '01 FEB 2345'}
+    value_slot_container = '-VALUE.SLOT+'
+    wrapper = {'document': {'common': {**mapper}}}
     for trigger, weaver in dispatch.items():
-        assert weaver({'title': '', 'header_date': '01 FEB 2345'}, '-VALUE.SLOT+') == f'-{expected[trigger]}+'
+        assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
+        value_wrapper = f'-VALUE.SLOT+{trigger}'
+        assert meta.weave_meta_meta(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
