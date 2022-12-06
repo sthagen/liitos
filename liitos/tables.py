@@ -1,11 +1,7 @@
 """Apply all pairs in patch module on document."""
-import pathlib
+from collections.abc import Iterable
 
-from liitos import log
-
-DOC_IN = pathlib.Path('document.tex')
-DOC_OUT = pathlib.Path('tables-patched-document.tex')
-ENCODING = 'utf-8'
+from liitos import ENCODING, log
 
 TAB_START_TOK = r'\begin{longtable}[]{@{}'
 TOP_RULE = r'\toprule()'
@@ -58,16 +54,13 @@ ANNOTATION
 \end{footnotesize}"""
 
 
-def patch() -> None:
+def patch(incoming: Iterable[str]) -> list[str]:
     """Later alligator."""
-    with open(DOC_IN, 'rt', encoding=ENCODING) as handle:
-        lines = [''] + [line.strip() for line in handle.readlines()]
-
     table_section, head, annotation = False, False, False
     table_ranges = []
     guess_slot = 0
     table_range = {}
-    for n, text in enumerate(lines):
+    for n, text in enumerate(incoming):
 
         if not table_section:
             if not text.startswith(TAB_START_TOK):
@@ -118,19 +111,20 @@ def patch() -> None:
         from_here = table['start']
         thru_there = table['amend']
         print('Table:')
-        print(f'-from {lines[from_here]}')
-        print(f'-thru {lines[thru_there]}')
+        print(f'-from {incoming[from_here]}')
+        print(f'-thru {incoming[thru_there]}')
         on_off = (from_here, thru_there + 1)
         on_off_slots.append(on_off)
-        tables_in.append((on_off, [line for line in lines[on_off[0] : on_off[1]]]))
+        tables_in.append((on_off, [line for line in incoming[on_off[0] : on_off[1]]]))
 
     log.debug('# - - - 8< - - -')
-    log.debug(str('\n'.join(tables_in[0][1])))
+    if tables_in:
+        log.debug(str('\n'.join(tables_in[0][1])))
     log.debug('# - - - 8< - - -')
 
     out = []
     next_slot = 0
-    for n, line in enumerate(lines):
+    for n, line in enumerate(incoming):
         if next_slot < len(on_off_slots):
             trigger_on, trigger_off = on_off_slots[next_slot]
             tb = table_ranges[next_slot]
@@ -165,5 +159,4 @@ def patch() -> None:
     log.debug(str('\n'.join(out)))
     log.debug('# - - - 8< - - -')
 
-    with open(DOC_OUT, 'wt', encoding=ENCODING) as handle:
-        handle.write('\n'.join(out) + '\n')
+    return out
