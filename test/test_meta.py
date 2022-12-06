@@ -69,6 +69,83 @@ def test_meta_dispatch():
         value_wrapper = f'-VALUE.SLOT+{trigger}'
         assert meta.weave_meta_meta(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
 
+
+def test_meta_dispatch_explicit():
+    dispatch = {
+        '%%_PATCH_%_HEADER_%_TITLE_%%': meta.weave_meta_part_header_title,
+        '%%_PATCH_%_MAIN_%_TITLE_%%': meta.weave_meta_part_title,
+        '%%_PATCH_%_SUB_%_TITLE_%%': meta.weave_meta_part_sub_title,
+        '%%_PATCH_%_TYPE_%%': meta.weave_meta_part_header_type,
+        '%%_PATCH_%_ID_%%': meta.weave_meta_part_header_id,
+        '%%_PATCH_%_ISSUE_%%': meta.weave_meta_part_issue,
+        '%%_PATCH_%_REVISION_%%': meta.weave_meta_part_revision,
+        '%%_PATCH_%_DATE_%%': meta.weave_meta_part_header_date,
+        '%%_PATCH_%_FRAME_%_NOTE_%%': meta.weave_meta_part_footer_frame_note,
+        '%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%': meta.weave_meta_part_footer_page_number_prefix,
+        '%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%': meta.weave_meta_part_change_log_issue_label,
+        '%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%': meta.weave_meta_part_change_log_revision_label,
+        '%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%': meta.weave_meta_part_change_log_date_label,
+        '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': meta.weave_meta_part_change_log_author_label,
+        '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': meta.weave_meta_part_change_log_description_label,
+        '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': meta.weave_meta_part_approvals_role_label,
+        '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': meta.weave_meta_part_approvals_name_label,
+        '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': meta.weave_meta_part_approvals_date_and_signature_label,
+        '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': meta.weave_meta_part_header_issue_revision_combined,
+        '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': meta.weave_meta_part_proprietary_information,
+    }
+    mapper = {
+        'header_title': 'Ttt Tt',
+        'title': 'Ttt Tt Tt',
+        'sub_title': 'The Deep Spec',
+        'header_type': 'Engineering Document',
+        'header_id': 'MMI',
+        'issue': '01',
+        'revision': '00',
+        'header_date': '01 FEB 2345',
+        'footer_frame_note': 'VERY CONSEQUENTIAL',
+        'footer_page_number_prefix': 'Page',
+        'change_log_issue_label': 'Iss.',
+        'change_log_revision_label': 'Rev.',
+        'change_log_date_label': 'Date',
+        'change_log_author_label': 'Author',
+        'change_log_description_label': 'Description',
+        'approvals_role_label': 'Approvals',
+        'approvals_name_label': 'Name',
+        'approvals_date_and_signature_label': 'Date and Signature',
+        'header_issue_revision_combined': 'combined',
+        'proprietary_information': 'test',
+    }
+    expected = {
+        '%%_PATCH_%_HEADER_%_TITLE_%%': mapper['header_title'],
+        '%%_PATCH_%_MAIN_%_TITLE_%%': mapper['title'],
+        '%%_PATCH_%_SUB_%_TITLE_%%': mapper['sub_title'],
+        '%%_PATCH_%_TYPE_%%': mapper['header_type'],
+        '%%_PATCH_%_ID_%%': mapper['header_id'],
+        '%%_PATCH_%_ISSUE_%%': mapper['issue'],
+        '%%_PATCH_%_REVISION_%%': mapper['revision'],
+        '%%_PATCH_%_DATE_%%': mapper['header_date'],
+        '%%_PATCH_%_FRAME_%_NOTE_%%': mapper['footer_frame_note'],
+        '%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%': mapper['footer_page_number_prefix'],
+        '%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%': mapper['change_log_issue_label'],
+        '%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%': mapper['change_log_revision_label'],
+        '%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%': mapper['change_log_date_label'],
+        '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': mapper['change_log_author_label'],
+        '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': mapper['change_log_description_label'],
+        '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': mapper['approvals_role_label'],
+        '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': mapper['approvals_name_label'],
+        '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': mapper['approvals_date_and_signature_label'],
+        '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': mapper['header_issue_revision_combined'],
+        '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': mapper['proprietary_information'],
+    }
+
+    value_slot_container = '-VALUE.SLOT+'
+    wrapper = {'document': {'common': {**mapper}}}
+    for trigger, weaver in dispatch.items():
+        assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
+        value_wrapper = f'-VALUE.SLOT+{trigger}'
+        assert meta.weave_meta_meta(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
+
+
 def test_driver_dispatch_no_match_let_pass():
     assert meta.weave_meta_driver({'document': {'common':{}}}, ['no-match']) == ['no-match', '\n']
 
