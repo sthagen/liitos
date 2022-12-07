@@ -39,6 +39,11 @@ def test_report_taxonomy():
     assert render.report_taxonomy(BASIC_FIXTURE_ROOT / 'empty.md') is None
 
 
+def test_unified_diff():
+    ud = list(render.unified_diff(['foo'], ['bar']))
+    assert ud == ['--- before', '+++ after', '@@ -1 +1 @@', '-foo', '+bar']
+
+
 def test_ren_der():
     parameters = {
         'doc_root': EXAMPLE_DEEP_DOC_ROOT,
