@@ -29,6 +29,16 @@ def test_adapt_image_other():
     assert collector == [f'{pathlib.Path().cwd()}/x/other/abc.def']
 
 
+def test_adapt_image_dot_dot():
+    collector = []
+    # eg. example/deep/part/x.md has source ref to ../other/abc.def which is example/deep/other/abc.def
+    assert (
+        concat.adapt_image('](../other/abc.def)', collector, 'part/x.md', root='y')
+        == f']({pathlib.Path().cwd()}/other/abc.def)'
+    )
+    assert collector == [f'{pathlib.Path().cwd()}/other/abc.def']
+
+
 def test_concatenate_base():
     parameters = {
         'doc_root': BASIC_FIXTURE_ROOT,

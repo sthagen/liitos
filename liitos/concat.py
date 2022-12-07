@@ -160,7 +160,7 @@ def process_meta(aspects: str) -> gat.Meta | int:
 def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) -> str:
     """YES."""
     before, xtr = text_line.split('](', 1)
-    has_caption = True if ' ' in xtr else False
+    has_caption = True if ' ' in xtr and '")' in xtr else False
     img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
     img_path = str((pathlib.Path(upstream).parent / img).resolve()).replace(root, '')
     collector.append(img_path)
@@ -170,7 +170,7 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
     elif f'/{DIAGRAMS_FOLDER}' in img_path:
         img_hack = DIAGRAMS_FOLDER + img_path.split(f'/{DIAGRAMS_FOLDER}', 1)[1]
     if img_hack != img_path:
-        log.debug(f'{img_hack} <--- OK? --- {img_path}')
+        log.info(f'{img_hack} <--- OK? --- {img_path}')
     return f'{before}]({img_hack}{" " if has_caption else ")"}{after}'
 
 
