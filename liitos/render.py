@@ -5,7 +5,7 @@ import os
 import pathlib
 import shutil
 import subprocess  # nosec B404
-
+import sys
 
 import yaml
 
@@ -15,6 +15,7 @@ import liitos.gather as gat
 import liitos.labels as lab
 import liitos.patch as pat
 from liitos import ENCODING, log
+from taksonomia.taksonomia import Taxonomy
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -23,6 +24,8 @@ DIAGRAMS_FOLDER = 'diagrams/'
 PATCH_SPEC_NAME = 'patch.yml'
 CHUNK_SIZE = 2 << 15
 TS_FORMAT = '%Y-%m-%d %H:%M:%S.%f +00:00'
+LOG_SEPARATOR = '- ' * 80
+
 
 def hash_file(path: pathlib.Path, hasher = None) -> str:
     """Return the SHA512 hex digest of the data from file."""
@@ -54,6 +57,12 @@ def log_subprocess_output(pipe, prefix: str):
 
 def report_taxonomy(target_path: pathlib.Path) -> None:
     """Convenience function to report date, size, and checksums of the deliverable."""
+    taxonomy = Taxonomy(target_path, excludes='', key_function='md5')
+    for path in sorted(target_path.rglob('*')):
+        taxonomy.add_branch(path) if path.is_dir() else taxonomy.add_leaf(path)
+    log.info('- Writing render/pdf folder taxonomy to taxonomy.json ...')
+    taxonomy.dump(sink='taxonomy', format_type='json', base64_encode=False)
+
     stat = target_path.stat()
     size_bytes = stat.st_size
     mod_time = dti.datetime.fromtimestamp(stat.st_ctime, tz=dti.timezone.utc).strftime(TS_FORMAT)
@@ -78,8 +87,7 @@ def der(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
-    separator = '- ' * 80
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():
@@ -185,7 +193,7 @@ def der(
             log.warning(f'we will not render ...')
             return 0
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('transforming SVG assets to high resolution PNG bitmaps ...')
         for path_to_dir in (IMAGES_FOLDER, DIAGRAMS_FOLDER):
             the_folder = pathlib.Path(path_to_dir)
@@ -208,7 +216,7 @@ def der(
                     else:
                         log.info(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('rewriting src attribute values of SVG to PNG sources ...')
         with open('document.md', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
@@ -234,7 +242,7 @@ def der(
         markdown_to_latex_command = [
             'pandoc', '--verbose', '-f', fmt_spec, '-t', 'latex', in_doc, '-o', out_doc, '--filter', 'mermaid-filter'
         ]
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter ...')
         process = subprocess.Popen(markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
@@ -245,7 +253,7 @@ def der(
         else:
             log.info(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('move any captions below tables ...')
         with open('document.tex', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
@@ -256,7 +264,7 @@ def der(
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_in_pipe))
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('inject stem (derived from file name) labels ...')
         doc_before_label_patch = 'document-before-inject-stem-label-patch.tex.txt'
         with open(doc_before_label_patch, 'wt', encoding=ENCODING) as handle:
@@ -265,7 +273,7 @@ def der(
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_in_pipe))
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('scale figures ...')
         doc_before_figures_patch = 'document-before-scale-figures-patch.tex.txt'
         with open(doc_before_figures_patch, 'wt', encoding=ENCODING) as handle:
@@ -275,7 +283,7 @@ def der(
             handle.write('\n'.join(lines_in_pipe))
 
         if need_patching:
-            log.info(separator)
+            log.info(LOG_SEPARATOR)
             log.info('apply user patches ...')
             doc_before_user_patch = 'document-before-user-patch.tex.txt'
             with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
@@ -284,17 +292,17 @@ def der(
             with open('document.tex', 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_in_pipe))
         else:
-            log.info(separator)
+            log.info(LOG_SEPARATOR)
             log.info('skipping application of user patches ...')
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('cp -a driver.tex this.tex ...')
         source_asset = 'driver.tex'
         target_asset = 'this.tex'
         shutil.copy(source_asset, target_asset)
 
         latex_to_pdf_command = ['lualatex', '--shell-escape', 'this.tex']
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('1/3) lualatex --shell-escape this.tex ...')
         process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
@@ -305,7 +313,7 @@ def der(
         else:
             log.info(f'latex-to-pdf process 1/3  ({latex_to_pdf_command}) returned {return_code}')
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('2/3) lualatex --shell-escape this.tex ...')
         process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
@@ -316,7 +324,7 @@ def der(
         else:
             log.info(f'latex-to-pdf process 2/3  ({latex_to_pdf_command}) returned {return_code}')
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('3/3) lualatex --shell-escape this.tex ...')
         process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
         with process.stdout:
@@ -327,13 +335,13 @@ def der(
         else:
             log.info(f'latex-to-pdf process 3/3  ({latex_to_pdf_command}) returned {return_code}')
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('Moving stuff around (result phase) ...')
         source_asset = 'this.pdf'
         target_asset = '../index.pdf'
         shutil.copy(source_asset, target_asset)
 
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('Deliverable taxonomy: ...')
         report_taxonomy(pathlib.Path(target_asset))
 
@@ -347,9 +355,8 @@ def der(
         else:
             log.info(f'pdffonts process ({pdffonts_command}) returned {return_code}')
 
-
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
         log.info('done.')
-        log.info(separator)
+        log.info(LOG_SEPARATOR)
 
     return 0
