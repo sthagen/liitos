@@ -53,8 +53,13 @@ def _generate_dependency_information() -> None:
         raise RuntimeError(noise)
 
     indirect_names = [  # TODO(sthagen) these indirect deps may diverge ...
+        'GitPython',
+        'PyYAML',
         'click',
-
+        'lxml',
+        'orjson',
+        'psutil',
+        'py-cpuinfo',
     ]
     full_vector = [
         'pip-licenses', '--format', 'json', '-p', *direct_names, *indirect_names,
