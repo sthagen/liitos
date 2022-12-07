@@ -8,7 +8,9 @@ import shutil
 import subprocess  # nosec B404
 import sys
 
+import foran.foran as api
 import yaml
+from foran.report import generate_report
 from taksonomia.taksonomia import Taxonomy
 
 import liitos.captions as cap
@@ -57,6 +59,25 @@ def log_subprocess_output(pipe, prefix: str):
                 log.debug(f'{prefix}: %s', cand)
             else:
                 log.info(f'{prefix}: %s', cand)
+
+
+def vcs_probe():
+    """Are we in front, on par, or behind with the upstream?"""
+    try:
+        repo = api.Repo('.', search_parent_directories=True)
+        status = api.Status(repo)
+        api.local_commits(repo, status)
+        api.local_staged(repo, status)
+        api.local_files(repo, status)
+        try:
+            repo_root_folder = repo.git.rev_parse(show_toplevel=True)
+            yield f'Root     ({repo_root_folder})'
+        except Exception:
+            yield 'WARNING - ignored exception when assessing repo root folder location'
+        for line in generate_report(status):
+            yield line.rstrip()
+    except Exception:
+        yield 'WARNING - we seem to not be within a git repository clone'
 
 
 def report_taxonomy(target_path: pathlib.Path) -> None:
@@ -152,6 +173,13 @@ def der(
     os.chdir(rel_concat_folder_path)
     log.info(f'render (this processor) teleported into the render/pdf location ({os.getcwd()}/)')
 
+    log.info(LOG_SEPARATOR)
+    log.info('Assessing the local version control status (compared to upstream) ...')
+    log.info(LOG_SEPARATOR)
+    for line in vcs_probe():
+        log.info(line)
+    log.info(LOG_SEPARATOR)
+
     if not STRUCTURE_PATH.is_file() or not STRUCTURE_PATH.stat().st_size:
         log.error(f'render failed to find non-empty structure file at {STRUCTURE_PATH}')
         return 1
@@ -227,25 +255,58 @@ def der(
                     else:
                         log.info(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
 
+        special_patching = []
         log.info(LOG_SEPARATOR)
         log.info('rewriting src attribute values of SVG to PNG sources ...')
         with open('document.md', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
         for slot, line in enumerate(lines):
-            if '.drawio.svg' in line:
-                fine = line.replace('.drawio.svg', '.png')
-                log.info(f'transform[#{slot + 1}]: {line}')
-                log.info(f'     into[#{slot + 1}]: {fine}')
+            if '.svg' in line and line.count('.') == 2:
+                before, app, rest = line.split('.')
+                fine = before + f'.{rest}'.replace('.svg', '.png')
+                # fine = line.replace('.drawio.svg', '.png')
+                log.info(f'  transform[#{slot + 1}]: {line}')
+                log.info(f'       into[#{slot + 1}]: {fine}')
                 lines[slot] = fine
+                dia_thing = line.split('](')[1].rstrip()
+                if '"' in dia_thing:
+                    dia_path_old = dia_thing.split(' ', 1)[0]
+                else:
+                    dia_path_old = dia_thing.split(')', 1)[0]
+                dia_path_old = dia_path_old.replace('.svg', '.png')
+                dia_fine = fine.split('](')[1].rstrip()
+                if '"' in dia_fine:
+                    dia_path_new = dia_fine.split(' ', 1)[0]
+                else:
+                    dia_path_new = dia_fine.split(')', 1)[0]
+                if dia_path_old and dia_path_new:
+                    special_patching.append((dia_path_old, dia_path_new))
+                    log.info(f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old}) -> ({dia_path_new})')
+                else:
+                    log.warning(f'- old: {dia_thing.rstrip()}')
+                    log.warning(f'- new: {dia_fine.rstrip()}')
                 continue
             if '.svg' in line:
                 fine = line.replace('.svg', '.png')
-                log.info(f'transform[#{slot + 1}]: {line}')
-                log.info(f'     into[#{slot + 1}]: {fine}')
+                log.info(f'  transform[#{slot + 1}]: {line}')
+                log.info(f'       into[#{slot + 1}]: {fine}')
                 lines[slot] = fine
                 continue
         with open('document.md', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
+
+        log.info(LOG_SEPARATOR)
+        log.info('ensure diagram files can be found when patched ...')
+        if special_patching:
+            # diagrams = pathlib.Path(DIAGRAMS_FOLDER)
+            for old, mew in special_patching:
+                source_asset = pathlib.Path(old)
+                target_asset = pathlib.Path(mew)
+                log.info(f'- moving: ({source_asset}) -> ({target_asset})')
+                shutil.move(source_asset, target_asset)
+        else:
+            log.info('post-action queue (from reference renaming) is empty - nothing to move')
+        log.info(LOG_SEPARATOR)
 
         fmt_spec = 'markdown+link_attributes'
         in_doc = 'document.md'
