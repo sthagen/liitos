@@ -35,6 +35,10 @@ def test_hash_file_explicit_md5_on_empty():
     assert render.hash_file(BASIC_FIXTURE_ROOT / 'empty.md', hashlib.md5) == EMPTY_MD5
 
 
+def test_report_taxonomy():
+    assert render.report_taxonomy(BASIC_FIXTURE_ROOT / 'empty.md') is None
+
+
 def test_ren_der():
     parameters = {
         'doc_root': EXAMPLE_DEEP_DOC_ROOT,
