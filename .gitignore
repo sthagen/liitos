@@ -138,3 +138,6 @@ local/
 gist/
 .vscode/
 current-bandit.json
+
+# Local specific ignores
+inventory.*

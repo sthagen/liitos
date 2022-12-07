@@ -70,7 +70,7 @@ baseline:
 .PHONY: clocal
 clocal:
 	@rm -rf example/deep/render
-	@rm -f taxonomy.*
+	@rm -f inventory.*
 
 .PHONY: clean
 clean: clocal
