@@ -15,7 +15,13 @@ TP_PATH = pathlib.Path('docs', 'third-party')
 TABLE_KEYS = (('Name', 'URL'), 'Version', 'License', 'Author', 'Description')
 HEADER_LABELS = ('Name', 'Version', 'License', 'Author', 'Description (from packaging data)')
 FALLBACK_URLS = {
+    'foran': 'https://git.sr.ht/~sthagen/foran',
+    'taksonomia': 'https://git.sr.ht/~sthagen/taksonomia',
     'typing-extensions': 'https://github.com/python/typing/blob/master/typing_extensions/README.rst',
+}
+FALLBACK_NAMES = {
+    'foran': 'Stefan Hagen',
+    'taksonomia': 'Stefan Hagen',
 }
 TARGET = """\
 __version__ = '$version$+parent.$revision$'\
@@ -111,6 +117,8 @@ def _extract_rows(data):
         ver_sion = f'[{ver}](https://pypi.org/project/{nam}/{ver}/)'
         lic = record['License']
         aut = record['Author']
+        if aut == 'UNKNOWN':
+            aut = FALLBACK_NAMES.get(nam, '')
         des = record['Description']
         rows.append((nam_e, ver_sion, lic, aut, des))
     rows.sort()
