@@ -64,8 +64,8 @@ def report_taxonomy(target_path: pathlib.Path) -> None:
     taxonomy = Taxonomy(target_path, excludes='', key_function='md5')
     for path in sorted(target_path.rglob('*')):
         taxonomy.add_branch(path) if path.is_dir() else taxonomy.add_leaf(path)
-    log.info('- Writing render/pdf folder taxonomy to taxonomy.json ...')
-    taxonomy.dump(sink='taxonomy', format_type='json', base64_encode=False)
+    log.info('- Writing render/pdf folder taxonomy to inventory.json ...')
+    taxonomy.dump(sink='inventory', format_type='json', base64_encode=False)
 
     stat = target_path.stat()
     size_bytes = stat.st_size
