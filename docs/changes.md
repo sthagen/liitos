@@ -1,5 +1,9 @@
 # Changes
 
+## 2022.12.7
+
+* Added foran (vcs) and taksonomia (taxonomy) services per dependencies
+
 ## 2022.12.6
 
 * Boosted test coverage above 80%
