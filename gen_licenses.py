@@ -56,10 +56,13 @@ def _generate_dependency_information() -> None:
         'GitPython',
         'PyYAML',
         'click',
+        'future',
+        'gitdb',
         'lxml',
         'orjson',
         'psutil',
         'py-cpuinfo',
+        'smmap',
     ]
     full_vector = [
         'pip-licenses', '--format', 'json', '-p', *direct_names, *indirect_names,
