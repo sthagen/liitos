@@ -1,5 +1,6 @@
 import liitos.tables as tables
 
+
 def test_patch_empty():
     assert tables.patch([]) == []
 

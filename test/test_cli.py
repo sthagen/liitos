@@ -124,7 +124,6 @@ def test_command_approvals_base():
 
 def test_command_render_deep():
     result = runner.invoke(
-        app,
-        ['render', '-d', f'{EXAMPLE_DEEP_PREFIX}', '-f', 'deep',
-         '-s', 'structure.yml', '-t', 'prod_kind', '-v'])
+        app, ['render', '-d', f'{EXAMPLE_DEEP_PREFIX}', '-f', 'deep', '-s', 'structure.yml', '-t', 'prod_kind', '-v']
+    )
     assert result.exit_code == 0

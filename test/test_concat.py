@@ -22,8 +22,12 @@ def test_adapt_image_diagrams():
 def test_adapt_image_other():
     collector = []
     # This may be not what anyone wants ...
-    assert concat.adapt_image('](x/other/abc.def)', collector, 'x', root='y') == f']({pathlib.Path().cwd()}/x/other/abc.def)'
+    assert (
+        concat.adapt_image('](x/other/abc.def)', collector, 'x', root='y')
+        == f']({pathlib.Path().cwd()}/x/other/abc.def)'
+    )
     assert collector == [f'{pathlib.Path().cwd()}/x/other/abc.def']
+
 
 def test_concatenate_base():
     parameters = {
