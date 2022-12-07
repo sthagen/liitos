@@ -2,6 +2,7 @@
 
 ## 2022.12.7
 
+* Added creation of inventory file as post action to the rendering
 * Added diff outputs in unified format for filter steps when rendering
 * Added foran (vcs) and taksonomia (taxonomy) services per dependencies
 
