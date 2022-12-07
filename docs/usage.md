@@ -30,7 +30,7 @@
 ## Version
 
 ```console
-❯ Splice (Finnish liitos) contributions. version 2022.12.5+parent.aec13b7a
+❯ Splice (Finnish liitos) contributions. version 2022.12.6+parent.e68424eb
 ```
 
 ## Eject 
