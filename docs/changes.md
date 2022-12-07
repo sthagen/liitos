@@ -5,6 +5,9 @@
 * Added creation of inventory file as post action to the rendering
 * Added diff outputs in unified format for filter steps when rendering
 * Added foran (vcs) and taksonomia (taxonomy) services per dependencies
+* Added vcs info to renderer
+* Extended and enhanced the deep example
+* Fixed specific app SVG renaming (dangling ref) and extended to any app (naive parser)
 
 ## 2022.12.6
 
