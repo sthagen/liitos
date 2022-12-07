@@ -52,6 +52,28 @@ def log_subprocess_output(pipe, prefix: str):
                 log.info(f'{prefix}: %s', cand)
 
 
+def report_taxonomy(target_path: pathlib.Path) -> None:
+    """Convenience function to report date, size, and checksums of the deliverable."""
+    stat = target_path.stat()
+    size_bytes = stat.st_size
+    mod_time = dti.datetime.fromtimestamp(stat.st_ctime, tz=dti.timezone.utc).strftime(TS_FORMAT)
+    sha612_hash = hash_file(target_path, hashlib.sha512)
+    sha256_hash = hash_file(target_path, hashlib.sha256)
+    sha1_hash = hash_file(target_path, hashlib.sha1)
+    md5_hash = hash_file(target_path, hashlib.md5)
+    log.info('- Ephemeral:')
+    log.info(f'  + name: {target_path.name}')
+    log.info(f'  + size: {size_bytes} bytes')
+    log.info(f'  + date: {mod_time}')
+    log.info('- Characteristic:')
+    log.info('  + Checksums:')
+    log.info(f'    sha512:{sha612_hash}')
+    log.info(f'    sha256:{sha256_hash}')
+    log.info(f'      sha1:{sha1_hash}')
+    log.info(f'       md5:{md5_hash}')
+    log.info('  + Fonts:')
+
+
 def der(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
@@ -166,6 +188,12 @@ def der(
         log.info(separator)
         log.info('transforming SVG assets to high resolution PNG bitmaps ...')
         for path_to_dir in (IMAGES_FOLDER, DIAGRAMS_FOLDER):
+            the_folder = pathlib.Path(path_to_dir)
+            if not the_folder.is_dir():
+                log.error(
+                    f'svg-to-png directory ({the_folder}) in ({pathlib.Path().cwd()}) does not exist or is no directory'
+                )
+                continue
             for svg in pathlib.Path(path_to_dir).iterdir():
                 if svg.is_file() and svg.suffix == '.svg':
                     png = str(svg).replace('.svg', '.png')
@@ -307,25 +335,7 @@ def der(
 
         log.info(separator)
         log.info('Deliverable taxonomy: ...')
-        target_path = pathlib.Path(target_asset)
-        stat = target_path.stat()
-        size_bytes = stat.st_size
-        mod_time = dti.datetime.fromtimestamp(stat.st_ctime, tz=dti.timezone.utc).strftime(TS_FORMAT)
-        sha612_hash = hash_file(target_path, hashlib.sha512)
-        sha256_hash = hash_file(target_path, hashlib.sha256)
-        sha1_hash = hash_file(target_path, hashlib.sha1)
-        md5_hash = hash_file(target_path, hashlib.md5)
-        log.info('- Ephemeral:')
-        log.info(f'  + name: {target_path.name}')
-        log.info(f'  + size: {size_bytes} bytes')
-        log.info(f'  + date: {mod_time}')
-        log.info('- Characteristic:')
-        log.info('  + Checksums:')
-        log.info(f'    sha512:{sha612_hash}')
-        log.info(f'    sha256:{sha256_hash}')
-        log.info(f'      sha1:{sha1_hash}')
-        log.info(f'       md5:{md5_hash}')
-        log.info('  + Fonts:')
+        report_taxonomy(pathlib.Path(target_asset))
 
         pdffonts_command = ['pdffonts', target_asset]
         process = subprocess.Popen(pdffonts_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
