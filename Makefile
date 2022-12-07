@@ -37,6 +37,7 @@ types:
 
 .PHONY: test
 test: clean
+	python -m liitos render example/deep -t prod_kind -f deep
 	$(pytest)
 
 .PHONY: testcov
