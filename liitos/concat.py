@@ -12,6 +12,7 @@ import yaml
 import liitos.gather as gat
 from liitos import ENCODING, log
 
+ALT_INJECTOR_HACK = ' "INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC")'
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 SLASH = '/'
@@ -160,7 +161,7 @@ def process_meta(aspects: str) -> gat.Meta | int:
 def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) -> str:
     """YES."""
     before, xtr = text_line.split('](', 1)
-    has_caption = True if ' ' in xtr and '")' in xtr else False
+    has_caption = True if ' ' in xtr and '")' in xtr else False  # has alt text but only then caption taken by pandoc
     img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
     img_path = str((pathlib.Path(upstream).parent / img).resolve()).replace(root, '')
     collector.append(img_path)
@@ -171,7 +172,9 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
         img_hack = DIAGRAMS_FOLDER + img_path.split(f'/{DIAGRAMS_FOLDER}', 1)[1]
     if img_hack != img_path:
         log.info(f'{img_hack} <--- OK? --- {img_path}')
-    return f'{before}]({img_hack}{" " if has_caption else ")"}{after}'
+    belte_og_seler = f"{before}]({img_hack}{' ' if has_caption else ALT_INJECTOR_HACK}{after}"
+    log.info(f'==> belte-og-seler: ->>{belte_og_seler}<<-')
+    return belte_og_seler
 
 
 def harvest_include(
