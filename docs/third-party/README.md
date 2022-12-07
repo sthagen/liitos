@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://github.com/sthagen/pilli/blob/default/sbom.json) with SHA256 checksum ([570a62cf ...](https://raw.githubusercontent.com/sthagen/pilli/default/sbom.json.sha256 "sha256:570a62cfeccf57db98e30e27a7b8dc632d3ebe179d297b0999e600a4c32655b3")).
-<!--[[[end]]] (checksum: 82e4a2e906a17a7e297f4d5189821290)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://github.com/sthagen/pilli/blob/default/sbom.json) with SHA256 checksum ([005dd97a ...](https://raw.githubusercontent.com/sthagen/pilli/default/sbom.json.sha256 "sha256:005dd97aabf77c55f7926b8229eb89cb9fc3f851dabf6fa8d3ac5d7d8fad8d71")).
+<!--[[[end]]] (checksum: 5a0d6e874a3ab99789d2e09f211c3137)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -14,10 +14,10 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 |:----------------------------------------------------|:------------------------------------------------------------|:------------------------|:------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
 | [PyYAML](https://pyyaml.org/)                       | [6.0](https://pypi.org/project/PyYAML/6.0/)                 | MIT License             | Kirill Simonov    | YAML parser and emitter for Python                                                                                                        |
 | [foran](https://git.sr.ht/~sthagen/foran)           | [2022.12.7](https://pypi.org/project/foran/2022.12.7/)      | MIT License             | Stefan Hagen      | In front or behind (Danish: foran eller bagved)? Answering the question if a local repository status is in front of or behind its remote. |
-| [taksonomia](https://git.sr.ht/~sthagen/taksonomia) | [2022.9.21](https://pypi.org/project/taksonomia/2022.9.21/) | MIT License             | Stefan Hagen      | Taxonomy (Finnish: taksonomia) of a folder tree, guided by conventions.                                                                   |
+| [taksonomia](https://git.sr.ht/~sthagen/taksonomia) | [2022.12.7](https://pypi.org/project/taksonomia/2022.12.7/) | MIT License             | Stefan Hagen      | Taxonomy (Finnish: taksonomia) of a folder tree, guided by conventions.                                                                   |
 | [treelib](https://github.com/caesar0301/treelib)    | [1.6.1](https://pypi.org/project/treelib/1.6.1/)            | Apache Software License | Xiaming Chen      | A Python 2/3 implementation of tree structure.                                                                                            |
 | [typer](https://github.com/tiangolo/typer)          | [0.7.0](https://pypi.org/project/typer/0.7.0/)              | MIT License             | Sebastián Ramírez | Typer, build great CLIs. Easy to code. Based on Python type hints.                                                                        |
-<!--[[[end]]] (checksum: 9af4b82cf0760eee9ee504311cfb6e2c)-->
+<!--[[[end]]] (checksum: c7a92d691e1833e1c5be514cbb5d3a51)-->
 
 ### Indirect Dependencies
 
@@ -55,13 +55,13 @@ foran==2022.12.7
       - smmap [required: >=3.0.1,<6, installed: 5.0.0]
   - typer [required: >=0.7.0, installed: 0.7.0]
     - click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
-taksonomia==2022.9.21
+taksonomia==2022.12.7
   - lxml [required: >=4.9.1, installed: 4.9.1]
-  - orjson [required: >=3.8.0, installed: 3.8.3]
-  - psutil [required: >=5.9.2, installed: 5.9.4]
-  - py-cpuinfo [required: >=8.0.0, installed: 9.0.0]
+  - orjson [required: >=3.8.3, installed: 3.8.3]
+  - psutil [required: >=5.9.4, installed: 5.9.4]
+  - py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
   - PyYAML [required: >=6.0, installed: 6.0]
 treelib==1.6.1
   - future [required: Any, installed: 0.18.2]
 ````
-<!--[[[end]]] (checksum: e3619c290eee2e49ede02f899f6a67dc)-->
+<!--[[[end]]] (checksum: 0820c298355dc89c92ea9c4d8bffad69)-->
