@@ -244,9 +244,9 @@ def der(
                 if svg.is_file() and svg.suffix == '.svg':
                     png = str(svg).replace('.svg', '.png')
                     svg_to_png_command = ['svgexport', svg, png, '100%']
-                    process = subprocess.Popen(
+                    process = subprocess.Popen(  # nosec B603
                         svg_to_png_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-                    )  # nosec B603
+                    )
                     with process.stdout:
                         log_subprocess_output(process.stdout, 'svg-to-png')
                     return_code = process.wait()
@@ -281,7 +281,9 @@ def der(
                     dia_path_new = dia_fine.split(')', 1)[0]
                 if dia_path_old and dia_path_new:
                     special_patching.append((dia_path_old, dia_path_new))
-                    log.info(f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old}) -> ({dia_path_new})')
+                    log.info(
+                        f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old}) -> ({dia_path_new})'
+                    )
                 else:
                     log.warning(f'- old: {dia_thing.rstrip()}')
                     log.warning(f'- new: {dia_fine.rstrip()}')
@@ -326,9 +328,9 @@ def der(
         ]
         log.info(LOG_SEPARATOR)
         log.info('pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter ...')
-        process = subprocess.Popen(
+        process = subprocess.Popen(  # nosec B603
             markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-        )  # nosec B603
+        )
         with process.stdout:
             log_subprocess_output(process.stdout, 'markdown-to-latex')
         return_code = process.wait()
