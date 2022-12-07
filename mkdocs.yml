@@ -3,6 +3,8 @@ site_description: "Splice (Finnish: liitos) contributions."
 
 theme:
   name: 'material'
+  logo: assets/logo.png
+  favicon: images/favicon.ico
   features:
     - navigation.expand
     - toc.integrate
