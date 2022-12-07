@@ -17,7 +17,6 @@ THINGS = {
     'metadata-pdf': (METADATA_TEMPLATE := 'templates/metadata.tex.in'),
     'publisher-pdf': (PUBLISHER_TEMPLATE := 'templates/publisher.tex.in'),
     'setup-pdf': (SETUP_TEMPLATE := 'templates/setup.tex.in'),
-
     'approvals-yaml': (APPROVALS_YAML := 'templates/approvals.yml'),
     'changes-yaml': (CHANGES_YAML := 'templates/changes.yml'),
     'meta-base-yaml': (META_YAML := 'templates/meta.yml'),

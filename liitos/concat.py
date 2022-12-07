@@ -4,9 +4,9 @@ import os
 import pathlib
 import shutil
 import sys
-import treelib
 from io import StringIO
 
+import treelib
 import yaml
 
 import liitos.gather as gat
@@ -101,6 +101,7 @@ def process_binder(aspects: str) -> gat.Binder | int:
         handle.write('\n'.join(binder) + '\n')
     return binder
 
+
 def process_changes(aspects: str) -> gat.Changes | int:
     """TODO."""
     changes_path = DOC_BASE / aspects[gat.KEY_CHANGES]
@@ -124,6 +125,7 @@ def process_changes(aspects: str) -> gat.Changes | int:
             json.dump(changes, handle, indent=2)
     return changes
 
+
 def process_meta(aspects: str) -> gat.Meta | int:
     """TODO."""
     meta_path = DOC_BASE / aspects[gat.KEY_META]
@@ -142,7 +144,8 @@ def process_meta(aspects: str) -> gat.Meta | int:
         base_meta_path = DOC_BASE / metadata['document']['import']
         if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
             log.error(
-                f'metadata declares import of base data from ({base_meta_path.name}) but failed to find non-empty base file at {base_meta_path}')
+                f'metadata declares import of base data from ({base_meta_path.name}) but failed to find non-empty base file at {base_meta_path}'
+            )
             return 1
         with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
             base_data = yaml.safe_load(handle)
@@ -172,11 +175,7 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
 
 
 def harvest_include(
-    text_line: str,
-    slot: int,
-    regions: dict[str, list[tuple[tuple[int, int], str]]],
-    tree: treelib.Tree,
-    parent: str
+    text_line: str, slot: int, regions: dict[str, list[tuple[tuple[int, int], str]]], tree: treelib.Tree, parent: str
 ) -> None:
     """TODO."""
     include_local = text_line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
@@ -388,7 +387,9 @@ def concatenate(
                             continue
                     if in_region:
                         if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                            sub_include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                            sub_include = (
+                                line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                            )
                             sub_include = str(pathlib.Path(include).parent / sub_include)
                         elif line.startswith(READ_SLOT_FENCE_END):
                             end = slot
@@ -420,7 +421,9 @@ def concatenate(
                                 continue
                         if in_region:
                             if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                                sub_sub_include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                                sub_sub_include = (
+                                    line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                                )
                                 sub_sub_include = str(pathlib.Path(sub_include).parent / sub_sub_include)
                             elif line.startswith(READ_SLOT_FENCE_END):
                                 end = slot
@@ -440,7 +443,9 @@ def concatenate(
                         sub_sub_sub_include = ''
                         for slot, line in enumerate(documents[sub_sub_include]):
                             if line.startswith(IMG_LINE_STARTSWITH):
-                                documents[sub_sub_include][slot] = adapt_image(line, img_collector, sub_sub_include, root_path)
+                                documents[sub_sub_include][slot] = adapt_image(
+                                    line, img_collector, sub_sub_include, root_path
+                                )
                             log.debug(f'{slot :02d}|{line.rstrip()}')
                             if not in_region:
                                 if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -452,8 +457,12 @@ def concatenate(
                                     continue
                             if in_region:
                                 if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                                    sub_sub_sub_include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
-                                    sub_sub_sub_include = str(pathlib.Path(sub_sub_include).parent / sub_sub_sub_include)
+                                    sub_sub_sub_include = (
+                                        line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                                    )
+                                    sub_sub_sub_include = str(
+                                        pathlib.Path(sub_sub_include).parent / sub_sub_sub_include
+                                    )
                                 elif line.startswith(READ_SLOT_FENCE_END):
                                     end = slot
                                     insert_regions[sub_sub_include].append(((begin, end), sub_sub_sub_include))
@@ -486,12 +495,21 @@ def concatenate(
                                         continue
                                 if in_region:
                                     if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                                        sub_sub_sub_sub_include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
-                                        sub_sub_sub_sub_include = str(pathlib.Path(sub_sub_sub_include).parent / sub_sub_sub_sub_include)
+                                        sub_sub_sub_sub_include = (
+                                            line.replace(READ_SLOT_CONTEXT_BEGIN, '')
+                                            .split(')', 1)[0]
+                                            .strip("'")
+                                            .strip('"')
+                                        )
+                                        sub_sub_sub_sub_include = str(
+                                            pathlib.Path(sub_sub_sub_include).parent / sub_sub_sub_sub_include
+                                        )
                                     elif line.startswith(READ_SLOT_FENCE_END):
                                         end = slot
                                         insert_regions[sub_sub_sub_include].append(((begin, end), sub_sub_sub_include))
-                                        tree.create_node(sub_sub_sub_sub_include, sub_sub_sub_sub_include, parent=sub_sub_sub_include)
+                                        tree.create_node(
+                                            sub_sub_sub_sub_include, sub_sub_sub_sub_include, parent=sub_sub_sub_include
+                                        )
                                         in_region = False
                                         begin, end = 0, 0
                                         sub_sub_sub_sub_include = ''

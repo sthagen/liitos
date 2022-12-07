@@ -71,7 +71,8 @@ def process_meta(aspects: str) -> gat.Meta | int:
         if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
             log.error(
                 f'metadata declares import of base data from ({base_meta_path.name})'
-                f' but failed to find non-empty base file at {base_meta_path}')
+                f' but failed to find non-empty base file at {base_meta_path}'
+            )
             return 1
         with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
             base_data = yaml.safe_load(handle)
@@ -83,7 +84,10 @@ def process_meta(aspects: str) -> gat.Meta | int:
     return metadata
 
 
-def weave_setup_font_path(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_font_path(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the xxxx from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FONT_%_PATH_%%')
@@ -92,9 +96,7 @@ def weave_setup_font_path(mapper: dict[str, str | int | bool | None], text: str,
     if mapper.get('font_path'):
         font_path = mapper.get('font_path')
         if not pathlib.Path(font_path).is_dir():
-            log.warning(
-                f'font_path ({font_path}) is no directory on this system - rendering may not work as intended'
-            )
+            log.warning(f'font_path ({font_path}) is no directory on this system - rendering may not work as intended')
         ACROSS['eff_font_folder'] = font_path
         return text.replace(VALUE_SLOT, font_path)
     else:
@@ -103,7 +105,10 @@ def weave_setup_font_path(mapper: dict[str, str | int | bool | None], text: str,
         return text.replace(VALUE_SLOT, defaults['font_path'])
 
 
-def weave_setup_font_suffix(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_font_suffix(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the font_suffix from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FONT_%_SUFFIX_%%')
@@ -112,9 +117,7 @@ def weave_setup_font_suffix(mapper: dict[str, str | int | bool | None], text: st
     if mapper.get('font_suffix'):
         font_suffix = mapper.get('font_suffix')
         if font_suffix not in ('.otf', '.ttf'):
-            log.warning(
-                f'font_suffix ({font_suffix}) is unexpected - rendering may not work as intended'
-            )
+            log.warning(f'font_suffix ({font_suffix}) is unexpected - rendering may not work as intended')
         ACROSS['eff_font_suffix'] = font_suffix
         return text.replace(VALUE_SLOT, font_suffix)
     else:
@@ -123,7 +126,10 @@ def weave_setup_font_suffix(mapper: dict[str, str | int | bool | None], text: st
         return text.replace(VALUE_SLOT, defaults['font_suffix'])
 
 
-def weave_setup_bold_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_bold_font(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the bold_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_BOLD_%_FONT_%%')
@@ -145,7 +151,10 @@ def weave_setup_bold_font(mapper: dict[str, str | int | bool | None], text: str,
         return text.replace(VALUE_SLOT, defaults['bold_font'])
 
 
-def weave_setup_italic_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_italic_font(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the italic_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ITALIC_%_FONT_%%')
@@ -167,7 +176,10 @@ def weave_setup_italic_font(mapper: dict[str, str | int | bool | None], text: st
         return text.replace(VALUE_SLOT, defaults['italic_font'])
 
 
-def weave_setup_bold_italic_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_bold_italic_font(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the bold_italic_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_BOLDITALIC_%_FONT_%%')
@@ -189,7 +201,10 @@ def weave_setup_bold_italic_font(mapper: dict[str, str | int | bool | None], tex
         return text.replace(VALUE_SLOT, defaults['bold_italic_font'])
 
 
-def weave_setup_main_font(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_main_font(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the main_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_FONT_%%')
@@ -211,7 +226,10 @@ def weave_setup_main_font(mapper: dict[str, str | int | bool | None], text: str,
         return text.replace(VALUE_SLOT, defaults['main_font'])
 
 
-def weave_setup_fixed_font_package(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_fixed_font_package(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the fixed_font_package from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%')
@@ -230,7 +248,10 @@ def weave_setup_fixed_font_package(mapper: dict[str, str | int | bool | None], t
         return text.replace(VALUE_SLOT, defaults['fixed_font_package'])
 
 
-def weave_setup_code_fontsize(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_code_fontsize(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the code_fontsize from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CODE_%_FONTSIZE_%%')
@@ -262,18 +283,23 @@ def weave_setup_code_fontsize(mapper: dict[str, str | int | bool | None], text: 
             log.info(f'valid values for code_fontsize must be in {bs}{(", " + bs).join(sizes)}')
             log.warning(
                 f'overriding code font size value with the (working) default of ({defaults["code_fontsize"]})'
-                f' - in config that would be {defaults["code_fontsize"]}')
+                f' - in config that would be {defaults["code_fontsize"]}'
+            )
             return text.replace(VALUE_SLOT, defaults['code_fontsize'])
         else:
             return text.replace(VALUE_SLOT, code_fontsize)
     else:
         log.warning(
             f'code_fontsize value missing ... setting default ({defaults["code_fontsize"]})'
-            f' - in config that would be {defaults["code_fontsize"]}')
+            f' - in config that would be {defaults["code_fontsize"]}'
+        )
         return text.replace(VALUE_SLOT, defaults['code_fontsize'])
 
 
-def weave_setup_chosen_logo(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_setup_chosen_logo(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the chosen_logo from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHOSEN_%_LOGO_%%')
@@ -293,7 +319,10 @@ def weave_setup_chosen_logo(mapper: dict[str, str | int | bool | None], text: st
         return text.replace(VALUE_SLOT, defaults['chosen_logo'])
 
 
-def dispatch_setup_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def dispatch_setup_weaver(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Dispatch the driver weaver by mapping to handled groups per source marker."""
     dispatch = {
         '%%_PATCH_%_FONT_%_PATH_%%': weave_setup_font_path,
@@ -321,7 +350,10 @@ def weave_meta_setup(meta_map: gat.Meta, latex: list[str]) -> None:
     return completed
 
 
-def weave_driver_toc_level(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_driver_toc_level(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the toc_level from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_TOC_%_LEVEL_%%')
@@ -337,16 +369,17 @@ def weave_driver_toc_level(mapper: dict[str, str | int | bool | None], text: str
                 )
         except ValueError as err:
             toc_level = 2
-            log.warning(
-                f'toc_level ({mapper["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})'
-            )
+            log.warning(f'toc_level ({mapper["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})')
             log.error(f'error detail: {err}')
     else:
         log.warning(f'toc_level value missing ... setting default ({toc_level})')
     return text.replace(VALUE_SLOT, str(toc_level))
 
 
-def weave_driver_list_of_figures(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_driver_list_of_figures(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the list_of_figures from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_LOF_%%')
@@ -367,7 +400,10 @@ def weave_driver_list_of_figures(mapper: dict[str, str | int | bool | None], tex
     return text.replace(VALUE_SLOT, '%')
 
 
-def weave_driver_list_of_tables(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_driver_list_of_tables(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the list_of_tables from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_LOT_%%')
@@ -388,7 +424,10 @@ def weave_driver_list_of_tables(mapper: dict[str, str | int | bool | None], text
     return text.replace(VALUE_SLOT, '%')
 
 
-def dispatch_driver_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def dispatch_driver_weaver(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Dispatch the driver weaver by mapping to handled groups per source marker."""
     dispatch = {
         '%%_PATCH_%_TOC_%_LEVEL_%%': weave_driver_toc_level,
@@ -410,7 +449,10 @@ def weave_meta_driver(meta_map: gat.Meta, latex: list[str]) -> None:
     return completed
 
 
-def weave_meta_part_header_title(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_header_title(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the header_title from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_HEADER_%_TITLE_%%')
@@ -422,7 +464,10 @@ def weave_meta_part_header_title(mapper: dict[str, str | int | bool | None], tex
         return text.replace(VALUE_SLOT, mapper['title'])
 
 
-def weave_meta_part_title(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_title(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the title from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%%')
@@ -430,7 +475,10 @@ def weave_meta_part_title(mapper: dict[str, str | int | bool | None], text: str,
     return text.replace(VALUE_SLOT, mapper['title'])
 
 
-def weave_meta_part_sub_title(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_sub_title(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the sub_title from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_SUB_%_TITLE_%%')
@@ -442,7 +490,10 @@ def weave_meta_part_sub_title(mapper: dict[str, str | int | bool | None], text: 
         return text.replace(VALUE_SLOT, ' ')
 
 
-def weave_meta_part_header_type(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_header_type(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the header_type from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_TYPE_%%')
@@ -454,7 +505,10 @@ def weave_meta_part_header_type(mapper: dict[str, str | int | bool | None], text
         return text.replace(VALUE_SLOT, 'Engineering Document')
 
 
-def weave_meta_part_header_id(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_header_id(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the header_id from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ID_%%')
@@ -466,7 +520,10 @@ def weave_meta_part_header_id(mapper: dict[str, str | int | bool | None], text: 
         return text.replace(VALUE_SLOT, 'P99999')
 
 
-def weave_meta_part_issue(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_issue(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the issue from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%%')
@@ -478,7 +535,10 @@ def weave_meta_part_issue(mapper: dict[str, str | int | bool | None], text: str,
         return text.replace(VALUE_SLOT, '01')
 
 
-def weave_meta_part_revision(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_revision(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the revision from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_REVISION_%%')
@@ -490,7 +550,10 @@ def weave_meta_part_revision(mapper: dict[str, str | int | bool | None], text: s
         return text.replace(VALUE_SLOT, '00')
 
 
-def weave_meta_part_header_date(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_header_date(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the header_date from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_DATE_%%')
@@ -507,7 +570,10 @@ def weave_meta_part_header_date(mapper: dict[str, str | int | bool | None], text
         return text.replace(VALUE_SLOT, pub_date_today)
 
 
-def weave_meta_part_footer_frame_note(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_footer_frame_note(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the footer_frame_note from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FRAME_%_NOTE_%%')
@@ -519,7 +585,10 @@ def weave_meta_part_footer_frame_note(mapper: dict[str, str | int | bool | None]
         return text.replace(VALUE_SLOT, 'VERY CONSEQUENTIAL')
 
 
-def weave_meta_part_footer_page_number_prefix(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_footer_page_number_prefix(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the footer_page_number_prefix from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%')
@@ -531,7 +600,10 @@ def weave_meta_part_footer_page_number_prefix(mapper: dict[str, str | int | bool
         return text.replace(VALUE_SLOT, 'Page')
 
 
-def weave_meta_part_change_log_issue_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_change_log_issue_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the change_log_issue_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%')
@@ -543,7 +615,10 @@ def weave_meta_part_change_log_issue_label(mapper: dict[str, str | int | bool | 
         return text.replace(VALUE_SLOT, 'Iss.')
 
 
-def weave_meta_part_change_log_revision_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_change_log_revision_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the change_log_revision_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%')
@@ -555,7 +630,10 @@ def weave_meta_part_change_log_revision_label(mapper: dict[str, str | int | bool
         return text.replace(VALUE_SLOT, 'Rev.')
 
 
-def weave_meta_part_change_log_date_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_change_log_date_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the change_log_date_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%')
@@ -567,7 +645,10 @@ def weave_meta_part_change_log_date_label(mapper: dict[str, str | int | bool | N
         return text.replace(VALUE_SLOT, 'Date')
 
 
-def weave_meta_part_change_log_author_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_change_log_author_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the change_log_author_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%')
@@ -579,7 +660,10 @@ def weave_meta_part_change_log_author_label(mapper: dict[str, str | int | bool |
         return text.replace(VALUE_SLOT, 'Author')
 
 
-def weave_meta_part_change_log_description_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_change_log_description_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the change_log_description_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%')
@@ -591,7 +675,10 @@ def weave_meta_part_change_log_description_label(mapper: dict[str, str | int | b
         return text.replace(VALUE_SLOT, 'Description')
 
 
-def weave_meta_part_approvals_role_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_approvals_role_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the approvals_role_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%')
@@ -603,7 +690,10 @@ def weave_meta_part_approvals_role_label(mapper: dict[str, str | int | bool | No
         return text.replace(VALUE_SLOT, 'Approvals')
 
 
-def weave_meta_part_approvals_name_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_approvals_name_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the approvals_name_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%')
@@ -615,7 +705,10 @@ def weave_meta_part_approvals_name_label(mapper: dict[str, str | int | bool | No
         return text.replace(VALUE_SLOT, 'Name')
 
 
-def weave_meta_part_approvals_date_and_signature_label(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_approvals_date_and_signature_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the approvals_date_and_signature_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%')
@@ -627,7 +720,10 @@ def weave_meta_part_approvals_date_and_signature_label(mapper: dict[str, str | i
         return text.replace(VALUE_SLOT, 'Date and Signature')
 
 
-def weave_meta_part_header_issue_revision_combined(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_header_issue_revision_combined(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the header_issue_revision_combined from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%')
@@ -642,7 +738,10 @@ def weave_meta_part_header_issue_revision_combined(mapper: dict[str, str | int |
         return text.replace(VALUE_SLOT, r'Iss \theMetaIssCode, Rev \theMetaRevCode')
 
 
-def weave_meta_part_proprietary_information(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def weave_meta_part_proprietary_information(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Weave in the proprietary_information from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%')
@@ -654,21 +753,20 @@ def weave_meta_part_proprietary_information(mapper: dict[str, str | int | bool |
                 prop_info_from_file = pathlib.Path(prop_info).open().read()
                 prop_info = prop_info_from_file
             except (OSError, UnicodeDecodeError) as err:
-                log.error(
-                    f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}'
-                )
+                log.error(f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}')
                 log.warning(f'using value ({prop_info}) directly for proprietary_information')
         else:
             log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
         return text.replace(VALUE_SLOT, prop_info)
     else:
-        log.warning(
-            'proprietary_information value missing ... setting default (Proprietary Information MISSING)'
-        )
+        log.warning('proprietary_information value missing ... setting default (Proprietary Information MISSING)')
         return text.replace(VALUE_SLOT, 'Proprietary Information MISSING')
 
 
-def dispatch_meta_weaver(mapper: dict[str, str | int | bool | None], text: str, ) -> str:
+def dispatch_meta_weaver(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
     """Dispatch the meta weaver by mapping to handled groups per source marker."""
     dispatch = {
         '%%_PATCH_%_HEADER_%_TITLE_%%': weave_meta_part_header_title,
@@ -705,6 +803,7 @@ def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> None:
     if completed and completed[-1]:
         completed.append('\n')
     return completed
+
 
 def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]

@@ -9,6 +9,7 @@ import subprocess  # nosec B404
 import sys
 
 import yaml
+from taksonomia.taksonomia import Taxonomy
 
 import liitos.captions as cap
 import liitos.figures as fig
@@ -16,7 +17,6 @@ import liitos.gather as gat
 import liitos.labels as lab
 import liitos.patch as pat
 from liitos import ENCODING, log
-from taksonomia.taksonomia import Taxonomy
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -28,7 +28,7 @@ TS_FORMAT = '%Y-%m-%d %H:%M:%S.%f +00:00'
 LOG_SEPARATOR = '- ' * 80
 
 
-def hash_file(path: pathlib.Path, hasher = None) -> str:
+def hash_file(path: pathlib.Path, hasher=None) -> str:
     """Return the SHA512 hex digest of the data from file."""
     if hasher is None:
         hasher = hashlib.sha512
@@ -43,14 +43,17 @@ def log_subprocess_output(pipe, prefix: str):
     for line in iter(pipe.readline, b''):  # b'\n'-separated lines
         cand = line.decode(encoding=ENCODING).rstrip()
         if cand.strip().strip('[])yex'):
-            if any([
-                'microtype' in cand,
-                'xassoccnt' in cand,
-                'texlive/2022/texmf-dist/tex/' in cand,
-                cand == 'erns.sty)',
-                cand == '(see the transcript file for additional information)',
-                cand.startswith(r'Overfull \hbox ') and cand.endswith(r'pt too wide) has occurred while \output is active')
-            ]):
+            if any(
+                [
+                    'microtype' in cand,
+                    'xassoccnt' in cand,
+                    'texlive/2022/texmf-dist/tex/' in cand,
+                    cand == 'erns.sty)',
+                    cand == '(see the transcript file for additional information)',
+                    cand.startswith(r'Overfull \hbox ')
+                    and cand.endswith(r'pt too wide) has occurred while \output is active'),
+                ]
+            ):
                 log.debug(f'{prefix}: %s', cand)
             else:
                 log.info(f'{prefix}: %s', cand)
@@ -212,14 +215,15 @@ def der(
             for svg in pathlib.Path(path_to_dir).iterdir():
                 if svg.is_file() and svg.suffix == '.svg':
                     png = str(svg).replace('.svg', '.png')
-                    svg_to_png_command = ['svgexport', svg,  png, '100%']
-                    process = subprocess.Popen(svg_to_png_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
+                    svg_to_png_command = ['svgexport', svg, png, '100%']
+                    process = subprocess.Popen(
+                        svg_to_png_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+                    )  # nosec B603
                     with process.stdout:
                         log_subprocess_output(process.stdout, 'svg-to-png')
                     return_code = process.wait()
                     if return_code < 0:
-                        log.error(
-                            f'svg-to-png process ({svg_to_png_command}) was terminated by signal {-return_code}')
+                        log.error(f'svg-to-png process ({svg_to_png_command}) was terminated by signal {-return_code}')
                     else:
                         log.info(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
 
@@ -247,16 +251,30 @@ def der(
         in_doc = 'document.md'
         out_doc = 'document.tex'
         markdown_to_latex_command = [
-            'pandoc', '--verbose', '-f', fmt_spec, '-t', 'latex', in_doc, '-o', out_doc, '--filter', 'mermaid-filter'
+            'pandoc',
+            '--verbose',
+            '-f',
+            fmt_spec,
+            '-t',
+            'latex',
+            in_doc,
+            '-o',
+            out_doc,
+            '--filter',
+            'mermaid-filter',
         ]
         log.info(LOG_SEPARATOR)
         log.info('pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter ...')
-        process = subprocess.Popen(markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
+        process = subprocess.Popen(
+            markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+        )  # nosec B603
         with process.stdout:
             log_subprocess_output(process.stdout, 'markdown-to-latex')
         return_code = process.wait()
         if return_code < 0:
-            log.error(f'markdown-to-latex process ({markdown_to_latex_command}) was terminated by signal {-return_code}')
+            log.error(
+                f'markdown-to-latex process ({markdown_to_latex_command}) was terminated by signal {-return_code}'
+            )
         else:
             log.info(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
 

@@ -8,8 +8,8 @@ import typer
 
 import liitos.approvals as sig
 import liitos.captions as cap
-import liitos.concat as cat
 import liitos.changes as chg
+import liitos.concat as cat
 import liitos.eject as eje
 import liitos.figures as fig
 import liitos.gather as gat
@@ -269,9 +269,7 @@ def eject(  # noqa
     """
     Eject a template. Enter unique part to retrieve, any unknown word to obtain the list of known templates.
     """
-    return sys.exit(
-        eje.this(thing=that, out=out)
-    )
+    return sys.exit(eje.this(thing=that, out=out))
 
 
 @app.command('version')

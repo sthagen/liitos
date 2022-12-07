@@ -42,4 +42,3 @@ def eject(argv: list[str] | None = None) -> int:
             target.write(data)
 
     return 0
-
