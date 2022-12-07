@@ -1,5 +1,6 @@
 """Render the concat document to pdf."""
 import datetime as dti
+import difflib
 import hashlib
 import os
 import pathlib
@@ -81,6 +82,12 @@ def report_taxonomy(target_path: pathlib.Path) -> None:
     log.info(f'      sha1:{sha1_hash}')
     log.info(f'       md5:{md5_hash}')
     log.info('  + Fonts:')
+
+
+def unified_diff(left: list[str], right: list[str], left_label: str = 'before', right_label: str = 'after'):
+    """Derive the unified diff between left and right lists of strings as generator of strings."""
+    for line in difflib.unified_diff(left, right, fromfile=left_label, tofile=right_label):
+        yield line.rstrip()
 
 
 def der(
@@ -260,37 +267,57 @@ def der(
         doc_before_caps_patch = 'document-before-caps-patch.tex.txt'
         with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
-        lines_in_pipe = cap.weave(lines)
+        lines_caps_patch = cap.weave(lines)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_in_pipe))
+            handle.write('\n'.join(lines_caps_patch))
+        log.info(f'diff of the (captions-below-tables) filter result:')
+        log.info(LOG_SEPARATOR)
+        for line in unified_diff(lines, lines_caps_patch):
+            log.info(line)
+        log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
         log.info('inject stem (derived from file name) labels ...')
         doc_before_label_patch = 'document-before-inject-stem-label-patch.tex.txt'
         with open(doc_before_label_patch, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_in_pipe))
-        lines_in_pipe = lab.inject(lines_in_pipe)
+            handle.write('\n'.join(lines_caps_patch))
+        lines_inject_stem_label = lab.inject(lines_caps_patch)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_in_pipe))
+            handle.write('\n'.join(lines_inject_stem_label))
+        log.info(f'diff of the (inject-stem-derived-labels) filter result:')
+        log.info(LOG_SEPARATOR)
+        for line in unified_diff(lines_caps_patch, lines_inject_stem_label):
+            log.info(line)
+        log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
         log.info('scale figures ...')
         doc_before_figures_patch = 'document-before-scale-figures-patch.tex.txt'
         with open(doc_before_figures_patch, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_in_pipe))
-        lines_in_pipe = fig.scale(lines_in_pipe)
+            handle.write('\n'.join(lines_inject_stem_label))
+        lines_scale_figures = fig.scale(lines_inject_stem_label)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_in_pipe))
+            handle.write('\n'.join(lines_scale_figures))
+        log.info(f'diff of the (inject-scale-figures) filter result:')
+        log.info(LOG_SEPARATOR)
+        for line in unified_diff(lines_inject_stem_label, lines_scale_figures):
+            log.info(line)
+        log.info(LOG_SEPARATOR)
 
         if need_patching:
             log.info(LOG_SEPARATOR)
             log.info('apply user patches ...')
             doc_before_user_patch = 'document-before-user-patch.tex.txt'
             with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_in_pipe))
-            lines_in_pipe = pat.apply(patches, lines_in_pipe)
+                handle.write('\n'.join(lines_scale_figures))
+            lines_user_patches = pat.apply(patches, lines_scale_figures)
             with open('document.tex', 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_in_pipe))
+                handle.write('\n'.join(lines_user_patches))
+            log.info(f'diff of the (user-patches) filter result:')
+            log.info(LOG_SEPARATOR)
+            for line in unified_diff(lines_scale_figures, lines_user_patches):
+                log.info(line)
+            log.info(LOG_SEPARATOR)
         else:
             log.info(LOG_SEPARATOR)
             log.info('skipping application of user patches ...')
