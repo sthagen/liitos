@@ -1,5 +1,14 @@
-PyYAML==6.0
+foran==2022.12.7
+  - GitPython [required: >=3.1.29, installed: 3.1.29]
+    - gitdb [required: >=4.0.1,<5, installed: 4.0.9]
+      - smmap [required: >=3.0.1,<6, installed: 5.0.0]
+  - typer [required: >=0.7.0, installed: 0.7.0]
+    - click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
+taksonomia==2022.9.21
+  - lxml [required: >=4.9.1, installed: 4.9.1]
+  - orjson [required: >=3.8.0, installed: 3.8.3]
+  - psutil [required: >=5.9.2, installed: 5.9.4]
+  - py-cpuinfo [required: >=8.0.0, installed: 9.0.0]
+  - PyYAML [required: >=6.0, installed: 6.0]
 treelib==1.6.1
   - future [required: Any, installed: 0.18.2]
-typer==0.7.0
-  - click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
