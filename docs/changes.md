@@ -1,5 +1,10 @@
 # Changes
 
+## 2022.12.8
+
+* Fixed link to CycloneDX format SBOM (the cyclonedx python package still does not find the indirect dependencies)
+* Fixed transformation of relative upwards image source links
+
 ## 2022.12.7
 
 * Added creation of inventory file as post action to the rendering
