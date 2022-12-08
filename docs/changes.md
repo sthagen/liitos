@@ -1,5 +1,9 @@
 # Changes
 
+## 2022.12.9
+
+* Fixed failing image parse cases where multiple spaces between src and alt as well as for empty caps
+
 ## 2022.12.8
 
 * Fixed link to CycloneDX format SBOM (the cyclonedx python package still does not find the indirect dependencies)
