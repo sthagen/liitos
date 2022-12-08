@@ -110,9 +110,9 @@ def patch(incoming: Iterable[str]) -> list[str]:
     for table in table_ranges:
         from_here = table['start']
         thru_there = table['amend']
-        print('Table:')
-        print(f'-from {incoming[from_here]}')
-        print(f'-thru {incoming[thru_there]}')
+        log.info('Table:')
+        log.info(f'-from {incoming[from_here]}')
+        log.info(f'-thru {incoming[thru_there]}')
         on_off = (from_here, thru_there + 1)
         on_off_slots.append(on_off)
         tables_in.append((on_off, [line for line in incoming[on_off[0] : on_off[1]]]))
