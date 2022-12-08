@@ -86,8 +86,20 @@ def test_parse_markdown_image():
         '![Caption Text Red] (images/red.png "Alt Text Red")': (
             '', '', '', '![Caption Text Red] (images/red.png "Alt Text Red")',
         ),
-        '![ccc](sss "aaa") <!-- rest -->  ': (
-            'ccc', 'sss', 'aaa', ' <!-- rest -->  ',
+        '![ccc(sss "aaa") <!-- rest -->  ': (
+            '', '', '', '![ccc(sss "aaa") <!-- rest -->  ',
+        ),
+        r'![cc\[c](sss "aaa") <!-- rest -->  ': (
+            r'cc\[c', 'sss', 'aaa', ' <!-- rest -->  ',
+        ),
+        '![ccc](sss "aaa" <!-- rest -->  ': (
+            '', '', '', '![ccc](sss "aaa" <!-- rest -->  ',
+        ),
+        '![ccc](sss)': (
+            'ccc', 'sss', '', '',
+        ),
+        '![cc(c](sss SSS "aaa") <!-- rest -->  ': (
+            '', '', '', '![cc(c](sss SSS "aaa") <!-- rest -->  ',
         ),
         '![Caption Text Red](images/red.png "Alt Text Red")': (
             'Caption Text Red', 'images/red.png', 'Alt Text Red', '',
