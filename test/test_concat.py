@@ -9,22 +9,40 @@ EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 
 def test_adapt_image_images():
     collector = []
-    assert concat.adapt_image('](x/images/abc.def)', collector, 'x', root='y') == '](images/abc.def)'
+    caption = 'Cap...'
+    img_path = 'x/images/abc.def'
+    alt_text = '"Alt..."'
+    text = f'![{caption}]({img_path} {alt_text})'
+    assert (
+        concat.adapt_image(text, collector, 'x', root='y')
+        == f'![{caption}](images/abc.def {alt_text})'
+    )
     assert collector == [f'{pathlib.Path().cwd()}/x/images/abc.def']
 
 
 def test_adapt_image_diagrams():
     collector = []
-    assert concat.adapt_image('](x/diagrams/abc.def)', collector, 'x', root='y') == '](diagrams/abc.def)'
+    caption = 'Cap...'
+    img_path = 'x/diagrams/abc.def'
+    alt_text = '"Alt..."'
+    text = f'![{caption}]({img_path} {alt_text})'
+    assert (
+        concat.adapt_image(text, collector, 'x', root='y')
+        == f'![{caption}](diagrams/abc.def {alt_text})'
+    )
     assert collector == [f'{pathlib.Path().cwd()}/x/diagrams/abc.def']
 
 
 def test_adapt_image_other():
     collector = []
     # This may be not what anyone wants ...
+    caption = 'Cap...'
+    img_path = 'x/other/abc.def'
+    alt_text = '"Alt..."'
+    text = f'![{caption}]({img_path} {alt_text})'
     assert (
-        concat.adapt_image('](x/other/abc.def)', collector, 'x', root='y')
-        == f']({pathlib.Path().cwd()}/x/other/abc.def)'
+        concat.adapt_image(text, collector, 'x', root='y')
+        == f'![{caption}]({pathlib.Path().cwd()}/x/other/abc.def {alt_text})'
     )
     assert collector == [f'{pathlib.Path().cwd()}/x/other/abc.def']
 
@@ -32,9 +50,13 @@ def test_adapt_image_other():
 def test_adapt_image_dot_dot():
     collector = []
     # eg. example/deep/part/x.md has source ref to ../other/abc.def which is example/deep/other/abc.def
+    caption = 'Cap...'
+    img_path = '../other/abc.def'
+    alt_text = '"Alt..."'
+    text = f'![{caption}]({img_path} {alt_text})'
     assert (
-        concat.adapt_image('](../other/abc.def)', collector, 'part/x.md', root='y')
-        == f']({pathlib.Path().cwd()}/other/abc.def)'
+        concat.adapt_image(text, collector, 'part/x.md', root='y')
+        == f'![{caption}]({pathlib.Path().cwd()}/other/abc.def {alt_text})'
     )
     assert collector == [f'{pathlib.Path().cwd()}/other/abc.def']
 
