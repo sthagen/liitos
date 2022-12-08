@@ -4,6 +4,7 @@
 
 * Fixed link to CycloneDX format SBOM (the cyclonedx python package still does not find the indirect dependencies)
 * Fixed transformation of relative upwards image source links
+* Implemented more robust (and chatty) markdown image text line parser
 
 ## 2022.12.7
 
