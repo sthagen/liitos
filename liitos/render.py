@@ -14,6 +14,7 @@ from foran.report import generate_report
 from taksonomia.taksonomia import Taxonomy
 
 import liitos.captions as cap
+import liitos.concat as con
 import liitos.figures as fig
 import liitos.gather as gat
 import liitos.labels as lab
@@ -29,6 +30,7 @@ CHUNK_SIZE = 2 << 15
 TS_FORMAT = '%Y-%m-%d %H:%M:%S.%f +00:00'
 LOG_SEPARATOR = '- ' * 80
 INTER_PROCESS_SYNC_SECS = 0.1
+INTER_PROCESS_SYNC_ATTEMPTS = 10
 
 
 def hash_file(path: pathlib.Path, hasher=None) -> str:
@@ -262,32 +264,27 @@ def der(
         with open('document.md', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
         for slot, line in enumerate(lines):
-            if '.svg' in line and line.count('.') == 2:
-                before, app, rest = line.split('.')
-                fine = before + f'.{rest}'.replace('.svg', '.png')
-                # fine = line.replace('.drawio.svg', '.png')
+            if '.svg' in line and line.count('.') >= 2:
+                caption, src, alt, rest = con.parse_markdown_image(line)
+                stem, app_indicator, format_suffix = src.rsplit('.', 2)
+                log.info(f'- removing application indicator ({app_indicator}) from src ...')
+                if format_suffix != 'svg':
+                    log.warning(f'  + format_suffix (.{format_suffix}) unexpected in <<{line.rstrip()}>> ...')
+                fine = f'![{caption}]({stem}.png "{alt}"){rest}'
                 log.info(f'  transform[#{slot + 1}]: {line}')
                 log.info(f'       into[#{slot + 1}]: {fine}')
                 lines[slot] = fine
-                dia_thing = line.split('](')[1].rstrip()
-                if '"' in dia_thing:
-                    dia_path_old = dia_thing.split(' ', 1)[0]
-                else:
-                    dia_path_old = dia_thing.split(')', 1)[0]
-                dia_path_old = dia_path_old.replace('.svg', '.png')
-                dia_fine = fine.split('](')[1].rstrip()
-                if '"' in dia_fine:
-                    dia_path_new = dia_fine.split(' ', 1)[0]
-                else:
-                    dia_path_new = dia_fine.split(')', 1)[0]
+                dia_path_old = src.replace('.svg', '.png')
+                dia_path_new = f'{stem}.png'
+                dia_fine_rstrip = dia_path_new.rstrip()
                 if dia_path_old and dia_path_new:
                     special_patching.append((dia_path_old, dia_path_new))
                     log.info(
                         f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old}) -> ({dia_path_new})'
                     )
                 else:
-                    log.warning(f'- old: {dia_thing.rstrip()}')
-                    log.warning(f'- new: {dia_fine.rstrip()}')
+                    log.warning(f'- old: {src.rstrip()}')
+                    log.warning(f'- new: {dia_fine_rstrip}')
                 continue
             if '.svg' in line:
                 fine = line.replace('.svg', '.png')
@@ -301,13 +298,12 @@ def der(
         log.info(LOG_SEPARATOR)
         log.info('ensure diagram files can be found when patched ...')
         if special_patching:
-            # diagrams = pathlib.Path(DIAGRAMS_FOLDER)
             for old, mew in special_patching:
                 source_asset = pathlib.Path(old)
                 target_asset = pathlib.Path(mew)
                 log.info(f'- moving: ({source_asset}) -> ({target_asset})')
                 present = False
-                remaining_attempts = 10
+                remaining_attempts = INTER_PROCESS_SYNC_ATTEMPTS
                 while remaining_attempts > 0 and not present:
                     try:
                         present = source_asset.is_file()
@@ -315,7 +311,7 @@ def der(
                         log.error(f'    * probing for resource ({old}) failed with ({ex}) ... continuing')
                     log.info(
                         f'  + resource ({old}) is{" " if present else " NOT "}present at ({source_asset})'
-                        f' - attempt {11 - remaining_attempts} of {remaining_attempts} ...'
+                        f' - attempt {11 - remaining_attempts} of {INTER_PROCESS_SYNC_ATTEMPTS} ...'
                     )
                     if present:
                         break
