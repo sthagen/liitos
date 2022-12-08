@@ -311,8 +311,8 @@ def der(
                 while remaining_attempts > 0 and not present:
                     try:
                         present = source_asset.is_file()
-                    except Exception:
-                        pass
+                    except Exception as ex:
+                        log.error(f'    * probing for resource ({old}) failed with ({ex}) ... continuing')
                     log.info(
                         f'  + resource ({old}) is{" " if present else " NOT "}present at ({source_asset})'
                         f' - attempt {11 - remaining_attempts} of {remaining_attempts} ...'
