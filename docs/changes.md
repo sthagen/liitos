@@ -1,5 +1,9 @@
 # Changes
 
+## 2022.12.10
+
+* Fixed failing svg-to-png conversion target path rename
+
 ## 2022.12.9
 
 * Fixed failing image parse cases where multiple spaces between src and alt as well as for empty caps
