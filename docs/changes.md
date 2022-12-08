@@ -2,7 +2,7 @@
 
 ## 2022.12.10
 
-* Fixed failing svg-to-png conversion target path rename
+* Fixed silent failing svg-to-png conversion target path rename per ABYL ten times and extended logging
 
 ## 2022.12.9
 

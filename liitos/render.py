@@ -6,7 +6,7 @@ import os
 import pathlib
 import shutil
 import subprocess  # nosec B404
-import sys
+import time
 
 import foran.foran as api
 import yaml
@@ -28,6 +28,7 @@ PATCH_SPEC_NAME = 'patch.yml'
 CHUNK_SIZE = 2 << 15
 TS_FORMAT = '%Y-%m-%d %H:%M:%S.%f +00:00'
 LOG_SEPARATOR = '- ' * 80
+INTER_PROCESS_SYNC_SECS = 0.1
 
 
 def hash_file(path: pathlib.Path, hasher=None) -> str:
@@ -305,6 +306,26 @@ def der(
                 source_asset = pathlib.Path(old)
                 target_asset = pathlib.Path(mew)
                 log.info(f'- moving: ({source_asset}) -> ({target_asset})')
+                present = False
+                remaining_attempts = 10
+                while remaining_attempts > 0 and not present:
+                    try:
+                        present = source_asset.is_file()
+                    except Exception:
+                        pass
+                    log.info(
+                        f'  + resource ({old}) is{" " if present else " NOT "}present at ({source_asset})'
+                        f' - attempt {11 - remaining_attempts} of {remaining_attempts} ...'
+                    )
+                    if present:
+                        break
+                    time.sleep(INTER_PROCESS_SYNC_SECS)
+                    remaining_attempts -= 1
+                if not source_asset.is_file():
+                    log.warning(
+                        f'- resource ({old}) still not present at ({source_asset}) after {remaining_attempts} attempts'
+                        f' and ({round(remaining_attempts * INTER_PROCESS_SYNC_SECS, 0) :.0f} seconds waiting)'
+                    )
                 shutil.move(source_asset, target_asset)
         else:
             log.info('post-action queue (from reference renaming) is empty - nothing to move')
