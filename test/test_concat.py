@@ -39,6 +39,20 @@ def test_adapt_image_dot_dot():
     assert collector == [f'{pathlib.Path().cwd()}/other/abc.def']
 
 
+def test_adapt_image_dot_dot_complete():
+    """From example/deep/other/b.md."""
+    collector = []
+    caption = 'Caption Text Dot Dot Lime'
+    img_path = '../images/lime.png'
+    alt_text = '"Alt Text Dot Dot Lime"'
+    text = f'![{caption}]({img_path} {alt_text})'
+    assert (
+        concat.adapt_image(text, collector, 'other/b.md', root='y')
+        == f'![{caption}](images/lime.png {alt_text})'
+    )
+    assert collector == [f'{pathlib.Path().cwd()}/images/lime.png']
+
+
 def test_concatenate_base():
     parameters = {
         'doc_root': BASIC_FIXTURE_ROOT,
