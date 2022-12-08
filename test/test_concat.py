@@ -53,6 +53,44 @@ def test_adapt_image_dot_dot_complete():
     assert collector == [f'{pathlib.Path().cwd()}/images/lime.png']
 
 
+def test_parse_markdown_image():
+    cases = {
+        '! [Caption Text Red](images/red.png "Alt Text Red")': (
+            '', '', '', '! [Caption Text Red](images/red.png "Alt Text Red")',
+        ),
+        ' ![Caption Text Red](images/red.png "Alt Text Red")': (
+            '', '', '', ' ![Caption Text Red](images/red.png "Alt Text Red")',
+        ),
+        '![Caption Text Red] (images/red.png "Alt Text Red")': (
+            '', '', '', '![Caption Text Red] (images/red.png "Alt Text Red")',
+        ),
+        '![ccc](sss "aaa") <!-- rest -->  ': (
+            'ccc', 'sss', 'aaa', ' <!-- rest -->  ',
+        ),
+        '![Caption Text Red](images/red.png "Alt Text Red")': (
+            'Caption Text Red', 'images/red.png', 'Alt Text Red', '',
+        ),
+        '![Caption Text Dot Dot Lime](../images/lime.png "Alt Text Dot Dot Lime")': (
+            'Caption Text Dot Dot Lime', '../images/lime.png', 'Alt Text Dot Dot Lime', '',
+        ),
+        '![Caption Text for SVG](/diagrams/squares-and-edges.svg) <!-- a comment -->  ': (
+            'Caption Text for SVG', '/diagrams/squares-and-edges.svg', '', ' <!-- a comment -->  ',
+        ),
+        '![Caption Text for app specific SVG](diagrams/nuts-and-bolts.app.svg "Alt Text for app specific SVG")': (
+            'Caption Text for app specific SVG', 'diagrams/nuts-and-bolts.app.svg', 'Alt Text for app specific SVG', '',
+        ),
+        r'![Caption \[Text] for app "specific SVG](diagrams/nuts-and-bolts.app.svg "Alt Text for ...")': (
+            r'Caption \[Text] for app "specific SVG', 'diagrams/nuts-and-bolts.app.svg', 'Alt Text for ...', '',
+        ),
+        r'![Caption \[Text] for app "specific (SVG)](diagrams/nuts-and-bolts.app.svg "Alt Text ... SVG")': (
+            r'Caption \[Text] for app "specific (SVG)', 'diagrams/nuts-and-bolts.app.svg', 'Alt Text ... SVG', '',
+        ),
+    }
+
+    for text_line, expected in cases.items():
+        assert concat.parse_markdown_image(text_line) == expected
+
+
 def test_concatenate_base():
     parameters = {
         'doc_root': BASIC_FIXTURE_ROOT,
