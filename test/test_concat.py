@@ -101,6 +101,12 @@ def test_parse_markdown_image():
         '![cc(c](sss SSS "aaa") <!-- rest -->  ': (
             '', '', '', '![cc(c](sss SSS "aaa") <!-- rest -->  ',
         ),
+        '![](sss "a(a)a")': (
+            'INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT', 'sss', 'a(a)a', '',
+        ),
+        '![](sss "a(a)a"': (  # This is not looking like anyone would want their alt text to be cut ...
+            'INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT', 'sss', 'a(a', 'a',
+        ),
         '![Caption Text Red](images/red.png "Alt Text Red")': (
             'Caption Text Red', 'images/red.png', 'Alt Text Red', '',
         ),
