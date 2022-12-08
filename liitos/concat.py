@@ -238,7 +238,7 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
         alt = parts['alt']
         rest = parts['rest']
         if orb in alt or crb in alt:
-            log.warning(f'- MAYBE-MD-IMG_LINE::ALT-TRUNCATED <<{text_line.rstrip()}>>')
+            log.warning(f'- MAYBE-MD-IMG_LINE::ALT-TRUNCATED-PARTIAL-MATCH <<{text_line.rstrip()}>>')
             log.warning(f"  + parsed as ({cap=}, {src=}, {alt=}, {rest=}")
 
         return cap, src, alt, rest
@@ -258,7 +258,7 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
     alt = parts['alt']
     rest = parts['rest']
     if orb in alt or crb in alt:
-        log.warning(f'- MAYBE-MD-IMG_LINE::ALT-TRUNCATED <<{text_line.rstrip()}>>')
+        log.warning(f'- MAYBE-MD-IMG_LINE::ALT-TRUNCATED-FULL-MATCH <<{text_line.rstrip()}>>')
         log.warning(f"  + parsed as ({cap=}, {src=}, {alt=}, {rest=}")
 
     return cap, src, alt, rest
