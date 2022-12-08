@@ -119,6 +119,9 @@ def test_parse_markdown_image():
         r'![Caption \[Text] for app "specific (SVG)](diagrams/nuts-and-bolts.app.svg "Alt Text ... SVG")': (
             r'Caption \[Text] for app "specific (SVG)', 'diagrams/nuts-and-bolts.app.svg', 'Alt Text ... SVG', '',
         ),
+        '![](images/blue.png  "Alt Text Blue Same Repeated Image Caption Missing")': (
+            'INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT', 'images/blue.png', 'Alt Text Blue Same Repeated Image Caption Missing', ''
+        )
     }
 
     for text_line, expected in cases.items():
