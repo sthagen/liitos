@@ -1,5 +1,10 @@
 # Changes
 
+## 2022.12.11
+
+* Enhanced the logging
+* Refactored markdown image text line rewrites for transformed images (formats)
+
 ## 2022.12.10
 
 * Fixed silent failing svg-to-png conversion target path rename per ABYL ten times and extended logging
