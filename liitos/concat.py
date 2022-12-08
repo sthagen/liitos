@@ -2,6 +2,7 @@
 import json
 import os
 import pathlib
+import re
 import shutil
 import sys
 from io import StringIO
@@ -12,7 +13,7 @@ import yaml
 import liitos.gather as gat
 from liitos import ENCODING, log
 
-ALT_INJECTOR_HACK = ' "INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC")'
+ALT_INJECTOR_HACK = 'INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC'
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 SLASH = '/'
@@ -41,6 +42,8 @@ INCLUDE_SLOT = '\\include{'
 ![Alt Text Sting Red](other/images/red.png "Caption Text Sting Red")
 """
 IMG_LINE_STARTSWITH = '!['
+MD_IMG_PATTERN = re.compile(r"^!\[(?P<cap>[^(]+)\]\((?P<src>[^ ]+)\ ?\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
+MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r"^(?P<src>[^ ]+)\ ?\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
 
 
 class RedirectedStdout:
@@ -158,21 +161,104 @@ def process_meta(aspects: str) -> gat.Meta | int:
     return metadata
 
 
+def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
+    """Parse a markdown image line within our conventions into caption, src, alt, and optional rest."""
+    invalid_marker = ('', '', '', text_line)
+
+    exclam = '!'
+    osb = '['
+    if not text_line or not text_line.startswith(f'{exclam}{osb}'):
+        log.error(f'- INVALID-MD-IMG_LINE::START <<{text_line.rstrip()}>>')
+        return invalid_marker
+
+    csb = ']'
+    osb_cnt = text_line.count(osb)
+    csb_cnt = text_line.count(csb)
+    if osb_cnt + csb_cnt < 2:
+        log.error(f'- INVALID-MD-IMG_LINE::SB-TOK-CNT-LOW <<{text_line.rstrip()}>>')
+        return invalid_marker
+    if osb_cnt != csb_cnt:
+        log.warning(f'- INCOMPLETE-MD-IMG_LINE::SB-TOK-CNT-UNBALANCED <<{text_line.rstrip()}>>')
+
+    orb = '('
+    cap_src_boundary = f'{csb}{orb}'
+    if cap_src_boundary not in text_line:
+        log.error(f'- INVALID-MD-IMG_LINE::CAP-SRC-BOUNDARY <<{text_line.rstrip()}>>')
+        return invalid_marker
+
+    crb = ')'
+    orb_cnt = text_line.count(orb)
+    crb_cnt = text_line.count(crb)
+    if orb_cnt + crb_cnt < 2:
+        log.error(f'- INVALID-MD-IMG_LINE::RB-TOK-CNT-LOW <<{text_line.rstrip()}>>')
+        return invalid_marker
+    if orb_cnt != crb_cnt:
+        log.warning(f'- INCOMPLETE-MD-IMG_LINE::RB-TOK-CNT-UNBALANCED <<{text_line.rstrip()}>>')
+
+    quo = '"'
+    quo_cnt = text_line.count(quo)
+    if quo_cnt < 2:
+        log.warning(f'- INCOMPLETE-MD-IMG_LINE::QU-TOK-CNT-LOW <<{text_line.rstrip()}>>')
+    if quo_cnt % 2:
+        log.warning(f'- INCOMPLETE-MD-IMG_LINE::QU-TOK-CNT-UNBALANCED <<{text_line.rstrip()}>>')
+
+    sp = ' '
+    sp_cnt = text_line.count(sp)
+    if not sp_cnt:
+        log.warning(f'- INCOMPLETE-MD-IMG_LINE::SP-TOK-CNT-LOW <<{text_line.rstrip()}>>')
+
+    dot = '.'
+    sla = '/'
+    abs_path_indicator = f'{csb}{orb}{sla}'
+    may_have_abs_path = abs_path_indicator in text_line
+    if may_have_abs_path:
+        log.info(f'- SUSPICIOUS-MD-IMG_LINE::MAY-HAVE-ABS-PATH <<{text_line.rstrip()}>>')
+    naive_upwards_path_indicator = f'{csb}{orb}{dot}{dot}{sla}'
+    may_have_upwards_path = naive_upwards_path_indicator in text_line
+    if may_have_upwards_path:
+        log.info(f'- SUSPICIOUS-MD-IMG_LINE::MAY-HAVE-UPWARDS-PATH <<{text_line.rstrip()}>>')
+
+    log.info('- parsing the markdown image text line ...')
+    if orb_cnt + crb_cnt > 2 or orb_cnt != crb_cnt:
+        # The regex is not safe for orb inside caption
+        left, right = text_line.split(cap_src_boundary, 1)
+        match_right = MD_IMG_PATTERN_RIGHT_SPLIT.match(right)
+        if not match_right:
+            log.error(f'- INVALID-MD-IMG_LINE::RE-MATCH-RIGHT-SPLIT-FAILED <<{text_line.rstrip()}>>')
+            return invalid_marker
+
+        parts = match_right.groupdict()
+        return left[2:], parts['src'], parts['alt'], parts['rest']
+
+    match = MD_IMG_PATTERN.match(text_line)
+    if not match:
+        log.error(f'- INVALID-MD-IMG_LINE::RE-MATCH-FAILED <<{text_line.rstrip()}>>')
+        return invalid_marker
+
+    parts = match.groupdict()
+    return parts['cap'], parts['src'], parts['alt'], parts['rest']
+
+
 def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) -> str:
     """YES."""
-    before, xtr = text_line.split('](', 1)
-    has_caption = True if ' ' in xtr and '")' in xtr else False  # has alt text but only then caption taken by pandoc
-    img, after = xtr.split(' ', 1) if has_caption else xtr.split(')', 1)
-    img_path = str((pathlib.Path(upstream).parent / img).resolve()).replace(root, '')
+    cap, src, alt, rest = parse_markdown_image(text_line)
+    if not src:
+        log.error(f'parse of markdown image text line failed <<{rest}>>')
+        return text_line
+
+    img_path = str((pathlib.Path(upstream).parent / src).resolve()).replace(root, '')
     collector.append(img_path)
     img_hack = img_path
     if f'/{IMAGES_FOLDER}' in img_path:
         img_hack = IMAGES_FOLDER + img_path.split(f'/{IMAGES_FOLDER}', 1)[1]
     elif f'/{DIAGRAMS_FOLDER}' in img_path:
         img_hack = DIAGRAMS_FOLDER + img_path.split(f'/{DIAGRAMS_FOLDER}', 1)[1]
+
     if img_hack != img_path:
         log.info(f'{img_hack} <--- OK? --- {img_path}')
-    belte_og_seler = f"{before}]({img_hack}{' ' if has_caption else ALT_INJECTOR_HACK}{after}"
+
+    alt_text = f'"{alt}"' if alt else f'"{ALT_INJECTOR_HACK}"'
+    belte_og_seler = f'![{cap}]({img_hack} {alt_text}){rest}'
     log.info(f'==> belte-og-seler: ->>{belte_og_seler}<<-')
     return belte_og_seler
 
