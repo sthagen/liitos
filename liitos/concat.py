@@ -14,6 +14,7 @@ import liitos.gather as gat
 from liitos import ENCODING, log
 
 ALT_INJECTOR_HACK = 'INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC'
+CAP_INJECTOR_HACK = 'INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT'
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 SLASH = '/'
@@ -42,8 +43,8 @@ INCLUDE_SLOT = '\\include{'
 ![Alt Text Sting Red](other/images/red.png "Caption Text Sting Red")
 """
 IMG_LINE_STARTSWITH = '!['
-MD_IMG_PATTERN = re.compile(r"^!\[(?P<cap>[^(]+)\]\((?P<src>[^ ]+)\ ?\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
-MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r"^(?P<src>[^ ]+)\ ?\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
+MD_IMG_PATTERN = re.compile(r"^!\[(?P<cap>[^(]*)\]\((?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
+MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r"^(?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
 
 
 class RedirectedStdout:
@@ -228,7 +229,12 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
             return invalid_marker
 
         parts = match_right.groupdict()
-        return left[2:], parts['src'], parts['alt'], parts['rest']
+        cap = left[2:]
+        if not cap:
+            log.warning(f'- INCOMPLETE-MD-IMG_LINE::CAP-MISS-INJECTED <<{text_line.rstrip()}>>')
+            cap = CAP_INJECTOR_HACK
+
+        return cap, parts['src'], parts['alt'], parts['rest']
 
     match = MD_IMG_PATTERN.match(text_line)
     if not match:
@@ -236,7 +242,12 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
         return invalid_marker
 
     parts = match.groupdict()
-    return parts['cap'], parts['src'], parts['alt'], parts['rest']
+    cap = parts['cap']
+    if not cap:
+        log.warning(f'- INCOMPLETE-MD-IMG_LINE::CAP-MISS-INJECTED <<{text_line.rstrip()}>>')
+        cap = CAP_INJECTOR_HACK
+
+    return cap, parts['src'], parts['alt'], parts['rest']
 
 
 def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) -> str:
