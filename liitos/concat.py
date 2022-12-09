@@ -280,7 +280,7 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
     """YES."""
     cap, src, alt, rest = parse_markdown_image(text_line)
     if not src:
-        log.error(f'parse of markdown image text line failed <<{rest}>>')
+        log.error(f'parse of markdown image text line failed - empty src, and rest is <<{rest.rstrip()}>>')
         return text_line
 
     img_path = str((pathlib.Path(upstream).parent / src).resolve()).replace(root, '')
