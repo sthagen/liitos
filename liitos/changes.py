@@ -58,7 +58,7 @@ def weave(
             rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
     else:
         for slot, change in enumerate(changes[0]['changes'], start=1):
-            model = sorted(change.keys())
+            model = sorted(change.keys())  # type: ignore
             if model != sorted(COLUMNS_EXPECTED):
                 log.error('unexpected column model!')
                 log.error(f'-  expected: ({COLUMNS_EXPECTED})')
@@ -66,9 +66,9 @@ def weave(
                 return 1
 
         for change in changes[0]['changes']:
-            author = change['author']
-            issue = change['issue']
-            summary = change['summary']
+            author = change['author']  # type: ignore
+            issue = change['issue']  # type: ignore
+            summary = change['summary']  # type: ignore
             rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
 
     publisher_template = template.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
