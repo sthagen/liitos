@@ -6,8 +6,9 @@ import re
 import shutil
 import sys
 from io import StringIO
+from typing import no_type_check
 
-import treelib
+import treelib  # type: ignore
 import yaml
 
 import liitos.gather as gat
@@ -47,23 +48,29 @@ MD_IMG_PATTERN = re.compile(r"^!\[(?P<cap>[^(]*)\]\((?P<src>[^ ]+)\ *\"?(?P<alt>
 MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r"^(?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
 
 
+@no_type_check
 class RedirectedStdout:
+    @no_type_check
     def __init__(self):
         self._stdout = None
         self._string_io = None
 
+    @no_type_check
     def __enter__(self):
         self._stdout = sys.stdout
         sys.stdout = self._string_io = StringIO()
         return self
 
+    @no_type_check
     def __exit__(self, type, value, traceback):
         sys.stdout = self._stdout
 
+    @no_type_check
     def __str__(self):
         return self._string_io.getvalue()
 
 
+@no_type_check
 def process_approvals(aspects: str) -> gat.Approvals | int:
     """TODO."""
     approvals_path = DOC_BASE / aspects[gat.KEY_APPROVALS]
@@ -88,6 +95,7 @@ def process_approvals(aspects: str) -> gat.Approvals | int:
     return approvals
 
 
+@no_type_check
 def process_binder(aspects: str) -> gat.Binder | int:
     """TODO."""
     bind_path = DOC_BASE / aspects[gat.KEY_BIND]
@@ -107,6 +115,7 @@ def process_binder(aspects: str) -> gat.Binder | int:
     return binder
 
 
+@no_type_check
 def process_changes(aspects: str) -> gat.Changes | int:
     """TODO."""
     changes_path = DOC_BASE / aspects[gat.KEY_CHANGES]
@@ -131,6 +140,7 @@ def process_changes(aspects: str) -> gat.Changes | int:
     return changes
 
 
+@no_type_check
 def process_meta(aspects: str) -> gat.Meta | int:
     """TODO."""
     meta_path = DOC_BASE / aspects[gat.KEY_META]
@@ -162,6 +172,7 @@ def process_meta(aspects: str) -> gat.Meta | int:
     return metadata
 
 
+@no_type_check
 def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
     """Parse a markdown image line within our conventions into caption, src, alt, and optional rest."""
     invalid_marker = ('', '', '', text_line)
@@ -264,6 +275,7 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
     return cap, src, alt, rest
 
 
+@no_type_check
 def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) -> str:
     """YES."""
     cap, src, alt, rest = parse_markdown_image(text_line)
@@ -288,6 +300,7 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
     return belte_og_seler
 
 
+@no_type_check
 def harvest_include(
     text_line: str, slot: int, regions: dict[str, list[tuple[tuple[int, int], str]]], tree: treelib.Tree, parent: str
 ) -> None:
@@ -298,6 +311,7 @@ def harvest_include(
     tree.create_node(include, include, parent=parent)
 
 
+@no_type_check
 def rollup(
     jobs: list[list[str]],
     docs: dict[str, list[str]],
@@ -333,6 +347,7 @@ def rollup(
     return [[job for job in chain if job not in flat] for chain in jobs]
 
 
+@no_type_check
 def collect_assets(collector: list[str]) -> None:
     """TODO"""
     images = pathlib.Path(IMAGES_FOLDER)
@@ -351,6 +366,7 @@ def collect_assets(collector: list[str]) -> None:
             shutil.copy(source_asset, target_asset)
 
 
+@no_type_check
 def concatenate(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
