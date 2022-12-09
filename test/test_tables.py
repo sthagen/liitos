@@ -39,6 +39,7 @@ def test_patch_tab_start():
     ]
     assert tables.patch(incoming) == incoming
 
+
 def test_patch_tab_three_cols():
     incoming = TABLE_THREE_COLS.split()
     assert tables.patch(incoming) == incoming
