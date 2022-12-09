@@ -10,7 +10,8 @@ def inject(incoming: Iterable[str]) -> list[str]:
     outgoing = []
     modus = 'copy'
     label = NO_LABEL
-    figure, caption = [], []
+    figure: list[str] = []
+    caption: list[str] = []
     precondition = r'\begin{figure}'
     precondition_met = False
     for slot, line in enumerate(incoming):
