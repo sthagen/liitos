@@ -7,7 +7,8 @@ def weave(incoming: Iterable[str]) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'
-    table, caption = [], []
+    table: list[str] = []
+    caption: list[str] = []
     for slot, line in enumerate(incoming):
         if modus == 'copy':
             if line.startswith(r'\begin{longtable}'):
