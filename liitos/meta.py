@@ -2,6 +2,7 @@
 import datetime as dti
 import os
 import pathlib
+from typing import no_type_check
 
 import yaml
 
@@ -52,6 +53,7 @@ ACROSS = {
 }
 
 
+@no_type_check
 def process_meta(aspects: str) -> gat.Meta | int:
     """TODO."""
     meta_path = DOC_BASE / aspects[gat.KEY_META]
@@ -84,6 +86,7 @@ def process_meta(aspects: str) -> gat.Meta | int:
     return metadata
 
 
+@no_type_check
 def weave_setup_font_path(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -105,6 +108,7 @@ def weave_setup_font_path(
         return text.replace(VALUE_SLOT, defaults['font_path'])
 
 
+@no_type_check
 def weave_setup_font_suffix(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -126,6 +130,7 @@ def weave_setup_font_suffix(
         return text.replace(VALUE_SLOT, defaults['font_suffix'])
 
 
+@no_type_check
 def weave_setup_bold_font(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -151,6 +156,7 @@ def weave_setup_bold_font(
         return text.replace(VALUE_SLOT, defaults['bold_font'])
 
 
+@no_type_check
 def weave_setup_italic_font(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -176,6 +182,7 @@ def weave_setup_italic_font(
         return text.replace(VALUE_SLOT, defaults['italic_font'])
 
 
+@no_type_check
 def weave_setup_bold_italic_font(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -201,6 +208,7 @@ def weave_setup_bold_italic_font(
         return text.replace(VALUE_SLOT, defaults['bold_italic_font'])
 
 
+@no_type_check
 def weave_setup_main_font(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -226,6 +234,7 @@ def weave_setup_main_font(
         return text.replace(VALUE_SLOT, defaults['main_font'])
 
 
+@no_type_check
 def weave_setup_fixed_font_package(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -248,6 +257,7 @@ def weave_setup_fixed_font_package(
         return text.replace(VALUE_SLOT, defaults['fixed_font_package'])
 
 
+@no_type_check
 def weave_setup_code_fontsize(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -296,6 +306,7 @@ def weave_setup_code_fontsize(
         return text.replace(VALUE_SLOT, defaults['code_fontsize'])
 
 
+@no_type_check
 def weave_setup_chosen_logo(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -319,6 +330,7 @@ def weave_setup_chosen_logo(
         return text.replace(VALUE_SLOT, defaults['chosen_logo'])
 
 
+@no_type_check
 def dispatch_setup_weaver(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -341,15 +353,17 @@ def dispatch_setup_weaver(
     return text
 
 
-def weave_meta_setup(meta_map: gat.Meta, latex: list[str]) -> None:
+@no_type_check
+def weave_meta_setup(meta_map: gat.Meta, latex: list[str]) -> list[str]:
     """TODO."""
     log.info('weaving in the meta data per setup.tex.in into setup.tex ...')
-    completed = [dispatch_setup_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
+    completed = [dispatch_setup_weaver(meta_map['document']['common'], line) for line in latex]
     if completed and completed[-1]:
         completed.append('\n')
     return completed
 
 
+@no_type_check
 def weave_driver_toc_level(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -376,6 +390,7 @@ def weave_driver_toc_level(
     return text.replace(VALUE_SLOT, str(toc_level))
 
 
+@no_type_check
 def weave_driver_list_of_figures(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -400,6 +415,7 @@ def weave_driver_list_of_figures(
     return text.replace(VALUE_SLOT, '%')
 
 
+@no_type_check
 def weave_driver_list_of_tables(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -424,6 +440,7 @@ def weave_driver_list_of_tables(
     return text.replace(VALUE_SLOT, '%')
 
 
+@no_type_check
 def dispatch_driver_weaver(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -440,15 +457,17 @@ def dispatch_driver_weaver(
     return text
 
 
-def weave_meta_driver(meta_map: gat.Meta, latex: list[str]) -> None:
+@no_type_check
+def weave_meta_driver(meta_map: gat.Meta, latex: list[str]) -> list[str]:
     """TODO."""
     log.info('weaving in the meta data per driver.tex.in into driver.tex ...')
-    completed = [dispatch_driver_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
+    completed = [dispatch_driver_weaver(meta_map['document']['common'], line) for line in latex]
     if completed and completed[-1]:
         completed.append('\n')
     return completed
 
 
+@no_type_check
 def weave_meta_part_header_title(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -464,6 +483,7 @@ def weave_meta_part_header_title(
         return text.replace(VALUE_SLOT, mapper['title'])
 
 
+@no_type_check
 def weave_meta_part_title(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -475,6 +495,7 @@ def weave_meta_part_title(
     return text.replace(VALUE_SLOT, mapper['title'])
 
 
+@no_type_check
 def weave_meta_part_sub_title(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -490,6 +511,7 @@ def weave_meta_part_sub_title(
         return text.replace(VALUE_SLOT, ' ')
 
 
+@no_type_check
 def weave_meta_part_header_type(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -505,6 +527,7 @@ def weave_meta_part_header_type(
         return text.replace(VALUE_SLOT, 'Engineering Document')
 
 
+@no_type_check
 def weave_meta_part_header_id(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -520,6 +543,7 @@ def weave_meta_part_header_id(
         return text.replace(VALUE_SLOT, 'P99999')
 
 
+@no_type_check
 def weave_meta_part_issue(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -535,6 +559,7 @@ def weave_meta_part_issue(
         return text.replace(VALUE_SLOT, '01')
 
 
+@no_type_check
 def weave_meta_part_revision(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -550,6 +575,7 @@ def weave_meta_part_revision(
         return text.replace(VALUE_SLOT, '00')
 
 
+@no_type_check
 def weave_meta_part_header_date(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -570,6 +596,7 @@ def weave_meta_part_header_date(
         return text.replace(VALUE_SLOT, pub_date_today)
 
 
+@no_type_check
 def weave_meta_part_footer_frame_note(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -585,6 +612,7 @@ def weave_meta_part_footer_frame_note(
         return text.replace(VALUE_SLOT, 'VERY CONSEQUENTIAL')
 
 
+@no_type_check
 def weave_meta_part_footer_page_number_prefix(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -600,6 +628,7 @@ def weave_meta_part_footer_page_number_prefix(
         return text.replace(VALUE_SLOT, 'Page')
 
 
+@no_type_check
 def weave_meta_part_change_log_issue_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -615,6 +644,7 @@ def weave_meta_part_change_log_issue_label(
         return text.replace(VALUE_SLOT, 'Iss.')
 
 
+@no_type_check
 def weave_meta_part_change_log_revision_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -630,6 +660,7 @@ def weave_meta_part_change_log_revision_label(
         return text.replace(VALUE_SLOT, 'Rev.')
 
 
+@no_type_check
 def weave_meta_part_change_log_date_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -645,6 +676,7 @@ def weave_meta_part_change_log_date_label(
         return text.replace(VALUE_SLOT, 'Date')
 
 
+@no_type_check
 def weave_meta_part_change_log_author_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -660,6 +692,7 @@ def weave_meta_part_change_log_author_label(
         return text.replace(VALUE_SLOT, 'Author')
 
 
+@no_type_check
 def weave_meta_part_change_log_description_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -675,6 +708,7 @@ def weave_meta_part_change_log_description_label(
         return text.replace(VALUE_SLOT, 'Description')
 
 
+@no_type_check
 def weave_meta_part_approvals_role_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -690,6 +724,7 @@ def weave_meta_part_approvals_role_label(
         return text.replace(VALUE_SLOT, 'Approvals')
 
 
+@no_type_check
 def weave_meta_part_approvals_name_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -705,6 +740,7 @@ def weave_meta_part_approvals_name_label(
         return text.replace(VALUE_SLOT, 'Name')
 
 
+@no_type_check
 def weave_meta_part_approvals_date_and_signature_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -720,6 +756,7 @@ def weave_meta_part_approvals_date_and_signature_label(
         return text.replace(VALUE_SLOT, 'Date and Signature')
 
 
+@no_type_check
 def weave_meta_part_header_issue_revision_combined(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -738,6 +775,7 @@ def weave_meta_part_header_issue_revision_combined(
         return text.replace(VALUE_SLOT, r'Iss \theMetaIssCode, Rev \theMetaRevCode')
 
 
+@no_type_check
 def weave_meta_part_proprietary_information(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -763,6 +801,7 @@ def weave_meta_part_proprietary_information(
         return text.replace(VALUE_SLOT, 'Proprietary Information MISSING')
 
 
+@no_type_check
 def dispatch_meta_weaver(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -796,15 +835,17 @@ def dispatch_meta_weaver(
     return text
 
 
-def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> None:
+@no_type_check
+def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> list[str]:
     """TODO."""
     log.info('weaving in the meta data per metadata.tex.in into metadata.tex ...')
-    completed = [dispatch_meta_weaver(meta_map['document']['common'], line) for line in latex]  # type: ignore
+    completed = [dispatch_meta_weaver(meta_map['document']['common'], line) for line in latex]
     if completed and completed[-1]:
         completed.append('\n')
     return completed
 
 
+@no_type_check
 def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
