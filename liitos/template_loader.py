@@ -24,7 +24,7 @@ def load_resource(resource: str, is_complete_path: bool = False) -> str:
         with open(resource, 'rt', encoding=ENCODING) as handle:
             return handle.read()
     else:
-        return pkgutil.get_data(__package__, resource).decode(encoding=ENCODING)
+        return pkgutil.get_data(__package__, resource).decode(encoding=ENCODING)  # type: ignore
 
 
 def eject(argv: list[str] | None = None) -> int:
@@ -37,7 +37,7 @@ def eject(argv: list[str] | None = None) -> int:
     (into_path / 'templates').mkdir(parents=True, exist_ok=True)
     for resource in RESOURCES:
         write_to = into_path / resource
-        data = pkgutil.get_data(__package__, resource).decode(encoding=ENCODING)
+        data = pkgutil.get_data(__package__, resource).decode(encoding=ENCODING)  # type: ignore
         with open(write_to, 'wt', encoding=ENCODING) as target:
             target.write(data)
 
