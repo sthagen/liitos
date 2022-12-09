@@ -1,5 +1,10 @@
 # Changes
 
+## 2022.12.12
+
+* Added info to error log from image parse
+* Fixed inventory (failed CPSR refactoring)
+
 ## 2022.12.11
 
 * Enhanced the logging
