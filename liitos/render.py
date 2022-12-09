@@ -7,6 +7,7 @@ import pathlib
 import shutil
 import subprocess  # nosec B404
 import time
+from typing import Any, Callable, no_type_check
 
 import foran.foran as api  # type: ignore
 import yaml
@@ -33,7 +34,7 @@ INTER_PROCESS_SYNC_SECS = 0.1
 INTER_PROCESS_SYNC_ATTEMPTS = 10
 
 
-def hash_file(path: pathlib.Path, hasher=None) -> str:
+def hash_file(path: pathlib.Path, hasher: Callable[..., Any] | None = None) -> str:
     """Return the SHA512 hex digest of the data from file."""
     if hasher is None:
         hasher = hashlib.sha512
@@ -44,6 +45,7 @@ def hash_file(path: pathlib.Path, hasher=None) -> str:
     return hash.hexdigest()
 
 
+@no_type_check
 def log_subprocess_output(pipe, prefix: str):
     for line in iter(pipe.readline, b''):  # b'\n'-separated lines
         cand = line.decode(encoding=ENCODING).rstrip()
@@ -64,6 +66,7 @@ def log_subprocess_output(pipe, prefix: str):
                 log.info(f'{prefix}: %s', cand)
 
 
+@no_type_check
 def vcs_probe():
     """Are we in front, on par, or behind with the upstream?"""
     try:
@@ -111,12 +114,14 @@ def report_taxonomy(target_path: pathlib.Path) -> None:
     log.info('  + Fonts:')
 
 
+@no_type_check
 def unified_diff(left: list[str], right: list[str], left_label: str = 'before', right_label: str = 'after'):
     """Derive the unified diff between left and right lists of strings as generator of strings."""
     for line in difflib.unified_diff(left, right, fromfile=left_label, tofile=right_label):
         yield line.rstrip()
 
 
+@no_type_check
 def der(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
