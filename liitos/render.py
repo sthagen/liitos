@@ -8,10 +8,10 @@ import shutil
 import subprocess  # nosec B404
 import time
 
-import foran.foran as api
+import foran.foran as api  # type: ignore
 import yaml
-from foran.report import generate_report
-from taksonomia.taksonomia import Taxonomy
+from foran.report import generate_report  # type: ignore
+from taksonomia.taksonomia import Taxonomy  # type: ignore
 
 import liitos.captions as cap
 import liitos.concat as con
