@@ -59,7 +59,7 @@ def weave(
             log.error(f'- but found: ({signatures[0]["columns"]})')
             return 1
 
-        for role, name in signatures[0]['rows']:
+        for role, name in signatures[0]['rows']:  # type: ignore
             rows.append(ROW_TEMPLATE.replace('role', role).replace('name', name))
     else:
         for slot, approval in enumerate(signatures[0]['approvals'], start=1):
@@ -71,8 +71,8 @@ def weave(
                 return 1
 
         for approval in signatures[0]['approvals']:
-            role = approval['role']
-            name = approval['name']
+            role = approval['role']  # type: ignore
+            name = approval['name']  # type: ignore
             rows.append(ROW_TEMPLATE.replace('role', role).replace('name', name))
 
     pushdown = EXTRA_OFFSET_EM - 2 * len(rows)
