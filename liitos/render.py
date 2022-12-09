@@ -89,7 +89,7 @@ def vcs_probe():
 def report_taxonomy(target_path: pathlib.Path) -> None:
     """Convenience function to report date, size, and checksums of the deliverable."""
     taxonomy = Taxonomy(target_path, excludes='', key_function='md5')
-    for path in sorted(target_path.rglob('*')):
+    for path in sorted(target_path.parent.rglob('*')):
         taxonomy.add_branch(path) if path.is_dir() else taxonomy.add_leaf(path)
     log.info('- Writing render/pdf folder taxonomy to inventory.json ...')
     taxonomy.dump(sink='inventory', format_type='json', base64_encode=False)
@@ -260,8 +260,10 @@ def der(
                     return_code = process.wait()
                     if return_code < 0:
                         log.error(f'svg-to-png process ({svg_to_png_command}) was terminated by signal {-return_code}')
-                    else:
+                    elif return_code == 0:
                         log.info(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
+                    else:
+                        log.error(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
 
         special_patching = []
         log.info(LOG_SEPARATOR)
