@@ -1,7 +1,7 @@
 ---
 slot_marker: VALUE.SLOT
 targets:
-  main_title:
+  title:
     eol_marker: '%%_PATCH_%_MAIN_%_TITLE_%%'
     default: null
     scope: metadata.tex.in
@@ -158,7 +158,7 @@ targets:
     default: liitos-logo.png
     scope: setup.tex.in
 tokens:
-  '%%_PATCH_%_MAIN_%_TITLE_%%': main_title
+  '%%_PATCH_%_MAIN_%_TITLE_%%': title
   '%%_PATCH_%_SUB_%_TITLE_%%': sub_title
   '%%_PATCH_%_HEADER_%_TITLE_%%': header_title
   '%%_PATCH_%_TYPE_%%': header_type
