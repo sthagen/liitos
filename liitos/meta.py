@@ -832,10 +832,7 @@ def weave_meta_part_header_issue_revision_combined_label(
     """
     do_show_key = 'header_issue_revision_combined_show'
     if mapper.get(do_show_key, None) is not None and not mapper[do_show_key]:
-        log.info(
-            f'{do_show_key} set to false'
-            ' - hiding date slot in header by setting label to a single space(" ")'
-        )
+        log.info(f'{do_show_key} set to false' ' - hiding date slot in header by setting label to a single space(" ")')
         return text.replace(VALUE_SLOT, ' ')
     log.info(f'{do_show_key} not set - considering header_issue_revision_combined_label ...')
     if mapper.get('header_issue_revision_combined_label'):
@@ -859,10 +856,7 @@ def weave_meta_part_header_issue_revision_combined(
     """
     do_show_key = 'header_issue_revision_combined_show'
     if mapper.get(do_show_key, None) is not None and not mapper[do_show_key]:
-        log.info(
-            f'{do_show_key} set to false'
-            ' - hiding date slot in header by setting value to a single space(" ")'
-        )
+        log.info(f'{do_show_key} set to false' ' - hiding date slot in header by setting value to a single space(" ")')
         return text.replace(VALUE_SLOT, ' ')
     log.info(f'{do_show_key} not set - considering header_issue_revision_combined ...')
     if mapper.get('header_issue_revision_combined'):
