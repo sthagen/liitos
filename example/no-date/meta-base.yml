@@ -1,0 +1,35 @@
+---
+document:
+  common:
+    title: Ttt Tt Tt
+    header_title: Ttt Tt
+    sub_title: The Deep Spec
+    header_type: Engineering Document
+    header_id: null
+    issue: '01'
+    revision: '00'
+    header_date: 01 DEC 2022
+    header_issue_revision_combined: null
+    footer_frame_note: VERY CONSEQUENTIAL
+    footer_page_number_prefix: Page
+    change_log_issue_label: Iss.
+    change_log_revision_label: Rev.
+    change_log_date_label: Date
+    change_log_author_label: Author
+    change_log_description_label: Description
+    approvals_role_label: Approvals
+    approvals_name_label: Name
+    approvals_date_and_signature_label: Date and Signature
+    proprietary_information: /opt/legal/proprietary_information.txt
+    toc_level: 2
+    list_of_figures: '%'  # empty string to enable lof
+    list_of_tables: '%'  # empty string to enable lot
+    font_path: /opt/fonts/
+    font_suffix: .otf
+    bold_font: ITCFranklinGothicStd-Demi
+    italic_font: ITCFranklinGothicStd-BookIt
+    bold_italic_font: ITCFranklinGothicStd-DemiIt
+    main_font: ITCFranklinGothicStd-Book
+    fixed_font_package: sourcecodepro
+    code_fontsize: \scriptsize
+    chosen_logo: /opt/logo/liitos-logo.png
