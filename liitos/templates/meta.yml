@@ -5,15 +5,16 @@ document:
     header_title: null
     sub_title: ' '
     header_type: Engineering Document
-    header_id_show: True
+    header_id_show: true
     header_id: null
     header_id_label: 'Doc. ID:'
     issue: '01'
     revision: '00'
-    header_issue_revision_combined_show: True
+    header_issue_revision_combined_show: true
     header_issue_revision_combined: null
     header_issue_revision_combined_label: 'Issue, Revision:'
-    header_date_show: True
+    header_date_enable_auto: true
+    header_date_show: true
     header_date: null
     header_date_label: 'Date:'
     footer_frame_note: null

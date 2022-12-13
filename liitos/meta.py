@@ -638,16 +638,27 @@ def weave_meta_part_header_date(
         log.info('header_date_show set to false - hiding date slot in header by setting value to a single space(" ")')
         return text.replace(VALUE_SLOT, ' ')
     log.info('header_date_show not set - considering header_date ...')
-    today = dti.datetime.today()
-    pub_date_today = today.strftime('%d %b %Y').upper()
-    if mapper.get('header_date'):
-        pub_date = mapper['header_date'].strip()
-        if pub_date == MAGIC_OF_TODAY:
-            pub_date = pub_date_today
-        return text.replace(VALUE_SLOT, pub_date)
+    if mapper.get('header_date_enable_auto', None) is not None and not mapper['header_date_enable_auto']:
+        log.info('header_date_enable_auto set to false - setting that slot value as is (no date semantics enforced)')
+        if mapper.get('header_date'):
+            pub_date_or_any = mapper['header_date'].strip()
+            if not pub_date_or_any:
+                pub_date_or_any = ' '  # single space to please the backend parser
+            return text.replace(VALUE_SLOT, pub_date_or_any)
+        else:
+            log.warning('header_date value missing and as-is mode ... setting to single space ( ) a.k.a. hiding')
+            return text.replace(VALUE_SLOT, ' ')
     else:
-        log.warning(f'header_date value missing ... setting default as today({pub_date_today})')
-        return text.replace(VALUE_SLOT, pub_date_today)
+        today = dti.datetime.today()
+        pub_date_today = today.strftime('%d %b %Y').upper()
+        if mapper.get('header_date'):
+            pub_date = mapper['header_date'].strip()
+            if pub_date == MAGIC_OF_TODAY:
+                pub_date = pub_date_today
+            return text.replace(VALUE_SLOT, pub_date)
+        else:
+            log.warning(f'header_date value missing ... setting default as today({pub_date_today})')
+            return text.replace(VALUE_SLOT, pub_date_today)
 
 
 @no_type_check
