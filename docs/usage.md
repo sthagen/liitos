@@ -30,7 +30,7 @@
 ## Version
 
 ```console
-❯ Splice (Finnish liitos) contributions. version 2022.12.13+parent.65379045
+❯ Splice (Finnish liitos) contributions. version 2022.12.14+parent.528cf590
 ```
 
 ## Eject 
@@ -41,8 +41,8 @@ Any unique start of template name will yield, executing the command without argu
 
 ```console
 ❯ liitos eject
-2022-12-05T19:14:56.833200+00:00 ERROR [LIITOS]: eject of template with no name requested
-2022-12-05T19:14:56.833815+00:00 INFO [LIITOS]: templates known: (approvals-yaml, bookmatter-pdf, changes-yaml, driver-pdf, meta-base-yaml, meta-patch-yaml, metadata-pdf, publisher-pdf, setup-pdf, vocabulary-yaml)
+2022-12-13T21:12:59.142262+00:00 ERROR [LIITOS]: eject of template with no name requested
+2022-12-13T21:12:59.142760+00:00 INFO [LIITOS]: templates known: (approvals-yaml, bookmatter-pdf, changes-yaml, driver-pdf, meta-base-yaml, meta-patch-yaml, metadata-pdf, publisher-pdf, setup-pdf, vocabulary-yaml)
 ```
 
 Example fetch the approvals data file by only naming the first letter (as it is unique) of the template name:
