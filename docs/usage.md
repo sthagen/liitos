@@ -30,7 +30,7 @@
 ## Version
 
 ```console
-❯ Splice (Finnish liitos) contributions. version 2022.12.12+parent.13dbb82b
+❯ Splice (Finnish liitos) contributions. version 2022.12.13+parent.65379045
 ```
 
 ## Eject 
@@ -625,7 +625,7 @@ We see that in above example we add/overwrite
 
 
 The base meta data files (imported by other meta data files or standing for themselves is only one meta data file is needed)
-in the example `deep` provide all known keys to demonstrate the features:
+in the example `deep` provide most known keys to demonstrate the features:
 
 ```console
 ❯ cat deep/meta-base.yml
@@ -688,6 +688,54 @@ The terseness profits from the defaults chosen in `liitos` that expect many arti
 Leaving out `proprietary_information` would produce warnings (like other left out settings)
 and also inject the text `Proprietary Information MISSING` on the second page of the rendered document.
 
+The eject command when used to produce a `meta-base.yml` template provides all known keys:
+
+```console
+❯ liitos eject meta-base
+---
+document:
+  common:
+    title: null
+    header_title: null
+    sub_title: ' '
+    header_type: Engineering Document
+    header_id_show: true
+    header_id: null
+    header_id_label: 'Doc. ID:'
+    issue: '01'
+    revision: '00'
+    header_issue_revision_combined_show: true
+    header_issue_revision_combined: null
+    header_issue_revision_combined_label: 'Issue, Revision:'
+    header_date_enable_auto: true
+    header_date_show: true
+    header_date: null
+    header_date_label: 'Date:'
+    footer_frame_note: null
+    footer_page_number_prefix: Page
+    change_log_issue_label: Iss.
+    change_log_revision_label: Rev.
+    change_log_date_label: Date
+    change_log_author_label: Author
+    change_log_description_label: Description
+    approvals_role_label: Approvals
+    approvals_name_label: Name
+    approvals_date_and_signature_label: Date and Signature
+    proprietary_information: /opt/legal/proprietary-information.txt
+    toc_level: 2
+    list_of_figures: '%'  # empty string to enable lof
+    list_of_tables: '%'  # empty string to enable lot
+    font_path: /opt/fonts/
+    font_suffix: .otf
+    bold_font: ITCFranklinGothicStd-Demi
+    italic_font: ITCFranklinGothicStd-BookIt
+    bold_italic_font: ITCFranklinGothicStd-DemiIt
+    main_font: ITCFranklinGothicStd-Book
+    fixed_font_package: sourcecodepro
+    code_fontsize: \scriptsize
+    chosen_logo: /opt/logo/liitos-logo.png
+
+```
 ### Including Markdown Files
 
 First things first:
