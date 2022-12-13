@@ -5,9 +5,9 @@
  -->
 <!-- Pages: 1 -->
 <svg width="782pt" height="376pt"
- viewBox="0.00 0.00 781.85 375.96" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 782.35 375.96" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 371.96)">
-<polygon fill="white" stroke="none" points="-4,4 -4,-371.96 777.85,-371.96 777.85,4 -4,4"/>
+<polygon fill="white" stroke="none" points="-4,4 -4,-371.96 778.35,-371.96 778.35,4 -4,4"/>
 <!-- typer -->
 <g id="node1" class="node">
 <title>typer</title>
@@ -53,79 +53,79 @@
 <!-- taksonomia -->
 <g id="node5" class="node">
 <title>taksonomia</title>
-<ellipse fill="none" stroke="black" cx="510.11" cy="-341.09" rx="56.64" ry="26.74"/>
-<text text-anchor="middle" x="510.11" y="-344.89" font-family="Times,serif" font-size="14.00">taksonomia</text>
-<text text-anchor="middle" x="510.11" y="-329.89" font-family="Times,serif" font-size="14.00">2022.12.7</text>
-</g>
-<!-- lxml -->
-<g id="node6" class="node">
-<title>lxml</title>
-<ellipse fill="none" stroke="black" cx="327.11" cy="-236.35" rx="31.23" ry="26.74"/>
-<text text-anchor="middle" x="327.11" y="-240.15" font-family="Times,serif" font-size="14.00">lxml</text>
-<text text-anchor="middle" x="327.11" y="-225.15" font-family="Times,serif" font-size="14.00">4.9.1</text>
-</g>
-<!-- taksonomia&#45;&gt;lxml -->
-<g id="edge3" class="edge">
-<title>taksonomia&#45;&gt;lxml</title>
-<path fill="none" stroke="black" d="M463.8,-325.41C443.3,-318.01 419.3,-308.08 399.11,-296.22 383.99,-287.34 368.73,-275.4 356.18,-264.59"/>
-<polygon fill="black" stroke="black" points="358.51,-261.97 348.7,-257.98 353.88,-267.22 358.51,-261.97"/>
-<text text-anchor="middle" x="421.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=4.9.1</text>
-</g>
-<!-- psutil -->
-<g id="node7" class="node">
-<title>psutil</title>
-<ellipse fill="none" stroke="black" cx="409.11" cy="-236.35" rx="33.47" ry="26.74"/>
-<text text-anchor="middle" x="409.11" y="-240.15" font-family="Times,serif" font-size="14.00">psutil</text>
-<text text-anchor="middle" x="409.11" y="-225.15" font-family="Times,serif" font-size="14.00">5.9.4</text>
-</g>
-<!-- taksonomia&#45;&gt;psutil -->
-<g id="edge4" class="edge">
-<title>taksonomia&#45;&gt;psutil</title>
-<path fill="none" stroke="black" d="M483.4,-317.19C476.02,-310.59 468.11,-303.27 461.11,-296.22 452.23,-287.28 442.98,-277.11 434.79,-267.78"/>
-<polygon fill="black" stroke="black" points="437.49,-265.56 428.29,-260.29 432.2,-270.14 437.49,-265.56"/>
-<text text-anchor="middle" x="483.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=5.9.4</text>
-</g>
-<!-- pyyaml -->
-<g id="node8" class="node">
-<title>pyyaml</title>
-<ellipse fill="none" stroke="black" cx="510.11" cy="-236.35" rx="49.49" ry="26.74"/>
-<text text-anchor="middle" x="510.11" y="-240.15" font-family="Times,serif" font-size="14.00">PyYAML</text>
-<text text-anchor="middle" x="510.11" y="-225.15" font-family="Times,serif" font-size="14.00">6.0</text>
-</g>
-<!-- taksonomia&#45;&gt;pyyaml -->
-<g id="edge5" class="edge">
-<title>taksonomia&#45;&gt;pyyaml</title>
-<path fill="none" stroke="black" d="M510.11,-313.9C510.11,-302.06 510.11,-287.86 510.11,-274.92"/>
-<polygon fill="black" stroke="black" points="513.61,-275.01 510.11,-265.01 506.61,-275.01 513.61,-275.01"/>
-<text text-anchor="middle" x="527.11" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=6.0</text>
-</g>
-<!-- orjson -->
-<g id="node9" class="node">
-<title>orjson</title>
-<ellipse fill="none" stroke="black" cx="613.11" cy="-236.35" rx="35.21" ry="26.74"/>
-<text text-anchor="middle" x="613.11" y="-240.15" font-family="Times,serif" font-size="14.00">orjson</text>
-<text text-anchor="middle" x="613.11" y="-225.15" font-family="Times,serif" font-size="14.00">3.8.3</text>
-</g>
-<!-- taksonomia&#45;&gt;orjson -->
-<g id="edge6" class="edge">
-<title>taksonomia&#45;&gt;orjson</title>
-<path fill="none" stroke="black" d="M533.74,-316.52C548.81,-301.49 568.44,-281.91 584.41,-265.98"/>
-<polygon fill="black" stroke="black" points="586.7,-268.64 591.31,-259.1 581.76,-263.68 586.7,-268.64"/>
-<text text-anchor="middle" x="590.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=3.8.3</text>
+<ellipse fill="none" stroke="black" cx="541.11" cy="-341.09" rx="56.64" ry="26.74"/>
+<text text-anchor="middle" x="541.11" y="-344.89" font-family="Times,serif" font-size="14.00">taksonomia</text>
+<text text-anchor="middle" x="541.11" y="-329.89" font-family="Times,serif" font-size="14.00">2022.12.7</text>
 </g>
 <!-- py&#45;cpuinfo -->
-<g id="node10" class="node">
+<g id="node6" class="node">
 <title>py&#45;cpuinfo</title>
-<ellipse fill="none" stroke="black" cx="720.11" cy="-236.35" rx="53.98" ry="26.74"/>
-<text text-anchor="middle" x="720.11" y="-240.15" font-family="Times,serif" font-size="14.00">py&#45;cpuinfo</text>
-<text text-anchor="middle" x="720.11" y="-225.15" font-family="Times,serif" font-size="14.00">9.0.0</text>
+<ellipse fill="none" stroke="black" cx="350.11" cy="-236.35" rx="53.98" ry="26.74"/>
+<text text-anchor="middle" x="350.11" y="-240.15" font-family="Times,serif" font-size="14.00">py&#45;cpuinfo</text>
+<text text-anchor="middle" x="350.11" y="-225.15" font-family="Times,serif" font-size="14.00">9.0.0</text>
 </g>
 <!-- taksonomia&#45;&gt;py&#45;cpuinfo -->
-<g id="edge7" class="edge">
+<g id="edge3" class="edge">
 <title>taksonomia&#45;&gt;py&#45;cpuinfo</title>
-<path fill="none" stroke="black" d="M553.89,-323.63C573.49,-315.89 596.73,-306.17 617.11,-296.22 637.26,-286.39 658.89,-274.27 677.11,-263.59"/>
-<polygon fill="black" stroke="black" points="678.72,-266.71 685.54,-258.6 675.15,-260.68 678.72,-266.71"/>
-<text text-anchor="middle" x="666.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=9.0.0</text>
+<path fill="none" stroke="black" d="M496.17,-324.51C476.35,-316.96 453.08,-307.16 433.11,-296.22 417.23,-287.51 400.75,-276.34 386.71,-266.07"/>
+<polygon fill="black" stroke="black" points="389.19,-263.55 379.07,-260.39 385.01,-269.16 389.19,-263.55"/>
+<text text-anchor="middle" x="455.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=9.0.0</text>
+</g>
+<!-- orjson -->
+<g id="node7" class="node">
+<title>orjson</title>
+<ellipse fill="none" stroke="black" cx="457.11" cy="-236.35" rx="35.21" ry="26.74"/>
+<text text-anchor="middle" x="457.11" y="-240.15" font-family="Times,serif" font-size="14.00">orjson</text>
+<text text-anchor="middle" x="457.11" y="-225.15" font-family="Times,serif" font-size="14.00">3.8.3</text>
+</g>
+<!-- taksonomia&#45;&gt;orjson -->
+<g id="edge4" class="edge">
+<title>taksonomia&#45;&gt;orjson</title>
+<path fill="none" stroke="black" d="M512.99,-317.55C505.75,-311.07 498.28,-303.72 492.11,-296.22 485.94,-288.71 480.13,-280 475.1,-271.61"/>
+<polygon fill="black" stroke="black" points="478.14,-269.88 470.12,-262.96 472.07,-273.37 478.14,-269.88"/>
+<text text-anchor="middle" x="514.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=3.8.3</text>
+</g>
+<!-- lxml -->
+<g id="node8" class="node">
+<title>lxml</title>
+<ellipse fill="none" stroke="black" cx="541.11" cy="-236.35" rx="31.23" ry="26.74"/>
+<text text-anchor="middle" x="541.11" y="-240.15" font-family="Times,serif" font-size="14.00">lxml</text>
+<text text-anchor="middle" x="541.11" y="-225.15" font-family="Times,serif" font-size="14.00">4.9.1</text>
+</g>
+<!-- taksonomia&#45;&gt;lxml -->
+<g id="edge5" class="edge">
+<title>taksonomia&#45;&gt;lxml</title>
+<path fill="none" stroke="black" d="M541.11,-313.9C541.11,-302.06 541.11,-287.86 541.11,-274.92"/>
+<polygon fill="black" stroke="black" points="544.61,-275.01 541.11,-265.01 537.61,-275.01 544.61,-275.01"/>
+<text text-anchor="middle" x="563.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=4.9.1</text>
+</g>
+<!-- pyyaml -->
+<g id="node9" class="node">
+<title>pyyaml</title>
+<ellipse fill="none" stroke="black" cx="640.11" cy="-236.35" rx="49.49" ry="26.74"/>
+<text text-anchor="middle" x="640.11" y="-240.15" font-family="Times,serif" font-size="14.00">PyYAML</text>
+<text text-anchor="middle" x="640.11" y="-225.15" font-family="Times,serif" font-size="14.00">6.0</text>
+</g>
+<!-- taksonomia&#45;&gt;pyyaml -->
+<g id="edge6" class="edge">
+<title>taksonomia&#45;&gt;pyyaml</title>
+<path fill="none" stroke="black" d="M567.92,-317.28C575.3,-310.68 583.18,-303.34 590.11,-296.22 598.03,-288.09 606.18,-278.91 613.53,-270.25"/>
+<polygon fill="black" stroke="black" points="616.16,-272.56 619.9,-262.65 610.8,-268.07 616.16,-272.56"/>
+<text text-anchor="middle" x="620.11" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=6.0</text>
+</g>
+<!-- psutil -->
+<g id="node10" class="node">
+<title>psutil</title>
+<ellipse fill="none" stroke="black" cx="741.11" cy="-236.35" rx="33.47" ry="26.74"/>
+<text text-anchor="middle" x="741.11" y="-240.15" font-family="Times,serif" font-size="14.00">psutil</text>
+<text text-anchor="middle" x="741.11" y="-225.15" font-family="Times,serif" font-size="14.00">5.9.4</text>
+</g>
+<!-- taksonomia&#45;&gt;psutil -->
+<g id="edge7" class="edge">
+<title>taksonomia&#45;&gt;psutil</title>
+<path fill="none" stroke="black" d="M582.95,-322.97C601.05,-315.25 622.34,-305.73 641.11,-296.22 667.22,-282.99 672.9,-278.1 698.11,-263.22 700.39,-261.88 702.74,-260.49 705.1,-259.08"/>
+<polygon fill="black" stroke="black" points="706.69,-262.2 713.48,-254.07 703.1,-256.2 706.69,-262.2"/>
+<text text-anchor="middle" x="690.61" y="-285.02" font-family="Times,serif" font-size="14.00">&gt;=5.9.4</text>
 </g>
 <!-- foran -->
 <g id="node11" class="node">
