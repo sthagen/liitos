@@ -528,6 +528,29 @@ def weave_meta_part_header_type(
 
 
 @no_type_check
+def weave_meta_part_header_id_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
+    """Weave in the header_id_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_ID_%_LABEL_%%')
+    """
+    if mapper.get('header_id_show', None) is not None and not mapper['header_id_show']:
+        log.info('header_id_show set to false - hiding id slot in header by setting label to a single space(" ")')
+        return text.replace(VALUE_SLOT, ' ')
+    log.info('header_id_show not set - considering header_id_label ...')
+    if mapper.get('header_id_label'):
+        pub_id_label = mapper['header_id_label'].strip()
+        if not pub_id_label:
+            pub_id_label = ' '  # single space to please the backend parser
+        return text.replace(VALUE_SLOT, pub_id_label)
+    else:
+        log.warning('header_id_label value missing ... setting default(Doc. ID:)')
+        return text.replace(VALUE_SLOT, 'Doc. ID:')
+
+
+@no_type_check
 def weave_meta_part_header_id(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -536,6 +559,10 @@ def weave_meta_part_header_id(
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ID_%%')
     """
+    if mapper.get('header_id_show', None) is not None and not mapper['header_id_show']:
+        log.info('header_id_show set to false - hiding id slot in header by setting value to a single space(" ")')
+        return text.replace(VALUE_SLOT, ' ')
+    log.info('header_id_show not set - considering header_id ...')
     if mapper.get('header_id'):
         return text.replace(VALUE_SLOT, mapper['header_id'])
     else:
@@ -576,6 +603,29 @@ def weave_meta_part_revision(
 
 
 @no_type_check
+def weave_meta_part_header_date_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
+    """Weave in the header_date_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_DATE_%_LABEL_%%')
+    """
+    if mapper.get('header_date_show', None) is not None and not mapper['header_date_show']:
+        log.info('header_date_show set to false - hiding date slot in header by setting label to a single space(" ")')
+        return text.replace(VALUE_SLOT, ' ')
+    log.info('header_date_show not set - considering header_date_label ...')
+    if mapper.get('header_date_label'):
+        pub_date_label = mapper['header_date_label'].strip()
+        if not pub_date_label:
+            pub_date_label = ' '  # single space to please the backend parser
+        return text.replace(VALUE_SLOT, pub_date_label)
+    else:
+        log.warning('header_date_label value missing ... setting default(Date:)')
+        return text.replace(VALUE_SLOT, 'Date:')
+
+
+@no_type_check
 def weave_meta_part_header_date(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -584,6 +634,10 @@ def weave_meta_part_header_date(
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_DATE_%%')
     """
+    if mapper.get('header_date_show', None) is not None and not mapper['header_date_show']:
+        log.info('header_date_show set to false - hiding date slot in header by setting value to a single space(" ")')
+        return text.replace(VALUE_SLOT, ' ')
+    log.info('header_date_show not set - considering header_date ...')
     today = dti.datetime.today()
     pub_date_today = today.strftime('%d %b %Y').upper()
     if mapper.get('header_date'):
@@ -757,6 +811,33 @@ def weave_meta_part_approvals_date_and_signature_label(
 
 
 @no_type_check
+def weave_meta_part_header_issue_revision_combined_label(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
+    """Weave in the header_issue_revision_combined_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%')
+    """
+    do_show_key = 'header_issue_revision_combined_show'
+    if mapper.get(do_show_key, None) is not None and not mapper[do_show_key]:
+        log.info(
+            f'{do_show_key} set to false'
+            ' - hiding date slot in header by setting label to a single space(" ")'
+        )
+        return text.replace(VALUE_SLOT, ' ')
+    log.info(f'{do_show_key} not set - considering header_issue_revision_combined_label ...')
+    if mapper.get('header_issue_revision_combined_label'):
+        head_iss_rev_comb_label = mapper['header_issue_revision_combined_label'].strip()
+        if not head_iss_rev_comb_label:
+            head_iss_rev_comb_label = ' '  # single space to please the backend parser
+        return text.replace(VALUE_SLOT, head_iss_rev_comb_label)
+    else:
+        log.warning('header_issue_revision_combined_label value missing ... setting default(Issue, Revision:)')
+        return text.replace(VALUE_SLOT, 'Issue, Revision:')
+
+
+@no_type_check
 def weave_meta_part_header_issue_revision_combined(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -765,6 +846,14 @@ def weave_meta_part_header_issue_revision_combined(
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%')
     """
+    do_show_key = 'header_issue_revision_combined_show'
+    if mapper.get(do_show_key, None) is not None and not mapper[do_show_key]:
+        log.info(
+            f'{do_show_key} set to false'
+            ' - hiding date slot in header by setting value to a single space(" ")'
+        )
+        return text.replace(VALUE_SLOT, ' ')
+    log.info(f'{do_show_key} not set - considering header_issue_revision_combined ...')
     if mapper.get('header_issue_revision_combined'):
         return text.replace(VALUE_SLOT, mapper['header_issue_revision_combined'])
     else:
@@ -812,9 +901,11 @@ def dispatch_meta_weaver(
         '%%_PATCH_%_MAIN_%_TITLE_%%': weave_meta_part_title,
         '%%_PATCH_%_SUB_%_TITLE_%%': weave_meta_part_sub_title,
         '%%_PATCH_%_TYPE_%%': weave_meta_part_header_type,
+        '%%_PATCH_%_ID_%_LABEL_%%': weave_meta_part_header_id_label,
         '%%_PATCH_%_ID_%%': weave_meta_part_header_id,
         '%%_PATCH_%_ISSUE_%%': weave_meta_part_issue,
         '%%_PATCH_%_REVISION_%%': weave_meta_part_revision,
+        '%%_PATCH_%_DATE_%_LABEL_%%': weave_meta_part_header_date_label,
         '%%_PATCH_%_DATE_%%': weave_meta_part_header_date,
         '%%_PATCH_%_FRAME_%_NOTE_%%': weave_meta_part_footer_frame_note,
         '%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%': weave_meta_part_footer_page_number_prefix,
@@ -826,6 +917,7 @@ def dispatch_meta_weaver(
         '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': weave_meta_part_approvals_role_label,
         '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': weave_meta_part_approvals_name_label,
         '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': weave_meta_part_approvals_date_and_signature_label,
+        '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%': weave_meta_part_header_issue_revision_combined_label,
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': weave_meta_part_header_issue_revision_combined,
         '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': weave_meta_part_proprietary_information,
     }

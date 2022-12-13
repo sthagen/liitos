@@ -166,7 +166,7 @@
      \strut \\
       \multicolumn{3}{l}{\hskip -0.6em \LARGE\theMetaTitle} \hfill \strut \\%% ... tuned the hskip to align left without gap
       \hline {\footnotesize \textbf{\theMetaType}} \hfill & \hfill & \hfill \strut \\
-      \hline {\footnotesize Doc. ID:} \hfill & {\footnotesize Issue, Revision:} \hfill & {\footnotesize Date:} \hfill \strut \\
+      \hline {\footnotesize \theMetaDocIdLabel} \hfill & {\footnotesize \theMetaIssRevLabel} \hfill & {\footnotesize \theMetaDateLabel} \hfill \strut \\
       {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\
     \end{tabular*}
   }
@@ -192,7 +192,7 @@
      \strut \\
       \multicolumn{3}{l}{\hskip -0.6em \LARGE\theMetaTitle} \hfill \strut \\%% ... tuned the hskip to align left without gap
       \hline {\footnotesize \textbf{\theMetaType}} \hfill & \hfill & \hfill \strut \\
-      \hline {\footnotesize Doc. ID:} \hfill & {\footnotesize Issue, Revision:} \hfill & {\footnotesize Date:} \hfill \strut \\
+      \hline {\footnotesize \theMetaDocIdLabel} \hfill & {\footnotesize \theMetaIssRevLabel} \hfill & {\footnotesize \theMetaDateLabel} \hfill \strut \\
       {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\
     \end{tabular*}
   }

@@ -3,9 +3,11 @@
 \newcommand{\theBoxedTitle}{\textbf{\textsf{VALUE.SLOT}}}%%_PATCH_%_MAIN_%_TITLE_%%
 \newcommand{\theBoxedSubTitle}{VALUE.SLOT}%%_PATCH_%_SUB_%_TITLE_%%
 \newcommand{\theMetaType}{VALUE.SLOT}%%_PATCH_%_TYPE_%%
+\newcommand{\theMetaDocIdLabel}{VALUE.SLOT}%%_PATCH_%_ID_%_LABEL_%%
 \newcommand{\theMetaDocId}{VALUE.SLOT}%%_PATCH_%_ID_%%
 \newcommand{\theMetaIssCode}{VALUE.SLOT}%%_PATCH_%_ISSUE_%%
 \newcommand{\theMetaRevCode}{VALUE.SLOT}%%_PATCH_%_REVISION_%%
+\newcommand{\theMetaDateLabel}{VALUE.SLOT}%%_PATCH_%_DATE_%_LABEL_%%
 \newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%
 \newcommand{\theMetaPropInfo}{VALUE.SLOT}%%_PATCH_%_FRAME_%_NOTE_%%
 \newcommand{\theMetaPageNumPrefix}{VALUE.SLOT}%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%
@@ -18,6 +20,7 @@
 \newcommand{\theApprovalsNameLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%
 \newcommand{\theApprovalsDateAndSignatureLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%
 % Combinations exposed to runtime override:
+\newcommand{\theMetaIssRevLabel}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%
 \newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%
 % The blurb:
 \newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%
