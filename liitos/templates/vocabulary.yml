@@ -21,6 +21,14 @@ targets:
     eol_marker: '%%_PATCH_%_ID_%%'
     default: null
     scope: metadata.tex.in
+  header_id_label:
+    eol_marker: '%%_PATCH_%_ID_%_LABEL_%%'
+    default: 'Doc. ID:'
+    scope: metadata.tex.in
+  header_id_show:
+    eol_marker: '%%_PATCH_%_ID_%_SHOW_%%'  # dummy to support inversion
+    default: true
+    scope: metadata.tex.in
   issue:
     eol_marker: '%%_PATCH_%_ISSUE_%%'
     default: '01'
@@ -33,9 +41,29 @@ targets:
     eol_marker: '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
     default: Iss \theMetaIssCode, Rev \theMetaRevCode
     scope: metadata.tex.in
+  header_issue_revision_combined_label:
+    eol_marker: '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+    default: 'Issue, Revision:'
+    scope: metadata.tex.in
+  header_issue_revision_combined_show:
+    eol_marker: '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_SHOW_%%'  # dummy to support inversion
+    default: true
+    scope: metadata.tex.in
   header_date:
     eol_marker: '%%_PATCH_%_DATE_%%'
     default: null
+    scope: metadata.tex.in
+  header_date_label:
+    eol_marker: '%%_PATCH_%_DATE_%_LABEL%%'
+    default: 'Date:'
+    scope: metadata.tex.in
+  header_date_enable_auto:
+    eol_marker: '%%_PATCH_%_DATE_%_ENABLE_%_AUTO_%%'  # dummy to support inversion
+    default: true
+    scope: metadata.tex.in
+  header_date_show:
+    eol_marker: '%%_PATCH_%_DATE_%_SHOW_%%'  # dummy to support inversion
+    default: true
     scope: metadata.tex.in
   footer_frame_note:
     eol_marker: '%%_PATCH_%_FRAME_%_NOTE_%%'
@@ -59,23 +87,23 @@ targets:
     scope: metadata.tex.in
   change_log_author_label:
     eol_marker: '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%'
-    default: 'Author'
+    default: Author
     scope: metadata.tex.in
   change_log_description_label:
     eol_marker: '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%'
-    default: 'Description'
+    default: Description
     scope: metadata.tex.in
   approvals_role_label:
     eol_marker: '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%'
-    default: 'Approvals'
+    default: Approvals
     scope: metadata.tex.in
   approvals_name_label:
     eol_marker: '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%'
-    default: 'Name'
+    default: Name
     scope: metadata.tex.in
   approvals_date_and_signature_label:
     eol_marker: '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%'
-    default: 'Date and Signature'
+    default: Date and Signature
     scope: metadata.tex.in
   proprietary_information:
     eol_marker: '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
@@ -135,10 +163,17 @@ tokens:
   '%%_PATCH_%_HEADER_%_TITLE_%%': header_title
   '%%_PATCH_%_TYPE_%%': header_type
   '%%_PATCH_%_ID_%%': header_id
+  '%%_PATCH_%_ID_%_LABEL_%%': header_id_label
+  '%%_PATCH_%_ID_%_SHOW_%%': header_id_show  # dummy to support inversion
   '%%_PATCH_%_ISSUE_%%': issue
   '%%_PATCH_%_REVISION_%%': revision
   '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': header_issue_revision_combined
+  '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%': header_issue_revision_combined_label
+  '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_SHOW_%%': header_issue_revision_combined_show  # dummy to support inversion
   '%%_PATCH_%_DATE_%%': header_date
+  '%%_PATCH_%_DATE_%_ENABLE_%_AUTO__%%': header_date_enable_auto  # dummy to support inversion
+  '%%_PATCH_%_DATE_%_LABEL_%%': header_date_label
+  '%%_PATCH_%_DATE_%_SHOW_%%': header_date_show  # dummy to support inversion
   '%%_PATCH_%_FRAME_%_NOTE_%%': footer_frame_note
   '%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%': footer_page_number_prefix
   '%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%': change_log_issue_label
