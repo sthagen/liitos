@@ -3,7 +3,9 @@
 ## 2022.12.13
 
 * Added new example for showing no date in the header
+* Added new example for showing no date in the header and moving iss-rev field into that slot
 * Added meta data keys to show or hide the three sub header fields coined id, iss_rev, and date
+* Added workaround meta data key to disable the semantics of the header date field
 
 ## 2022.12.12
 
