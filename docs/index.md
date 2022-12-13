@@ -1,8 +1,10 @@
-# liitos
+# Liitos
 
 Splice (Finnish: liitos) contributions.
 
 [License: MIT](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE)
+
+Third party dependencies are documented in the folder [third-party](third-party/README.md).
 
 [![version](https://img.shields.io/pypi/v/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
 [![downloads](https://pepy.tech/badge/liitos/month)](https://pepy.tech/project/liitos)
