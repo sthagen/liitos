@@ -1,0 +1,7 @@
+prod_kind:
+- no-date-iss-rev-moved:
+    approvals: approvals.yml
+    bind: bind.txt
+    changes: changes.yml
+    meta: meta-no-date-iss-rev-moved.yml
+    render: true
