@@ -1,5 +1,9 @@
 # Changes
 
+## 2022.12.14
+
+* Fixed title token in vocabulary (currently used only in packages interfacing with liitos)
+
 ## 2022.12.13
 
 * Added new example for showing no date in the header
