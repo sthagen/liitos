@@ -1,5 +1,10 @@
 # Changes
 
+## 2022.12.13
+
+* Added new example for showing no date in the header
+* Added meta data keys to show or hide the three sub header fields coined id, iss_rev, and date
+
 ## 2022.12.12
 
 * Added info to error log from image parse
