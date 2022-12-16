@@ -1,5 +1,7 @@
 # Changes
 
+* Experimental html builder
+
 ## 2022.12.14
 
 * Fixed title token in vocabulary (currently used only in packages interfacing with liitos)
