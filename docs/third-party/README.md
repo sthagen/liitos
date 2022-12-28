@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json) with SHA256 checksum ([e221a585 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json.sha256 "sha256:e221a585960672a03197d2cd069cf9a6271f8b091a58022a5ea855f1d4d5caa3")).
-<!--[[[end]]] (checksum: 0f8f4c79880dc5f1f71404e29446d999)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json) with SHA256 checksum ([1eb0e680 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json.sha256 "sha256:1eb0e680cf00f8ab1262704da00d45e2aab57910183a84d89ae3765099932467")).
+<!--[[[end]]] (checksum: 30012b3547b22a78e407623da3891f65)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -27,13 +27,13 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 | [GitPython](https://github.com/gitpython-developers/GitPython) | [3.1.29](https://pypi.org/project/GitPython/3.1.29/) | BSD License                          | Sebastian Thiel, Michael Trier | GitPython is a python library used to interact with Git repositories                             |
 | [click](https://palletsprojects.com/p/click/)                  | [8.1.3](https://pypi.org/project/click/8.1.3/)       | BSD License                          | Armin Ronacher                 | Composable command line interface toolkit                                                        |
 | [future](https://python-future.org)                            | [0.18.2](https://pypi.org/project/future/0.18.2/)    | MIT License                          | Ed Schofield                   | Clean single-source support for Python 3 and 2                                                   |
-| [gitdb](https://github.com/gitpython-developers/gitdb)         | [4.0.9](https://pypi.org/project/gitdb/4.0.9/)       | BSD License                          | Sebastian Thiel                | Git Object Database                                                                              |
-| [lxml](https://lxml.de/)                                       | [4.9.1](https://pypi.org/project/lxml/4.9.1/)        | BSD License                          | lxml dev team                  | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
+| [gitdb](https://github.com/gitpython-developers/gitdb)         | [4.0.10](https://pypi.org/project/gitdb/4.0.10/)     | BSD License                          | Sebastian Thiel                | Git Object Database                                                                              |
+| [lxml](https://lxml.de/)                                       | [4.9.2](https://pypi.org/project/lxml/4.9.2/)        | BSD License                          | lxml dev team                  | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
 | [orjson](https://github.com/ijl/orjson)                        | [3.8.3](https://pypi.org/project/orjson/3.8.3/)      | Apache Software License; MIT License | ijl <ijl@mailbox.org>          | Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy                   |
 | [psutil](https://github.com/giampaolo/psutil)                  | [5.9.4](https://pypi.org/project/psutil/5.9.4/)      | BSD License                          | Giampaolo Rodola               | Cross-platform lib for process and system monitoring in Python.                                  |
 | [py-cpuinfo](https://github.com/workhorsy/py-cpuinfo)          | [9.0.0](https://pypi.org/project/py-cpuinfo/9.0.0/)  | MIT License                          | Matthew Brennan Jones          | Get CPU info with pure Python                                                                    |
 | [smmap](https://github.com/gitpython-developers/smmap)         | [5.0.0](https://pypi.org/project/smmap/5.0.0/)       | BSD License                          | Sebastian Thiel                | A pure Python implementation of a sliding window memory map manager                              |
-<!--[[[end]]] (checksum: 3d02f06151e3afa56550273f68c08816)-->
+<!--[[[end]]] (checksum: 206ee7d7a7680c83446b0e343296418e)-->
 
 ## Dependency Tree(s)
 
@@ -51,12 +51,12 @@ Base graphviz file in dot format: [Trees of the direct dependencies](package-dep
 ````console
 foran==2022.12.7
   - GitPython [required: >=3.1.29, installed: 3.1.29]
-    - gitdb [required: >=4.0.1,<5, installed: 4.0.9]
+    - gitdb [required: >=4.0.1,<5, installed: 4.0.10]
       - smmap [required: >=3.0.1,<6, installed: 5.0.0]
   - typer [required: >=0.7.0, installed: 0.7.0]
     - click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
 taksonomia==2022.12.7
-  - lxml [required: >=4.9.1, installed: 4.9.1]
+  - lxml [required: >=4.9.1, installed: 4.9.2]
   - orjson [required: >=3.8.3, installed: 3.8.3]
   - psutil [required: >=5.9.4, installed: 5.9.4]
   - py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
@@ -64,4 +64,4 @@ taksonomia==2022.12.7
 treelib==1.6.1
   - future [required: Any, installed: 0.18.2]
 ````
-<!--[[[end]]] (checksum: 0820c298355dc89c92ea9c4d8bffad69)-->
+<!--[[[end]]] (checksum: 49dc31fc9b83f441210af65527f70b4c)-->
