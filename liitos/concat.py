@@ -44,8 +44,8 @@ INCLUDE_SLOT = '\\include{'
 ![Alt Text Sting Red](other/images/red.png "Caption Text Sting Red")
 """
 IMG_LINE_STARTSWITH = '!['
-MD_IMG_PATTERN = re.compile(r"^!\[(?P<cap>[^(]*)\]\((?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
-MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r"^(?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$")
+MD_IMG_PATTERN = re.compile(r'^!\[(?P<cap>[^(]*)\]\((?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$')
+MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r'^(?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$')
 
 
 @no_type_check
@@ -159,7 +159,8 @@ def process_meta(aspects: str) -> gat.Meta | int:
         base_meta_path = DOC_BASE / metadata['document']['import']
         if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
             log.error(
-                f'metadata declares import of base data from ({base_meta_path.name}) but failed to find non-empty base file at {base_meta_path}'
+                f'metadata declares import of base data from ({base_meta_path.name})'
+                f' but failed to find non-empty base file at {base_meta_path}'
             )
             return 1
         with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
@@ -250,7 +251,7 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
         rest = parts['rest']
         if orb in alt or crb in alt:
             log.warning(f'- MAYBE-MD-IMG_LINE::ALT-TRUNCATED-PARTIAL-MATCH <<{text_line.rstrip()}>>')
-            log.warning(f"  + parsed as ({cap=}, {src=}, {alt=}, {rest=}")
+            log.warning(f'  + parsed as ({cap=}, {src=}, {alt=}, {rest=}')
 
         return cap, src, alt, rest
 
@@ -270,7 +271,7 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
     rest = parts['rest']
     if orb in alt or crb in alt:
         log.warning(f'- MAYBE-MD-IMG_LINE::ALT-TRUNCATED-FULL-MATCH <<{text_line.rstrip()}>>')
-        log.warning(f"  + parsed as ({cap=}, {src=}, {alt=}, {rest=}")
+        log.warning(f'  + parsed as ({cap=}, {src=}, {alt=}, {rest=}')
 
     return cap, src, alt, rest
 
@@ -385,7 +386,7 @@ def concatenate(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='concat'
     )
     log.info(f'prelude teleported processor into the document root at ({os.getcwd()}/)')
-    rel_concat_folder_path = pathlib.Path("render/pdf/")
+    rel_concat_folder_path = pathlib.Path('render/pdf/')
     rel_concat_folder_path.mkdir(parents=True, exist_ok=True)
     os.chdir(rel_concat_folder_path)
     log.info(f'concatenate (this processor) teleported into the render/pdf location ({os.getcwd()}/)')
@@ -664,7 +665,7 @@ def concatenate(
         log.info(f'dependencies for the {len(insert_regions)} document parts:')
         for key, regions in insert_regions.items():
             num_in = len(regions)
-            dashes = "-" * num_in
+            dashes = '-' * num_in
             incl_disp = f'( {num_in} include{"" if num_in == 1 else "s"} )'
             indicator = '(no includes)' if not regions else f'<{dashes + incl_disp + dashes}'
             log.info(f'- part {key} {indicator}')

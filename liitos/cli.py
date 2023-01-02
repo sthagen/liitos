@@ -7,18 +7,13 @@ import sys
 import typer
 
 import liitos.approvals as sig
-import liitos.captions as cap
 import liitos.changes as chg
 import liitos.concat as cat
 import liitos.eject as eje
-import liitos.figures as fig
 import liitos.gather as gat
-import liitos.labels as lab
 import liitos.meta as met
-import liitos.patch as pat
 import liitos.render as ren
-import liitos.tables as tab
-from liitos import APP_ALIAS, APP_NAME, DEBUG, QUIET, VERBOSE, __version__ as APP_VERSION, log
+from liitos import APP_NAME, QUIET, __version__ as APP_VERSION, log
 
 app = typer.Typer(
     add_completion=False,

@@ -1,7 +1,7 @@
 """Apply all pairs in patch module on document."""
 from collections.abc import Iterable
 
-from liitos import ENCODING, log
+from liitos import log
 
 TAB_START_TOK = r'\begin{longtable}[]{@{}'
 TOP_RULE = r'\toprule()'

@@ -407,7 +407,7 @@ def weave_driver_list_of_figures(
             lof = '%'
             log.warning(
                 f"list_of_figures ({mapper['list_of_figures']}) not in ('', '%')"
-                f" - resorting to default ({lof}) i.e. commenting out the list of figures"
+                f' - resorting to default ({lof}) i.e. commenting out the list of figures'
             )
     else:
         log.warning('list_of_figures value missing ... setting default (comment out the lof per %)')
@@ -432,7 +432,7 @@ def weave_driver_list_of_tables(
             lof = '%'
             log.warning(
                 f"list_of_tables ({mapper['list_of_tables']}) not in ('', '%')"
-                f" - resorting to default ({lof}) i.e. commenting out the list of tables"
+                f' - resorting to default ({lof}) i.e. commenting out the list of tables'
             )
     else:
         log.warning('list_of_tables value missing ... setting default (comment out the lot per %)')
@@ -959,7 +959,7 @@ def weave(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='meta'
     )
     log.info(f'prelude teleported processor into the document root at ({os.getcwd()}/)')
-    rel_concat_folder_path = pathlib.Path("render/pdf/")
+    rel_concat_folder_path = pathlib.Path('render/pdf/')
     rel_concat_folder_path.mkdir(parents=True, exist_ok=True)
     os.chdir(rel_concat_folder_path)
     log.info(f'meta (this processor) teleported into the render/pdf location ({os.getcwd()}/)')

@@ -1,13 +1,6 @@
 """Eject templates and configurations."""
-import json
-import os
 import pathlib
-import shutil
-import sys
 
-import yaml
-
-import liitos.gather as gat
 import liitos.template_loader as template
 from liitos import ENCODING, log
 
@@ -21,6 +14,7 @@ THINGS = {
     'changes-yaml': (CHANGES_YAML := 'templates/changes.yml'),
     'meta-base-yaml': (META_YAML := 'templates/meta.yml'),
     'meta-patch-yaml': (META_PATCH_YAML := 'templates/meta-patch.yml'),
+    'mkdocs-yaml': (MKDOCS_PATCH_YAML := 'templates/mkdocs.yml.in'),
     'vocabulary-yaml': (VOCABULARY_YAML := 'templates/vocabulary.yml'),
 }
 

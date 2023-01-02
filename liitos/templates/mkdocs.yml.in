@@ -1,14 +1,14 @@
-site_name: NAME
-site_description: "TITLE."
+site_name: SITE_NAME
+site_description: SITE_DESCRIPTION
 
-docs_dir: SOURCE
-site_dir: site/FUNCTION
+docs_dir: SOURCE_PATH
+site_dir: DIST_PATH
 
 theme:
   name: 'material'
-  logo: assets/logo.png
-  favicon: images/favicon.svg
-  font: false
+  logo: THEME_LOGO_REL_PATH
+  favicon: THEME_FAVICON_REL_PATH
+  font: THEME_FONT
   features:
     - navigation.expand
     - toc.integrate
@@ -32,36 +32,30 @@ theme:
         name: Switch to light mode
 
 extra:
-  generator: false
-  homepage: https://example.com/doc/root/
+  generator: EXTRA_GENERATOR_SHOW
+  homepage: EXTRA_HOMEPAGE_URL
   social:
-    - icon: fontawesome/brands/bitbucket
-      link: https://vcs.example.com/orga/repo/
+    - icon: EXTRA_SOCIAL_ICON_REL_PATH
+      link: EXTRA_SOCIAL_LINK_URL
 
 extra_css:
-  - stylesheets/extra.css
-copyright: Copyright &copy; 2022 Organization - All rights reserved.
+  - EXTRA_CSS_STYLESHEET_PATH
+copyright: COPYRIGHT_TEXT
 
-repo_name: orga/repo
-repo_url: https://vcs.example.com/orga/repo/
-edit_uri: ""
+repo_name: REPO_NAME
+repo_url: REPO_URL
+edit_uri: EDIT_URI
 
 plugins:
   - search
   - mkdocstrings
   - exclude:
       glob:
-        - attic/*
-        - render/*
-        - "*.tex"
-        - "*.pdf"
-        - "*.json"
+        - PLUGINS_EXCLUDE_GLOB_LIST
   - enumerate-headings
 
 nav:
-  - Document:
-    - Web: document.md
-    - PDF: /path/to/function/
+  - NAV_TREE
 
 markdown_extensions:
   - abbr
@@ -73,14 +67,13 @@ markdown_extensions:
   - md_in_html
   - tables
   - toc:
-      permalink: '∞'
+      permalink: MARKDOWN_EXTENSIONS_TOC_PERMALINK_TEXT
   - mkautodoc
   - pymdownx.highlight
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-
+          format: MARKDOWN_EXTENSIONS_PYMDOWNX_X_MERMAID_FORMAT
 
 extra_javascript:

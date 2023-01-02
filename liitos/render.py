@@ -163,7 +163,7 @@ def der(
                 patch_pair_count = len(patches)
                 if not patch_pair_count:
                     need_patching = False
-                    log.warning(f'- ignoring empty patch spec')
+                    log.warning('- ignoring empty patch spec')
                 else:
                     log.info(
                         f'- loaded {patch_pair_count} patch pair{"" if patch_pair_count == 1 else "s"}'
@@ -234,9 +234,9 @@ def der(
             log.info(f'found render instruction with value ({aspect_map["render"]})')
 
         if do_render is None or do_render:
-            log.info(f'we will render ...')
+            log.info('we will render ...')
         else:
-            log.warning(f'we will not render ...')
+            log.warning('we will not render ...')
             return 0
 
         log.info(LOG_SEPARATOR)
@@ -375,7 +375,7 @@ def der(
         lines_caps_patch = cap.weave(lines)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_caps_patch))
-        log.info(f'diff of the (captions-below-tables) filter result:')
+        log.info('diff of the (captions-below-tables) filter result:')
         log.info(LOG_SEPARATOR)
         for line in unified_diff(lines, lines_caps_patch):
             log.info(line)
@@ -389,7 +389,7 @@ def der(
         lines_inject_stem_label = lab.inject(lines_caps_patch)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_inject_stem_label))
-        log.info(f'diff of the (inject-stem-derived-labels) filter result:')
+        log.info('diff of the (inject-stem-derived-labels) filter result:')
         log.info(LOG_SEPARATOR)
         for line in unified_diff(lines_caps_patch, lines_inject_stem_label):
             log.info(line)
@@ -403,7 +403,7 @@ def der(
         lines_scale_figures = fig.scale(lines_inject_stem_label)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_scale_figures))
-        log.info(f'diff of the (inject-scale-figures) filter result:')
+        log.info('diff of the (inject-scale-figures) filter result:')
         log.info(LOG_SEPARATOR)
         for line in unified_diff(lines_inject_stem_label, lines_scale_figures):
             log.info(line)
@@ -418,7 +418,7 @@ def der(
             lines_user_patches = pat.apply(patches, lines_scale_figures)
             with open('document.tex', 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_user_patches))
-            log.info(f'diff of the (user-patches) filter result:')
+            log.info('diff of the (user-patches) filter result:')
             log.info(LOG_SEPARATOR)
             for line in unified_diff(lines_scale_figures, lines_user_patches):
                 log.info(line)

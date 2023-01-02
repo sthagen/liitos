@@ -1,13 +1,11 @@
-import logging
 import os
 import pathlib
 
-import pytest
 from typer.testing import CliRunner
 
 import liitos
 import liitos.gather as gather
-from liitos.cli import app, render
+from liitos.cli import app
 
 runner = CliRunner()
 
@@ -31,15 +29,15 @@ OLE_WD = pathlib.Path.cwd()
 
 
 def setup():
-    print(pathlib.Path.cwd(), "before")
+    print(pathlib.Path.cwd(), 'before')
     global OLE_WD
     OLE_WD = pathlib.Path.cwd()
-    print(pathlib.Path.cwd(), "during")
+    print(pathlib.Path.cwd(), 'during')
 
 
 def teardown():
     os.chdir(OLE_WD)
-    print(pathlib.Path.cwd(), "after")
+    print(pathlib.Path.cwd(), 'after')
 
 
 def test_version_ok():

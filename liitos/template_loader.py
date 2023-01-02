@@ -2,7 +2,7 @@
 import pathlib
 import pkgutil
 
-from liitos import ENCODING, log
+from liitos import ENCODING
 
 RESOURCES = (
     'templates/approvals.yml',
@@ -12,6 +12,7 @@ RESOURCES = (
     'templates/meta.yml',
     'templates/meta-patch.yml',
     'templates/metadata.tex.in',
+    'templates/mkdocs.yml.in',
     'templates/publisher.tex.in',
     'templates/setup.tex.in',
     'templates/vocabulary.yml',

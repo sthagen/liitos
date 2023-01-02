@@ -1,7 +1,5 @@
 """Gather the structure and discover the content."""
-import argparse
 import json
-import logging
 import os
 import pathlib
 from typing import Dict, List, Set, Tuple, Union
