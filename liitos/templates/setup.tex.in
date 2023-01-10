@@ -13,6 +13,11 @@
   overfullrule=false,
 ]{scrartcl}
 \usepackage{bookmark}
+\bookmarksetup{
+  open,
+  openlevel=2,
+  numbered,
+}
 \usepackage{microtype}
 \usepackage{ragged2e}
 \RaggedRight
