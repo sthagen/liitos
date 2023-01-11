@@ -2,11 +2,11 @@
 
 ## 2023.1.11
 
-* Fixed templates packaging (https://todo.sr.ht/~sthagen/liitos/2)
+* Fixed templates packaging (<https://todo.sr.ht/~sthagen/liitos/2>)
 
 ## 2023.1.10
 
-* Added initial implementation of PDF document structure to include numbering to implement https://todo.sr.ht/~sthagen/liitos/1 
+* Added initial implementation of PDF document structure to include numbering to implement <https://todo.sr.ht/~sthagen/liitos/1> 
 
 ## 2022.12.14
 
