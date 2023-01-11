@@ -11,6 +11,7 @@
   footsepline=true,
   draft=false,
   overfullrule=false,
+  egregdoesnotlikesansseriftitles,
 ]{scrartcl}
 \usepackage{bookmark}
 \bookmarksetup{
