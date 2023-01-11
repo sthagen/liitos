@@ -26,10 +26,10 @@ document:
     list_of_tables: '%'  # empty string to enable lot
     font_path: /opt/fonts/
     font_suffix: .otf
-    bold_font: ITCFranklinGothicStd-Demi
-    italic_font: ITCFranklinGothicStd-BookIt
-    bold_italic_font: ITCFranklinGothicStd-DemiIt
-    main_font: ITCFranklinGothicStd-Book
+    bold_font: ITCFranklinGothicStd-Demi  # Vollkorn-SemiBold
+    italic_font: ITCFranklinGothicStd-BookIt  # Vollkorn-Italic
+    bold_italic_font: ITCFranklinGothicStd-DemiIt  # Vollkorn-SemiBoldItalic
+    main_font: ITCFranklinGothicStd-Book  # Vollkorn-Regular
     fixed_font_package: sourcecodepro
     code_fontsize: \scriptsize
     chosen_logo: /opt/logo/liitos-logo.png
