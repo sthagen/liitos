@@ -1,5 +1,9 @@
 # Changes
 
+## 2023.1.12
+
+* Implemented use of selected fonts in all elements (<https://todo.sr.ht/~sthagen/liitos/3>)
+
 ## 2023.1.11
 
 * Fixed templates packaging (<https://todo.sr.ht/~sthagen/liitos/2>)
