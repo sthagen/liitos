@@ -1,5 +1,10 @@
 # Changes
 
+## 2023.1.14
+
+* Added total run duration to render command logging (<https://todo.sr.ht/~sthagen/liitos/4>)
+* Fixed logging of locally changed repository files (<https://todo.sr.ht/~sthagen/liitos/5>)
+
 ## 2023.1.12
 
 * Implemented use of selected fonts in all elements (<https://todo.sr.ht/~sthagen/liitos/3>)
