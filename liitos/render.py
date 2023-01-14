@@ -184,8 +184,9 @@ def der(
     log.info(LOG_SEPARATOR)
     log.info('Assessing the local version control status (compared to upstream) ...')
     log.info(LOG_SEPARATOR)
-    for line in vcs_probe():
-        log.info(line)
+    for lines in vcs_probe():
+        for line in lines.split('\n'):
+            log.info(line)
     log.info(LOG_SEPARATOR)
 
     if not STRUCTURE_PATH.is_file() or not STRUCTURE_PATH.stat().st_size:
