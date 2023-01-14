@@ -1,4 +1,5 @@
 """Command line interface for splice (Finnish liitos) contributions."""
+import datetime as dti
 import logging
 import os
 import pathlib
@@ -13,7 +14,7 @@ import liitos.eject as eje
 import liitos.gather as gat
 import liitos.meta as met
 import liitos.render as ren
-from liitos import APP_NAME, QUIET, __version__ as APP_VERSION, log
+from liitos import APP_NAME, QUIET, TS_FORMAT_PAYLOADS, __version__ as APP_VERSION, log
 
 app = typer.Typer(
     add_completion=False,
@@ -223,6 +224,9 @@ def render(  # noqa
         log.error(message)
         return 2
 
+    start_time = dti.datetime.now(tz=dti.timezone.utc)
+    start_ts = start_time.strftime(TS_FORMAT_PAYLOADS)
+    log.info(f'Start timestamp ({start_ts})')
     code = cat.concatenate(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     if code:
         return code
@@ -251,9 +255,13 @@ def render(  # noqa
     log.info(f'before chg.weave(): {os.getcwd()} set doc ({doc})')
     os.chdir(idem)
     log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
-    return sys.exit(
-        ren.der(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
-    )
+    code = ren.der(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    end_time = dti.datetime.now(tz=dti.timezone.utc)
+    end_ts = end_time.strftime(TS_FORMAT_PAYLOADS)
+    duration_secs = (end_time - start_time).total_seconds()
+    log.info(f'End timestamp ({end_ts})')
+    log.info(f'Rendered {target} document for {facet} at {doc} in {duration_secs} secs')
+    return code
 
 
 @app.command('eject')
