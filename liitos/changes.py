@@ -13,11 +13,13 @@ if not PUBLISHER_TEMPLATE:
 
 PUBLISHER_PATH = pathlib.Path('render/pdf/publisher.tex')
 TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
-ROW_TEMPLATE = r'issue & 00 & author & summary \\'
+DEFAULT_REVISION = '00'
+ROW_TEMPLATE = r'issue & revision & author & summary \\'
 GLUE = '\n\\hline\n'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
-COLUMNS_EXPECTED = ['issue', 'author', 'date', 'summary']
+COLUMNS_EXPECTED = sorted(['author', 'date', 'issue', 'revision', 'summary'])
+COLUMNS_MINIMAL = sorted(['author', 'issue', 'summary'])
 
 
 def weave(
@@ -47,29 +49,43 @@ def weave(
     rows = []
     if channel == JSON_CHANNEL:
         for slot, change in enumerate(changes[0]['changes'], start=1):
-            if sorted(change) != sorted(columns_expected):
+            if not set(COLUMNS_MINIMAL).issubset(set(change)):
                 log.error('unexpected column model!')
                 log.error(f'-  expected: ({columns_expected})')
+                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
                 log.error(f'- but found: ({change}) for entry #{slot}')
                 return 1
 
         for change in changes[0]['changes']:
             issue, author, summary = change['issue'], change['author'], change['summary']  # type: ignore
-            rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
+            revision = change.get('revision', DEFAULT_REVISION)  # type: ignore
+            rows.append(
+                ROW_TEMPLATE.replace('issue', issue)
+                .replace('revision', revision)
+                .replace('author', author)
+                .replace('summary', summary)
+            )
     else:
         for slot, change in enumerate(changes[0]['changes'], start=1):
             model = sorted(change.keys())  # type: ignore
-            if model != sorted(COLUMNS_EXPECTED):
+            if not set(COLUMNS_MINIMAL).issubset(set(model)):
                 log.error('unexpected column model!')
-                log.error(f'-  expected: ({COLUMNS_EXPECTED})')
+                log.error(f'-  expected: ({columns_expected})')
+                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
                 log.error(f'- but found: ({model}) in slot {slot}')
                 return 1
 
         for change in changes[0]['changes']:
             author = change['author']  # type: ignore
             issue = change['issue']  # type: ignore
+            revision = change.get('revision', DEFAULT_REVISION)  # type: ignore
             summary = change['summary']  # type: ignore
-            rows.append(ROW_TEMPLATE.replace('issue', issue).replace('author', author).replace('summary', summary))
+            rows.append(
+                ROW_TEMPLATE.replace('issue', issue)
+                .replace('revision', revision)
+                .replace('author', author)
+                .replace('summary', summary)
+            )
 
     publisher_template = template.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in publisher_template.split('\n')]

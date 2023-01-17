@@ -2,4 +2,5 @@ changes:
 - author: An Author
   date: PUBLICATIONDATE
   issue: '01'
+  revision: '00'
   summary: Initial Issue
