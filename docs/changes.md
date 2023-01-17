@@ -1,5 +1,10 @@
 # Changes
 
+## 2023.1.17
+
+* Added parameter to adjust the vertical placement of the approvals table (https://todo.sr.ht/~sthagen/liitos/7)
+* Enhanced changes implementation to allow a revision key (<https://todo.sr.ht/~sthagen/liitos/10>)
+
 ## 2023.1.14
 
 * Added total run duration to render command logging (<https://todo.sr.ht/~sthagen/liitos/4>)
@@ -15,7 +20,7 @@
 
 ## 2023.1.10
 
-* Added initial implementation of PDF document structure to include numbering to implement <https://todo.sr.ht/~sthagen/liitos/1> 
+* Added initial implementation of PDF document structure to include numbering to implement (<https://todo.sr.ht/~sthagen/liitos/1>)
 
 ## 2022.12.14
 
