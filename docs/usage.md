@@ -837,10 +837,15 @@ The changes files may of course also differ per facet (in our case often the aud
 ```console
 ❯ cat deep/changes.yml
 changes:
+- author: Another Author
+  date: 01 DEC 2022
+  issue: '01'
+  summary: Initial Issue
 - author: An Author
   date: PUBLICATIONDATE
   issue: '01'
-  summary: Initial Issue
+  revision: '01'
+  summary: Fixed some nit
 ```
 
 Again the keys in spelling and case are significant.
@@ -908,8 +913,8 @@ document:
     header_type: Engineering Document
     header_id: null
     issue: '01'
-    revision: '00'
-    header_date: 01 DEC 2022
+    revision: '01'
+    header_date: 17 JAN 2023
     header_issue_revision_combined: null
     footer_frame_note: VERY CONSEQUENTIAL
     footer_page_number_prefix: Page
@@ -918,6 +923,7 @@ document:
     change_log_date_label: Date
     change_log_author_label: Author
     change_log_description_label: Description
+    approvals_adjustable_vertical_space: '0.5em'
     approvals_role_label: Approvals
     approvals_name_label: Name
     approvals_date_and_signature_label: Date and Signature
@@ -988,6 +994,7 @@ document:
     change_log_date_label: Date
     change_log_author_label: Author
     change_log_description_label: Description
+    approvals_adjustable_vertical_space: '2.5em'
     approvals_role_label: Approvals
     approvals_name_label: Name
     approvals_date_and_signature_label: Date and Signature
