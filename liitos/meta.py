@@ -46,6 +46,7 @@ WEAVE_DEFAULTS = {
     'fixed_font_package': 'sourcecodepro',
     'code_fontsize': r'\scriptsize',
     'chosen_logo': '/opt/logo/liitos-logo.png',
+    'adjustable_vertical_space': '2.5em',
 }
 ACROSS = {
     'eff_font_folder': '',
@@ -774,6 +775,25 @@ def weave_meta_part_change_log_description_label(
 
 
 @no_type_check
+def weave_meta_part_approvals_adjustable_vertical_space(
+    mapper: dict[str, str | int | bool | None],
+    text: str,
+) -> str:
+    """Weave in the approvals_adjustable_vertical_space from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%')
+    """
+    if mapper.get('approvals_adjustable_vertical_space'):
+        return text.replace(VALUE_SLOT, mapper['approvals_adjustable_vertical_space'])
+    else:
+        log.warning(
+            'approvals_adjustable_vertical_space value missing ...'
+            f' setting default ({WEAVE_DEFAULTS["adjustable_vertical_space"]})'
+        )
+        return text.replace(VALUE_SLOT, WEAVE_DEFAULTS['adjustable_vertical_space'])
+
+
+@no_type_check
 def weave_meta_part_approvals_role_label(
     mapper: dict[str, str | int | bool | None],
     text: str,
@@ -919,6 +939,7 @@ def dispatch_meta_weaver(
         '%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%': weave_meta_part_change_log_date_label,
         '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': weave_meta_part_change_log_author_label,
         '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': weave_meta_part_change_log_description_label,
+        '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': weave_meta_part_approvals_adjustable_vertical_space,
         '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': weave_meta_part_approvals_role_label,
         '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': weave_meta_part_approvals_name_label,
         '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': weave_meta_part_approvals_date_and_signature_label,

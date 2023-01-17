@@ -10,7 +10,7 @@
 }
 \end{flushleft}
 
-\vskip 2.5em
+\vskip \theApprovalsAdjustableVerticalSpace%default for single line titles is 2.5em
 \vskip \ExtraPushdown
 \begin{large}
 \addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules

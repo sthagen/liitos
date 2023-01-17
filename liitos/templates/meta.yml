@@ -27,6 +27,7 @@ document:
     approvals_role_label: Approvals
     approvals_name_label: Name
     approvals_date_and_signature_label: Date and Signature
+    approvals_adjustable_vertical_space: '2.5em'
     proprietary_information: /opt/legal/proprietary-information.txt
     toc_level: 2
     list_of_figures: '%'  # empty string to enable lof

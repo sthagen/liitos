@@ -93,6 +93,10 @@ targets:
     eol_marker: '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%'
     default: Description
     scope: metadata.tex.in
+  approvals_adjustable_vertical_space:
+    eol_marker: '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%'
+    default: '2.5em'
+    scope: metadata.tex.in
   approvals_role_label:
     eol_marker: '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%'
     default: Approvals
@@ -181,6 +185,7 @@ tokens:
   '%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%': change_log_date_label
   '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': change_log_author_label
   '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': change_log_description_label
+  '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': approvals_adjustable_vertical_space
   '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': approvals_role_label
   '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': approvals_name_label
   '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': approvals_date_and_signature_label

@@ -24,3 +24,14 @@
 \newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%
 % The blurb:
 \newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%
+% Vertical adjustable space between subtitle and top of approvals table
+\newcommand{\theApprovalsAdjustableVerticalSpace}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%
+% PDF Metadata:
+%\hypersetup{%
+%  pdfinfo = {%
+%    Author={VALUE.SLOT},%%_PATCH_%_PDF_%_META_%_AUTHOR_%%
+%    Title={VALUE.SLOT},%%_PATCH_%_PDF_%_META_%_TITLE_%%
+%    Subject={VALUE.SLOT},%%_PATCH_%_PDF_%_META_%_SUBJECT_%%
+%    Keywords={VALUE.SLOT},%%_PATCH_%_PDF_%_META_%_KEYWORDS_%%
+%    Producer={VALUE.SLOT},%%_PATCH_%_PDF_%_META_%_PRODUCER_%%
+%    Creator={VALUE.SLOT}}}%%_PATCH_%_PDF_%_META_%_CREATOR_%%
