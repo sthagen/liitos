@@ -2,7 +2,7 @@
 
 ## 2023.1.17
 
-* Added parameter to adjust the vertical placement of the approvals table (https://todo.sr.ht/~sthagen/liitos/7)
+* Added parameter to adjust the vertical placement of the approvals table (<https://todo.sr.ht/~sthagen/liitos/7>)
 * Enhanced changes implementation to allow a revision key (<https://todo.sr.ht/~sthagen/liitos/10>)
 
 ## 2023.1.14
