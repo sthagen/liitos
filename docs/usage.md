@@ -241,6 +241,9 @@ Invalid asset link of facet for target document key:
 
 ## Render
 
+Note: Since version 2023.1.21 an optional `-l,--label` parameter allows to provide a call string for 
+labeling the resulting pdf file. Example: `... --label 'label-pdf --enforce'`.
+
 ```console
 ❯ liitos render example/deep -t prod_kind -f deep
 # ... - - - 8< - - - ...
