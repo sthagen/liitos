@@ -1,6 +1,6 @@
 {
   "errors": [],
-  "generated_at": "2023-01-17T21:19:40Z",
+  "generated_at": "2023-01-21T21:42:32Z",
   "metrics": {
     "_totals": {
       "CONFIDENCE.HIGH": 0,
@@ -11,9 +11,9 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 3126,
+      "loc": 3145,
       "nosec": 0,
-      "skipped_tests": 10
+      "skipped_tests": 11
     },
     "liitos/__init__.py": {
       "CONFIDENCE.HIGH": 0,
@@ -89,7 +89,7 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 250,
+      "loc": 258,
       "nosec": 0,
       "skipped_tests": 0
     },
@@ -219,9 +219,9 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 446,
+      "loc": 457,
       "nosec": 0,
-      "skipped_tests": 7
+      "skipped_tests": 8
     },
     "liitos/tables.py": {
       "CONFIDENCE.HIGH": 0,
