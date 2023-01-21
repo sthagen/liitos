@@ -1,5 +1,9 @@
 # Changes
 
+## 2023.1.21
+
+* Implemented an optional call string interface to pdf labeling (<https://todo.sr.ht/~sthagen/liitos/6>)
+
 ## 2023.1.17
 
 * Added parameter to adjust the vertical placement of the approvals table (<https://todo.sr.ht/~sthagen/liitos/7>)
