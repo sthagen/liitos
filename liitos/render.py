@@ -2,10 +2,12 @@
 import datetime as dti
 import difflib
 import hashlib
+import io
 import os
 import pathlib
 import shutil
 import subprocess  # nosec B404
+import sys
 import time
 from typing import Any, Callable, no_type_check
 
@@ -123,7 +125,7 @@ def unified_diff(left: list[str], right: list[str], left_label: str = 'before', 
 
 @no_type_check
 def der(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
+    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
@@ -467,6 +469,16 @@ def der(
             log.error(f'latex-to-pdf process 3/3 ({latex_to_pdf_command}) was terminated by signal {-return_code}')
         else:
             log.info(f'latex-to-pdf process 3/3  ({latex_to_pdf_command}) returned {return_code}')
+
+        if str(options.get('label', '')).strip():
+            labeling_call = str(options['label']).strip().split()
+            log.info(LOG_SEPARATOR)
+            log.info(f'Labeling the resulting pdf file per ({options["label"]})')
+            proc = subprocess.Popen(labeling_call, stdout=subprocess.PIPE)  # nosec B603
+            for line in io.TextIOWrapper(proc.stdout, encoding='utf-8'):
+                print(line.rstrip())
+            sys.stdout.flush()
+            log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
         log.info('Moving stuff around (result phase) ...')

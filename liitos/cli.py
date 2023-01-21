@@ -64,6 +64,12 @@ OutputPath = typer.Option(
     '--output-path',
     help='Path to output unambiguous content to - like when ejecting a template',
 )
+LabelCall = typer.Option(
+    '',
+    '-l',
+    '--label',
+    help='optional label call to execute',
+)
 
 
 @app.callback(invoke_without_command=True)
@@ -85,8 +91,8 @@ def callback(
 
 
 def _verify_call_vector(
-    doc_root: str, doc_root_pos: str, verbose: bool, strict: bool
-) -> tuple[int, str, str, dict[str, bool]]:
+    doc_root: str, doc_root_pos: str, verbose: bool, strict: bool, label: str = ''
+) -> tuple[int, str, str, dict[str, bool | str]]:
     """DRY"""
     doc = doc_root.strip()
     if not doc and doc_root_pos:
@@ -104,10 +110,11 @@ def _verify_call_vector(
         print(f'requested tree root at ({doc}) does not exist', file=sys.stderr)
         return 2, f'requested tree root at ({doc}) does not exist', '', {}
 
-    options = {
+    options: dict[str, bool | str] = {
         'quiet': QUIET and not verbose and not strict,
         'strict': strict,
         'verbose': verbose,
+        'label': label,
     }
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
@@ -213,13 +220,14 @@ def render(  # noqa
     structure: str = StructureName,
     target: str = TargetName,
     facet: str = FacetName,
+    label: str = LabelCall,
     verbose: bool = Verbosity,
     strict: bool = Strictness,
 ) -> int:
     """
     Render the markdown tree for facet of target within render/pdf below document root.
     """
-    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
+    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict, label=label)
     if code:
         log.error(message)
         return 2

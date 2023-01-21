@@ -369,7 +369,7 @@ def collect_assets(collector: list[str]) -> None:
 
 @no_type_check
 def concatenate(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
+    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
 ) -> int:
     """Later alligator."""
     separator = '- ' * 80
