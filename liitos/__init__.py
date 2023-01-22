@@ -15,6 +15,7 @@ __version_info__ = tuple(
 APP_NAME = 'Splice (Finnish liitos) contributions.'
 APP_ALIAS = 'liitos'
 APP_ENV = 'LIITOS'
+APP_VERSION = __version__
 DEBUG = bool(os.getenv(f'{APP_ENV}_DEBUG', ''))
 VERBOSE = bool(os.getenv(f'{APP_ENV}_VERBOSE', ''))
 QUIET = False
@@ -33,6 +34,9 @@ TS_FORMAT_LOG = '%Y-%m-%dT%H:%M:%S'
 TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'
 
 __all__: List[str] = [
+    'APP_ALIAS',
+    'APP_ENV',
+    'APP_VERSION',
     'ENCODING',
     'log',
 ]
