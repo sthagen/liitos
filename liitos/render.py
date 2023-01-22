@@ -18,6 +18,7 @@ from taksonomia.taksonomia import Taxonomy  # type: ignore
 
 import liitos.captions as cap
 import liitos.concat as con
+import liitos.description_lists as dsc
 import liitos.figures as fig
 import liitos.gather as gat
 import liitos.labels as lab
@@ -412,18 +413,32 @@ def der(
             log.info(line)
         log.info(LOG_SEPARATOR)
 
+        log.info(LOG_SEPARATOR)
+        log.info('add options to descriptions (definition lists) ...')
+        doc_before_descriptions_patch = 'document-before-description-options-patch.tex.txt'
+        with open(doc_before_descriptions_patch, 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(lines_scale_figures))
+        lines_decsription_options = dsc.options(lines_scale_figures)
+        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+            handle.write('\n'.join(lines_decsription_options))
+        log.info('diff of the (inject-description-options) filter result:')
+        log.info(LOG_SEPARATOR)
+        for line in unified_diff(lines_scale_figures, lines_decsription_options):
+            log.info(line)
+        log.info(LOG_SEPARATOR)
+
         if need_patching:
             log.info(LOG_SEPARATOR)
             log.info('apply user patches ...')
             doc_before_user_patch = 'document-before-user-patch.tex.txt'
             with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_scale_figures))
-            lines_user_patches = pat.apply(patches, lines_scale_figures)
+                handle.write('\n'.join(lines_decsription_options))
+            lines_user_patches = pat.apply(patches, lines_decsription_options)
             with open('document.tex', 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_user_patches))
             log.info('diff of the (user-patches) filter result:')
             log.info(LOG_SEPARATOR)
-            for line in unified_diff(lines_scale_figures, lines_user_patches):
+            for line in unified_diff(lines_decsription_options, lines_user_patches):
                 log.info(line)
             log.info(LOG_SEPARATOR)
         else:
