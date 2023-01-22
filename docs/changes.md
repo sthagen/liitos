@@ -1,5 +1,9 @@
 # Changes
 
+## 2023.1.22
+
+* Implemented an option command handling to style descriptions (definition lists) (<https://todo.sr.ht/~sthagen/liitos/8>)
+
 ## 2023.1.21
 
 * Implemented an optional call string interface to pdf labeling (<https://todo.sr.ht/~sthagen/liitos/6>)
