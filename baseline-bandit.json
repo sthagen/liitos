@@ -1,6 +1,6 @@
 {
   "errors": [],
-  "generated_at": "2023-01-21T21:42:32Z",
+  "generated_at": "2023-01-22T20:36:26Z",
   "metrics": {
     "_totals": {
       "CONFIDENCE.HIGH": 0,
@@ -11,7 +11,7 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 3145,
+      "loc": 3195,
       "nosec": 0,
       "skipped_tests": 11
     },
@@ -24,7 +24,7 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 50,
+      "loc": 54,
       "nosec": 0,
       "skipped_tests": 0
     },
@@ -116,6 +116,19 @@
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
       "loc": 53,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "liitos/description_lists.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 32,
       "nosec": 0,
       "skipped_tests": 0
     },
@@ -219,7 +232,7 @@
       "SEVERITY.LOW": 0,
       "SEVERITY.MEDIUM": 0,
       "SEVERITY.UNDEFINED": 0,
-      "loc": 457,
+      "loc": 471,
       "nosec": 0,
       "skipped_tests": 8
     },
