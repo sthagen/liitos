@@ -242,7 +242,8 @@ Invalid asset link of facet for target document key:
 ## Render
 
 Note: Since version 2023.1.21 an optional `-l,--label` parameter allows to provide a call string for 
-labeling the resulting pdf file. Example: `... --label 'label-pdf --enforce'`.
+labeling the resulting pdf file. Example: `... --label 'etiketti --enforce'`
+(that could be using the [`etiketti` script from the package with the same name](https://pypi.org/project/etiketti/)).
 
 ```console
 ❯ liitos render example/deep -t prod_kind -f deep
@@ -1060,3 +1061,75 @@ The example in the provided folder inside the source repository:
 Demonstrates how to ensure that no naive scaling distorting the aspect of images occurs (setting the width but
 not the height in the markdown source can result in pandoc generating a rectangular scaling that over scales the height
 in case of portrait mode layouts).
+
+### Adding Options to Descriptions
+
+The definition lists are mapped to description environments in LaTeX for PDF generation.
+
+In case the description texts of the items shall share a common indent of say `6em`,
+then one can inject the following command into the markdown preceding the definition list it shall apply to
+2(taken from `example/deep/1.md`):
+
+```markdown
+## References
+
+\option[style=multiline,leftmargin=6em]
+
+\[CODE-A]
+:    A book, a manuscript, and all that, 2021, City, Country, URL=<https://example.com/code-a>
+
+\[CODE-C]
+:    A Cook, a manuscript, and all that, 2022, City, Country, URL=<https://example.com/code-c>
+
+\[CODE-BIT-LONG]
+:    A bit, a manuscript, and all that, 2023, City, Country, URL=<https://example.com/code-bit-long>
+
+```
+
+This maps to the following LaTeX code:
+
+```latex
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+
+\begin{description}[style=multiline,leftmargin=6em]
+\tightlist
+\item[{[}CODE-A{]}]
+A book, a manuscript, and all that, 2021, City, Country,
+URL=\url{https://example.com/code-a}
+\item[{[}CODE-C{]}]
+A Cook, a manuscript, and all that, 2022, City, Country,
+URL=\url{https://example.com/code-c}
+\item[{[}CODE-BIT-LONG{]}]
+A bit, a manuscript, and all that, 2023, City, Country,
+URL=\url{https://example.com/code-bit-long}
+\end{description}
+```
+
+A typical indication in the log can be (again working on the `example/deep` document):
+
+```console
+# ... - - - 8< - - -  ...
+2023-01-22T20:28:36.525269+00:00 INFO [LIITOS]: add options to descriptions (definition lists) ...
+2023-01-22T20:28:36.525409+00:00 INFO [LIITOS]: trigger an option mod for the next description environment at line #169|\option[style=multiline,leftmargin=6em]
+2023-01-22T20:28:36.525427+00:00 INFO [LIITOS]: - found the option target start at line #171|\begin{description}
+2023-01-22T20:28:36.527933+00:00 INFO [LIITOS]: diff of the (inject-description-options) filter result:
+2023-01-22T20:28:36.527953+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2023-01-22T20:28:36.528136+00:00 INFO [LIITOS]: --- before
+2023-01-22T20:28:36.528154+00:00 INFO [LIITOS]: +++ after
+2023-01-22T20:28:36.528171+00:00 INFO [LIITOS]: @@ -166,9 +166,8 @@
+2023-01-22T20:28:36.528186+00:00 INFO [LIITOS]:  \hypertarget{references}{%
+2023-01-22T20:28:36.528201+00:00 INFO [LIITOS]:  \subsection{References}\label{references}}
+2023-01-22T20:28:36.528216+00:00 INFO [LIITOS]:
+2023-01-22T20:28:36.528230+00:00 INFO [LIITOS]: -\option[style=multiline,leftmargin=6em]
+2023-01-22T20:28:36.528245+00:00 INFO [LIITOS]: -
+2023-01-22T20:28:36.528259+00:00 INFO [LIITOS]: -\begin{description}
+2023-01-22T20:28:36.528274+00:00 INFO [LIITOS]: +
+2023-01-22T20:28:36.528289+00:00 INFO [LIITOS]: +\begin{description}[style=multiline,leftmargin=6em]
+2023-01-22T20:28:36.528303+00:00 INFO [LIITOS]:  \tightlist
+2023-01-22T20:28:36.528318+00:00 INFO [LIITOS]:  \item[{[}CODE-A{]}]
+2023-01-22T20:28:36.528332+00:00 INFO [LIITOS]:  A book, a manuscript, and all that, 2021, City, Country,
+2023-01-22T20:28:36.528350+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# ... - - - 8< - - -  ...
+```
