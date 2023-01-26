@@ -87,6 +87,19 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
+%dehyphenate
+\usepackage[american=nohyphenation]{hyphsubst}
+% ... woodpecker
+%\tolerance=1
+%\emergencystretch=\maxdimen
+%\hyphenpenalty=10000
+%\hbadness=10000
+\tolerance=9000
+\emergencystretch=0pt
+\hyphenpenalty=10000
+\hbadness=10000
+\frenchspacing
+% - experimental-above -
 % internationalization
 \usepackage[main=american]{babel}
 % remove language-specific shorthands:
