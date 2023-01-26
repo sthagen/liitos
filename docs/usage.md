@@ -1133,3 +1133,8 @@ A typical indication in the log can be (again working on the `example/deep` docu
 2023-01-22T20:28:36.528350+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # ... - - - 8< - - -  ...
 ```
+
+Note: When reference texts are too log to fit a line some words may be hyphenated and (esp. when dashes found
+inside such terms) broken across lines. To avoid that, you can break the line in the markdown source before that term
+and append `\hfill \break` at the end of that line. Replacing say `LONG-TERM` with `\mbox{LONG-TERM}` also shields
+against linebreaks cutting the term, but may cause "badness" (the term may well stick out the page to the right).
