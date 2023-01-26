@@ -1,5 +1,10 @@
 # Changes
 
+## 2023.1.25
+
+* Added experimental suppression of hyphenation
+* Implemented an option command for opinionated table patching
+
 ## 2023.1.22
 
 * Implemented an option command handling to style descriptions (definition lists) (<https://todo.sr.ht/~sthagen/liitos/8>)
