@@ -23,6 +23,7 @@ import liitos.figures as fig
 import liitos.gather as gat
 import liitos.labels as lab
 import liitos.patch as pat
+import liitos.tables as tab
 from liitos import ENCODING, log
 
 DOC_BASE = pathlib.Path('..', '..')
@@ -427,18 +428,35 @@ def der(
             log.info(line)
         log.info(LOG_SEPARATOR)
 
+        if options.get('patch_tables', False):
+            log.info(LOG_SEPARATOR)
+            log.info('patching tables EXPERIMENTAL (table-shape) ...')
+            doc_before_table_shape_patch = 'document-before-table-shape-patch.tex.txt'
+            with open(doc_before_table_shape_patch, 'wt', encoding=ENCODING) as handle:
+                handle.write('\n'.join(lines_decsription_options))
+            lines_table_shape_options = tab.patch(lines_decsription_options)
+            with open('document.tex', 'wt', encoding=ENCODING) as handle:
+                handle.write('\n'.join(lines_table_shape_options))
+            log.info('diff of the (changed-table-shape) filter result:')
+            log.info(LOG_SEPARATOR)
+            for line in unified_diff(lines_decsription_options, lines_table_shape_options):
+                log.info(line)
+            log.info(LOG_SEPARATOR)
+        else:
+            lines_table_shape_options = lines_decsription_options  # HACK A DID ACK
+
         if need_patching:
             log.info(LOG_SEPARATOR)
             log.info('apply user patches ...')
             doc_before_user_patch = 'document-before-user-patch.tex.txt'
             with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_decsription_options))
-            lines_user_patches = pat.apply(patches, lines_decsription_options)
+                handle.write('\n'.join(lines_table_shape_options))
+            lines_user_patches = pat.apply(patches, lines_table_shape_options)
             with open('document.tex', 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_user_patches))
             log.info('diff of the (user-patches) filter result:')
             log.info(LOG_SEPARATOR)
-            for line in unified_diff(lines_decsription_options, lines_user_patches):
+            for line in unified_diff(lines_table_shape_options, lines_user_patches):
                 log.info(line)
             log.info(LOG_SEPARATOR)
         else:

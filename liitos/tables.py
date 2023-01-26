@@ -143,12 +143,12 @@ def patch(incoming: Iterable[str]) -> list[str]:
             continue
         if n <= tb['end_head']:
             continue
-        if n < tb['bottom_rule']:
+        if n < tb.get('bottom_rule', 0):
             out.append(line)
             if n in tb['end_data_row']:  # type: ignore
                 out.append(NEW_RULE)
             continue
-        if tb['bottom_rule'] <= n < tb['amend']:
+        if tb.get('bottom_rule', 0) <= n < tb['amend']:
             continue
         if n == tb['amend']:
             out.append(TAB_NEW_END.replace('ANNOTATION', line))

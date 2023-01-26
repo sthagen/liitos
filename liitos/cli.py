@@ -70,6 +70,12 @@ LabelCall = typer.Option(
     '--label',
     help='optional label call to execute',
 )
+PatchTables = typer.Option(
+    False,
+    '-p',
+    '--patch-tables',
+    help='Patch tables EXPERIMENTAL (default is False)',
+)
 
 
 @app.callback(invoke_without_command=True)
@@ -91,7 +97,12 @@ def callback(
 
 
 def _verify_call_vector(
-    doc_root: str, doc_root_pos: str, verbose: bool, strict: bool, label: str = ''
+    doc_root: str,
+    doc_root_pos: str,
+    verbose: bool,
+    strict: bool,
+    label: str = '',
+    patch_tables: bool = False,
 ) -> tuple[int, str, str, dict[str, bool | str]]:
     """DRY"""
     doc = doc_root.strip()
@@ -115,6 +126,7 @@ def _verify_call_vector(
         'strict': strict,
         'verbose': verbose,
         'label': label,
+        'patch_tables': patch_tables,
     }
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
@@ -223,11 +235,14 @@ def render(  # noqa
     label: str = LabelCall,
     verbose: bool = Verbosity,
     strict: bool = Strictness,
+    patch_tables: bool = PatchTables,
 ) -> int:
     """
     Render the markdown tree for facet of target within render/pdf below document root.
     """
-    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict, label=label)
+    code, message, doc, options = _verify_call_vector(
+        doc_root, doc_root_pos, verbose, strict, label=label, patch_tables=patch_tables
+    )
     if code:
         log.error(message)
         return 2
@@ -264,6 +279,7 @@ def render(  # noqa
     os.chdir(idem)
     log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
     code = ren.der(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+
     end_time = dti.datetime.now(tz=dti.timezone.utc)
     end_ts = end_time.strftime(TS_FORMAT_PAYLOADS)
     duration_secs = (end_time - start_time).total_seconds()
