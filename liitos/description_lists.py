@@ -6,7 +6,7 @@ NO_OPTION: str = ''
 
 
 def options(incoming: Iterable[str]) -> list[str]:
-    """Later alligator. \option[style=multiline,leftmargin=6em]"""
+    """Later alligator. \\option[style=multiline,leftmargin=6em]"""
     outgoing = []
     modus = 'copy'
     opt = NO_OPTION
