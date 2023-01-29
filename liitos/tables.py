@@ -1,7 +1,109 @@
 """Apply all pairs in patch module on document."""
+
+_ = r"""
+\columns=,10\%,30\%,50\%
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0735}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1471}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3824}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3971}}@{}}
+\caption{A caption for a patchable table
+\label{table:patchable-table}}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Key
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Summary
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parent Requirement
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Means of Compliance (MOC)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Key
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Summary
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parent Requirement
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Means of Compliance (MOC)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+A-1 & Be good & I told you so! & Observation \\
+A-2 & Be nice & I asked you to! & Trust \\
+A-3 & Be good & I told you once! & Observation \\
+A-4 & Be nice & I asked you once! & Trust \\
+A-5 & Be good & I told you twice! & Observation \\
+A-6 & Be nice & I asked you twice! & Trust \\
+A-7 & Be good & I told you three times! & Observation \\
+A-8 & Be nice & I asked you three times! & Trust \\
+\end{longtable}
+"""
+
+# after captions patch:
+__ = r"""
+\columns=,10\%,30\%,50\%
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0735}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1471}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3824}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3971}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Key
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Summary
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parent Requirement
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Means of Compliance (MOC)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Key
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Summary
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parent Requirement
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Means of Compliance (MOC)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+A-1 & Be good & I told you so! & Observation \\
+A-2 & Be nice & I asked you to! & Trust \\
+A-3 & Be good & I told you once! & Observation \\
+A-4 & Be nice & I asked you once! & Trust \\
+A-5 & Be good & I told you twice! & Observation \\
+A-6 & Be nice & I asked you twice! & Trust \\
+A-7 & Be good & I told you three times! & Observation \\
+A-8 & Be nice & I asked you three times! & Trust \\
+\rowcolor{white}
+\caption{A caption for a patchable table
+\label{table:patchable-table}}\tabularnewline
+\end{longtable}
+"""
+
 from collections.abc import Iterable
 
 from liitos import log
+
+# Width lines for header:
+FUT_LSPLIT_ONCE_FOR_PREFIX_VAL_COMMA_RIGHT = '}}'
+FUT_LSPLIT_ONCE_FOR_PREFIX_COMMA_VAL = r'\real{'
+# then concat PREFIX + r'\real{' + str(column_width_new) + '}}' + RIGHT
 
 TAB_START_TOK = r'\begin{longtable}[]{'  # '@{}'
 TOP_RULE = r'\toprule()'
