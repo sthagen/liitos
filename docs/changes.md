@@ -1,5 +1,9 @@
 # Changes
 
+## 2023.1.29
+
+* Documented how to remove the bold style from description list terms in usage docs
+
 ## 2023.1.25
 
 * Added experimental suppression of hyphenation
