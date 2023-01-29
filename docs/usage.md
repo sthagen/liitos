@@ -1067,23 +1067,24 @@ in case of portrait mode layouts).
 The definition lists are mapped to description environments in LaTeX for PDF generation.
 
 In case the description texts of the items shall share a common indent of say `6em`,
-then one can inject the following command into the markdown preceding the definition list it shall apply to
-2(taken from `example/deep/1.md`):
+then one can inject the following command into the markdown preceding the definition list
+it shall apply to (taken from `example/deep/1.md`) - also adding `\normalfont` before the bibliographic code
+or in general "term" removes the bold face styling:
 
 ```markdown
 ## References
 
 \option[style=multiline,leftmargin=6em]
 
-\[CODE-A]
-:    A book, a manuscript, and all that, 2021, City, Country, URL=<https://example.com/code-a>
+\normalfont \[CODE-A]
+:    Term has no bold style attached, A book, a manuscript, and all that, 2021, City, Country, URL=<https://example.com/code-a>
 
 \[CODE-C]
-:    A Cook, a manuscript, and all that, 2022, City, Country, URL=<https://example.com/code-c>
+:    A Cook, a manuscript, and all that, 2022, City, Country, \mbox{hy-phe-nation-test-please-do-not-find-this-lterm-broken}
 
 \[CODE-BIT-LONG]
-:    A bit, a manuscript, and all that, 2023, City, Country, URL=<https://example.com/code-bit-long>
-
+:    A bit, a manuscript, and all that, 2023, City, Country,\hfill \break
+hy-phe-nation-test-please-do-not-find-this-lterm-broken
 ```
 
 This maps to the following LaTeX code:
@@ -1095,15 +1096,15 @@ This maps to the following LaTeX code:
 
 \begin{description}[style=multiline,leftmargin=6em]
 \tightlist
-\item[{[}CODE-A{]}]
-A book, a manuscript, and all that, 2021, City, Country,
-URL=\url{https://example.com/code-a}
+\item[\normalfont {[}CODE-A{]}]
+Term has no bold style attached, A book, a manuscript, and all that,
+2021, City, Country, URL=\url{https://example.com/code-a}
 \item[{[}CODE-C{]}]
 A Cook, a manuscript, and all that, 2022, City, Country,
-URL=\url{https://example.com/code-c}
+\mbox{hy-phe-nation-test-please-do-not-find-this-lterm-broken}
 \item[{[}CODE-BIT-LONG{]}]
-A bit, a manuscript, and all that, 2023, City, Country,
-URL=\url{https://example.com/code-bit-long}
+A bit, a manuscript, and all that, 2023, City, Country,\hfill \break
+hy-phe-nation-test-please-do-not-find-this-lterm-broken
 \end{description}
 ```
 
