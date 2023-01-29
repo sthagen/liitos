@@ -4,6 +4,7 @@
 
 ### 2023.1.29
 
+* Added processing of columns command (no consideration when patching tables yet)
 * Documented how to remove the bold style from description list terms in usage docs
 
 ### 2023.1.25
