@@ -3,7 +3,7 @@ from collections.abc import Iterable
 
 from liitos import log
 
-TAB_START_TOK = r'\begin{longtable}[]{@{}'
+TAB_START_TOK = r'\begin{longtable}[]{'  # '@{}'
 TOP_RULE = r'\toprule()'
 MID_RULE = r'\midrule()'
 END_HEAD = r'\endhead'
@@ -53,16 +53,46 @@ TAB_NEW_END = r"""\end{longtable}
 ANNOTATION
 \end{footnotesize}"""
 
+COMMA = ','
+
+
+def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[float]]:
+    """Parse the \\columns=,0.2,0.7 command."""
+    if text_line.startswith(r'\columns='):
+        log.info(f'trigger a columns mod for the next table environment at line #{slot + 1}|{text_line}')
+        try:
+            cols_csv = text_line.split('=', 1)[1].strip()  # r'\columns    =    , 20\%,70\%'  --> r', 20\%,70\%'
+            cols = [v.strip() for v in cols_csv.split(COMMA)]
+            widths = [float(v.replace(r'\%', '')) / 100 if r'\%' in v else (float(v) if v else 0) for v in cols]
+            rest = 1 - sum(widths)
+            widths = [v if v else rest for v in widths]
+            log.info(f' -> parsed columns mod as | {" | ".join(str(round(v, 2)) for v in widths)} |')
+            return True, '', widths
+        except Exception as err:
+            log.error(f'failed to parse columns values from {text_line.strip()} with err: {err}')
+            return False, text_line, []
+    else:
+        return False, text_line, []
+
 
 def patch(incoming: Iterable[str]) -> list[str]:
-    """Later alligator."""
+    """Later alligator. \\columns=,0.2,0.7 as mandatory trigger"""
     table_section, head, annotation = False, False, False
     table_ranges = []
     guess_slot = 0
     table_range = {}
+    has_column = False
+    widths: list[float] = []
+    comment_outs = []
     for n, text in enumerate(incoming):
 
         if not table_section:
+            if not has_column:
+                has_column, text_line, widths = parse_columns_command(n, text)
+                if has_column:
+                    comment_outs.append(n)
+            if not has_column:
+                continue
             if not text.startswith(TAB_START_TOK):
                 continue
             table_range['start'] = n
@@ -124,7 +154,12 @@ def patch(incoming: Iterable[str]) -> list[str]:
 
     out = []
     next_slot = 0
+    punch_me = set(comment_outs)
     for n, line in enumerate(incoming):
+        if n in punch_me:
+            out.append(f'%CONSIDERED_{line}')
+            continue
+
         if next_slot < len(on_off_slots):
             trigger_on, trigger_off = on_off_slots[next_slot]
             tb = table_ranges[next_slot]

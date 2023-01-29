@@ -419,12 +419,12 @@ def der(
         doc_before_descriptions_patch = 'document-before-description-options-patch.tex.txt'
         with open(doc_before_descriptions_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_scale_figures))
-        lines_decsription_options = dsc.options(lines_scale_figures)
+        lines_description_options = dsc.options(lines_scale_figures)
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_decsription_options))
+            handle.write('\n'.join(lines_description_options))
         log.info('diff of the (inject-description-options) filter result:')
         log.info(LOG_SEPARATOR)
-        for line in unified_diff(lines_scale_figures, lines_decsription_options):
+        for line in unified_diff(lines_scale_figures, lines_description_options):
             log.info(line)
         log.info(LOG_SEPARATOR)
 
@@ -433,17 +433,23 @@ def der(
             log.info('patching tables EXPERIMENTAL (table-shape) ...')
             doc_before_table_shape_patch = 'document-before-table-shape-patch.tex.txt'
             with open(doc_before_table_shape_patch, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_decsription_options))
-            lines_table_shape_options = tab.patch(lines_decsription_options)
+                handle.write('\n'.join(lines_description_options))
+            lines_table_shape_options = tab.patch(lines_description_options)
             with open('document.tex', 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_table_shape_options))
             log.info('diff of the (changed-table-shape) filter result:')
             log.info(LOG_SEPARATOR)
-            for line in unified_diff(lines_decsription_options, lines_table_shape_options):
-                log.info(line)
+            for line in unified_diff(lines_description_options, lines_table_shape_options):
+                for fine in line.split('\n'):
+                    log.info(fine)
             log.info(LOG_SEPARATOR)
         else:
-            lines_table_shape_options = lines_decsription_options  # HACK A DID ACK
+            log.info(LOG_SEPARATOR)
+            log.info('not patching tables but commenting out (ignoring) any columns command (table-shape) ...')
+            lines_table_shape_options = [
+                f'%IGNORED_{v}' if v.startswith(r'\columns=') else v for v in lines_description_options
+            ]
+            log.info(LOG_SEPARATOR)
 
         if need_patching:
             log.info(LOG_SEPARATOR)
