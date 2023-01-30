@@ -143,47 +143,6 @@ from collections.abc import Iterable
 
 from liitos import log
 
-# ---- begin of LBP skeleton / shape ---
-LBP_STARTSWITH_TAB_ENV_BEGIN = r'\begin{longtable}[]{'
-LBP_REAL_INNER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\real{(?P<cwval>[0-9.]+)}}\s*$')
-LBP_REAL_OUTER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\real{(?P<cwval>[0-9.]+)}}@{}}\s*$')
-# Width lines for header:
-FUT_LSPLIT_ONCE_FOR_PREFIX_VAL_COMMA_RIGHT = '}}'
-FUT_LSPLIT_ONCE_FOR_PREFIX_COMMA_VAL = r'\real{'
-# then concat PREFIX + r'\real{' + str(column_width_new) + '}}' + RIGHT
-
-LBP_TOP_RULE_CONTEXT_STARTSWITH = r'\toprule\noalign{}'
-LPB_START_COLUMN_LABEL_STARTSWITH = r'\begin{minipage}['
-LBP_SEP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} & \begin{minipage}['
-LBP_STOP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} \\'
-
-LBP_MID_RULE_CONTEXT_STARTSWITH = r'\midrule\noalign{}'
-
-LBP_END_FIRST_HEAD_STARTSWITH = r'\endfirsthead'
-
-# LBP_TOP_RULE_CONTEXT_STARTSWITH = r'\toprule\noalign{}'
-# LPB_START_COLUMN_LABEL_STARTSWITH = r'\begin{minipage}['
-# LBP_SEP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} & \begin{minipage}['
-# LBP_STOP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} \\'
-
-# LBP_MID_RULE_CONTEXT_STARTSWITH = r'\midrule\noalign{}'
-
-LBP_END_ALL_HEAD_STARTSWITH = r'\endhead'
-
-LBP_BOTTOM_RULE_CONTEXT_STARTSWITH = r'\bottomrule\noalign{}'
-
-LBP_END_LAST_FOOT_STARTSWITH = r'\endlastfoot'
-
-# ... data lines - we want inject of r'\hline' following every data line (not text line)
-# -> that is, inject after lines ending with r'\\'
-
-LBP_END_OF_DATA_STARTSWITH = r'\rowcolor{white}'
-LBP_START_CAP_STARTSWITH = r'\caption{'
-LBP_STOP_CAP_ENDSWITH = r'\tabularnewline'
-LBP_STARTSWITH_TAB_ENV_END = r'\end{longtable}'
-
-# ---- end of LBP skeleton / shape ---
-
 TAB_START_TOK = r'\begin{longtable}[]{'  # '@{}'
 TOP_RULE = r'\toprule()'
 MID_RULE = r'\midrule()'
@@ -239,10 +198,50 @@ COMMA = ','
 
 class Table:
     """Some adhoc structure to encapsulate tje source and target table."""
+    # ---- begin of LBP skeleton / shape ---
+    LBP_STARTSWITH_TAB_ENV_BEGIN = r'\begin{longtable}[]{'
+    LBP_REAL_INNER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\real{(?P<cwval>[0-9.]+)}}\s*$')
+    LBP_REAL_OUTER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\real{(?P<cwval>[0-9.]+)}}@{}}\s*$')
+    # Width lines for header:
+    FUT_LSPLIT_ONCE_FOR_PREFIX_VAL_COMMA_RIGHT = '}}'
+    FUT_LSPLIT_ONCE_FOR_PREFIX_COMMA_VAL = r'\real{'
+    # then concat PREFIX + r'\real{' + str(column_width_new) + '}}' + RIGHT
+
+    LBP_TOP_RULE_CONTEXT_STARTSWITH = r'\toprule\noalign{}'
+    LPB_START_COLUMN_LABEL_STARTSWITH = r'\begin{minipage}['
+    LBP_SEP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} & \begin{minipage}['
+    LBP_STOP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} \\'
+
+    LBP_MID_RULE_CONTEXT_STARTSWITH = r'\midrule\noalign{}'
+
+    LBP_END_FIRST_HEAD_STARTSWITH = r'\endfirsthead'
+
+    # LBP_TOP_RULE_CONTEXT_STARTSWITH = r'\toprule\noalign{}'
+    # LPB_START_COLUMN_LABEL_STARTSWITH = r'\begin{minipage}['
+    # LBP_SEP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} & \begin{minipage}['
+    # LBP_STOP_COLUMN_LABEL_STARTSWITH = r'\end{minipage} \\'
+
+    # LBP_MID_RULE_CONTEXT_STARTSWITH = r'\midrule\noalign{}'
+
+    LBP_END_ALL_HEAD_STARTSWITH = r'\endhead'
+
+    LBP_BOTTOM_RULE_CONTEXT_STARTSWITH = r'\bottomrule\noalign{}'
+
+    LBP_END_LAST_FOOT_STARTSWITH = r'\endlastfoot'
+
+    # ... data lines - we want inject of r'\hline' following every data line (not text line)
+    # -> that is, inject after lines ending with r'\\'
+
+    LBP_END_OF_DATA_STARTSWITH = r'\rowcolor{white}'
+    LBP_START_CAP_STARTSWITH = r'\caption{'
+    LBP_STOP_CAP_ENDSWITH = r'\tabularnewline'
+    LBP_STARTSWITH_TAB_ENV_END = r'\end{longtable}'
+
+    # ---- end of LBP skeleton / shape ---
     def __init__(self, anchor: int, test_lines: Iterable[str]):
         """Initialize the table from source text lines anchored at anchor."""
         pass
-    
+
 
 def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[float]]:
     """Parse the \\columns=,0.2,0.7 command."""
