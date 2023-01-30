@@ -237,6 +237,13 @@ ANNOTATION
 COMMA = ','
 
 
+class Table:
+    """Some adhoc structure to encapsulate tje source and target table."""
+    def __init__(self, anchor: int, test_lines: Iterable[str]):
+        """Initialize the table from source text lines anchored at anchor."""
+        pass
+    
+
 def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[float]]:
     """Parse the \\columns=,0.2,0.7 command."""
     if text_line.startswith(r'\columns='):
