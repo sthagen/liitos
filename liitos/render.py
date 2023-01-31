@@ -339,7 +339,7 @@ def der(
             log.info('post-action queue (from reference renaming) is empty - nothing to move')
         log.info(LOG_SEPARATOR)
 
-        fmt_spec = 'markdown+link_attributes'
+        fmt_spec = 'markdown+header_attributes+link_attributes+strikeout'
         in_doc = 'document.md'
         out_doc = 'document.tex'
         markdown_to_latex_command = [
@@ -356,7 +356,7 @@ def der(
             'mermaid-filter',
         ]
         log.info(LOG_SEPARATOR)
-        log.info('pandoc -f markdown+link_attributes -t latex document.md -o document.tex --filter mermaid-filter ...')
+        log.info(f'executing ({" ".join(markdown_to_latex_command)}) ...')
         process = subprocess.Popen(  # nosec B603
             markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         )
@@ -383,7 +383,8 @@ def der(
         log.info('diff of the (captions-below-tables) filter result:')
         log.info(LOG_SEPARATOR)
         for line in unified_diff(lines, lines_caps_patch):
-            log.info(line)
+            for fine in line.split('\n'):
+                log.info(fine)
         log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
@@ -397,7 +398,8 @@ def der(
         log.info('diff of the (inject-stem-derived-labels) filter result:')
         log.info(LOG_SEPARATOR)
         for line in unified_diff(lines_caps_patch, lines_inject_stem_label):
-            log.info(line)
+            for fine in line.split('\n'):
+                log.info(fine)
         log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
@@ -411,7 +413,8 @@ def der(
         log.info('diff of the (inject-scale-figures) filter result:')
         log.info(LOG_SEPARATOR)
         for line in unified_diff(lines_inject_stem_label, lines_scale_figures):
-            log.info(line)
+            for fine in line.split('\n'):
+                log.info(fine)
         log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
@@ -425,7 +428,8 @@ def der(
         log.info('diff of the (inject-description-options) filter result:')
         log.info(LOG_SEPARATOR)
         for line in unified_diff(lines_scale_figures, lines_description_options):
-            log.info(line)
+            for fine in line.split('\n'):
+                log.info(fine)
         log.info(LOG_SEPARATOR)
 
         if options.get('patch_tables', False):
@@ -463,7 +467,8 @@ def der(
             log.info('diff of the (user-patches) filter result:')
             log.info(LOG_SEPARATOR)
             for line in unified_diff(lines_table_shape_options, lines_user_patches):
-                log.info(line)
+                for fine in line.split('\n'):
+                    log.info(fine)
             log.info(LOG_SEPARATOR)
         else:
             log.info(LOG_SEPARATOR)

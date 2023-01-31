@@ -83,6 +83,8 @@
 \makeatletter
 \def\fps@figure{h!tbp}
 \makeatother
+% enable strikeout
+\usepackage{soul}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}

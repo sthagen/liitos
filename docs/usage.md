@@ -1062,6 +1062,47 @@ Demonstrates how to ensure that no naive scaling distorting the aspect of images
 not the height in the markdown source can result in pandoc generating a rectangular scaling that over scales the height
 in case of portrait mode layouts).
 
+### Exempt Headers from Table of Contents
+
+You can inject attributes per the usual markdown attribute syntax to exempt headers from being listed in the
+table of contents.
+
+Example:
+
+```markdown
+## Many Of These Would Flood the TOC {.unlisted}
+
+Text is not important (here).
+```
+
+### Exempt Headers from Numbering
+
+You can provide no or your own numbering (typically for appendices) per the usual markdown attribute syntax
+which is also additive (you can combine with unlisted attributes). The shortcut `{-}` for unnumbered is preferred
+for non-english documents.
+
+Example:
+
+```markdown
+# Appendices  {.unnumbered}
+
+## A Special Concerns {-}
+
+### A.1 Some Over-engineered Sectioning to hide from TOC {.unnumbered .unlisted}
+
+This text is not important (here).
+```
+
+Note: You can also use the user patch stage for e.g. unlisting (and implicitly unnumbering) all level 2 headings that
+start with some text):
+
+```console
+❯ cat example/patch.yml
+---
+- - '\subsection{Do '
+  - '\subsection*{Do '
+```
+
 ### Adding Options to Descriptions
 
 The definition lists are mapped to description environments in LaTeX for PDF generation.

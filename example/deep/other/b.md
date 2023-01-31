@@ -1,5 +1,7 @@
 # B
 
+## Do Not List in TOC {.unlisted}
+
 Yes.
 
 ![Caption Text Red](images/red.png "Alt Text Red")
@@ -21,4 +23,12 @@ Enumerated list:
 1. wun
 1. two
 1. three
+
+# Appendices {.unnumbered}
+
+## A Special Concerns {-}
+
+### A.1 Some Over-engineered Sectioning to hide from TOC {.unnumbered .unlisted}
+
+This text is not important (here).
 
