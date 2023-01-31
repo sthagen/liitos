@@ -2,6 +2,12 @@
 
 ## 2023
 
+### 2023.1.31
+
+* Added the header filtering and documented the use
+* Replaced a print statement with a log call in patch module
+* Wrapped all diff log loops in another newline split-level to ensure consistent prefixing
+
 ### 2023.1.29
 
 * Added processing of columns command (no consideration when patching tables yet)
