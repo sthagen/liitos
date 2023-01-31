@@ -1,5 +1,5 @@
 PyYAML==6.0
 foran==2022.12.7
-taksonomia==2023.1.10
+taksonomia==2023.1.24
 treelib==1.6.1
 typer==0.7.0
