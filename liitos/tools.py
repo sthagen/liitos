@@ -132,3 +132,13 @@ def log_unified_diff(left: list[str], right: list[str], left_label: str = 'befor
         for fine in line.split('\n'):
             log.info(fine)
     log.info(LOG_SEPARATOR)
+
+
+@no_type_check
+def ensure_separate_log_lines(sourcer: Callable, *args: list[object] | None):
+    """Wrapping idiom breaking up any strings containing newlines."""
+    log.info(LOG_SEPARATOR)
+    for line in sourcer(*args) if args else sourcer():
+        for fine in line.split('\n'):
+            log.info(fine)
+    log.info(LOG_SEPARATOR)

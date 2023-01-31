@@ -96,11 +96,7 @@ def der(
 
     log.info(LOG_SEPARATOR)
     log.info('Assessing the local version control status (compared to upstream) ...')
-    log.info(LOG_SEPARATOR)
-    for lines in too.vcs_probe():
-        for line in lines.split('\n'):
-            log.info(line)
-    log.info(LOG_SEPARATOR)
+    too.ensure_separate_log_lines(too.vcs_probe)
 
     if not STRUCTURE_PATH.is_file() or not STRUCTURE_PATH.stat().st_size:
         log.error(f'render failed to find non-empty structure file at {STRUCTURE_PATH}')
@@ -290,11 +286,7 @@ def der(
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_caps_patch))
         log.info('diff of the (captions-below-tables) filter result:')
-        log.info(LOG_SEPARATOR)
-        for line in too.unified_diff(lines, lines_caps_patch):
-            for fine in line.split('\n'):
-                log.info(fine)
-        log.info(LOG_SEPARATOR)
+        too.log_unified_diff(lines, lines_caps_patch)
 
         log.info(LOG_SEPARATOR)
         log.info('inject stem (derived from file name) labels ...')
@@ -305,11 +297,7 @@ def der(
         with open('document.tex', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_inject_stem_label))
         log.info('diff of the (inject-stem-derived-labels) filter result:')
-        log.info(LOG_SEPARATOR)
-        for line in too.unified_diff(lines_caps_patch, lines_inject_stem_label):
-            for fine in line.split('\n'):
-                log.info(fine)
-        log.info(LOG_SEPARATOR)
+        too.log_unified_diff(lines_caps_patch, lines_inject_stem_label)
 
         log.info(LOG_SEPARATOR)
         log.info('scale figures ...')
