@@ -48,8 +48,8 @@
     {
         "key": "taksonomia",
         "package_name": "taksonomia",
-        "installed_version": "2023.1.10",
-        "required_version": "2023.1.10",
+        "installed_version": "2023.1.24",
+        "required_version": "2023.1.24",
         "dependencies": [
             {
                 "key": "lxml",
