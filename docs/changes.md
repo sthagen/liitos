@@ -5,6 +5,7 @@
 ### 2023.1.31
 
 * Added the header filtering and documented the use
+* Enabled strike-out (a.k.a. strike-through) markup per the usual double tilde bracketing
 * Replaced a print statement with a log call in patch module
 * Wrapped all diff log loops in another newline split-level to ensure consistent prefixing
 
