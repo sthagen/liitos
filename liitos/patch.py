@@ -13,7 +13,7 @@ def apply(patches: list[tuple[str, str]], incoming: Iterable[str]) -> list[str]:
         log.info(f' - trying any ({this}) --> ({that}) ...')
         for n, text in enumerate(outgoing):
             if this in text:
-                print(f'  + found match ({text})')
+                log.info(f'   + found match ({text})')
                 outgoing[n] = text.replace(this, that)
 
     return outgoing
