@@ -1,4 +1,8 @@
 """Apply all pairs in patch module on document."""
+import re
+from collections.abc import Iterable
+
+from liitos import log
 
 _ = r"""
 \columns=,10\%,30\%,50\%
@@ -138,11 +142,6 @@ cap_text_y\tabularnewline
 \end{longtable}
 """
 
-import re
-from collections.abc import Iterable
-
-from liitos import log
-
 TAB_START_TOK = r'\begin{longtable}[]{'  # '@{}'
 TOP_RULE = r'\toprule()'
 MID_RULE = r'\midrule()'
@@ -198,6 +197,7 @@ COMMA = ','
 
 class Table:
     """Some adhoc structure to encapsulate tje source and target table."""
+
     # ---- begin of LBP skeleton / shape ---
     LBP_STARTSWITH_TAB_ENV_BEGIN = r'\begin{longtable}[]{'
     LBP_REAL_INNER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\real{(?P<cwval>[0-9.]+)}}\s*$')
