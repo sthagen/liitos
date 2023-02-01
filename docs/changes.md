@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 2023.2.1
+
+* Amended setup template to embrace more pandoc version transforms for strikeout (<https://todo.sr.ht/~sthagen/liitos/15>)
+
 ### 2023.1.31
 
 * Added the header filtering and documented the use
