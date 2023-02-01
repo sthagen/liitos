@@ -8,10 +8,7 @@ import sys
 import time
 from typing import no_type_check
 
-import foran.foran as api  # type: ignore
 import yaml
-from foran.report import generate_report  # type: ignore
-from taksonomia.taksonomia import Taxonomy  # type: ignore
 
 import liitos.captions as cap
 import liitos.concat as con

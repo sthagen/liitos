@@ -1,28 +1,13 @@
 import datetime as dti
 import difflib
 import hashlib
-import io
-import os
 import pathlib
-import shutil
-import subprocess  # nosec B404
-import sys
-import time
 from typing import Any, Callable, no_type_check
 
 import foran.foran as api  # type: ignore
-import yaml
 from foran.report import generate_report  # type: ignore
 from taksonomia.taksonomia import Taxonomy  # type: ignore
 
-import liitos.captions as cap
-import liitos.concat as con
-import liitos.description_lists as dsc
-import liitos.figures as fig
-import liitos.gather as gat
-import liitos.labels as lab
-import liitos.patch as pat
-import liitos.tables as tab
 from liitos import ENCODING, log
 
 DOC_BASE = pathlib.Path('..', '..')

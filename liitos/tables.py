@@ -272,7 +272,6 @@ def patch(incoming: Iterable[str]) -> list[str]:
     widths: list[float] = []
     comment_outs = []
     for n, text in enumerate(incoming):
-
         if not table_section:
             if not has_column:
                 has_column, text_line, widths = parse_columns_command(n, text)
