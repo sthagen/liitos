@@ -373,7 +373,7 @@ def concatenate(
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
-    log.info(f'entered concat function ...')
+    log.info('entered concat function ...')
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():

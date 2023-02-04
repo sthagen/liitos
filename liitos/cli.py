@@ -14,15 +14,7 @@ import liitos.eject as eje
 import liitos.gather as gat
 import liitos.meta as met
 import liitos.render as ren
-from liitos import (
-    APP_NAME,
-    APP_VERSION,
-    FILTER_CS_LIST,
-    FROM_FORMAT_SPEC,
-    QUIET,
-    TS_FORMAT_PAYLOADS,
-    log
-)
+from liitos import APP_NAME, APP_VERSION, FILTER_CS_LIST, FROM_FORMAT_SPEC, QUIET, TS_FORMAT_PAYLOADS, log
 
 app = typer.Typer(
     add_completion=False,
@@ -267,8 +259,14 @@ def render(  # noqa
     Render the markdown tree for facet of target within render/pdf below document root.
     """
     code, message, doc, options = _verify_call_vector(
-        doc_root, doc_root_pos, verbose, strict, label=label, patch_tables=patch_tables,
-        from_format_spec=from_format_spec, filter_cs_list=filter_cs_list
+        doc_root,
+        doc_root_pos,
+        verbose,
+        strict,
+        label=label,
+        patch_tables=patch_tables,
+        from_format_spec=from_format_spec,
+        filter_cs_list=filter_cs_list,
     )
     if code:
         log.error(message)

@@ -28,7 +28,7 @@ def weave(
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
-    log.info(f'entered signatures weave function ...')
+    log.info('entered signatures weave function ...')
     structure, asset_map = gat.prelude(
         doc_root=doc_root,
         structure_name=structure_name,

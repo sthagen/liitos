@@ -969,7 +969,7 @@ def weave(
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
-    log.info(f'entered meta weave function ...')
+    log.info('entered meta weave function ...')
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():

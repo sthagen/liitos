@@ -36,7 +36,7 @@ def der(
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
-    log.info(f'entered render function ...')
+    log.info('entered render function ...')
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():
