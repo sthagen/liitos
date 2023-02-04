@@ -4,7 +4,7 @@ import pathlib
 
 import liitos.gather as gat
 import liitos.template_loader as template
-from liitos import ENCODING, log
+from liitos import ENCODING, LOG_SEPARATOR, log
 
 PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
 PUBLISHER_TEMPLATE_IS_EXTERNAL = bool(PUBLISHER_TEMPLATE)
@@ -26,8 +26,8 @@ def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
 ) -> int:
     """Later alligator."""
-    separator = '- ' * 80
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
+    log.info(f'entered changes weave function ...')
     structure, asset_map = gat.prelude(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='changes'
     )
@@ -43,7 +43,7 @@ def weave(
     changes = gat.load_changes(facet_key, target_key, changes_path)
     log.info(f'{changes=}')
 
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
     log.info('plausibility tests for changes ...')
 
     rows = []
@@ -90,7 +90,7 @@ def weave(
     publisher_template = template.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in publisher_template.split('\n')]
 
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
     log.info('weaving in the changes ...')
     for n, line in enumerate(lines):
         if line.strip() == TOKEN:
@@ -100,6 +100,6 @@ def weave(
         lines.append('\n')
     with open(PUBLISHER_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
 
     return 0

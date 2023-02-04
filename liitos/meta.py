@@ -8,7 +8,7 @@ import yaml
 
 import liitos.gather as gat
 import liitos.template_loader as template
-from liitos import ENCODING, log
+from liitos import ENCODING, LOG_SEPARATOR, log
 
 METADATA_TEMPLATE = os.getenv('LIITOS_METADATA_TEMPLATE', '')
 METADATA_TEMPLATE_IS_EXTERNAL = bool(METADATA_TEMPLATE)
@@ -968,6 +968,8 @@ def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
+    log.info(LOG_SEPARATOR)
+    log.info(f'entered meta weave function ...')
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():

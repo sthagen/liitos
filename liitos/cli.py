@@ -14,7 +14,15 @@ import liitos.eject as eje
 import liitos.gather as gat
 import liitos.meta as met
 import liitos.render as ren
-from liitos import APP_NAME, QUIET, TS_FORMAT_PAYLOADS, __version__ as APP_VERSION, log
+from liitos import (
+    APP_NAME,
+    APP_VERSION,
+    FILTER_CS_LIST,
+    FROM_FORMAT_SPEC,
+    QUIET,
+    TS_FORMAT_PAYLOADS,
+    log
+)
 
 app = typer.Typer(
     add_completion=False,
@@ -45,6 +53,18 @@ FacetName = typer.Option(
     '-f',
     '--facet',
     help='facet key of target document',
+)
+FromFormatSpec = typer.Option(
+    FROM_FORMAT_SPEC,
+    '-s',
+    '--from-format-spec',
+    help='from format specification handed over to pandoc',
+)
+FilterCSList = typer.Option(
+    FILTER_CS_LIST,
+    '-F',
+    '--filters',
+    help='comma separated list of filters handed over to pandoc (in order)',
 )
 Verbosity = typer.Option(
     False,
@@ -103,6 +123,8 @@ def _verify_call_vector(
     strict: bool,
     label: str = '',
     patch_tables: bool = False,
+    from_format_spec: str = '',
+    filter_cs_list: str = '',
 ) -> tuple[int, str, str, dict[str, bool | str]]:
     """DRY"""
     doc = doc_root.strip()
@@ -127,6 +149,8 @@ def _verify_call_vector(
         'verbose': verbose,
         'label': label,
         'patch_tables': patch_tables,
+        'from_format_spec': from_format_spec if from_format_spec else FROM_FORMAT_SPEC,
+        'filter_cs_list': filter_cs_list if filter_cs_list else FILTER_CS_LIST,
     }
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
@@ -236,44 +260,47 @@ def render(  # noqa
     verbose: bool = Verbosity,
     strict: bool = Strictness,
     patch_tables: bool = PatchTables,
+    from_format_spec: str = FromFormatSpec,
+    filter_cs_list: str = FilterCSList,
 ) -> int:
     """
     Render the markdown tree for facet of target within render/pdf below document root.
     """
     code, message, doc, options = _verify_call_vector(
-        doc_root, doc_root_pos, verbose, strict, label=label, patch_tables=patch_tables
+        doc_root, doc_root_pos, verbose, strict, label=label, patch_tables=patch_tables,
+        from_format_spec=from_format_spec, filter_cs_list=filter_cs_list
     )
     if code:
         log.error(message)
-        return 2
+        return sys.exit(code)
 
     start_time = dti.datetime.now(tz=dti.timezone.utc)
     start_ts = start_time.strftime(TS_FORMAT_PAYLOADS)
     log.info(f'Start timestamp ({start_ts})')
     code = cat.concatenate(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     if code:
-        return code
+        return sys.exit(code)
 
     idem = os.getcwd()
     doc = '../../'
     log.info(f'before met.weave(): {os.getcwd()} set doc ({doc})')
     code = met.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     if code:
-        return code
+        return sys.exit(code)
 
     log.info(f'before sig.weave(): {os.getcwd()} set doc ({doc})')
     os.chdir(idem)
     log.info(f'relocated for sig.weave(): {os.getcwd()} with doc ({doc})')
     code = sig.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     if code:
-        return code
+        return sys.exit(code)
 
     log.info(f'before chg.weave(): {os.getcwd()} set doc ({doc})')
     os.chdir(idem)
     log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
     code = chg.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
     if code:
-        return code
+        return sys.exit(code)
 
     log.info(f'before chg.weave(): {os.getcwd()} set doc ({doc})')
     os.chdir(idem)
@@ -285,7 +312,7 @@ def render(  # noqa
     duration_secs = (end_time - start_time).total_seconds()
     log.info(f'End timestamp ({end_ts})')
     log.info(f'Rendered {target} document for {facet} at {doc} in {duration_secs} secs')
-    return code
+    return sys.exit(code)
 
 
 @app.command('eject')

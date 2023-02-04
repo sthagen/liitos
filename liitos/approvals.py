@@ -4,7 +4,7 @@ import pathlib
 
 import liitos.gather as gat
 import liitos.template_loader as template
-from liitos import ENCODING, log
+from liitos import ENCODING, LOG_SEPARATOR, log
 
 BOOKMATTER_TEMPLATE = os.getenv('LIITOS_BOOKMATTER_TEMPLATE', '')
 BOOKMATTER_TEMPLATE_IS_EXTERNAL = bool(BOOKMATTER_TEMPLATE)
@@ -27,8 +27,8 @@ def weave(
     doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
 ) -> int:
     """Later alligator."""
-    separator = '- ' * 80
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
+    log.info(f'entered signatures weave function ...')
     structure, asset_map = gat.prelude(
         doc_root=doc_root,
         structure_name=structure_name,
@@ -48,7 +48,7 @@ def weave(
     signatures = gat.load_approvals(facet_key, target_key, signatures_path)
     log.info(f'{signatures=}')
 
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
     log.info('plausibility tests for approvals ...')
 
     rows = []
@@ -81,7 +81,7 @@ def weave(
     bookmatter_template = template.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in bookmatter_template.split('\n')]
 
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
     log.info(f'weaving in the approvals from {signatures_path}...')
     for n, line in enumerate(lines):
         if TOKEN_EXTRA_PUSHDOWN in line:
@@ -96,6 +96,6 @@ def weave(
 
     with open(BOOKMATTER_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
-    log.info(separator)
+    log.info(LOG_SEPARATOR)
 
     return 0

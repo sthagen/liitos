@@ -16,6 +16,7 @@ APP_NAME = 'Splice (Finnish liitos) contributions.'
 APP_ALIAS = 'liitos'
 APP_ENV = 'LIITOS'
 APP_VERSION = __version__
+COMMA = ','
 DEBUG = bool(os.getenv(f'{APP_ENV}_DEBUG', ''))
 VERBOSE = bool(os.getenv(f'{APP_ENV}_VERBOSE', ''))
 QUIET = False
@@ -24,11 +25,14 @@ ENCODING = 'utf-8'
 ENCODING_ERRORS_POLICY = 'ignore'
 DEFAULT_CONFIG_NAME = '.liitos.json'
 DEFAULT_LF_ONLY = 'YES'
+FILTER_CS_LIST = 'mermaid-filter'
+FROM_FORMAT_SPEC = 'markdown+header_attributes+link_attributes+strikeout'
 log = logging.getLogger()  # Module level logger is sufficient
 LOG_FOLDER = pathlib.Path('logs')
 LOG_FILE = f'{APP_ALIAS}.log'
 LOG_PATH = pathlib.Path(LOG_FOLDER, LOG_FILE) if LOG_FOLDER.is_dir() else pathlib.Path(LOG_FILE)
 LOG_LEVEL = logging.INFO
+LOG_SEPARATOR = '- ' * 80
 
 TS_FORMAT_LOG = '%Y-%m-%dT%H:%M:%S'
 TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'
@@ -38,8 +42,18 @@ __all__: List[str] = [
     'APP_ENV',
     'APP_VERSION',
     'ENCODING',
+    'FILTER_CS_LIST',
+    'FROM_FORMAT_SPEC',
+    'LOG_SEPARATOR',
+    'TS_FORMAT_PAYLOADS',
     'log',
+    'parse_csl',
 ]
+
+
+def parse_csl(csl: str) -> List[str]:
+    """DRY."""
+    return [fmt.strip().lower() for fmt in csl.split(COMMA) if fmt.strip()]
 
 
 @no_type_check

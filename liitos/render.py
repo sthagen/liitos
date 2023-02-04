@@ -19,14 +19,13 @@ import liitos.labels as lab
 import liitos.patch as pat
 import liitos.tables as tab
 import liitos.tools as too
-from liitos import ENCODING, log
+from liitos import ENCODING, FILTER_CS_LIST, FROM_FORMAT_SPEC, LOG_SEPARATOR, log, parse_csl
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 IMAGES_FOLDER = 'images/'
 DIAGRAMS_FOLDER = 'diagrams/'
 PATCH_SPEC_NAME = 'patch.yml'
-LOG_SEPARATOR = '- ' * 80
 INTER_PROCESS_SYNC_SECS = 0.1
 INTER_PROCESS_SYNC_ATTEMPTS = 10
 
@@ -37,6 +36,7 @@ def der(
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
+    log.info(f'entered render function ...')
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():
@@ -44,6 +44,10 @@ def der(
         return 2
 
     log.info(f'parsed target ({target_code}) and facet ({facet_code}) from request')
+
+    from_format_spec = options.get('from_format_spec', FROM_FORMAT_SPEC)
+    filter_cs_list = parse_csl(options.get('filter_cs_list', FILTER_CS_LIST))
+    log.info(f'parsed from-format-spec ({from_format_spec}) and filters ({", ".join(filter_cs_list)}) from request')
 
     structure, asset_map = gat.prelude(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='render'
@@ -241,9 +245,11 @@ def der(
             log.info('post-action queue (from reference renaming) is empty - nothing to move')
         log.info(LOG_SEPARATOR)
 
-        fmt_spec = 'markdown+header_attributes+link_attributes+strikeout'
+        fmt_spec = from_format_spec
         in_doc = 'document.md'
         out_doc = 'document.tex'
+        filters = [added_prefix for expr in filter_cs_list for added_prefix in ('--filter', expr)]
+        # [prefix+elt for elt in alist for prefix in ('','ok.') ]
         markdown_to_latex_command = [
             'pandoc',
             '--verbose',
@@ -254,9 +260,7 @@ def der(
             in_doc,
             '-o',
             out_doc,
-            '--filter',
-            'mermaid-filter',
-        ]
+        ] + filters
         log.info(LOG_SEPARATOR)
         log.info(f'executing ({" ".join(markdown_to_latex_command)}) ...')
         process = subprocess.Popen(  # nosec B603
@@ -269,8 +273,10 @@ def der(
             log.error(
                 f'markdown-to-latex process ({markdown_to_latex_command}) was terminated by signal {-return_code}'
             )
+            return return_code
         else:
-            log.info(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
+            log.error(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
+            return return_code
 
         log.info(LOG_SEPARATOR)
         log.info('move any captions below tables ...')
