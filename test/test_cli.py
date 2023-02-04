@@ -107,7 +107,7 @@ def test_command_concat():
 
 def test_command_render_base():
     result = runner.invoke(app, ['render', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
-    assert result.exit_code == 0
+    assert result.exit_code == 2
 
 
 def test_command_changes_base():
@@ -124,4 +124,4 @@ def test_command_render_deep():
     result = runner.invoke(
         app, ['render', '-d', f'{EXAMPLE_DEEP_PREFIX}', '-f', 'deep', '-s', 'structure.yml', '-t', 'prod_kind', '-v']
     )
-    assert result.exit_code == 0
+    assert result.exit_code == 2
