@@ -16,7 +16,7 @@ import liitos.labels as lab
 import liitos.patch as pat
 import liitos.tables as tab
 import liitos.tools as too
-from liitos import ENCODING, FILTER_CS_LIST, FROM_FORMAT_SPEC, LOG_SEPARATOR, log, parse_csl
+from liitos import ENCODING, FILTER_CS_LIST, FROM_FORMAT_SPEC, LOG_SEPARATOR, TOOL_VERSION_COMMAND_MAP, log, parse_csl
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -45,6 +45,12 @@ def der(
     from_format_spec = options.get('from_format_spec', FROM_FORMAT_SPEC)
     filter_cs_list = parse_csl(options.get('filter_cs_list', FILTER_CS_LIST))
     log.info(f'parsed from-format-spec ({from_format_spec}) and filters ({", ".join(filter_cs_list)}) from request')
+
+    log.info(LOG_SEPARATOR)
+    log.info('inspecting environment (tool version information):')
+    for tool_key in TOOL_VERSION_COMMAND_MAP:
+        too.report(tool_key)
+    log.info(LOG_SEPARATOR)
 
     structure, asset_map = gat.prelude(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='render'

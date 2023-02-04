@@ -9,7 +9,7 @@ import foran.foran as api  # type: ignore
 from foran.report import generate_report  # type: ignore
 from taksonomia.taksonomia import Taxonomy  # type: ignore
 
-from liitos import ENCODING, log
+from liitos import ENCODING, TOOL_VERSION_COMMAND_MAP, ToolKey, log
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -145,3 +145,20 @@ def delegate(command: list[str], marker: str) -> int:
         log.info(f'{marker} process succeeded')
 
     return return_code
+
+
+@no_type_check
+def report(on: ToolKey) -> int:
+    """Execute the tool specific version command."""
+    tool_version_call = str(TOOL_VERSION_COMMAND_MAP.get(on, '')).strip().split()
+    if not tool_version_call:
+        log.warning(f'cowardly avoiding undefined call for tool key ({on})')
+        log.info(f'- known tool keys are: ({", ".join(sorted(TOOL_VERSION_COMMAND_MAP))})')
+        return 42
+
+    log.info(LOG_SEPARATOR)
+    log.info(f'requesting tool version information from environment per ({tool_version_call})')
+    code = delegate(tool_version_call, f'tool-version-of-{on}')
+    log.info(LOG_SEPARATOR)
+
+    return code

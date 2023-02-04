@@ -34,6 +34,24 @@ LOG_PATH = pathlib.Path(LOG_FOLDER, LOG_FILE) if LOG_FOLDER.is_dir() else pathli
 LOG_LEVEL = logging.INFO
 LOG_SEPARATOR = '- ' * 80
 
+TOOL_VERSION_COMMAND_MAP = {
+    'git': 'git --version',
+    'pandoc': 'pandoc --version',
+    'mermaid': 'npm view mermaid',
+    'mermaid-filter': 'npm view mermaid-filter',
+    'svgexport': 'npm view svgexport',
+    'lualatex': 'lualatex --version',
+    'pdfinfo': 'pdfinfo -v',
+    'exiftool': 'exiftool -ver',
+    'foran': 'foran version',
+    'etiketti': 'etiketti --version',
+    'taksonomia': 'taksonomia --version',
+    'navigaattori': 'navigaattori version',
+    'liitos': 'liitos version',
+}
+
+ToolKey = str
+
 TS_FORMAT_LOG = '%Y-%m-%dT%H:%M:%S'
 TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'
 
@@ -45,6 +63,8 @@ __all__: List[str] = [
     'FILTER_CS_LIST',
     'FROM_FORMAT_SPEC',
     'LOG_SEPARATOR',
+    'TOOL_VERSION_COMMAND_MAP',
+    'ToolKey',
     'TS_FORMAT_PAYLOADS',
     'log',
     'parse_csl',
