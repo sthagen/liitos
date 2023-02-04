@@ -258,9 +258,12 @@ def der(
             return code
 
         log.info(LOG_SEPARATOR)
-        log.info('move any captions below tables ...')
+        log.info('load text lines from intermediate document.tex file before internal transforms ...')
         with open('document.tex', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
+
+        log.info(LOG_SEPARATOR)
+        log.info('move any captions below tables ...')
         doc_before_caps_patch = 'document-before-caps-patch.tex.txt'
         with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
