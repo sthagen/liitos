@@ -133,18 +133,24 @@ def ensure_separate_log_lines(sourcer: Callable, *args: list[object] | None):
 @no_type_check
 def delegate(command: list[str], marker: str, do_shell: bool = False) -> int:
     """Execute command in subprocess and follow requests."""
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell)  # nosec B602
-    with process.stdout:
-        log_subprocess_output(process.stdout, marker)
-    return_code = process.wait()
-    if return_code < 0:
-        log.error(f'{marker} process ({command}) was terminated by signal {-return_code}')
-    elif return_code > 0:
-        log.error(f'{marker} process ({command}) returned {return_code}')
-    else:
-        log.info(f'{marker} process succeeded')
+    try:
+        process = subprocess.Popen(
+            command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell  # nosec B602
+        )
+        with process.stdout:
+            log_subprocess_output(process.stdout, marker)
+        code = process.wait()
+        if code < 0:
+            log.error(f'{marker} process ({command}) was terminated by signal {-code}')
+        elif code > 0:
+            log.error(f'{marker} process ({command}) returned {code}')
+        else:
+            log.info(f'{marker} process succeeded')
+    except Exception as err:
+        log.error(f'failed executing tool with error: {err}')
+        code = 42
 
-    return return_code
+    return code
 
 
 @no_type_check

@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 2023.2.5
+
+* Modified external tool delegation harness to never exit the process per uncaught exception (<https://todo.sr.ht/~sthagen/liitos/16>)
+
 ### 2023.2.4
 
 * Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
