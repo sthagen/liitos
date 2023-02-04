@@ -16,7 +16,16 @@ import liitos.labels as lab
 import liitos.patch as pat
 import liitos.tables as tab
 import liitos.tools as too
-from liitos import ENCODING, FILTER_CS_LIST, FROM_FORMAT_SPEC, LOG_SEPARATOR, TOOL_VERSION_COMMAND_MAP, log, parse_csl
+from liitos import (
+    ENCODING,
+    FILTER_CS_LIST,
+    FROM_FORMAT_SPEC,
+    LATEX_PAYLOAD_NAME,
+    LOG_SEPARATOR,
+    TOOL_VERSION_COMMAND_MAP,
+    log,
+    parse_csl,
+)
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -239,7 +248,7 @@ def der(
 
         fmt_spec = from_format_spec
         in_doc = 'document.md'
-        out_doc = 'document.tex'
+        out_doc = LATEX_PAYLOAD_NAME
         filters = [added_prefix for expr in filter_cs_list for added_prefix in ('--filter', expr)]
         markdown_to_latex_command = [
             'pandoc',
@@ -258,8 +267,8 @@ def der(
             return code
 
         log.info(LOG_SEPARATOR)
-        log.info('load text lines from intermediate document.tex file before internal transforms ...')
-        with open('document.tex', 'rt', encoding=ENCODING) as handle:
+        log.info(f'load text lines from intermediate {LATEX_PAYLOAD_NAME} file before internal transforms ...')
+        with open(LATEX_PAYLOAD_NAME, 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
 
         log.info(LOG_SEPARATOR)
@@ -268,7 +277,7 @@ def der(
         with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
         lines_caps_patch = cap.weave(lines)
-        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+        with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_caps_patch))
         log.info('diff of the (captions-below-tables) filter result:')
         too.log_unified_diff(lines, lines_caps_patch)
@@ -279,7 +288,7 @@ def der(
         with open(doc_before_label_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_caps_patch))
         lines_inject_stem_label = lab.inject(lines_caps_patch)
-        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+        with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_inject_stem_label))
         log.info('diff of the (inject-stem-derived-labels) filter result:')
         too.log_unified_diff(lines_caps_patch, lines_inject_stem_label)
@@ -290,7 +299,7 @@ def der(
         with open(doc_before_figures_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_inject_stem_label))
         lines_scale_figures = fig.scale(lines_inject_stem_label)
-        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+        with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_scale_figures))
         log.info('diff of the (inject-scale-figures) filter result:')
         too.log_unified_diff(lines_inject_stem_label, lines_scale_figures)
@@ -301,7 +310,7 @@ def der(
         with open(doc_before_descriptions_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_scale_figures))
         lines_description_options = dsc.options(lines_scale_figures)
-        with open('document.tex', 'wt', encoding=ENCODING) as handle:
+        with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines_description_options))
         log.info('diff of the (inject-description-options) filter result:')
         too.log_unified_diff(lines_scale_figures, lines_description_options)
@@ -313,7 +322,7 @@ def der(
             with open(doc_before_table_shape_patch, 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_description_options))
             lines_table_shape_options = tab.patch(lines_description_options)
-            with open('document.tex', 'wt', encoding=ENCODING) as handle:
+            with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_table_shape_options))
             log.info('diff of the (changed-table-shape) filter result:')
             too.log_unified_diff(lines_description_options, lines_table_shape_options)
@@ -332,7 +341,7 @@ def der(
             with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_table_shape_options))
             lines_user_patches = pat.apply(patches, lines_table_shape_options)
-            with open('document.tex', 'wt', encoding=ENCODING) as handle:
+            with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
                 handle.write('\n'.join(lines_user_patches))
             log.info('diff of the (user-patches) filter result:')
             too.log_unified_diff(lines_table_shape_options, lines_user_patches)

@@ -28,6 +28,7 @@ DEFAULT_CONFIG_NAME = '.liitos.json'
 DEFAULT_LF_ONLY = 'YES'
 FILTER_CS_LIST = 'mermaid-filter'
 FROM_FORMAT_SPEC = 'markdown+header_attributes+link_attributes+strikeout'
+LATEX_PAYLOAD_NAME = 'document.tex'
 log = logging.getLogger()  # Module level logger is sufficient
 LOG_FOLDER = pathlib.Path('logs')
 LOG_FILE = f'{APP_ALIAS}.log'
@@ -72,6 +73,7 @@ __all__: List[str] = [
     'ENCODING',
     'FILTER_CS_LIST',
     'FROM_FORMAT_SPEC',
+    'LATEX_PAYLOAD_NAME',
     'LOG_SEPARATOR',
     'TOOL_VERSION_COMMAND_MAP',
     'ToolKey',
