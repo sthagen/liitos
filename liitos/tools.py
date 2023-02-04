@@ -131,9 +131,9 @@ def ensure_separate_log_lines(sourcer: Callable, *args: list[object] | None):
 
 
 @no_type_check
-def delegate(command: list[str], marker: str) -> int:
+def delegate(command: list[str], marker: str, do_shell: bool = False) -> int:
     """Execute command in subprocess and follow requests."""
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell)  # nosec B603
     with process.stdout:
         log_subprocess_output(process.stdout, marker)
     return_code = process.wait()
@@ -150,7 +150,8 @@ def delegate(command: list[str], marker: str) -> int:
 @no_type_check
 def report(on: ToolKey) -> int:
     """Execute the tool specific version command."""
-    tool_version_call = str(TOOL_VERSION_COMMAND_MAP.get(on, '')).strip().split()
+    tool_version_call_text = str(TOOL_VERSION_COMMAND_MAP.get(on, '')).strip()
+    tool_version_call = tool_version_call_text.split()
     if not tool_version_call:
         log.warning(f'cowardly avoiding undefined call for tool key ({on})')
         log.info(f'- known tool keys are: ({", ".join(sorted(TOOL_VERSION_COMMAND_MAP))})')

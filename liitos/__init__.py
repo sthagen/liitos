@@ -3,6 +3,7 @@ import datetime as dti
 import logging
 import os
 import pathlib
+import shellingham
 from typing import List, no_type_check
 
 # [[[fill git_describe()]]]
@@ -34,20 +35,29 @@ LOG_PATH = pathlib.Path(LOG_FOLDER, LOG_FILE) if LOG_FOLDER.is_dir() else pathli
 LOG_LEVEL = logging.INFO
 LOG_SEPARATOR = '- ' * 80
 
+try:
+    SHELL = shellingham.detect_shell()
+except shellingham.ShellDetectionFailure:
+    SHELL = ('', 'echo')
+
 TOOL_VERSION_COMMAND_MAP = {
-    'git': 'git --version',
-    'pandoc': 'pandoc --version',
-    'mermaid': 'npm view mermaid',
-    'mermaid-filter': 'npm view mermaid-filter',
-    'svgexport': 'npm view svgexport',
-    'lualatex': 'lualatex --version',
-    'pdfinfo': 'pdfinfo -v',
+    'etiketti': 'etiketti --version',
     'exiftool': 'exiftool -ver',
     'foran': 'foran version',
-    'etiketti': 'etiketti --version',
-    'taksonomia': 'taksonomia --version',
-    'navigaattori': 'navigaattori version',
+    'git': 'git --version',
     'liitos': 'liitos version',
+    'lualatex': 'lualatex --version',
+    'mermaid': 'npm view mermaid',
+    'mermaid-filter': 'npm view mermaid-filter',
+    'navigaattori': 'navigaattori version',
+    'node': 'node --version',
+    'npm': 'npm --version',
+    'pandoc': 'pandoc --version',
+    'pdfinfo': 'pdfinfo -v',
+    'python': 'python -V',
+    'shell': f'{SHELL[1]} --version',
+    'svgexport': 'npm view svgexport',
+    'taksonomia': 'taksonomia --version',
 }
 
 ToolKey = str
