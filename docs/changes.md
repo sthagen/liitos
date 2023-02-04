@@ -6,7 +6,7 @@
 
 * Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
 * Added enter log messages per function
-* Fixed process return codes for render command to not always return 0
+* Fixed process render command to actually return the result codes to the parent process
 
 ### 2023.2.1
 
