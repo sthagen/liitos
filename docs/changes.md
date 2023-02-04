@@ -6,7 +6,7 @@
 
 * Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
 * Added enter log messages per function
-* Fixed process render command to actually return the result codes to the parent process
+* Fixed process render command to actually return the result codes to the parent process (some failures are now final!)
 * Implemented minimal environment tool version reporting before rendering (<https://todo.sr.ht/~sthagen/liitos/14>)
 
 ### 2023.2.1
