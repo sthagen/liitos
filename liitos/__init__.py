@@ -3,7 +3,7 @@ import datetime as dti
 import logging
 import os
 import pathlib
-import shellingham
+import shellingham  # type: ignore
 from typing import List, no_type_check
 
 # [[[fill git_describe()]]]
