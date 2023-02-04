@@ -276,62 +276,68 @@ def der(
         doc_before_caps_patch = 'document-before-caps-patch.tex.txt'
         with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
-        lines_caps_patch = cap.weave(lines)
+        patched_lines = cap.weave(lines)
         with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_caps_patch))
+            handle.write('\n'.join(patched_lines))
         log.info('diff of the (captions-below-tables) filter result:')
-        too.log_unified_diff(lines, lines_caps_patch)
+        too.log_unified_diff(lines, patched_lines)
+        lines = patched_lines
 
         log.info(LOG_SEPARATOR)
         log.info('inject stem (derived from file name) labels ...')
         doc_before_label_patch = 'document-before-inject-stem-label-patch.tex.txt'
         with open(doc_before_label_patch, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_caps_patch))
-        lines_inject_stem_label = lab.inject(lines_caps_patch)
+            handle.write('\n'.join(lines))
+        patched_lines = lab.inject(lines)
         with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_inject_stem_label))
+            handle.write('\n'.join(patched_lines))
         log.info('diff of the (inject-stem-derived-labels) filter result:')
-        too.log_unified_diff(lines_caps_patch, lines_inject_stem_label)
+        too.log_unified_diff(lines, patched_lines)
+        lines = patched_lines
 
         log.info(LOG_SEPARATOR)
         log.info('scale figures ...')
         doc_before_figures_patch = 'document-before-scale-figures-patch.tex.txt'
         with open(doc_before_figures_patch, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_inject_stem_label))
-        lines_scale_figures = fig.scale(lines_inject_stem_label)
+            handle.write('\n'.join(lines))
+        patched_lines = fig.scale(lines)
         with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_scale_figures))
+            handle.write('\n'.join(patched_lines))
         log.info('diff of the (inject-scale-figures) filter result:')
-        too.log_unified_diff(lines_inject_stem_label, lines_scale_figures)
+        too.log_unified_diff(lines, patched_lines)
+        lines = patched_lines
 
         log.info(LOG_SEPARATOR)
         log.info('add options to descriptions (definition lists) ...')
         doc_before_descriptions_patch = 'document-before-description-options-patch.tex.txt'
         with open(doc_before_descriptions_patch, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_scale_figures))
-        lines_description_options = dsc.options(lines_scale_figures)
+            handle.write('\n'.join(lines))
+        patched_lines = dsc.options(lines)
         with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(lines_description_options))
+            handle.write('\n'.join(patched_lines))
         log.info('diff of the (inject-description-options) filter result:')
-        too.log_unified_diff(lines_scale_figures, lines_description_options)
+        too.log_unified_diff(lines, patched_lines)
+        lines = patched_lines
 
         if options.get('patch_tables', False):
             log.info(LOG_SEPARATOR)
             log.info('patching tables EXPERIMENTAL (table-shape) ...')
             doc_before_table_shape_patch = 'document-before-table-shape-patch.tex.txt'
             with open(doc_before_table_shape_patch, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_description_options))
-            lines_table_shape_options = tab.patch(lines_description_options)
+                handle.write('\n'.join(lines))
+            patched_lines = tab.patch(lines)
             with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_table_shape_options))
+                handle.write('\n'.join(patched_lines))
             log.info('diff of the (changed-table-shape) filter result:')
-            too.log_unified_diff(lines_description_options, lines_table_shape_options)
+            too.log_unified_diff(lines, patched_lines)
+            lines = patched_lines
         else:
             log.info(LOG_SEPARATOR)
             log.info('not patching tables but commenting out (ignoring) any columns command (table-shape) ...')
-            lines_table_shape_options = [
-                f'%IGNORED_{v}' if v.startswith(r'\columns=') else v for v in lines_description_options
-            ]
+            patched_lines = [f'%IGNORED_{v}' if v.startswith(r'\columns=') else v for v in lines]
+            log.info('diff of the (ignore-table-shape-if-not-patched) filter result:')
+            too.log_unified_diff(lines, patched_lines)
+            lines = patched_lines
             log.info(LOG_SEPARATOR)
 
         if need_patching:
@@ -339,15 +345,19 @@ def der(
             log.info('apply user patches ...')
             doc_before_user_patch = 'document-before-user-patch.tex.txt'
             with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_table_shape_options))
-            lines_user_patches = pat.apply(patches, lines_table_shape_options)
+                handle.write('\n'.join(lines))
+            patched_lines = pat.apply(patches, lines)
             with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
-                handle.write('\n'.join(lines_user_patches))
+                handle.write('\n'.join(patched_lines))
             log.info('diff of the (user-patches) filter result:')
-            too.log_unified_diff(lines_table_shape_options, lines_user_patches)
+            too.log_unified_diff(lines, patched_lines)
+            lines = patched_lines
         else:
             log.info(LOG_SEPARATOR)
             log.info('skipping application of user patches ...')
+
+        log.info(LOG_SEPARATOR)
+        log.info(f'Internal text line buffer counts {len(lines)} lines')
 
         log.info(LOG_SEPARATOR)
         log.info('cp -a driver.tex this.tex ...')
