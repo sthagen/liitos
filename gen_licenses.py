@@ -42,7 +42,7 @@ IPN_PATH = pathlib.Path(INDIRECT_PACKAGE_NAMES)
 if IPN_PATH.is_file():
     print(f'Reading indirect names from file ({IPN_PATH})', file=sys.stderr)
     with open(IPN_PATH, 'rt', encoding=ENCODING) as handle:
-        indirect_names = yaml.safe_load(handle)
+        indirect_names: dict[str, list[str]] = yaml.safe_load(handle)
 
 if indirect_names:
     print(f'Indirect names from file gives map ({indirect_names})', file=sys.stderr)
@@ -73,7 +73,7 @@ def _generate_dependency_information() -> None:
     """Use pip-licenses for creation of diverse databases and graphs."""
     install_requires = _fetch_direct_dependency_names()
     tokens = set(list(string.ascii_letters + '-_.'))
-    direct_names = [''.join(c for c in term if c in tokens).strip('.') for term in install_requires]
+    direct_names = [''.join(c for c in term if c in tokens).replace('.post', '').strip('.') for term in install_requires]
     print('Direct dependencies identified as:', file=sys.stderr)
     for d_dep in direct_names:
         print(f'- {d_dep}', file=sys.stderr)
@@ -157,7 +157,7 @@ def _extract_rows(data):
         if aut == 'UNKNOWN' and nam in FALLBACK_AUTHORS:
             aut = FALLBACK_AUTHORS[nam]
         des = record['Description']
-        if des == 'UNKNOWN' and nam in FALLBACK_DESCRIPTIONS:
+        if des in ('UNKNOWN', nam)  and nam in FALLBACK_DESCRIPTIONS:
             des = FALLBACK_DESCRIPTIONS[nam]
         rows.append((nam_e, ver_sion, lic, aut, des))
     rows.sort()
