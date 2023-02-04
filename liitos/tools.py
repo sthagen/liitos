@@ -9,7 +9,7 @@ import foran.foran as api  # type: ignore
 from foran.report import generate_report  # type: ignore
 from taksonomia.taksonomia import Taxonomy  # type: ignore
 
-from liitos import ENCODING, TOOL_VERSION_COMMAND_MAP, ToolKey, log
+from liitos import ENCODING, LATEX_PAYLOAD_NAME, TOOL_VERSION_COMMAND_MAP, ToolKey, log
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -169,3 +169,21 @@ def report(on: ToolKey) -> int:
     log.info(LOG_SEPARATOR)
 
     return code
+
+
+@no_type_check
+def execute_filter(the_filter: Callable, head: str, backup: str, label: str, text_lines: list[str]) -> list[str]:
+    """Chain filter calls by storing in and out lies in files and return the resulting lines."""
+    log.info(LOG_SEPARATOR)
+    log.info(head)
+    doc_before_caps_patch = backup
+    with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
+        handle.write('\n'.join(text_lines))
+    patched_lines = the_filter(text_lines)
+    with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
+        handle.write('\n'.join(patched_lines))
+    log.info(f'diff of the ({label}) filter result:')
+    log_unified_diff(text_lines, patched_lines)
+
+    return patched_lines
+
