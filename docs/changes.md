@@ -2,6 +2,12 @@
 
 ## 2023
 
+### 2023.2.4
+
+* Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
+* Added enter log messages per function
+* Fixed process return codes for render command to not always return 0
+
 ### 2023.2.1
 
 * Amended setup template to embrace more pandoc version transforms for strikeout (<https://todo.sr.ht/~sthagen/liitos/15>)
