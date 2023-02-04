@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json) with SHA256 checksum ([be61d8fe ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json.sha256 "sha256:be61d8fe60870e042f5ac7feebb1313c7044162b2dbc577ce1a108e069927b6c")).
-<!--[[[end]]] (checksum: 63577df7ecb868456349116f1b5cc241)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json) with SHA256 checksum ([2e87a786 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json.sha256 "sha256:2e87a786d13926843902bbf23fcb2535c0b1bee67f3b5db0eb45bb442e1f1b88")).
+<!--[[[end]]] (checksum: 70c43fbd8c074244226c7c705ee717d8)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -10,14 +10,15 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 ### Direct Dependencies
 
 <!--[[[fill direct_dependencies_table()]]]-->
-| Name                                                                            | Version                                                     | License                 | Author            | Description (from packaging data)                                                                                                         |
-|:--------------------------------------------------------------------------------|:------------------------------------------------------------|:------------------------|:------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
-| [PyYAML](https://pyyaml.org/)                                                   | [6.0](https://pypi.org/project/PyYAML/6.0/)                 | MIT License             | Kirill Simonov    | YAML parser and emitter for Python                                                                                                        |
-| [foran](https://git.sr.ht/~sthagen/foran/tree/default/item/README.md)           | [2022.12.7](https://pypi.org/project/foran/2022.12.7/)      | MIT License             | Stefan Hagen      | In front or behind (Danish: foran eller bagved)? Answering the question if a local repository status is in front of or behind its remote. |
-| [taksonomia](https://git.sr.ht/~sthagen/taksonomia/tree/default/item/README.md) | [2023.1.24](https://pypi.org/project/taksonomia/2023.1.24/) | MIT License             | Stefan Hagen      | Taxonomy (Finnish: taksonomia) of a folder tree, guided by conventions.                                                                   |
-| [treelib](https://github.com/caesar0301/treelib)                                | [1.6.1](https://pypi.org/project/treelib/1.6.1/)            | Apache Software License | Xiaming Chen      | A Python 2/3 implementation of tree structure.                                                                                            |
-| [typer](https://github.com/tiangolo/typer)                                      | [0.7.0](https://pypi.org/project/typer/0.7.0/)              | MIT License             | Sebastián Ramírez | Typer, build great CLIs. Easy to code. Based on Python type hints.                                                                        |
-<!--[[[end]]] (checksum: b9dc3657d4668322d8a3d51b8b70c2ea)-->
+| Name                                                                            | Version                                                          | License                 | Author            | Description (from packaging data)                                                                                                         |
+|:--------------------------------------------------------------------------------|:-----------------------------------------------------------------|:------------------------|:------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
+| [PyYAML](https://pyyaml.org/)                                                   | [6.0](https://pypi.org/project/PyYAML/6.0/)                      | MIT License             | Kirill Simonov    | YAML parser and emitter for Python                                                                                                        |
+| [foran](https://git.sr.ht/~sthagen/foran/tree/default/item/README.md)           | [2022.12.7](https://pypi.org/project/foran/2022.12.7/)           | MIT License             | Stefan Hagen      | In front or behind (Danish: foran eller bagved)? Answering the question if a local repository status is in front of or behind its remote. |
+| [shellingham](https://github.com/sarugaku/shellingham)                          | [1.5.0.post1](https://pypi.org/project/shellingham/1.5.0.post1/) | ISC License (ISCL)      | Tzu-ping Chung    | Tool to Detect Surrounding Shell                                                                                                          |
+| [taksonomia](https://git.sr.ht/~sthagen/taksonomia/tree/default/item/README.md) | [2023.1.24](https://pypi.org/project/taksonomia/2023.1.24/)      | MIT License             | Stefan Hagen      | Taxonomy (Finnish: taksonomia) of a folder tree, guided by conventions.                                                                   |
+| [treelib](https://github.com/caesar0301/treelib)                                | [1.6.1](https://pypi.org/project/treelib/1.6.1/)                 | Apache Software License | Xiaming Chen      | A Python 2/3 implementation of tree structure.                                                                                            |
+| [typer](https://github.com/tiangolo/typer)                                      | [0.7.0](https://pypi.org/project/typer/0.7.0/)                   | MIT License             | Sebastián Ramírez | Typer, build great CLIs. Easy to code. Based on Python type hints.                                                                        |
+<!--[[[end]]] (checksum: d754a1d04c80278440aabff46a55a0af)-->
 
 ### Indirect Dependencies
 
@@ -55,6 +56,7 @@ foran==2022.12.7
       - smmap [required: >=3.0.1,<6, installed: 5.0.0]
   - typer [required: >=0.7.0, installed: 0.7.0]
     - click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
+shellingham==1.5.0.post1
 taksonomia==2023.1.24
   - lxml [required: >=4.9.2, installed: 4.9.2]
   - msgspec [required: >=0.12.0, installed: 0.12.0]
@@ -64,4 +66,4 @@ taksonomia==2023.1.24
 treelib==1.6.1
   - future [required: Any, installed: 0.18.2]
 ````
-<!--[[[end]]] (checksum: 05b0d2554299bd0cecfc287f3b526912)-->
+<!--[[[end]]] (checksum: b6190e081a0b176867988b83e840c681)-->
