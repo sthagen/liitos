@@ -274,9 +274,10 @@ def der(
                 f'markdown-to-latex process ({markdown_to_latex_command}) was terminated by signal {-return_code}'
             )
             return return_code
-        else:
+        elif return_code > 0:
             log.error(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
             return return_code
+        log.info('markdown transform per pandoc succeeded')
 
         log.info(LOG_SEPARATOR)
         log.info('move any captions below tables ...')
