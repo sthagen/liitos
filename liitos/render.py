@@ -276,7 +276,7 @@ def der(
             head='move any captions below tables ...',
             backup='document-before-caps-patch.tex.txt',
             label='captions-below-tables',
-            text_lines=lines
+            text_lines=lines,
         )
 
         lines = too.execute_filter(
@@ -284,7 +284,7 @@ def der(
             head='inject stem (derived from file name) labels ...',
             backup='document-before-inject-stem-label-patch.tex.txt',
             label='inject-stem-derived-labels',
-            text_lines=lines
+            text_lines=lines,
         )
 
         lines = too.execute_filter(
@@ -292,7 +292,7 @@ def der(
             head='scale figures ...',
             backup='document-before-scale-figures-patch.tex.txt',
             label='inject-scale-figures',
-            text_lines=lines
+            text_lines=lines,
         )
 
         lines = too.execute_filter(
@@ -300,7 +300,7 @@ def der(
             head='add options to descriptions (definition lists) ...',
             backup='document-before-description-options-patch.tex.txt',
             label='inject-description-options',
-            text_lines=lines
+            text_lines=lines,
         )
 
         if options.get('patch_tables', False):
@@ -309,7 +309,7 @@ def der(
                 head='patching tables EXPERIMENTAL (table-shape) ...',
                 backup='document-before-table-shape-patch.tex.txt',
                 label='changed-table-shape',
-                text_lines=lines
+                text_lines=lines,
             )
         else:
             log.info(LOG_SEPARATOR)

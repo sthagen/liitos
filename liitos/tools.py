@@ -186,4 +186,3 @@ def execute_filter(the_filter: Callable, head: str, backup: str, label: str, tex
     log_unified_diff(text_lines, patched_lines)
 
     return patched_lines
-
