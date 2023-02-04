@@ -2,6 +2,7 @@ import datetime as dti
 import difflib
 import hashlib
 import pathlib
+import subprocess  # nosec B404
 from typing import Any, Callable, no_type_check
 
 import foran.foran as api  # type: ignore
@@ -26,11 +27,11 @@ def hash_file(path: pathlib.Path, hasher: Callable[..., Any] | None = None) -> s
     """Return the SHA512 hex digest of the data from file."""
     if hasher is None:
         hasher = hashlib.sha512
-    hash = hasher()
+    the_hash = hasher()
     with open(path, 'rb') as handle:
         while chunk := handle.read(CHUNK_SIZE):
-            hash.update(chunk)
-    return hash.hexdigest()
+            the_hash.update(chunk)
+    return the_hash.hexdigest()
 
 
 @no_type_check
@@ -127,3 +128,20 @@ def ensure_separate_log_lines(sourcer: Callable, *args: list[object] | None):
         for fine in line.split('\n'):
             log.info(fine)
     log.info(LOG_SEPARATOR)
+
+
+@no_type_check
+def delegate(command: list[str], marker: str) -> int:
+    """Execute command in subprocess and follow requests."""
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
+    with process.stdout:
+        log_subprocess_output(process.stdout, marker)
+    return_code = process.wait()
+    if return_code < 0:
+        log.error(f'{marker} process ({command}) was terminated by signal {-return_code}')
+    elif return_code > 0:
+        log.error(f'{marker} process ({command}) returned {return_code}')
+    else:
+        log.info(f'{marker} process succeeded')
+
+    return return_code

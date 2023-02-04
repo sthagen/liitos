@@ -1,10 +1,7 @@
 """Render the concat document to pdf."""
-import io
 import os
 import pathlib
 import shutil
-import subprocess  # nosec B404
-import sys
 import time
 from typing import no_type_check
 
@@ -163,18 +160,7 @@ def der(
                 if svg.is_file() and svg.suffix == '.svg':
                     png = str(svg).replace('.svg', '.png')
                     svg_to_png_command = ['svgexport', svg, png, '100%']
-                    process = subprocess.Popen(  # nosec B603
-                        svg_to_png_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-                    )
-                    with process.stdout:
-                        too.log_subprocess_output(process.stdout, 'svg-to-png')
-                    return_code = process.wait()
-                    if return_code < 0:
-                        log.error(f'svg-to-png process ({svg_to_png_command}) was terminated by signal {-return_code}')
-                    elif return_code == 0:
-                        log.info(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
-                    else:
-                        log.error(f'svg-to-png process ({svg_to_png_command}) returned {return_code}')
+                    too.delegate(svg_to_png_command, 'svg-to-png')
 
         special_patching = []
         log.info(LOG_SEPARATOR)
@@ -249,7 +235,6 @@ def der(
         in_doc = 'document.md'
         out_doc = 'document.tex'
         filters = [added_prefix for expr in filter_cs_list for added_prefix in ('--filter', expr)]
-        # [prefix+elt for elt in alist for prefix in ('','ok.') ]
         markdown_to_latex_command = [
             'pandoc',
             '--verbose',
@@ -263,21 +248,8 @@ def der(
         ] + filters
         log.info(LOG_SEPARATOR)
         log.info(f'executing ({" ".join(markdown_to_latex_command)}) ...')
-        process = subprocess.Popen(  # nosec B603
-            markdown_to_latex_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-        )
-        with process.stdout:
-            too.log_subprocess_output(process.stdout, 'markdown-to-latex')
-        return_code = process.wait()
-        if return_code < 0:
-            log.error(
-                f'markdown-to-latex process ({markdown_to_latex_command}) was terminated by signal {-return_code}'
-            )
-            return return_code
-        elif return_code > 0:
-            log.error(f'markdown-to-latex process ({markdown_to_latex_command}) returned {return_code}')
-            return return_code
-        log.info('markdown transform per pandoc succeeded')
+        if code := too.delegate(markdown_to_latex_command, 'markdown-to-latex'):
+            return code
 
         log.info(LOG_SEPARATOR)
         log.info('move any captions below tables ...')
@@ -368,45 +340,24 @@ def der(
         latex_to_pdf_command = ['lualatex', '--shell-escape', 'this.tex']
         log.info(LOG_SEPARATOR)
         log.info('1/3) lualatex --shell-escape this.tex ...')
-        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
-        with process.stdout:
-            too.log_subprocess_output(process.stdout, 'latex-to-pdf(1/3)')
-        return_code = process.wait()
-        if return_code < 0:
-            log.error(f'latex-to-pdf process 1/3 ({latex_to_pdf_command}) was terminated by signal {-return_code}')
-        else:
-            log.info(f'latex-to-pdf process 1/3  ({latex_to_pdf_command}) returned {return_code}')
+        if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(1/3)'):
+            return code
 
         log.info(LOG_SEPARATOR)
         log.info('2/3) lualatex --shell-escape this.tex ...')
-        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
-        with process.stdout:
-            too.log_subprocess_output(process.stdout, 'latex-to-pdf(2/3)')
-        return_code = process.wait()
-        if return_code < 0:
-            log.error(f'latex-to-pdf process 2/3 ({latex_to_pdf_command}) was terminated by signal {-return_code}')
-        else:
-            log.info(f'latex-to-pdf process 2/3  ({latex_to_pdf_command}) returned {return_code}')
+        if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(2/3)'):
+            return code
 
         log.info(LOG_SEPARATOR)
         log.info('3/3) lualatex --shell-escape this.tex ...')
-        process = subprocess.Popen(latex_to_pdf_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
-        with process.stdout:
-            too.log_subprocess_output(process.stdout, 'latex-to-pdf(3/3)')
-        return_code = process.wait()
-        if return_code < 0:
-            log.error(f'latex-to-pdf process 3/3 ({latex_to_pdf_command}) was terminated by signal {-return_code}')
-        else:
-            log.info(f'latex-to-pdf process 3/3  ({latex_to_pdf_command}) returned {return_code}')
+        if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(3/3)'):
+            return code
 
         if str(options.get('label', '')).strip():
             labeling_call = str(options['label']).strip().split()
             log.info(LOG_SEPARATOR)
             log.info(f'Labeling the resulting pdf file per ({options["label"]})')
-            proc = subprocess.Popen(labeling_call, stdout=subprocess.PIPE)  # nosec B603
-            for line in io.TextIOWrapper(proc.stdout, encoding='utf-8'):
-                print(line.rstrip())
-            sys.stdout.flush()
+            too.delegate(labeling_call, 'label-pdf')
             log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
@@ -420,14 +371,7 @@ def der(
         too.report_taxonomy(pathlib.Path(target_asset))
 
         pdffonts_command = ['pdffonts', target_asset]
-        process = subprocess.Popen(pdffonts_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)  # nosec B603
-        with process.stdout:
-            too.log_subprocess_output(process.stdout, '    pdffonts')
-        return_code = process.wait()
-        if return_code < 0:
-            log.error(f'pdffonts process ({pdffonts_command}) was terminated by signal {-return_code}')
-        else:
-            log.info(f'pdffonts process ({pdffonts_command}) returned {return_code}')
+        too.delegate(pdffonts_command, 'assess-pdf-fonts')
 
         log.info(LOG_SEPARATOR)
         log.info('done.')
