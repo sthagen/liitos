@@ -133,7 +133,7 @@ def ensure_separate_log_lines(sourcer: Callable, *args: list[object] | None):
 @no_type_check
 def delegate(command: list[str], marker: str, do_shell: bool = False) -> int:
     """Execute command in subprocess and follow requests."""
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell)  # nosec B603
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell)  # nosec B602
     with process.stdout:
         log_subprocess_output(process.stdout, marker)
     return_code = process.wait()
