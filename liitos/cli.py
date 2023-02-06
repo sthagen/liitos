@@ -309,7 +309,11 @@ def render(  # noqa
     end_ts = end_time.strftime(TS_FORMAT_PAYLOADS)
     duration_secs = (end_time - start_time).total_seconds()
     log.info(f'End timestamp ({end_ts})')
-    log.info(f'Rendered {target} document for {facet} at {doc} in {duration_secs} secs')
+    acted = 'Rendered'
+    if code == 0xfadecafe:
+        acted = 'Did not render'
+        code = 0  # HACK A DID ACK
+    log.info(f'{acted} {target} document for {facet} at {doc} in {duration_secs} secs')
     return sys.exit(code)
 
 
