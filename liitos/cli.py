@@ -14,7 +14,18 @@ import liitos.eject as eje
 import liitos.gather as gat
 import liitos.meta as met
 import liitos.render as ren
-from liitos import APP_NAME, APP_VERSION, FILTER_CS_LIST, FROM_FORMAT_SPEC, QUIET, TS_FORMAT_PAYLOADS, log
+import liitos.tools as too
+from liitos import (
+    APP_NAME,
+    APP_VERSION,
+    FILTER_CS_LIST,
+    FROM_FORMAT_SPEC,
+    LOG_SEPARATOR,
+    QUIET,
+    TOOL_VERSION_COMMAND_MAP,
+    TS_FORMAT_PAYLOADS,
+    log,
+)
 
 app = typer.Typer(
     add_completion=False,
@@ -310,11 +321,25 @@ def render(  # noqa
     duration_secs = (end_time - start_time).total_seconds()
     log.info(f'End timestamp ({end_ts})')
     acted = 'Rendered'
-    if code == 0xfadecafe:
+    if code == 0xFADECAFE:
         acted = 'Did not render'
         code = 0  # HACK A DID ACK
     log.info(f'{acted} {target} document for {facet} at {doc} in {duration_secs} secs')
     return sys.exit(code)
+
+
+@app.command('report')
+def eject() -> int:
+    """
+    Report on the environment.
+    """
+    log.info(LOG_SEPARATOR)
+    log.info('inspecting environment (tool version information):')
+    for tool_key in TOOL_VERSION_COMMAND_MAP:
+        too.report(tool_key)
+    log.info(LOG_SEPARATOR)
+
+    return sys.exit(0)
 
 
 @app.command('eject')

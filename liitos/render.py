@@ -154,13 +154,7 @@ def der(
             log.info('we will render ...')
         else:
             log.warning('we will not render ...')
-            return 0xfadecafe
-
-        log.info(LOG_SEPARATOR)
-        log.info('inspecting environment (tool version information):')
-        for tool_key in TOOL_VERSION_COMMAND_MAP:
-            too.report(tool_key)
-        log.info(LOG_SEPARATOR)
+            return 0xFADECAFE
 
         log.info(LOG_SEPARATOR)
         log.info('transforming SVG assets to high resolution PNG bitmaps ...')
