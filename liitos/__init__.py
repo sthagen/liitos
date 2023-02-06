@@ -42,23 +42,74 @@ except shellingham.ShellDetectionFailure:
     SHELL = ('', 'echo')
 
 TOOL_VERSION_COMMAND_MAP = {
-    'etiketti': 'etiketti --version',
-    'exiftool': 'exiftool -ver',
-    'foran': 'foran version',
-    'git': 'git --version',
-    'liitos': 'liitos version',
-    'lualatex': 'lualatex --version',
-    'mermaid': 'npm view mermaid',
-    'mermaid-filter': 'npm view mermaid-filter',
-    'navigaattori': 'navigaattori version',
-    'node': 'node --version',
-    'npm': 'npm --version',
-    'pandoc': 'pandoc --version',
-    'pdfinfo': 'pdfinfo -v',
-    'python': 'python -V',
-    'shell': f'{SHELL[1]} --version',
-    'svgexport': 'npm view svgexport',
-    'taksonomia': 'taksonomia --version',
+    'etiketti': {
+        'command': 'etiketti --version',
+        'banner': 'Label and document the pdf file (data protection and identity)',
+    },
+    'exiftool': {
+        'command': 'exiftool -ver',
+        'banner': 'Change and list EXIF attributes',
+    },
+    'foran': {
+        'command': 'foran version',
+        'banner': 'Inspect local git status (or detect that there is no repository)',
+    },
+    'git': {
+        'command': 'git --version',
+        'banner': 'Version control system (git)',
+    },
+    'liitos': {
+        'command': 'liitos version',
+        'banner': 'Process the markdown documentation to produce PDF',
+    },
+    'lualatex': {
+        'command': 'lualatex --version',
+        'banner': 'Process LaTeX to produce PDF',
+    },
+    'mermaid': {
+        'command': 'npm view mermaid',
+        'banner': 'Mermaid for rendering diagrams from textual representations',
+    },
+    'mermaid-filter': {
+        'command': 'npm view mermaid-filter',
+        'banner': 'Pandoc filter for mermaid diagrams (rasterized version for PDF)',
+    },
+    'navigaattori': {
+        'command': 'navigaattori version',
+        'banner': 'Discover publication structural information from tree',
+    },
+    'node': {
+        'command': 'node --version',
+        'banner': 'Node server for executing some tools',
+    },
+    'npm': {
+        'command': 'npm --version',
+        'banner': 'Node package manager for inspecting versions of some node based tools',
+    },
+    'pandoc': {
+        'command': 'pandoc --version',
+        'banner': 'Pandoc for transforming markdown to LaTeX',
+    },
+    'pdfinfo': {
+        'command': 'pdfinfo -v',
+        'banner': 'Show PDF file information',
+    },
+    'python': {
+        'command': 'python -V',
+        'banner': 'Python driving it all',
+    },
+    'shell': {
+        'command': f'{SHELL[1]} --version',
+        'banner': 'The shell under which this process executes',
+    },
+    'svgexport': {
+        'command': 'npm view svgexport',
+        'banner': 'Export SVG to PNG (rasterized version for inclusion in PDF)',
+    },
+    'taksonomia': {
+        'command': 'taksonomia --version',
+        'banner': 'Assess and document the inventory of folders and files',
+    },
 }
 
 ToolKey = str

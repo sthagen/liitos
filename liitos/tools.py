@@ -156,8 +156,10 @@ def delegate(command: list[str], marker: str, do_shell: bool = False) -> int:
 @no_type_check
 def report(on: ToolKey) -> int:
     """Execute the tool specific version command."""
-    tool_version_call_text = str(TOOL_VERSION_COMMAND_MAP.get(on, '')).strip()
+    tool_context = TOOL_VERSION_COMMAND_MAP.get(on, {})
+    tool_version_call_text = str(tool_context.get('command', '')).strip()
     tool_version_call = tool_version_call_text.split()
+    tool_reason_banner = str(tool_context.get('banner', 'No reason for the tool known')).strip()
     if not tool_version_call:
         log.warning(f'cowardly avoiding undefined call for tool key ({on})')
         log.info(f'- known tool keys are: ({", ".join(sorted(TOOL_VERSION_COMMAND_MAP))})')
@@ -165,6 +167,7 @@ def report(on: ToolKey) -> int:
 
     log.info(LOG_SEPARATOR)
     log.info(f'requesting tool version information from environment per ({tool_version_call})')
+    log.info(f'- {tool_reason_banner}')
     code = delegate(tool_version_call, f'tool-version-of-{on}')
     log.info(LOG_SEPARATOR)
 
