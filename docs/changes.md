@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 2023.2.6
+
+* Amended tool version reports with why and what for semantics (<https://todo.sr.ht/~sthagen/liitos/18>)
+
 ### 2023.2.5
 
 * Modified external tool delegation harness to never exit the process per uncaught exception (<https://todo.sr.ht/~sthagen/liitos/16>)
