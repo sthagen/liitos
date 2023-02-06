@@ -4,16 +4,17 @@
 
 ### 2023.2.7
 
-* Fix: Consider render value in logs (<https://todo.sr.ht/~sthagen/liitos/17>)
-* Performance: Do not report on environment for render false (<https://todo.sr.ht/~sthagen/liitos/21>)
+* Fix: consider render value in logs (<https://todo.sr.ht/~sthagen/liitos/17>)
+* Performance: do not report on environment for render false (<https://todo.sr.ht/~sthagen/liitos/21>)
+* Performance: move report functionality to dedicated command (<https://todo.sr.ht/~sthagen/liitos/22>)
 
 ### 2023.2.6
 
-* Feature: Amended tool version reports with why and what for semantics (<https://todo.sr.ht/~sthagen/liitos/18>)
+* Feature: amended tool version reports with why and what for semantics (<https://todo.sr.ht/~sthagen/liitos/18>)
 
 ### 2023.2.5
 
-* Robustness: Modified external tool delegation harness to never exit the process per uncaught exception (<https://todo.sr.ht/~sthagen/liitos/16>)
+* Robustness: modified external tool delegation harness to never exit the process per uncaught exception (<https://todo.sr.ht/~sthagen/liitos/16>)
 
 ### 2023.2.4
 
