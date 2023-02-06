@@ -55,12 +55,6 @@ def der(
     filter_cs_list = parse_csl(options.get('filter_cs_list', FILTER_CS_LIST))
     log.info(f'parsed from-format-spec ({from_format_spec}) and filters ({", ".join(filter_cs_list)}) from request')
 
-    log.info(LOG_SEPARATOR)
-    log.info('inspecting environment (tool version information):')
-    for tool_key in TOOL_VERSION_COMMAND_MAP:
-        too.report(tool_key)
-    log.info(LOG_SEPARATOR)
-
     structure, asset_map = gat.prelude(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='render'
     )
@@ -160,7 +154,13 @@ def der(
             log.info('we will render ...')
         else:
             log.warning('we will not render ...')
-            return 0
+            return 0xfadecafe
+
+        log.info(LOG_SEPARATOR)
+        log.info('inspecting environment (tool version information):')
+        for tool_key in TOOL_VERSION_COMMAND_MAP:
+            too.report(tool_key)
+        log.info(LOG_SEPARATOR)
 
         log.info(LOG_SEPARATOR)
         log.info('transforming SVG assets to high resolution PNG bitmaps ...')
