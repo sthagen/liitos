@@ -28,9 +28,13 @@ def weave(incoming: Iterable[str]) -> list[str]:
                     modus = 'caption'
             elif line.startswith(r'\end{longtable}'):
                 log.info(f'end of table env detected at line #{slot + 1}')
-                outgoing.extend(table)
-                outgoing.append(r'\rowcolor{white}')
-                outgoing.extend(caption)
+                for stmt in table:
+                    if not stmt.startswith(r'\endlastfoot'):
+                        outgoing.append(stmt)
+                        continue
+                    else:
+                        outgoing.extend(caption)
+                        outgoing.append(stmt)
                 outgoing.append(line)
                 modus = 'copy'
             else:

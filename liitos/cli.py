@@ -329,7 +329,7 @@ def render(  # noqa
 
 
 @app.command('report')
-def eject() -> int:
+def report() -> int:
     """
     Report on the environment.
     """
