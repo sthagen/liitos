@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 2023.2.8
+
+* Fix: with pandoc 3+ the captions end up within the table (<https://todo.sr.ht/~sthagen/liitos/23>)
+
 ### 2023.2.7
 
 * Fix: consider render value in logs (<https://todo.sr.ht/~sthagen/liitos/17>)
