@@ -299,7 +299,7 @@ def der(
 
         if options.get('patch_tables', False):
             lines = too.execute_filter(
-                dsc.options,
+                tab.patch,
                 head='patching tables EXPERIMENTAL (table-shape) ...',
                 backup='document-before-table-shape-patch.tex.txt',
                 label='changed-table-shape',
