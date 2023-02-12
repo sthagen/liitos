@@ -43,3 +43,35 @@ def test_patch_tab_start():
 def test_patch_tab_three_cols():
     incoming = TABLE_THREE_COLS.split()
     assert tables.patch(incoming) == incoming
+
+
+def test_table():
+    with open('test/fixtures/random/tables.tex', 'rt', encoding='utf-8') as handle:
+        lines_buffer = [line.rstrip() for line in handle.readlines()]
+
+    reader = iter(lines_buffer)
+    some_tables = []
+    comment_outs = []
+    n = 0
+    widths = []
+    for line in reader:
+        if not line.startswith(tables.Table.LBP_STARTSWITH_TAB_ENV_BEGIN):
+            if line.startswith(r'\columns='):
+                has_column, text_line, widths = tables.parse_columns_command(n, line)
+                if has_column:
+                    comment_outs.append(n)
+            n += 1
+        else:
+            table = tables.Table(n, line, reader, widths)  # sharing the meal - instead of iter(lines_buffer[n:]))
+            widths = []
+            some_tables.append(table)
+            n += len(some_tables[-1].source_map())
+
+    assert comment_outs == [92]
+
+
+def test_patch_some():
+    with open('test/fixtures/random/tables.tex', 'rt', encoding='utf-8') as handle:
+        lines_buffer = [line.rstrip() for line in handle.readlines()]
+    out_lines = tables.patch(lines_buffer)
+    assert out_lines[92] == r'%CONSIDERED_\columns=,10\%,30\%,50\%'
