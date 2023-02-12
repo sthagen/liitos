@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 2023.2.13
+
+* Fix: Compare strings to strings for width manipulation (<https://todo.sr.ht/~sthagen/liitos/25>)
+
 ### 2023.2.12
 
 * Feature: offer an injection feature like scale command for table column widths (<https://todo.sr.ht/~sthagen/liitos/9>)
