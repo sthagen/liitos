@@ -1,107 +1,11 @@
 """Apply all pairs in patch module on document."""
 import re
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 
 from liitos import log
 
-_ = r"""
-\columns=,10\%,30\%,50\%
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0735}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1471}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3824}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3971}}@{}}
-\caption{A caption for a patchable table
-\label{table:patchable-table}}\tabularnewline
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Key
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Summary
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Parent Requirement
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Means of Compliance (MOC)
-\end{minipage} \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Key
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Summary
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Parent Requirement
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Means of Compliance (MOC)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-A-1 & Be good & I told you so! & Observation \\
-A-2 & Be nice & I asked you to! & Trust \\
-A-3 & Be good & I told you once! & Observation \\
-A-4 & Be nice & I asked you once! & Trust \\
-A-5 & Be good & I told you twice! & Observation \\
-A-6 & Be nice & I asked you twice! & Trust \\
-A-7 & Be good & I told you three times! & Observation \\
-A-8 & Be nice & I asked you three times! & Trust \\
-\end{longtable}
-"""
-
-# after captions patch:
-__ = r"""
-\columns=,10\%,30\%,50\%
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0735}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1471}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3824}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3971}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Key
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Summary
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Parent Requirement
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Means of Compliance (MOC)
-\end{minipage} \\
-\midrule\noalign{}
-\endfirsthead
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Key
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Summary
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Parent Requirement
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Means of Compliance (MOC)
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-A-1 & Be good & I told you so! & Observation \\
-A-2 & Be nice & I asked you to! & Trust \\
-A-3 & Be good & I told you once! & Observation \\
-A-4 & Be nice & I asked you once! & Trust \\
-A-5 & Be good & I told you twice! & Observation \\
-A-6 & Be nice & I asked you twice! & Trust \\
-A-7 & Be good & I told you three times! & Observation \\
-A-8 & Be nice & I asked you three times! & Trust \\
-\rowcolor{white}
-\caption{A caption for a patchable table
-\label{table:patchable-table}}\tabularnewline
-\end{longtable}
-"""
-
 # The "target pattern for a line base minimal regex parser"
-___ = r"""
+_ = r"""
 \columns=
 
 \begin{longtable}[]{
@@ -197,11 +101,13 @@ COMMA = ','
 
 class Table:
     """Some adhoc structure to encapsulate tje source and target table."""
+    SourceMapType = list[tuple[int, str]]
+    ColumnsType = dict[str, dict[str, float | int | str]]
 
     # ---- begin of LBP skeleton / shape ---
     LBP_STARTSWITH_TAB_ENV_BEGIN = r'\begin{longtable}[]{'
-    LBP_REAL_INNER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\real{(?P<cwval>[0-9.]+)}}\s*$')
-    LBP_REAL_OUTER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\real{(?P<cwval>[0-9.]+)}}@{}}\s*$')
+    LBP_REAL_INNER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\\real{(?P<cwval>[0-9.]+)}}\s*$')
+    LBP_REAL_OUTER_COLW_PAT = re.compile(r'^(?P<clspec>.+)\\real{(?P<cwval>[0-9.]+)}}@{}}\s*$')
     # Width lines for header:
     FUT_LSPLIT_ONCE_FOR_PREFIX_VAL_COMMA_RIGHT = '}}'
     FUT_LSPLIT_ONCE_FOR_PREFIX_COMMA_VAL = r'\real{'
@@ -238,9 +144,252 @@ class Table:
     LBP_STARTSWITH_TAB_ENV_END = r'\end{longtable}'
 
     # ---- end of LBP skeleton / shape ---
-    def __init__(self, anchor: int, test_lines: Iterable[str]):
-        """Initialize the table from source text lines anchored at anchor."""
-        pass
+    def __init__(self, anchor: int, start_line: str, text_lines: Iterator[str], widths: list[float]):
+        """Initialize the table from source text lines anchored at anchor.
+        The implementation allows reuse of the iterator on caller site for extracting subsequent tables in one go.
+        """
+        self.src_map: Table.SourceMapType = [(anchor, start_line.rstrip())]
+        self.data_row_ends: Table.SourceMapType = []
+        self.columns: Table.ColumnsType = {}
+        self.target_widths: list[float] = widths
+        self.source_widths: list[float] = []
+        log.info(f'Received {anchor=}, {start_line=}, and target {widths=}')
+        local_number = 0
+        consumed = False
+        while not consumed:
+            local_number += 1
+            pos = local_number + anchor
+            line = next(text_lines).rstrip()
+            self.src_map.append((pos, line))
+            if line.startswith(Table.LBP_STARTSWITH_TAB_ENV_END):
+                consumed = True
+
+        self.parse_columns()
+        self.parse_data_rows()
+        self.data_row_count = len(self.data_row_ends)
+        self.cw_patches = {}
+        self.create_width_patches()
+        log.info(f'Parsed {len(self.target_widths)} x {self.data_row_count} table starting at anchor {anchor}')
+
+    def create_width_patches(self):
+        """If widths are meaningful and consistent create the patches with the zero-based line-numbers as keys."""
+        if not self.source_widths:
+            log.warning('Found no useful width information')
+            return {}
+        wrapper = r'\real{'
+        postfix = '}}'
+        finalize = '@{}}'
+        ranks = list(self.columns)
+        for rank in ranks:
+            anchor_str = str(self.columns[rank]['col_spec_line'])
+            prefix = self.columns[rank]['colspec_prefix']
+            value = self.columns[rank]['width']
+            # concat PREFIX + r'\real{' + str(column_width_new) + '}}'
+            self.cw_patches[anchor_str] = prefix + wrapper + str(value) + postfix
+            if rank == ranks[-1]:
+                self.cw_patches[anchor_str] += finalize
+
+    def width_patches(self) -> dict[str, str]:
+        """Return the map of width patches with the zero-based line-numbers as keys."""
+        return self.cw_patches
+
+    def source_map(self) -> SourceMapType:
+        """Return the source map data (a random accessible sequence of pairs) mapping abs line number to text line."""
+        return self.src_map
+
+    def column_data(self) -> ColumnsType:
+        """Return the column data (an ordered dict of first labels, other labels, and widths) with abs line map."""
+        return self.columns
+
+    def column_source_widths(self) -> list[float]:
+        """Return the incoming column widths."""
+        return self.source_widths
+
+    def column_target_widths(self) -> list[float]:
+        """Return the outgoing column widths."""
+        return self.target_widths
+
+    def table_width(self) -> float:
+        """Return the sum of all column widths."""
+        return sum(self.columns[r].get('width', 0) for r in self.columns)
+
+    def data_row_seps(self) -> SourceMapType:
+        """Return the map to the data row ends for injecting separators."""
+        return self.data_row_ends
+
+    def transform_widths(self):
+        """Apply the target transform to column widths."""
+        self.source_widths = [self.columns[rank]['width'] for rank in self.columns]
+        if not self.target_widths:
+            log.info('No target widths given - maintaining source column widths')
+            self.target_widths = self.source_widths
+            return
+        if len(self.target_widths) != len(self.source_widths):
+            log.warning(
+                f'Mismatching {len(self.target_widths)} target widths given - maintaining'
+                f'the {len(self.source_widths)} source column widths'
+            )
+            self.target_widths = self.source_widths
+            return
+        log.info('Applying target widths given - adapting source column widths')
+        for rank, target_width in zip(self.columns, self.target_widths):
+            self.columns[rank]['width'] = target_width
+
+    def parse_columns(self):
+        """Parse the head to extract the columns."""
+        self.parse_column_widths()
+        self.parse_column_first_head()
+        self.parse_column_other_head()
+        self.transform_widths()
+
+    def parse_column_widths(self):
+        """Parse the column width declarations to initialize the columns data.
+
+        \begin{longtable}[]{@{}%wun-based-line-9
+          >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1118}}
+          >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.5776}}
+          >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1739}}
+          >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1366}}@{}}
+        \toprule\noalign{}
+        """
+        rank = 0
+        for anchor, text in self.src_map:
+            if text.startswith(Table.LBP_STARTSWITH_TAB_ENV_BEGIN):
+                continue
+            if text.startswith(Table.LBP_TOP_RULE_CONTEXT_STARTSWITH):
+                break
+            m = Table.LBP_REAL_INNER_COLW_PAT.match(text)
+            if m:
+                self.columns[str(rank)] = {
+                    'first_label': '',
+                    'first_label_line': -1,
+                    'continued_label': '',
+                    'continued_label_line': -1,
+                    'col_spec_line': anchor,
+                    'colspec_prefix': m.groupdict()['clspec'],
+                    'width': float(m.groupdict()['cwval']),
+                }
+                rank += 1
+                continue
+            m = Table.LBP_REAL_OUTER_COLW_PAT.match(text)
+            if m:
+                self.columns[str(rank)] = {
+                    'first_label': '',
+                    'first_label_line': -1,
+                    'continued_label': '',
+                    'continued_label_line': -1,
+                    'col_spec_line': anchor,
+                    'colspec_prefix': m.groupdict()['clspec'],
+                    'width': float(m.groupdict()['cwval']),
+                }
+                rank += 1
+                continue
+
+    def parse_column_first_head(self):
+        """Parse the head to extract the columns.
+
+        \begin{minipage}[b]{\linewidth}\raggedright
+        Parameter
+        \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+        Description
+        \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+        Name
+        \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+        Example
+        \end{minipage} \\
+        \midrule\noalign{}
+        \endfirsthead
+        """
+        rank = 0
+        first_head = False
+        label_next = False
+        for anchor, text in self.src_map:
+            if text.startswith(Table.LBP_TOP_RULE_CONTEXT_STARTSWITH):
+                first_head = True
+                continue
+            if not first_head:
+                continue
+            if text.startswith(Table.LBP_END_FIRST_HEAD_STARTSWITH):
+                break
+            if text.startswith(Table.LPB_START_COLUMN_LABEL_STARTSWITH):
+                label_next = True
+                continue
+            if text.startswith(Table.LBP_SEP_COLUMN_LABEL_STARTSWITH):
+                label_next = True
+                continue
+            if text.startswith(Table.LBP_STOP_COLUMN_LABEL_STARTSWITH):
+                label_next = True
+                continue
+            if label_next:
+                self.columns[str(rank)]['first_label'] = text.strip()
+                self.columns[str(rank)]['first_label_line'] = anchor
+                rank += 1
+                if str(rank) in self.columns:
+                    continue
+                break
+
+    def parse_column_other_head(self):
+        """Parse the other heads to extract the column labelss.
+
+        \endfirsthead
+        \toprule\noalign{}
+        \begin{minipage}[b]{\linewidth}\raggedright
+        Parameter
+        \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+        Description
+        \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+        Name
+        \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+        Example
+        \end{minipage} \\
+        \midrule\noalign{}
+        \endhead
+        """
+        rank = 0
+        continued_head = False
+        label_next = False
+        for anchor, text in self.src_map:
+            if text.startswith(Table.LBP_END_FIRST_HEAD_STARTSWITH):
+                continued_head = True
+                continue
+            if not continued_head:
+                continue
+            if text.startswith(Table.LBP_END_ALL_HEAD_STARTSWITH):
+                break
+            if text.startswith(Table.LPB_START_COLUMN_LABEL_STARTSWITH):
+                label_next = True
+                continue
+            if text.startswith(Table.LBP_SEP_COLUMN_LABEL_STARTSWITH):
+                label_next = True
+                continue
+            if text.startswith(Table.LBP_STOP_COLUMN_LABEL_STARTSWITH):
+                label_next = True
+                continue
+            if label_next:
+                self.columns[str(rank)]['continued_label'] = text.strip()
+                self.columns[str(rank)]['continued_label_line'] = anchor
+                rank += 1
+                if str(rank) in self.columns:
+                    continue
+                break
+
+    def parse_data_rows(self):
+        """Parse the data rows.
+
+        \endlastfoot
+        A2 & B2 & C2 & D2 \\
+        \end{longtable}
+        """
+        data_section = False
+        for anchor, text in self.src_map:
+            if text.startswith(Table.LBP_END_LAST_FOOT_STARTSWITH):
+                data_section = True
+                continue
+            if text.startswith(Table.LBP_STARTSWITH_TAB_ENV_END):
+                break
+            if data_section and r'\\' in text:
+                self.data_row_ends.append((anchor, text))
+                continue
 
 
 def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[float]]:
@@ -251,7 +400,7 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
             cols_csv = text_line.split('=', 1)[1].strip()  # r'\columns    =    , 20\%,70\%'  --> r', 20\%,70\%'
             cols = [v.strip() for v in cols_csv.split(COMMA)]
             widths = [float(v.replace(r'\%', '')) / 100 if r'\%' in v else (float(v) if v else 0) for v in cols]
-            rest = 1 - sum(widths)
+            rest = round(1 - sum(round(w, 5) for w in widths), 5)
             widths = [v if v else rest for v in widths]
             log.info(f' -> parsed columns mod as | {" | ".join(str(round(v, 2)) for v in widths)} |')
             return True, '', widths
@@ -320,7 +469,7 @@ def patch(incoming: Iterable[str]) -> list[str]:
             table_range = {}
             annotation, table_section = False, False
 
-    log.debug(str(table_ranges))
+    log.error(str(table_ranges))
 
     tables_in, on_off_slots = [], []
     for table in table_ranges:
@@ -338,6 +487,54 @@ def patch(incoming: Iterable[str]) -> list[str]:
         log.debug(str('\n'.join(tables_in[0][1])))
     log.debug('# - - - 8< - - -')
 
+    reader = iter(incoming)
+    tables = []
+    comment_outs = []
+    n = 0
+    widths = []
+    for line in reader:
+        log.info(f'zero-based-line-no={n}, text=({line}) table-count={len(tables)}')
+        if not line.startswith(Table.LBP_STARTSWITH_TAB_ENV_BEGIN):
+            if line.startswith(r'\columns='):
+                has_column, text_line, widths = parse_columns_command(n, line)
+                log.info(f'    + {has_column=}, {text_line=}, {widths=}')
+                if has_column:
+                    comment_outs.append(n)
+            n += 1
+        else:
+            table = Table(n, line, reader, widths)  # sharing the meal - instead of iter(lines_buffer[n:]))
+            widths = []
+            tables.append(table)
+            n += len(tables[-1].source_map())
+            log.info(f'- incremented n to {n}')
+            log.info(f'! next n (zero offset) is {n}')
+
+    log.info('---')
+    for n, table in enumerate(tables, start=1):
+        log.info(f'Table #{n} (total width = {table.table_width()}):')
+        for rank, column in table.column_data().items():
+            log.info(f'{rank} -> {column}')
+        log.info(f'- source widths = {table.column_source_widths()}):')
+        log.info(f'- target widths = {table.column_target_widths()}):')
+        for numba, replacement in table.width_patches().items():
+            log.info(f'{numba} -> {replacement}')
+        for anchor, text in table.data_row_seps():
+            log.info(f'{anchor} -> {text}')
+    log.info('---')
+    log.info(f'Comment out the following {len(comment_outs)} lines (zero based numbers):')
+    for number in comment_outs:
+        log.info(f'- {number}')
+
+    wideners = {}
+    for table in tables:
+        for numba, replacement in table.width_patches().items():
+            wideners[numba] = replacement
+    widen_me = set(wideners)
+    log.info('--- global replacement width lines: ---')
+    for numba, replacement in wideners.items():
+        log.info(f'{numba} => {replacement}')
+    log.info('---')
+
     out = []
     next_slot = 0
     punch_me = set(comment_outs)
@@ -345,35 +542,39 @@ def patch(incoming: Iterable[str]) -> list[str]:
         if n in punch_me:
             out.append(f'%CONSIDERED_{line}')
             continue
+        if n in widen_me:
+            out.append(wideners[str(n)])
+            continue
+        out.append(line)
 
-        if next_slot < len(on_off_slots):
-            trigger_on, trigger_off = on_off_slots[next_slot]
-            tb = table_ranges[next_slot]
-        else:
-            trigger_on = None
-        if trigger_on is None:
-            out.append(line)
-            continue
-
-        if n < trigger_on:
-            out.append(line)
-            continue
-        if n == trigger_on:
-            out.append(TAB_NEW_START)
-            out.append(TAB_HACKED_HEAD)
-            continue
-        if n <= tb['end_head']:
-            continue
-        if n < tb.get('bottom_rule', 0):
-            out.append(line)
-            if n in tb['end_data_row']:  # type: ignore
-                out.append(NEW_RULE)
-            continue
-        if tb.get('bottom_rule', 0) <= n < tb['amend']:
-            continue
-        if n == tb['amend']:
-            out.append(TAB_NEW_END.replace('ANNOTATION', line))
-            next_slot += 1
+        # if next_slot < len(on_off_slots):
+        #     trigger_on, trigger_off = on_off_slots[next_slot]
+        #     tb = table_ranges[next_slot]
+        # else:
+        #     trigger_on = None
+        # if trigger_on is None:
+        #     out.append(line)
+        #     continue
+        #
+        # if n < trigger_on:
+        #     out.append(line)
+        #     continue
+        # if n == trigger_on:
+        #     out.append(TAB_NEW_START)
+        #     out.append(TAB_HACKED_HEAD)
+        #     continue
+        # if n <= tb['end_head']:
+        #     continue
+        # if n < tb.get('bottom_rule', 0):
+        #     out.append(line)
+        #     if n in tb['end_data_row']:  # type: ignore
+        #         out.append(NEW_RULE)
+        #     continue
+        # if tb.get('bottom_rule', 0) <= n < tb['amend']:
+        #     continue
+        # if n == tb['amend']:
+        #     out.append(TAB_NEW_END.replace('ANNOTATION', line))
+        #     next_slot += 1
 
     log.debug(' -----> ')
     log.debug('# - - - 8< - - -')
