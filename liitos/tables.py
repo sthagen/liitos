@@ -469,7 +469,9 @@ def patch(incoming: Iterable[str]) -> list[str]:
             table_range = {}
             annotation, table_section = False, False
 
-    log.error(str(table_ranges))
+    log.info(f'Detected {len(table_ranges)} tables (method from before version 2023.2.12):')
+    for thing in table_ranges:
+        log.info(f'- {thing}')
 
     tables_in, on_off_slots = [], []
     for table in table_ranges:
@@ -493,7 +495,7 @@ def patch(incoming: Iterable[str]) -> list[str]:
     n = 0
     widths = []
     for line in reader:
-        log.info(f'zero-based-line-no={n}, text=({line}) table-count={len(tables)}')
+        log.debug(f'zero-based-line-no={n}, text=({line}) table-count={len(tables)}')
         if not line.startswith(Table.LBP_STARTSWITH_TAB_ENV_BEGIN):
             if line.startswith(r'\columns='):
                 has_column, text_line, widths = parse_columns_command(n, line)
@@ -506,8 +508,8 @@ def patch(incoming: Iterable[str]) -> list[str]:
             widths = []
             tables.append(table)
             n += len(tables[-1].source_map())
-            log.info(f'- incremented n to {n}')
-            log.info(f'! next n (zero offset) is {n}')
+            log.debug(f'- incremented n to {n}')
+            log.debug(f'! next n (zero offset) is {n}')
 
     log.info('---')
     for n, table in enumerate(tables, start=1):
@@ -530,13 +532,13 @@ def patch(incoming: Iterable[str]) -> list[str]:
         for numba, replacement in table.width_patches().items():
             wideners[numba] = replacement
     widen_me = set(wideners)
-    log.info('--- global replacement width lines: ---')
+    log.debug('--- global replacement width lines: ---')
     for numba, replacement in wideners.items():
-        log.info(f'{numba} => {replacement}')
-    log.info('---')
+        log.debug(f'{numba} => {replacement}')
+    log.debug('---')
 
     out = []
-    next_slot = 0
+    # next_slot = 0
     punch_me = set(comment_outs)
     for n, line in enumerate(incoming):
         if n in punch_me:
@@ -575,6 +577,8 @@ def patch(incoming: Iterable[str]) -> list[str]:
         # if n == tb['amend']:
         #     out.append(TAB_NEW_END.replace('ANNOTATION', line))
         #     next_slot += 1
+
+    log.warning('Disabled naive table patching from before version 2023.2.12 for now')
 
     log.debug(' -----> ')
     log.debug('# - - - 8< - - -')
