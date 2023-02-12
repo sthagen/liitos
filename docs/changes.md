@@ -2,6 +2,11 @@
 
 ## 2023
 
+### 2023.2.12
+
+* Feature: offer an injection feature like scale command for table column widths (<https://todo.sr.ht/~sthagen/liitos/9>)
+* Fix: Table patching skipped due to failed refactoring (<https://todo.sr.ht/~sthagen/liitos/24>)
+
 ### 2023.2.8
 
 * Fix: with pandoc 3+ the captions end up within the table (<https://todo.sr.ht/~sthagen/liitos/23>)
