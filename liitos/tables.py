@@ -523,7 +523,7 @@ def patch(incoming: Iterable[str]) -> list[str]:
         for anchor, text in table.data_row_seps():
             log.info(f'{anchor} -> {text}')
     log.info('---')
-    log.info(f'Comment out the following {len(comment_outs)} lines (zero based numbers):')
+    log.info(f'Comment out the following {len(comment_outs)} lines (zero based numbers) - punch:')
     for number in comment_outs:
         log.info(f'- {number}')
 
@@ -532,6 +532,8 @@ def patch(incoming: Iterable[str]) -> list[str]:
         for numba, replacement in table.width_patches().items():
             wideners[numba] = replacement
     widen_me = set(wideners)
+    log.debug('widen me has:')
+    log.debug(list(widen_me))
     log.debug('--- global replacement width lines: ---')
     for numba, replacement in wideners.items():
         log.debug(f'{numba} => {replacement}')
@@ -542,10 +544,14 @@ def patch(incoming: Iterable[str]) -> list[str]:
     punch_me = set(comment_outs)
     for n, line in enumerate(incoming):
         if n in punch_me:
-            out.append(f'%CONSIDERED_{line}')
+            corrected = f'%CONSIDERED_{line}'
+            out.append(corrected)
+            log.info(f' (x) Punched out line {n} -> ({corrected})')
             continue
-        if n in widen_me:
+        if str(n) in widen_me:
             out.append(wideners[str(n)])
+            log.info(f' (<) Incoming: ({line})')
+            log.info(f' (>) Outgoing: ({wideners[str(n)]})')
             continue
         out.append(line)
 
