@@ -1,6 +1,7 @@
 """Apply all pairs in patch module on document."""
 import re
 from collections.abc import Iterable, Iterator
+from typing import no_type_check
 
 from liitos import log
 
@@ -145,6 +146,7 @@ class Table:
     LBP_STARTSWITH_TAB_ENV_END = r'\end{longtable}'
 
     # ---- end of LBP skeleton / shape ---
+    @no_type_check
     def __init__(self, anchor: int, start_line: str, text_lines: Iterator[str], widths: list[float]):
         """Initialize the table from source text lines anchored at anchor.
         The implementation allows reuse of the iterator on caller site for extracting subsequent tables in one go.
@@ -168,10 +170,11 @@ class Table:
         self.parse_columns()
         self.parse_data_rows()
         self.data_row_count = len(self.data_row_ends)
-        self.cw_patches = {}
+        self.cw_patches: dict[str, str] = {}
         self.create_width_patches()
         log.info(f'Parsed {len(self.target_widths)} x {self.data_row_count} table starting at anchor {anchor}')
 
+    @no_type_check
     def create_width_patches(self):
         """If widths are meaningful and consistent create the patches with the zero-based line-numbers as keys."""
         if not self.source_widths:
@@ -210,6 +213,7 @@ class Table:
         """Return the outgoing column widths."""
         return self.target_widths
 
+    @no_type_check
     def table_width(self) -> float:
         """Return the sum of all column widths."""
         return sum(self.columns[r].get('width', 0) for r in self.columns)
@@ -218,7 +222,8 @@ class Table:
         """Return the map to the data row ends for injecting separators."""
         return self.data_row_ends
 
-    def transform_widths(self):
+    @no_type_check
+    def transform_widths(self) -> None:
         """Apply the target transform to column widths."""
         self.source_widths = [self.columns[rank]['width'] for rank in self.columns]
         if not self.target_widths:
@@ -236,14 +241,15 @@ class Table:
         for rank, target_width in zip(self.columns, self.target_widths):
             self.columns[rank]['width'] = target_width
 
-    def parse_columns(self):
+    @no_type_check
+    def parse_columns(self) -> None:
         """Parse the head to extract the columns."""
         self.parse_column_widths()
         self.parse_column_first_head()
         self.parse_column_other_head()
         self.transform_widths()
 
-    def parse_column_widths(self):
+    def parse_column_widths(self) -> None:
         """Parse the column width declarations to initialize the columns data.
 
         \begin{longtable}[]{@{}%wun-based-line-9
@@ -286,7 +292,7 @@ class Table:
                 rank += 1
                 continue
 
-    def parse_column_first_head(self):
+    def parse_column_first_head(self) -> None:
         """Parse the head to extract the columns.
 
         \begin{minipage}[b]{\linewidth}\raggedright
@@ -329,7 +335,7 @@ class Table:
                     continue
                 break
 
-    def parse_column_other_head(self):
+    def parse_column_other_head(self) -> None:
         """Parse the other heads to extract the column labelss.
 
         \endfirsthead
@@ -374,7 +380,7 @@ class Table:
                     continue
                 break
 
-    def parse_data_rows(self):
+    def parse_data_rows(self) -> None:
         """Parse the data rows.
 
         \endlastfoot
@@ -412,6 +418,7 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
         return False, text_line, []
 
 
+@no_type_check
 def patch(incoming: Iterable[str]) -> list[str]:
     """Later alligator. \\columns=,0.2,0.7 as mandatory trigger"""
     table_section, head, annotation = False, False, False
@@ -434,7 +441,7 @@ def patch(incoming: Iterable[str]) -> list[str]:
             table_range['start'] = n
             table_section = True
             head = True
-            table_range['end_data_row'] = []  # type: ignore
+            table_range['end_data_row'] = []
             continue
 
         if text.startswith(TOP_RULE):
@@ -451,7 +458,7 @@ def patch(incoming: Iterable[str]) -> list[str]:
             continue
 
         if not head and text.strip().endswith(END_DATA_ROW):
-            table_range['end_data_row'].append(n)  # type: ignore
+            table_range['end_data_row'].append(n)
             continue
 
         if text.startswith(BOT_RULE):
@@ -479,11 +486,11 @@ def patch(incoming: Iterable[str]) -> list[str]:
         from_here = table['start']
         thru_there = table['amend']
         log.info('Table:')
-        log.info(f'-from {incoming[from_here]}')  # type: ignore
-        log.info(f'-thru {incoming[thru_there]}')  # type: ignore
+        log.info(f'-from {incoming[from_here]}')
+        log.info(f'-thru {incoming[thru_there]}')
         on_off = (from_here, thru_there + 1)
         on_off_slots.append(on_off)
-        tables_in.append((on_off, [line for line in incoming[on_off[0] : on_off[1]]]))  # type: ignore
+        tables_in.append((on_off, [line for line in incoming[on_off[0] : on_off[1]]]))
 
     log.debug('# - - - 8< - - -')
     if tables_in:
