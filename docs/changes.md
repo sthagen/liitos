@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 2023.2.14
+
+* Fix: Restore italics as emphasis instead of underline (<https://todo.sr.ht/~sthagen/liitos/26>)
+
 ### 2023.2.13
 
 * Fix: Compare strings to strings for width manipulation (<https://todo.sr.ht/~sthagen/liitos/25>)
