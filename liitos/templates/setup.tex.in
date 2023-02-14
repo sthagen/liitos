@@ -85,7 +85,7 @@
 \makeatother
 % enable strikeout
 \usepackage{soul}
-\usepackage{ulem}
+\usepackage[normalem]{ulem}%% package with default options change emph to become underline instead of italics =(
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
