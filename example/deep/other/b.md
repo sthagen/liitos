@@ -1,8 +1,8 @@
 # B
 
-## Do Not List in TOC {.unlisted}
+## Do Not List This Subsection in TOC {.unlisted}
 
-Yes.
+Yes. Not listing the above proves that `header_attributes` is active.
 
 ![Caption Text Red](images/red.png "Alt Text Red")
 
