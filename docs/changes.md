@@ -2,6 +2,10 @@
 
 ## 2023
 
+### 2023.4.25
+
+* Fix: Mermaid captions not considered (<https://todo.sr.ht/~sthagen/liitos/27>)
+
 ### 2023.2.14
 
 * Fix: Restore italics as emphasis instead of underline (<https://todo.sr.ht/~sthagen/liitos/26>)
