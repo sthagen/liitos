@@ -11,5 +11,5 @@ taksonomia==2023.1.24
   - psutil [required: >=5.9.4, installed: 5.9.4]
   - py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
   - PyYAML [required: >=6.0, installed: 6.0]
-treelib==1.6.1
-  - future [required: Any, installed: 0.18.2]
+treelib==1.6.4
+  - six [required: Any, installed: 1.16.0]

@@ -98,13 +98,13 @@
     {
         "key": "treelib",
         "package_name": "treelib",
-        "installed_version": "1.6.1",
-        "required_version": "1.6.1",
+        "installed_version": "1.6.4",
+        "required_version": "1.6.4",
         "dependencies": [
             {
-                "key": "future",
-                "package_name": "future",
-                "installed_version": "0.18.2",
+                "key": "six",
+                "package_name": "six",
+                "installed_version": "1.16.0",
                 "required_version": "Any",
                 "dependencies": []
             }

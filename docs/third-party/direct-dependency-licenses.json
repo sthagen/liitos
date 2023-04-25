@@ -12,7 +12,7 @@
     "Version": "6.0"
   },
   {
-    "Author": "UNKNOWN",
+    "Author": "Stefan Hagen <stefan@hagen.link>",
     "Description": "In front or behind (Danish: foran eller bagved)? Answering the question if a local repository status is in front of or behind its remote.",
     "License": "MIT License",
     "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.9/envs/liitos-3-10-9/lib/python3.10/site-packages/foran-2022.12.7.dist-info/LICENSE",
@@ -20,7 +20,7 @@
     "Name": "foran",
     "NoticeFile": "UNKNOWN",
     "NoticeText": "UNKNOWN",
-    "URL": "UNKNOWN",
+    "URL": "https://git.sr.ht/~sthagen/foran",
     "Version": "2022.12.7"
   },
   {
@@ -36,7 +36,7 @@
     "Version": "1.5.0.post1"
   },
   {
-    "Author": "UNKNOWN",
+    "Author": "Stefan Hagen <stefan@hagen.link>",
     "Description": "Taxonomy (Finnish: taksonomia) of a folder tree, guided by conventions.",
     "License": "MIT License",
     "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.9/envs/liitos-3-10-9/lib/python3.10/site-packages/taksonomia-2023.1.24.dist-info/LICENSE",
@@ -44,20 +44,20 @@
     "Name": "taksonomia",
     "NoticeFile": "UNKNOWN",
     "NoticeText": "UNKNOWN",
-    "URL": "UNKNOWN",
+    "URL": "https://git.sr.ht/~sthagen/taksonomia",
     "Version": "2023.1.24"
   },
   {
     "Author": "Xiaming Chen",
     "Description": "A Python 2/3 implementation of tree structure.",
     "License": "Apache Software License",
-    "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.9/envs/liitos-3-10-9/lib/python3.10/site-packages/treelib-1.6.1.dist-info/LICENSE",
+    "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.9/envs/liitos-3-10-9/lib/python3.10/site-packages/treelib-1.6.4.dist-info/LICENSE",
     "LicenseText": "treelib - Simple to use for you.\nPython 2/3 Tree Implementation\n\nCopyright (C) 2011\n    Brett Alistair Kromkamp - brettkromkamp@gmail.com\nCopyright (C) 2012-2017\n    Xiaming Chen - chenxm35@gmail.com\n    and other contributors.\nAll rights reserved.\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.",
     "Name": "treelib",
     "NoticeFile": "UNKNOWN",
     "NoticeText": "UNKNOWN",
     "URL": "https://github.com/caesar0301/treelib",
-    "Version": "1.6.1"
+    "Version": "1.6.4"
   },
   {
     "Author": "Sebasti\u00e1n Ram\u00edrez",
