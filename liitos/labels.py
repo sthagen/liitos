@@ -5,7 +5,7 @@ from liitos import log
 NO_LABEL = 'no-label-found-ERROR'
 
 
-def inject(incoming: Iterable[str]) -> list[str]:
+def inject(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'
@@ -34,11 +34,20 @@ def inject(incoming: Iterable[str]) -> list[str]:
                     log.info(adhoc_label)
                 except Exception as err:
                     log.error(f'failed to extract generic label from {line.strip()} with err: {err}')
+                captain = 'MISSING-CAPTION-IN-MARKDOWN'
+                try:
+                    token = line.split('{', 1)[1].rstrip('}')
+                    if lookup is not None:
+                        captain = lookup.get(token, captain)
+                except Exception as err:
+                    log.error(
+                        f'failed to extract file path token for caption lookup from {line.strip()} with err: {err}'
+                    )
                 outgoing.append('')  # TODO(sthagen) - why do we sometimes received joined strings?
                 outgoing.append(r'\begin{figure}')
                 outgoing.append(r'\centering')
                 outgoing.append(line)
-                outgoing.append(r'\caption{MISSING-CAPTION-IN-MARKDOWN ' + adhoc_label + '}')
+                outgoing.append(r'\caption{' + captain + ' ' + adhoc_label + '}')
                 outgoing.append(r'\end{figure}')
             elif line.startswith(r'\includegraphics{') and precondition_met:
                 log.info(f'within a figure environment at line #{slot + 1}')

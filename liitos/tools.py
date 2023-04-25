@@ -175,14 +175,21 @@ def report(on: ToolKey) -> int:
 
 
 @no_type_check
-def execute_filter(the_filter: Callable, head: str, backup: str, label: str, text_lines: list[str]) -> list[str]:
+def execute_filter(
+    the_filter: Callable,
+    head: str,
+    backup: str,
+    label: str,
+    text_lines: list[str],
+    lookup: dict[str, str] | None = None,
+) -> list[str]:
     """Chain filter calls by storing in and out lies in files and return the resulting lines."""
     log.info(LOG_SEPARATOR)
     log.info(head)
     doc_before_caps_patch = backup
     with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(text_lines))
-    patched_lines = the_filter(text_lines)
+    patched_lines = the_filter(text_lines, lookup=lookup)
     with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(patched_lines))
     log.info(f'diff of the ({label}) filter result:')

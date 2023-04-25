@@ -3,7 +3,7 @@ from collections.abc import Iterable
 from liitos import log
 
 
-def weave(incoming: Iterable[str]) -> list[str]:
+def weave(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'

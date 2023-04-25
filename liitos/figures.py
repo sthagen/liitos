@@ -5,7 +5,7 @@ from liitos import log
 NO_RESCALE: float | int = 0
 
 
-def scale(incoming: Iterable[str]) -> list[str]:
+def scale(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'

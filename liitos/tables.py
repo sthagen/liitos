@@ -419,7 +419,7 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
 
 
 @no_type_check
-def patch(incoming: Iterable[str]) -> list[str]:
+def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     """Later alligator. \\columns=,0.2,0.7 as mandatory trigger"""
     table_section, head, annotation = False, False, False
     table_ranges = []
