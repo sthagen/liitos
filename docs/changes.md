@@ -1,5 +1,8 @@
 # Changes
 
+Source
+:    * Fix: Make the SVG asset patching more robust (<https://todo.sr.ht/~sthagen/liitos/28>)
+
 2023.4.25
 :    * Fix: Mermaid captions not considered (<https://todo.sr.ht/~sthagen/liitos/27>)
 
