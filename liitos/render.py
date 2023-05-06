@@ -2,6 +2,7 @@
 import json
 import os
 import pathlib
+import re
 import shutil
 import time
 from typing import no_type_check
@@ -35,6 +36,7 @@ DIAGRAMS_FOLDER = 'diagrams/'
 PATCH_SPEC_NAME = 'patch.yml'
 INTER_PROCESS_SYNC_SECS = 0.1
 INTER_PROCESS_SYNC_ATTEMPTS = 10
+VENDORED_SVG_PAT = re.compile(r'^.+\]\([^.]+\.[^.]+\.svg\ .+$')
 
 
 @no_type_check
@@ -178,34 +180,36 @@ def der(
         with open('document.md', 'rt', encoding=ENCODING) as handle:
             lines = [line.rstrip() for line in handle.readlines()]
         for slot, line in enumerate(lines):
-            if '.svg' in line and line.count('.') >= 2:
-                caption, src, alt, rest = con.parse_markdown_image(line)
-                stem, app_indicator, format_suffix = src.rsplit('.', 2)
-                log.info(f'- removing application indicator ({app_indicator}) from src ...')
-                if format_suffix != 'svg':
-                    log.warning(f'  + format_suffix (.{format_suffix}) unexpected in <<{line.rstrip()}>> ...')
-                fine = f'![{caption}]({stem}.png "{alt}"){rest}'
-                log.info(f'  transform[#{slot + 1}]: {line}')
-                log.info(f'       into[#{slot + 1}]: {fine}')
-                lines[slot] = fine
-                dia_path_old = src.replace('.svg', '.png')
-                dia_path_new = f'{stem}.png'
-                dia_fine_rstrip = dia_path_new.rstrip()
-                if dia_path_old and dia_path_new:
-                    special_patching.append((dia_path_old, dia_path_new))
-                    log.info(
-                        f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old}) -> ({dia_path_new})'
-                    )
-                else:
-                    log.warning(f'- old: {src.rstrip()}')
-                    log.warning(f'- new: {dia_fine_rstrip}')
-                continue
-            if '.svg' in line:
-                fine = line.replace('.svg', '.png')
-                log.info(f'  transform[#{slot + 1}]: {line}')
-                log.info(f'       into[#{slot + 1}]: {fine}')
-                lines[slot] = fine
-                continue
+            if line.startswith('![') and '](' in line:
+                if VENDORED_SVG_PAT.match(line):
+                    if '.svg' in line and line.count('.') >= 2:
+                        caption, src, alt, rest = con.parse_markdown_image(line)
+                        stem, app_indicator, format_suffix = src.rsplit('.', 2)
+                        log.info(f'- removing application indicator ({app_indicator}) from src ...')
+                        if format_suffix != 'svg':
+                            log.warning(f'  + format_suffix (.{format_suffix}) unexpected in <<{line.rstrip()}>> ...')
+                        fine = f'![{caption}]({stem}.png "{alt}"){rest}'
+                        log.info(f'  transform[#{slot + 1}]: {line}')
+                        log.info(f'       into[#{slot + 1}]: {fine}')
+                        lines[slot] = fine
+                        dia_path_old = src.replace('.svg', '.png')
+                        dia_path_new = f'{stem}.png'
+                        dia_fine_rstrip = dia_path_new.rstrip()
+                        if dia_path_old and dia_path_new:
+                            special_patching.append((dia_path_old, dia_path_new))
+                            log.info(
+                                f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old}) -> ({dia_path_new})'
+                            )
+                        else:
+                            log.warning(f'- old: {src.rstrip()}')
+                            log.warning(f'- new: {dia_fine_rstrip}')
+                        continue
+                if '.svg' in line:
+                    fine = line.replace('.svg', '.png')
+                    log.info(f'  transform[#{slot + 1}]: {line}')
+                    log.info(f'       into[#{slot + 1}]: {fine}')
+                    lines[slot] = fine
+                    continue
         with open('document.md', 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
 
