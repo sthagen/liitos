@@ -1,99 +1,77 @@
 # Changes
 
-## 2023
+2023.4.25
+:    * Fix: Mermaid captions not considered (<https://todo.sr.ht/~sthagen/liitos/27>)
 
-### 2023.4.25
+2023.2.14
+:    * Fix: Restore italics as emphasis instead of underline (<https://todo.sr.ht/~sthagen/liitos/26>)
 
-* Fix: Mermaid captions not considered (<https://todo.sr.ht/~sthagen/liitos/27>)
+2023.2.13
+:    * Fix: Compare strings to strings for width manipulation (<https://todo.sr.ht/~sthagen/liitos/25>)
 
-### 2023.2.14
-
-* Fix: Restore italics as emphasis instead of underline (<https://todo.sr.ht/~sthagen/liitos/26>)
-
-### 2023.2.13
-
-* Fix: Compare strings to strings for width manipulation (<https://todo.sr.ht/~sthagen/liitos/25>)
-
-### 2023.2.12
-
-* Feature: offer an injection feature like scale command for table column widths (<https://todo.sr.ht/~sthagen/liitos/9>)
+2023.2.12
+:    * Feature: offer an injection feature like scale command for table column widths (<https://todo.sr.ht/~sthagen/liitos/9>)
 * Fix: Table patching skipped due to failed refactoring (<https://todo.sr.ht/~sthagen/liitos/24>)
 
-### 2023.2.8
+2023.2.8
+:    * Fix: with pandoc 3+ the captions end up within the table (<https://todo.sr.ht/~sthagen/liitos/23>)
 
-* Fix: with pandoc 3+ the captions end up within the table (<https://todo.sr.ht/~sthagen/liitos/23>)
-
-### 2023.2.7
-
-* Fix: consider render value in logs (<https://todo.sr.ht/~sthagen/liitos/17>)
+2023.2.7
+:    * Fix: consider render value in logs (<https://todo.sr.ht/~sthagen/liitos/17>)
 * Performance: do not report on environment for render false (<https://todo.sr.ht/~sthagen/liitos/21>)
 * Performance: move report functionality to dedicated command (<https://todo.sr.ht/~sthagen/liitos/22>)
 
-### 2023.2.6
+2023.2.6
+:    * Feature: amended tool version reports with why and what for semantics (<https://todo.sr.ht/~sthagen/liitos/18>)
 
-* Feature: amended tool version reports with why and what for semantics (<https://todo.sr.ht/~sthagen/liitos/18>)
+2023.2.5
+:    * Robustness: modified external tool delegation harness to never exit the process per uncaught exception (<https://todo.sr.ht/~sthagen/liitos/16>)
 
-### 2023.2.5
-
-* Robustness: modified external tool delegation harness to never exit the process per uncaught exception (<https://todo.sr.ht/~sthagen/liitos/16>)
-
-### 2023.2.4
-
-* Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
+2023.2.4
+:    * Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
 * Added enter log messages per function
 * Fixed process render command to actually return the result codes to the parent process (some failures are now final!)
 * Implemented minimal environment tool version reporting before rendering (<https://todo.sr.ht/~sthagen/liitos/14>)
 
-### 2023.2.1
+2023.2.1
+:    * Amended setup template to embrace more pandoc version transforms for strikeout (<https://todo.sr.ht/~sthagen/liitos/15>)
 
-* Amended setup template to embrace more pandoc version transforms for strikeout (<https://todo.sr.ht/~sthagen/liitos/15>)
-
-### 2023.1.31
-
-* Added the header filtering and documented the use
+2023.1.31
+:    * Added the header filtering and documented the use
 * Enabled strike-out (a.k.a. strike-through) markup per the usual double tilde bracketing
 * Replaced a print statement with a log call in patch module
 * Wrapped all diff log loops in another newline split-level to ensure consistent prefixing
 
-### 2023.1.29
-
-* Added processing of columns command (no consideration when patching tables yet)
+2023.1.29
+:    * Added processing of columns command (no consideration when patching tables yet)
 * Documented how to remove the bold style from description list terms in usage docs
 
-### 2023.1.25
-
-* Added experimental suppression of hyphenation
+2023.1.25
+:    * Added experimental suppression of hyphenation
 * Implemented an option command for opinionated table patching
 
-### 2023.1.22
+2023.1.22
+:    * Implemented an option command handling to style descriptions (definition lists) (<https://todo.sr.ht/~sthagen/liitos/8>)
 
-* Implemented an option command handling to style descriptions (definition lists) (<https://todo.sr.ht/~sthagen/liitos/8>)
+2023.1.21
+:    * Implemented an optional call string interface to pdf labeling (<https://todo.sr.ht/~sthagen/liitos/6>)
 
-### 2023.1.21
-
-* Implemented an optional call string interface to pdf labeling (<https://todo.sr.ht/~sthagen/liitos/6>)
-
-### 2023.1.17
-
-* Added parameter to adjust the vertical placement of the approvals table (<https://todo.sr.ht/~sthagen/liitos/7>)
+2023.1.17
+:    * Added parameter to adjust the vertical placement of the approvals table (<https://todo.sr.ht/~sthagen/liitos/7>)
 * Enhanced changes implementation to allow a revision key (<https://todo.sr.ht/~sthagen/liitos/10>)
 
-### 2023.1.14
-
-* Added total run duration to render command logging (<https://todo.sr.ht/~sthagen/liitos/4>)
+2023.1.14
+:    * Added total run duration to render command logging (<https://todo.sr.ht/~sthagen/liitos/4>)
 * Fixed logging of locally changed repository files (<https://todo.sr.ht/~sthagen/liitos/5>)
 
-### 2023.1.12
+2023.1.12
+:    * Implemented use of selected fonts in all elements (<https://todo.sr.ht/~sthagen/liitos/3>)
 
-* Implemented use of selected fonts in all elements (<https://todo.sr.ht/~sthagen/liitos/3>)
+2023.1.11
+:    * Fixed templates packaging (<https://todo.sr.ht/~sthagen/liitos/2>)
 
-### 2023.1.11
-
-* Fixed templates packaging (<https://todo.sr.ht/~sthagen/liitos/2>)
-
-### 2023.1.10
-
-* Added initial implementation of PDF document structure to include numbering to implement (<https://todo.sr.ht/~sthagen/liitos/1>)
+2023.1.10
+:    * Added initial implementation of PDF document structure to include numbering to implement (<https://todo.sr.ht/~sthagen/liitos/1>)
 
 ## 2022
 
