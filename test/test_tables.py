@@ -101,8 +101,24 @@ def test_parse_table_font_size_command_known_size():
     assert font_size == '\\tiny'
 
 
+def test_parse_table_font_size_command_known_size_with_backslash():
+    line = '\\tablefontsize=\\tiny'
+    worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
+    assert worked is True
+    assert out_line == ''
+    assert font_size == '\\tiny'
+
+
 def test_parse_table_font_size_command_no_equal_sign():
     line = '\\tablefontsize\\tiny'
+    worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
+    assert worked is False
+    assert out_line == line
+    assert font_size == ''
+
+
+def test_parse_table_font_size_command_missing_value():
+    line = '\\tablefontsize='
     worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
     assert worked is False
     assert out_line == line
