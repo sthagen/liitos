@@ -403,15 +403,15 @@ def parse_table_font_size_command(slot: int, text_line: str) -> tuple[bool, str,
     """Parse the \\tablefontsize=footnotesize command."""
     backslash = '\\'
     known_sizes = (
-        '\\tiny', '\\scriptsize', '\\footnotesize', '\\small', '\\normalsize',
-        '\\large', '\\Large', '\\LARGE', '\\huge', '\\Huge',
+        'tiny', 'scriptsize', 'footnotesize', 'small', 'normalsize',
+        'large', 'Large', 'LARGE', 'huge', 'Huge',
     )
     if text_line.startswith(r'\tablefontsize='):
         log.info(f'trigger a fontsize mod for the next table environment at line #{slot + 1}|{text_line}')
         try:
             font_size = text_line.split('=', 1)[1].strip()  # r'\tablefontsize=Huge'  --> 'Huge'
-            if not font_size.startswith(backslash):
-                font_size = backslash + font_size
+            if font_size.startswith(backslash):
+                font_size = font_size.lstrip(backslash)
             if font_size not in known_sizes:
                 log.error(f'failed to map given fontsize ({font_size}) into known sizes ({",".join(known_sizes)})')
                 return False, text_line, ''

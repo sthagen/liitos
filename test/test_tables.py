@@ -94,11 +94,11 @@ def test_parse_table_font_size_command_no_command_at_start():
 
 
 def test_parse_table_font_size_command_known_size():
-    line = '\\tablefontsize=tiny'
+    line = '\\tablefontsize=footnotesize'
     worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
     assert worked is True
     assert out_line == ''
-    assert font_size == '\\tiny'
+    assert font_size == 'footnotesize'
 
 
 def test_parse_table_font_size_command_known_size_with_backslash():
@@ -106,7 +106,7 @@ def test_parse_table_font_size_command_known_size_with_backslash():
     worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
     assert worked is True
     assert out_line == ''
-    assert font_size == '\\tiny'
+    assert font_size == 'tiny'
 
 
 def test_parse_table_font_size_command_no_equal_sign():
