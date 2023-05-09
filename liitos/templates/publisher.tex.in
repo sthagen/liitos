@@ -4,8 +4,8 @@
 \begin{longtable}[]{|
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1600}}|
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.6900}}|}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2000}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.6500}}|}
 \hline
 \begin{minipage}[b]{\linewidth}\raggedright
 \textbf{\theChangeLogIssLabel}
