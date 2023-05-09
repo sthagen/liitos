@@ -1,7 +1,9 @@
 # Changes
 
-Source
-:    * Fix: Make the SVG asset patching more robust (<https://todo.sr.ht/~sthagen/liitos/28>)
+2023.5.9
+:    * Added tablefontsize parser function and corresponding tests
+* Fix: Make the SVG asset patching more robust (<https://todo.sr.ht/~sthagen/liitos/28>)
+* Widened the author column in the change log table
 
 2023.4.25
 :    * Fix: Mermaid captions not considered (<https://todo.sr.ht/~sthagen/liitos/27>)
