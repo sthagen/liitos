@@ -147,7 +147,7 @@ class Table:
 
     # ---- end of LBP skeleton / shape ---
     @no_type_check
-    def __init__(self, anchor: int, start_line: str, text_lines: Iterator[str], widths: list[float]):
+    def __init__(self, anchor: int, start_line: str, text_lines: Iterator[str], widths: list[float], font_sz: str = ''):
         """Initialize the table from source text lines anchored at anchor.
         The implementation allows reuse of the iterator on caller site for extracting subsequent tables in one go.
         """
@@ -156,7 +156,8 @@ class Table:
         self.columns: Table.ColumnsType = {}
         self.target_widths: list[float] = widths
         self.source_widths: list[float] = []
-        log.info(f'Received {anchor=}, {start_line=}, and target {widths=}')
+        self.font_size = font_sz
+        log.info(f'Received {anchor=}, {start_line=}, target {widths=}, and {font_sz=}')
         local_number = 0
         consumed = False
         while not consumed:
@@ -451,16 +452,27 @@ def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list
     guess_slot = 0
     table_range = {}
     has_column = False
+    has_font_size = False
     widths: list[float] = []
+    font_size = ''
     comment_outs = []
     for n, text in enumerate(incoming):
         if not table_section:
+
+            if not has_font_size:
+                has_font_size, text_line, font_size = parse_table_font_size_command(n, text)
+                if has_font_size:
+                    comment_outs.append(n)
+            if not has_font_size:
+                continue
+
             if not has_column:
                 has_column, text_line, widths = parse_columns_command(n, text)
                 if has_column:
                     comment_outs.append(n)
             if not has_column:
                 continue
+
             if not text.startswith(TAB_START_TOK):
                 continue
             table_range['start'] = n
@@ -527,22 +539,31 @@ def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list
     comment_outs = []
     n = 0
     widths = []
+    font_size = ''
     for line in reader:
         log.debug(f'zero-based-line-no={n}, text=({line}) table-count={len(tables)}')
         if not line.startswith(Table.LBP_STARTSWITH_TAB_ENV_BEGIN):
+            if line.startswith(r'\tablefontsize='):
+                has_font_size, text_line, font_size = parse_table_font_size_command(n, line)
+                log.info(f'    + {has_font_size=}, {text_line=}, {font_size=}')
+                if has_font_size:
+                    comment_outs.append(n)
+                    log.info(f'FONT-SIZE at <<{n}>>')
             if line.startswith(r'\columns='):
                 has_column, text_line, widths = parse_columns_command(n, line)
                 log.info(f'    + {has_column=}, {text_line=}, {widths=}')
                 if has_column:
                     comment_outs.append(n)
+                    log.info(f'COLUMNS-WIDTH at <<{n}>>')
             n += 1
         else:
-            table = Table(n, line, reader, widths)  # sharing the meal - instead of iter(lines_buffer[n:]))
-            widths = []
+            table = Table(n, line, reader, widths, font_size)  # sharing the meal - instead of iter(lines_buffer[n:]))
             tables.append(table)
             n += len(tables[-1].source_map())
             log.debug(f'- incremented n to {n}')
             log.debug(f'! next n (zero offset) is {n}')
+            widths = []
+            font_size = ''
 
     log.info('---')
     for n, table in enumerate(tables, start=1):
@@ -555,6 +576,7 @@ def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list
             log.info(f'{numba} -> {replacement}')
         for anchor, text in table.data_row_seps():
             log.info(f'{anchor} -> {text}')
+        log.info(f'= (fontsize command = "{table.font_size}"):')
     log.info('---')
     log.info(f'Comment out the following {len(comment_outs)} lines (zero based numbers) - punch:')
     for number in comment_outs:
@@ -572,6 +594,19 @@ def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list
         log.debug(f'{numba} => {replacement}')
     log.debug('---')
 
+    sizers = {}
+    for table in tables:
+        if table.font_size:
+            sizers[str(table.src_map[0][0])] = '\\begin{' + table.font_size + '}\n' + table.src_map[0][1]
+            sizers[str(table.src_map[-1][0])] = table.src_map[-1][1] + '\n' + '\\end{' + table.font_size + '}'
+    size_me = set(sizers)
+    log.debug('size me has:')
+    log.debug(list(size_me))
+    log.debug('--- global replacement sizer lines: ---')
+    for numba, replacement in sizers.items():
+        log.debug(f'{numba} => {replacement}')
+    log.debug('---')
+
     out = []
     # next_slot = 0
     punch_me = set(comment_outs)
@@ -585,6 +620,11 @@ def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list
             out.append(wideners[str(n)])
             log.info(f' (<) Incoming: ({line})')
             log.info(f' (>) Outgoing: ({wideners[str(n)]})')
+            continue
+        if str(n) in size_me:
+            out.append(sizers[str(n)])
+            log.info(f' (<) Incoming: ({line})')
+            log.info(f' (>) Outgoing: ({sizers[str(n)]})')
             continue
         out.append(line)
 

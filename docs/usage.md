@@ -1180,3 +1180,43 @@ Note: When reference texts are too log to fit a line some words may be hyphenate
 inside such terms) broken across lines. To avoid that, you can break the line in the markdown source before that term
 and append `\hfill \break` at the end of that line. Replacing say `LONG-TERM` with `\mbox{LONG-TERM}` also shields
 against linebreaks cutting the term, but may cause "badness" (the term may well stick out the page to the right).
+
+### Adjusting Table Column Widths and Font Sizes
+
+There are two commands that you can inject into the markdown before tables (`example/deep/part/a2.md`):
+
+```markdown
+\tablefontsize=tiny
+
+\columns=,20%,70%
+
+| Left          |   Middle Quite Long    |          Right and even much longer |
+|:--------------|:----------------------:|------------------------------------:|
+| L1            |           M2           | Whatever this triggers in layout R3 |
+| L4 and really | M5 or MFIVE who knows? |                                  R6 |
+| L7            |           M8           |                                  R9 |
+| L10           |          M11           |                                 R12 |
+| L13           |          M14           |                                 R15 |
+
+Table: A caption for a table \label{table:left-middle-right-too}
+```
+
+This will force the second column to have 20% of width, the third to have 70%, and the first column 
+width will be calculated as 10% (100% - 20% - 70%).
+
+The fontsize of the table (for now also the caption, sorry) will be set to the latex fontsize `\tiny`.
+
+The known latex fontsizes from smallest to largest are:
+
+- `\tiny`
+- `\scriptsize`
+- `\footnotesize`
+- `\small`
+- `\normalsize`
+- `\large`
+- `\Large`
+- `\LARGE`
+- `\huge`
+- `\Huge`
+
+You can drop the backslash when the fontsize is given as parameter to this command.

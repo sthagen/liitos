@@ -383,6 +383,7 @@ def der(
             log.info(LOG_SEPARATOR)
             log.info('not patching tables but commenting out (ignoring) any columns command (table-shape) ...')
             patched_lines = [f'%IGNORED_{v}' if v.startswith(r'\columns=') else v for v in lines]
+            patched_lines = [f'%IGNORED_{v}' if v.startswith(r'\tablefontsize=') else v for v in patched_lines]
             log.info('diff of the (ignore-table-shape-if-not-patched) filter result:')
             too.log_unified_diff(lines, patched_lines)
             lines = patched_lines
