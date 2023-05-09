@@ -75,3 +75,35 @@ def test_patch_some():
         lines_buffer = [line.rstrip() for line in handle.readlines()]
     out_lines = tables.patch(lines_buffer)
     assert out_lines[92] == r'%CONSIDERED_\columns=,10\%,30\%,50\%'
+
+
+def test_parse_table_font_size_command_unknown():
+    line = '\\tablefontsize=unknown'
+    worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
+    assert worked is False
+    assert out_line == line
+    assert font_size == ''
+
+
+def test_parse_table_font_size_command_no_command_at_start():
+    line = ' \\tablefontsize=notatstart'
+    worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
+    assert worked is False
+    assert out_line == line
+    assert font_size == ''
+
+
+def test_parse_table_font_size_command_known_size():
+    line = '\\tablefontsize=tiny'
+    worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
+    assert worked is True
+    assert out_line == ''
+    assert font_size == '\\tiny'
+
+
+def test_parse_table_font_size_command_no_equal_sign():
+    line = '\\tablefontsize\\tiny'
+    worked, out_line, font_size = tables.parse_table_font_size_command(0, line)
+    assert worked is False
+    assert out_line == line
+    assert font_size == ''
