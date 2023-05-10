@@ -404,8 +404,16 @@ def parse_table_font_size_command(slot: int, text_line: str) -> tuple[bool, str,
     """Parse the \\tablefontsize=footnotesize command."""
     backslash = '\\'
     known_sizes = (
-        'tiny', 'scriptsize', 'footnotesize', 'small', 'normalsize',
-        'large', 'Large', 'LARGE', 'huge', 'Huge',
+        'tiny',
+        'scriptsize',
+        'footnotesize',
+        'small',
+        'normalsize',
+        'large',
+        'Large',
+        'LARGE',
+        'huge',
+        'Huge',
     )
     if text_line.startswith(r'\tablefontsize='):
         log.info(f'trigger a fontsize mod for the next table environment at line #{slot + 1}|{text_line}')
@@ -458,7 +466,6 @@ def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list
     comment_outs = []
     for n, text in enumerate(incoming):
         if not table_section:
-
             if not has_font_size:
                 has_font_size, text_line, font_size = parse_table_font_size_command(n, text)
                 if has_font_size:
