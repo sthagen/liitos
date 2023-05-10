@@ -1,9 +1,12 @@
 # Changes
 
+2023.5.10
+:    * Feature: Finished implementation of font size environment use for tables (<https://todo.sr.ht/~sthagen/liitos/11>)
+
 2023.5.9
-:    * Added tablefontsize parser function and corresponding tests
+:    * Feature: Added tablefontsize parser function and corresponding tests
 * Fix: Make the SVG asset patching more robust (<https://todo.sr.ht/~sthagen/liitos/28>)
-* Widened the author column in the change log table
+* Feature: Widened the author column in the change log table
 
 2023.4.25
 :    * Fix: Mermaid captions not considered (<https://todo.sr.ht/~sthagen/liitos/27>)
@@ -33,37 +36,37 @@
 :    * Robustness: modified external tool delegation harness to never exit the process per uncaught exception (<https://todo.sr.ht/~sthagen/liitos/16>)
 
 2023.2.4
-:    * Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
-* Added enter log messages per function
+:    * Feature: Added from-format-spec and filter-cs-list parameters to extend the pandoc transformations
+* Feature: Added enter log messages per function
 * Fixed process render command to actually return the result codes to the parent process (some failures are now final!)
-* Implemented minimal environment tool version reporting before rendering (<https://todo.sr.ht/~sthagen/liitos/14>)
+* Feature: Implemented minimal environment tool version reporting before rendering (<https://todo.sr.ht/~sthagen/liitos/14>)
 
 2023.2.1
-:    * Amended setup template to embrace more pandoc version transforms for strikeout (<https://todo.sr.ht/~sthagen/liitos/15>)
+:    * Feature: Amended setup template to embrace more pandoc version transforms for strikeout (<https://todo.sr.ht/~sthagen/liitos/15>)
 
 2023.1.31
-:    * Added the header filtering and documented the use
-* Enabled strike-out (a.k.a. strike-through) markup per the usual double tilde bracketing
-* Replaced a print statement with a log call in patch module
-* Wrapped all diff log loops in another newline split-level to ensure consistent prefixing
+:    * Feature: Added the header filtering and documented the use
+* Feature: Enabled strike-out (a.k.a. strike-through) markup per the usual double tilde bracketing
+* Refactoring: Replaced a print statement with a log call in patch module
+* Refactoring: Wrapped all diff log loops in another newline split-level to ensure consistent prefixing
 
 2023.1.29
-:    * Added processing of columns command (no consideration when patching tables yet)
-* Documented how to remove the bold style from description list terms in usage docs
+:    * Feature: Added processing of columns command (no consideration when patching tables yet)
+* Feature: Documented how to remove the bold style from description list terms in usage docs
 
 2023.1.25
-:    * Added experimental suppression of hyphenation
-* Implemented an option command for opinionated table patching
+:    * Feature: Added experimental suppression of hyphenation
+* Feature: Implemented an option command for opinionated table patching
 
 2023.1.22
-:    * Implemented an option command handling to style descriptions (definition lists) (<https://todo.sr.ht/~sthagen/liitos/8>)
+:    * Feature: Implemented an option command handling to style descriptions (definition lists) (<https://todo.sr.ht/~sthagen/liitos/8>)
 
 2023.1.21
-:    * Implemented an optional call string interface to pdf labeling (<https://todo.sr.ht/~sthagen/liitos/6>)
+:    * Feature: Implemented an optional call string interface to pdf labeling (<https://todo.sr.ht/~sthagen/liitos/6>)
 
 2023.1.17
-:    * Added parameter to adjust the vertical placement of the approvals table (<https://todo.sr.ht/~sthagen/liitos/7>)
-* Enhanced changes implementation to allow a revision key (<https://todo.sr.ht/~sthagen/liitos/10>)
+:    * Feature: Added parameter to adjust the vertical placement of the approvals table (<https://todo.sr.ht/~sthagen/liitos/7>)
+* Feature: Enhanced changes implementation to allow a revision key (<https://todo.sr.ht/~sthagen/liitos/10>)
 
 2023.1.14
 :    * Added total run duration to render command logging (<https://todo.sr.ht/~sthagen/liitos/4>)
