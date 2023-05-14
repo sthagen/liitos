@@ -185,7 +185,7 @@
   \clearpairofpagestyles
   \ihead*{%%
     \upshape
-    \begin{tabular*}{116mm}[t]{@{}p{55mm}p{35mm}p{25mm}@{}}%% ... tuned ... effective 115mm
+    \begin{tabular*}{117mm}[t]{@{}p{55mm}p{35mm}p{25mm}@{}}%% ... tuned ... effective 115mm
      \strut \\
       \multicolumn{3}{l}{\hskip -0.6em \LARGE\theMetaTitle} \hfill \strut \\%% ... tuned the hskip to align left without gap
       \hline {\footnotesize \textbf{\theMetaType}} \hfill & \hfill & \hfill \strut \\
