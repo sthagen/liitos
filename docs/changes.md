@@ -1,5 +1,8 @@
 # Changes
 
+2023.5.13
+:    * Templates: ensure horizontal header lines for title page are of same lenght as in other header (<https://todo.sr.ht/~sthagen/liitos/30>)
+
 2023.5.10
 :    * Feature: Finished implementation of font size environment use for tables (<https://todo.sr.ht/~sthagen/liitos/11>)
 
