@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json) with SHA256 checksum ([d46c7760 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom.json.sha256 "sha256:d46c776030a0516f84363860c4d7961eaae92f1305dca3d66a4afa1e0136e6b7")).
-<!--[[[end]]] (checksum: c76885d9ccb9b4c2d565fbfa4e8c5cef)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json) with SHA256 checksum ([c9403c54 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json.sha256 "sha256:c9403c540697795669a67cf6dee66a3e3a81d30bb84698f4557f6577e74944ac")).
+<!--[[[end]]] (checksum: 3e9712b68eaf58067733e4b977f9418b)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -51,19 +51,19 @@ Base graphviz file in dot format: [Trees of the direct dependencies](package-dep
 <!--[[[fill dependency_tree_console_text()]]]-->
 ````console
 foran==2022.12.7
-  - GitPython [required: >=3.1.29, installed: 3.1.29]
-    - gitdb [required: >=4.0.1,<5, installed: 4.0.10]
-      - smmap [required: >=3.0.1,<6, installed: 5.0.0]
-  - typer [required: >=0.7.0, installed: 0.7.0]
-    - click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
+├── GitPython [required: >=3.1.29, installed: 3.1.29]
+│   └── gitdb [required: >=4.0.1,<5, installed: 4.0.10]
+│       └── smmap [required: >=3.0.1,<6, installed: 5.0.0]
+└── typer [required: >=0.7.0, installed: 0.7.0]
+    └── click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
 shellingham==1.5.0.post1
 taksonomia==2023.1.24
-  - lxml [required: >=4.9.2, installed: 4.9.2]
-  - msgspec [required: >=0.12.0, installed: 0.12.0]
-  - psutil [required: >=5.9.4, installed: 5.9.4]
-  - py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
-  - PyYAML [required: >=6.0, installed: 6.0]
+├── lxml [required: >=4.9.2, installed: 4.9.2]
+├── msgspec [required: >=0.12.0, installed: 0.12.0]
+├── psutil [required: >=5.9.4, installed: 5.9.4]
+├── py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
+└── PyYAML [required: >=6.0, installed: 6.0]
 treelib==1.6.4
-  - six [required: Any, installed: 1.16.0]
+└── six [required: Any, installed: 1.16.0]
 ````
-<!--[[[end]]] (checksum: d5c196dda193d85f1354a1b39de55f1c)-->
+<!--[[[end]]] (checksum: 797d3be73a90cb9cf6ac429a1552c377)-->
