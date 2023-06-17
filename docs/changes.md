@@ -1,5 +1,8 @@
 # Changes
 
+2023.6.17
+:    * Moved SBOM noise into folder and added SPDX SBOM (derived) in multiple file formats 
+
 2023.5.13
 :    * Templates: ensure horizontal header lines for title page are of same length as in other header (<https://todo.sr.ht/~sthagen/liitos/30>)
 
