@@ -1,0 +1,6 @@
+---
+layout:
+  global:
+    has_approvals: true
+    has_changes: true
+    has_notices: true

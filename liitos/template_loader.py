@@ -9,6 +9,7 @@ RESOURCES = (
     'templates/bookmatter.tex.in',
     'templates/changes.yml',
     'templates/driver.tex.in',
+    'templates/layout.yml',
     'templates/meta.yml',
     'templates/meta-patch.yml',
     'templates/metadata.tex.in',

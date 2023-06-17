@@ -1,0 +1,10 @@
+changes:
+- author: Another Author
+  date: 01 DEC 2022
+  issue: '01'
+  summary: Initial Issue
+- author: An Author
+  date: PUBLICATIONDATE
+  issue: '01'
+  revision: '01'
+  summary: Fixed some nit

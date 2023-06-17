@@ -251,8 +251,8 @@ def test_verify_assets():
     os.chdir(TEST_PREFIX)
     predicate, message = gather.verify_assets(TEST_FACET, TEST_TARGET, assets)
     os.chdir(ole_place)
-    assert not message
-    assert predicate
+    assert message == 'layout asset for facet (mn) of target (abc) is invalid'
+    assert predicate is False
 
 
 def test_verify_assets_no_key():

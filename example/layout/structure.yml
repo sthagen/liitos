@@ -1,0 +1,8 @@
+prod_kind:
+- deep:
+    approvals: approvals.yml
+    bind: bind.txt
+    changes: changes.yml
+    layout: layout.yml
+    meta: meta-deep.yml
+    render: true

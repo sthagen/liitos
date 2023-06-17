@@ -7,8 +7,8 @@ META_PATCH_CONTENT = """\
 document:
   import: meta.yml
   patch:
-    header_id: P99999
     header_date: PUBLICATIONDATE
+    header_id: P99999
 """
 
 

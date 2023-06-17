@@ -14,6 +14,7 @@ Approvals = Dict[str, Union[List[str], List[List[str]]]]
 Assets = Dict[str, Dict[str, Dict[str, str]]]
 Binder = List[str]
 Changes = Dict[str, Union[List[str], List[List[str]]]]
+Layout = Dict[str, str]
 Meta = Dict[str, str]
 Structure = Dict[str, List[Dict[str, str]]]
 Targets = Set[str]
@@ -25,6 +26,7 @@ DEFAULT_STRUCTURE_NAME = 'structure.yml'
 KEY_APPROVALS = 'approvals'
 KEY_BIND = 'bind'
 KEY_CHANGES = 'changes'
+KEY_LAYOUT = 'layout'
 KEY_META = 'meta'
 KEYS_REQUIRED = (KEY_APPROVALS, KEY_BIND, KEY_CHANGES, KEY_META)
 
@@ -91,6 +93,24 @@ def binder(facet: str, target: str, asset_struct: Assets) -> Tuple[Binder, str]:
     except KeyError as err:
         return error_context([], 'Binder', facet, target, '', err)  # type: ignore
     return load_binder(facet, target, path)
+
+
+def load_layout(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
+    """Yield the layout for facet of target from path and message (in case of failure)."""
+    try:
+        with open(path, 'rt', encoding=ENCODING) as handle:
+            return yaml.safe_load(handle), ''
+    except FileNotFoundError as err:
+        return error_context({}, 'Metadata', facet, target, path, err)  # type: ignore
+
+
+def layout(facet: str, target: str, asset_struct: Assets) -> Tuple[Meta, str]:
+    """Yield the layout for facet of target from link in assets and message (in case of failure)."""
+    try:
+        path = pathlib.Path(asset_struct[target][facet][KEY_LAYOUT])
+    except KeyError as err:
+        return error_context({}, 'Layout', facet, target, '', err)  # type: ignore
+    return load_layout(facet, target, path)
 
 
 def load_meta(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
@@ -189,6 +209,7 @@ ASSET_KEY_ACTION = {
     KEY_APPROVALS: approvals,
     KEY_BIND: binder,
     KEY_CHANGES: changes,
+    KEY_LAYOUT: layout,
     KEY_META: meta,
 }
 
@@ -266,9 +287,16 @@ def verify(
     log.info(f'loading history from {history_path=}')
     history = load_changes(facet, target, history_path)
     log.info(f'{history=}')
+
+    layout_path = asset_map[target][facet][KEY_LAYOUT]
+    log.info(f'loading layout from {layout_path=}')
+    design = load_layout(facet, target, layout_path)
+    log.info(f'{design=}')
+
     metadata_path = asset_map[target][facet][KEY_META]
     log.info(f'loading metadata from {metadata_path=}')
     info = load_meta(facet, target, metadata_path)
+
     log.info(f'{info=}')
     log.info('successful verification')
     return 0

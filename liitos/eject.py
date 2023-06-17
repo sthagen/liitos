@@ -12,6 +12,7 @@ THINGS = {
     'setup-pdf': (SETUP_TEMPLATE := 'templates/setup.tex.in'),
     'approvals-yaml': (APPROVALS_YAML := 'templates/approvals.yml'),
     'changes-yaml': (CHANGES_YAML := 'templates/changes.yml'),
+    'layout-yaml': (LAYOUT_YAML := 'templates/layout.yml'),
     'meta-base-yaml': (META_YAML := 'templates/meta.yml'),
     'meta-patch-yaml': (META_PATCH_YAML := 'templates/meta-patch.yml'),
     'mkdocs-yaml': (MKDOCS_PATCH_YAML := 'templates/mkdocs.yml.in'),

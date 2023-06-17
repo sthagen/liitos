@@ -1,0 +1,9 @@
+---
+document:
+  import: meta-base.yml
+  patch:
+    header_id: P99999
+    header_date: PUBLICATIONDATE
+    toc_level: 3
+    list_of_figures: ''  # empty string to enable lof
+    list_of_tables: ''  # empty string to enable lot

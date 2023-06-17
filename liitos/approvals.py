@@ -21,6 +21,8 @@ FORMAT_DATE = '%d %b %Y'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
 COLUMNS_EXPECTED = ['name', 'role']
+CUT_MARKER_TOP = '% |-- approvals - cut - marker - top -->'
+CUT_MARKER_BOTTOM = '% <-- approvals - cut - marker - bottom --|'
 
 
 def weave(
@@ -36,6 +38,18 @@ def weave(
         facet_key=facet_key,
         command='approvals',
     )
+
+    layout = {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
+    layout_path = asset_map[target_key][facet_key].get(gat.KEY_LAYOUT, '')
+    if layout_path:
+        log.info(f'loading layout from {layout_path=} for approvals')
+        layout = gat.load_layout(facet_key, target_key, layout_path)[0]  # type: ignore
+    else:
+        log.info('using default layout for approvals')
+    log.info(f'{layout=}')
+
+    log.info(LOG_SEPARATOR)
+
     channel = YAML_CHANNEL
     columns_expected = COLUMNS_EXPECTED
     signatures_path = asset_map[target_key][facet_key][gat.KEY_APPROVALS]
@@ -80,6 +94,22 @@ def weave(
 
     bookmatter_template = template.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in bookmatter_template.split('\n')]
+
+    if not layout['layout']['global']['has_approvals']:
+        log.info('removing approvals from document layout')
+        in_section = False
+        keep = []
+        for line in lines:
+            if not in_section:
+                if CUT_MARKER_TOP in line:
+                    in_section = True
+                    continue
+            if in_section:
+                if CUT_MARKER_BOTTOM in line:
+                    in_section = False
+                continue
+            keep.append(line)
+        lines = keep
 
     log.info(LOG_SEPARATOR)
     log.info(f'weaving in the approvals from {signatures_path}...')

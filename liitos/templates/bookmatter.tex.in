@@ -10,6 +10,7 @@
 }
 \end{flushleft}
 
+% |-- approvals - cut - marker - top -->
 \vskip \theApprovalsAdjustableVerticalSpace%default for single line titles is 2.5em
 \vskip \ExtraPushdown
 \begin{large}
@@ -32,3 +33,4 @@
 \hline
 \end{longtable}
 \end{large}
+% <-- approvals - cut - marker - bottom --|

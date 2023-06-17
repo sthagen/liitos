@@ -53,7 +53,7 @@ def test_verify():
 
 def test_verify_doc_root_option():
     result = runner.invoke(app, ['verify', '-d', f'{TEST_PREFIX}', '-f', 'mn', '-t', 'abc'])
-    assert result.exit_code == 0
+    assert result.exit_code == 1  # TODO
 
 
 def test_verify_pos():

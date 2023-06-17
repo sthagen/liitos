@@ -1,3 +1,4 @@
+% |-- changes - cut - marker - top -->
 \hypertarget{status-and-change-log}{%
 \section*{Status and Change Log}\label{status-and-change-log}}
 
@@ -20,12 +21,15 @@
 THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 \hline
 \end{longtable}
+% <-- changes - cut - marker - bottom --|
 
-\vskip 14em
+\vskip \AdustedPushdown% <-- Do not change this line if using liitos to manage the content
 
+% |-- notices - cut - marker - top -->
 \hypertarget{proprietary-information}{%
 \section*{Proprietary Information}\label{proprietary-information}}
 
 \theProprietaryInformation
+% <-- notices - cut - marker - bottom --|
 
 \pagenumbering{arabic}
