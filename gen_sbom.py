@@ -28,7 +28,7 @@ if assumed is None:
 
 def sbom_sha256():
     """Fill in the data."""
-    with open(pathlib.Path('sbom/cdx.json.sha256'), 'rt', encoding=ENCODING) as handle:
+    with open(pathlib.Path('sbom', 'cdx.json.sha256'), 'rt', encoding=ENCODING) as handle:
         hash_full = handle.read().strip()
     hash_8 = hash_full[:8]
     base_path = BASE_URL.replace('$REPO$', assumed)
