@@ -1,6 +1,6 @@
 PyYAML==6.0
 foran==2022.12.7
 shellingham==1.5.0.post1
-taksonomia==2023.1.24
+taksonomia==2023.6.18
 treelib==1.6.4
-typer==0.7.0
+typer==0.9.0
