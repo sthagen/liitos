@@ -1,11 +1,12 @@
 from collections.abc import Iterable
+from typing import Union
 
 from liitos import log
 
-NO_RESCALE: float | int = 0
+NO_RESCALE: Union[float, int] = 0
 
 
-def scale(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
+def scale(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'

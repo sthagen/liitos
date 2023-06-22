@@ -4,6 +4,7 @@ import logging
 import os
 import pathlib
 import sys
+from typing import Union
 
 import typer
 
@@ -128,7 +129,7 @@ def _verify_call_vector(
     patch_tables: bool = False,
     from_format_spec: str = '',
     filter_cs_list: str = '',
-) -> tuple[int, str, str, dict[str, bool | str]]:
+) -> tuple[int, str, str, dict[str, Union[bool, str]]]:
     """DRY"""
     doc = doc_root.strip()
     if not doc and doc_root_pos:
@@ -146,7 +147,7 @@ def _verify_call_vector(
         print(f'requested tree root at ({doc}) does not exist', file=sys.stderr)
         return 2, f'requested tree root at ({doc}) does not exist', '', {}
 
-    options: dict[str, bool | str] = {
+    options: dict[str, Union[bool, str]] = {
         'quiet': QUIET and not verbose and not strict,
         'strict': strict,
         'verbose': verbose,

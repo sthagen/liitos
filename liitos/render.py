@@ -5,7 +5,7 @@ import pathlib
 import re
 import shutil
 import time
-from typing import no_type_check
+from typing import Union, no_type_check
 
 import yaml
 
@@ -20,11 +20,9 @@ import liitos.tables as tab
 import liitos.tools as too
 from liitos import (
     ENCODING,
-    FILTER_CS_LIST,
     FROM_FORMAT_SPEC,
     LATEX_PAYLOAD_NAME,
     LOG_SEPARATOR,
-    TOOL_VERSION_COMMAND_MAP,
     log,
     parse_csl,
 )
@@ -41,7 +39,11 @@ VENDORED_SVG_PAT = re.compile(r'^.+\]\([^.]+\.[^.]+\.svg\ .+$')
 
 @no_type_check
 def der(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
+    doc_root: Union[str, pathlib.Path],
+    structure_name: str,
+    target_key: str,
+    facet_key: str,
+    options: dict[str, Union[bool, str]],
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
@@ -201,7 +203,8 @@ def der(
                         if dia_path_old and dia_path_new:
                             special_patching.append((dia_path_old, dia_path_new))
                             log.info(
-                                f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old}) -> ({dia_path_new})'
+                                f'post-action[#{slot + 1}]: adding to queue for sync move: ({dia_path_old})'
+                                f' -> ({dia_path_new})'
                             )
                         else:
                             log.warning(f'- old: {src.rstrip()}')

@@ -1,11 +1,12 @@
 from collections.abc import Iterable
+from typing import Union
 
 from liitos import log
 
 NO_LABEL = 'no-label-found-ERROR'
 
 
-def inject(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
+def inject(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'

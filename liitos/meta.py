@@ -2,7 +2,7 @@
 import datetime as dti
 import os
 import pathlib
-from typing import no_type_check
+from typing import Union, no_type_check
 
 import yaml
 
@@ -55,7 +55,7 @@ ACROSS = {
 
 
 @no_type_check
-def process_meta(aspects: str) -> gat.Meta | int:
+def process_meta(aspects: str) -> Union[gat.Meta, int]:
     """TODO."""
     meta_path = DOC_BASE / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
@@ -89,7 +89,7 @@ def process_meta(aspects: str) -> gat.Meta | int:
 
 @no_type_check
 def weave_setup_font_path(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the xxxx from mapper or default for driver.
@@ -111,7 +111,7 @@ def weave_setup_font_path(
 
 @no_type_check
 def weave_setup_font_suffix(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the font_suffix from mapper or default for driver.
@@ -133,7 +133,7 @@ def weave_setup_font_suffix(
 
 @no_type_check
 def weave_setup_bold_font(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the bold_font from mapper or default for driver.
@@ -159,7 +159,7 @@ def weave_setup_bold_font(
 
 @no_type_check
 def weave_setup_italic_font(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the italic_font from mapper or default for driver.
@@ -185,7 +185,7 @@ def weave_setup_italic_font(
 
 @no_type_check
 def weave_setup_bold_italic_font(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the bold_italic_font from mapper or default for driver.
@@ -211,7 +211,7 @@ def weave_setup_bold_italic_font(
 
 @no_type_check
 def weave_setup_main_font(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the main_font from mapper or default for driver.
@@ -237,7 +237,7 @@ def weave_setup_main_font(
 
 @no_type_check
 def weave_setup_fixed_font_package(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the fixed_font_package from mapper or default for driver.
@@ -260,7 +260,7 @@ def weave_setup_fixed_font_package(
 
 @no_type_check
 def weave_setup_code_fontsize(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the code_fontsize from mapper or default for driver.
@@ -309,7 +309,7 @@ def weave_setup_code_fontsize(
 
 @no_type_check
 def weave_setup_chosen_logo(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the chosen_logo from mapper or default for driver.
@@ -333,7 +333,7 @@ def weave_setup_chosen_logo(
 
 @no_type_check
 def dispatch_setup_weaver(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Dispatch the driver weaver by mapping to handled groups per source marker."""
@@ -366,7 +366,7 @@ def weave_meta_setup(meta_map: gat.Meta, latex: list[str]) -> list[str]:
 
 @no_type_check
 def weave_driver_toc_level(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the toc_level from mapper or default for driver.
@@ -393,7 +393,7 @@ def weave_driver_toc_level(
 
 @no_type_check
 def weave_driver_list_of_figures(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the list_of_figures from mapper or default for driver.
@@ -418,7 +418,7 @@ def weave_driver_list_of_figures(
 
 @no_type_check
 def weave_driver_list_of_tables(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the list_of_tables from mapper or default for driver.
@@ -443,7 +443,7 @@ def weave_driver_list_of_tables(
 
 @no_type_check
 def dispatch_driver_weaver(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Dispatch the driver weaver by mapping to handled groups per source marker."""
@@ -470,7 +470,7 @@ def weave_meta_driver(meta_map: gat.Meta, latex: list[str]) -> list[str]:
 
 @no_type_check
 def weave_meta_part_header_title(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_title from mapper or default.
@@ -486,7 +486,7 @@ def weave_meta_part_header_title(
 
 @no_type_check
 def weave_meta_part_title(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the title from mapper or default.
@@ -498,7 +498,7 @@ def weave_meta_part_title(
 
 @no_type_check
 def weave_meta_part_sub_title(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the sub_title from mapper or default.
@@ -514,7 +514,7 @@ def weave_meta_part_sub_title(
 
 @no_type_check
 def weave_meta_part_header_type(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_type from mapper or default.
@@ -530,7 +530,7 @@ def weave_meta_part_header_type(
 
 @no_type_check
 def weave_meta_part_header_id_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_id_label from mapper or default.
@@ -553,7 +553,7 @@ def weave_meta_part_header_id_label(
 
 @no_type_check
 def weave_meta_part_header_id(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_id from mapper or default.
@@ -573,7 +573,7 @@ def weave_meta_part_header_id(
 
 @no_type_check
 def weave_meta_part_issue(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the issue from mapper or default.
@@ -589,7 +589,7 @@ def weave_meta_part_issue(
 
 @no_type_check
 def weave_meta_part_revision(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the revision from mapper or default.
@@ -605,7 +605,7 @@ def weave_meta_part_revision(
 
 @no_type_check
 def weave_meta_part_header_date_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_date_label from mapper or default.
@@ -628,7 +628,7 @@ def weave_meta_part_header_date_label(
 
 @no_type_check
 def weave_meta_part_header_date(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_date from mapper or default.
@@ -664,7 +664,7 @@ def weave_meta_part_header_date(
 
 @no_type_check
 def weave_meta_part_footer_frame_note(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the footer_frame_note from mapper or default.
@@ -680,7 +680,7 @@ def weave_meta_part_footer_frame_note(
 
 @no_type_check
 def weave_meta_part_footer_page_number_prefix(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the footer_page_number_prefix from mapper or default.
@@ -696,7 +696,7 @@ def weave_meta_part_footer_page_number_prefix(
 
 @no_type_check
 def weave_meta_part_change_log_issue_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the change_log_issue_label from mapper or default.
@@ -712,7 +712,7 @@ def weave_meta_part_change_log_issue_label(
 
 @no_type_check
 def weave_meta_part_change_log_revision_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the change_log_revision_label from mapper or default.
@@ -728,7 +728,7 @@ def weave_meta_part_change_log_revision_label(
 
 @no_type_check
 def weave_meta_part_change_log_date_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the change_log_date_label from mapper or default.
@@ -744,7 +744,7 @@ def weave_meta_part_change_log_date_label(
 
 @no_type_check
 def weave_meta_part_change_log_author_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the change_log_author_label from mapper or default.
@@ -760,7 +760,7 @@ def weave_meta_part_change_log_author_label(
 
 @no_type_check
 def weave_meta_part_change_log_description_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the change_log_description_label from mapper or default.
@@ -776,7 +776,7 @@ def weave_meta_part_change_log_description_label(
 
 @no_type_check
 def weave_meta_part_approvals_adjustable_vertical_space(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the approvals_adjustable_vertical_space from mapper or default.
@@ -795,7 +795,7 @@ def weave_meta_part_approvals_adjustable_vertical_space(
 
 @no_type_check
 def weave_meta_part_approvals_role_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the approvals_role_label from mapper or default.
@@ -811,7 +811,7 @@ def weave_meta_part_approvals_role_label(
 
 @no_type_check
 def weave_meta_part_approvals_name_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the approvals_name_label from mapper or default.
@@ -827,7 +827,7 @@ def weave_meta_part_approvals_name_label(
 
 @no_type_check
 def weave_meta_part_approvals_date_and_signature_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the approvals_date_and_signature_label from mapper or default.
@@ -843,7 +843,7 @@ def weave_meta_part_approvals_date_and_signature_label(
 
 @no_type_check
 def weave_meta_part_header_issue_revision_combined_label(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_issue_revision_combined_label from mapper or default.
@@ -867,7 +867,7 @@ def weave_meta_part_header_issue_revision_combined_label(
 
 @no_type_check
 def weave_meta_part_header_issue_revision_combined(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the header_issue_revision_combined from mapper or default.
@@ -891,7 +891,7 @@ def weave_meta_part_header_issue_revision_combined(
 
 @no_type_check
 def weave_meta_part_proprietary_information(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Weave in the proprietary_information from mapper or default.
@@ -917,7 +917,7 @@ def weave_meta_part_proprietary_information(
 
 @no_type_check
 def dispatch_meta_weaver(
-    mapper: dict[str, str | int | bool | None],
+    mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
     """Dispatch the meta weaver by mapping to handled groups per source marker."""
@@ -965,7 +965,7 @@ def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> list[str]:
 
 @no_type_check
 def weave(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
+    doc_root: Union[str, pathlib.Path], structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)

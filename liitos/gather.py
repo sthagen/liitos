@@ -227,7 +227,7 @@ def verify_assets(facet: str, target: str, asset_struct: Assets) -> Verification
 
 
 def prelude(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, command: str
+    doc_root: Union[str, pathlib.Path], structure_name: str, target_key: str, facet_key: str, command: str
 ) -> tuple[Structure, Assets]:
     """DRY."""
     doc_root = pathlib.Path(doc_root)
@@ -244,7 +244,11 @@ def prelude(
 
 
 def verify(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
+    doc_root: Union[str, pathlib.Path],
+    structure_name: str,
+    target_key: str,
+    facet_key: str,
+    options: dict[str, Union[bool, str]],
 ) -> int:
     """Drive the verification."""
     doc_root = pathlib.Path(doc_root)

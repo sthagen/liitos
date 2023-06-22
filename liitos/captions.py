@@ -1,9 +1,10 @@
 from collections.abc import Iterable
+from typing import Union
 
 from liitos import log
 
 
-def weave(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
+def weave(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'

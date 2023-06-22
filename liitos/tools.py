@@ -3,7 +3,7 @@ import difflib
 import hashlib
 import pathlib
 import subprocess  # nosec B404
-from typing import Any, Callable, no_type_check
+from typing import Any, Callable, Union, no_type_check
 
 import foran.foran as api  # type: ignore
 from foran.report import generate_report  # type: ignore
@@ -23,7 +23,7 @@ INTER_PROCESS_SYNC_SECS = 0.1
 INTER_PROCESS_SYNC_ATTEMPTS = 10
 
 
-def hash_file(path: pathlib.Path, hasher: Callable[..., Any] | None = None) -> str:
+def hash_file(path: pathlib.Path, hasher: Union[Callable[..., Any], None] = None) -> str:
     """Return the SHA512 hex digest of the data from file."""
     if hasher is None:
         hasher = hashlib.sha512
@@ -121,7 +121,7 @@ def log_unified_diff(left: list[str], right: list[str], left_label: str = 'befor
 
 
 @no_type_check
-def ensure_separate_log_lines(sourcer: Callable, *args: list[object] | None):
+def ensure_separate_log_lines(sourcer: Callable, *args: Union[list[object], None]):
     """Wrapping idiom breaking up any strings containing newlines."""
     log.info(LOG_SEPARATOR)
     for line in sourcer(*args) if args else sourcer():
@@ -181,7 +181,7 @@ def execute_filter(
     backup: str,
     label: str,
     text_lines: list[str],
-    lookup: dict[str, str] | None = None,
+    lookup: Union[dict[str, str], None] = None,
 ) -> list[str]:
     """Chain filter calls by storing in and out lies in files and return the resulting lines."""
     log.info(LOG_SEPARATOR)

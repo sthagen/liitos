@@ -6,7 +6,7 @@ import re
 import shutil
 import sys
 from io import StringIO
-from typing import no_type_check
+from typing import Union, no_type_check
 
 import treelib  # type: ignore
 import yaml
@@ -71,7 +71,7 @@ class RedirectedStdout:
 
 
 @no_type_check
-def process_approvals(aspects: str) -> gat.Approvals | int:
+def process_approvals(aspects: str) -> Union[gat.Approvals, int]:
     """TODO."""
     approvals_path = DOC_BASE / aspects[gat.KEY_APPROVALS]
     if not approvals_path.is_file() or not approvals_path.stat().st_size:
@@ -96,7 +96,7 @@ def process_approvals(aspects: str) -> gat.Approvals | int:
 
 
 @no_type_check
-def process_binder(aspects: str) -> gat.Binder | int:
+def process_binder(aspects: str) -> Union[gat.Binder, int]:
     """TODO."""
     bind_path = DOC_BASE / aspects[gat.KEY_BIND]
     if not bind_path.is_file() or not bind_path.stat().st_size:
@@ -116,7 +116,7 @@ def process_binder(aspects: str) -> gat.Binder | int:
 
 
 @no_type_check
-def process_changes(aspects: str) -> gat.Changes | int:
+def process_changes(aspects: str) -> Union[gat.Changes, int]:
     """TODO."""
     changes_path = DOC_BASE / aspects[gat.KEY_CHANGES]
     if not changes_path.is_file() or not changes_path.stat().st_size:
@@ -141,7 +141,7 @@ def process_changes(aspects: str) -> gat.Changes | int:
 
 
 @no_type_check
-def process_meta(aspects: str) -> gat.Meta | int:
+def process_meta(aspects: str) -> Union[gat.Meta, int]:
     """TODO."""
     meta_path = DOC_BASE / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
@@ -369,7 +369,11 @@ def collect_assets(collector: list[str]) -> None:
 
 @no_type_check
 def concatenate(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
+    doc_root: Union[str, pathlib.Path],
+    structure_name: str,
+    target_key: str,
+    facet_key: str,
+    options: dict[str, Union[bool, str]],
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)

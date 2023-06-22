@@ -1,4 +1,5 @@
 from collections.abc import Iterable
+from typing import Union
 
 from liitos import log
 
@@ -21,7 +22,7 @@ def parse_options_command(slot: int, text_line: str) -> tuple[bool, str, str]:
         return False, text_line, ''
 
 
-def options(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
+def options(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
     """Later alligator. \\option[style=multiline,leftmargin=6em]"""
     outgoing = []
     modus = 'copy'

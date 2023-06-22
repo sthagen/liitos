@@ -1,6 +1,7 @@
 """Weave the content of the approvals data file into the output structure (for now LaTeX)."""
 import os
 import pathlib
+from typing import Union
 
 import liitos.gather as gat
 import liitos.template_loader as template
@@ -26,7 +27,11 @@ CUT_MARKER_BOTTOM = '% <-- approvals - cut - marker - bottom --|'
 
 
 def weave(
-    doc_root: str | pathlib.Path, structure_name: str, target_key: str, facet_key: str, options: dict[str, bool | str]
+    doc_root: Union[str, pathlib.Path],
+    structure_name: str,
+    target_key: str,
+    facet_key: str,
+    options: dict[str, Union[bool, str]],
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
