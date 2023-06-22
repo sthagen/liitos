@@ -55,8 +55,11 @@ def der(
     log.info(f'parsed target ({target_code}) and facet ({facet_code}) from request')
 
     from_format_spec = options.get('from_format_spec', FROM_FORMAT_SPEC)
-    filter_cs_list = parse_csl(options.get('filter_cs_list', FILTER_CS_LIST))
-    log.info(f'parsed from-format-spec ({from_format_spec}) and filters ({", ".join(filter_cs_list)}) from request')
+    filter_cs_list = parse_csl(options.get('filter_cs_list', ''))
+    if filter_cs_list:
+        log.info(f'parsed from-format-spec ({from_format_spec}) and filters ({", ".join(filter_cs_list)}) from request')
+    else:
+        log.info(f'parsed from-format-spec ({from_format_spec}) and no filters from request')
 
     structure, asset_map = gat.prelude(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='render'
@@ -312,7 +315,6 @@ def der(
         fmt_spec = from_format_spec
         in_doc = 'document.md'
         out_doc = LATEX_PAYLOAD_NAME
-        filters = [added_prefix for expr in filter_cs_list for added_prefix in ('--filter', expr)]
         markdown_to_latex_command = [
             'pandoc',
             '--verbose',
@@ -323,7 +325,10 @@ def der(
             in_doc,
             '-o',
             out_doc,
-        ] + filters
+        ]
+        if filter_cs_list:
+            filters = [added_prefix for expr in filter_cs_list for added_prefix in ('--filter', expr)]
+            markdown_to_latex_command += filters
         log.info(LOG_SEPARATOR)
         log.info(f'executing ({" ".join(markdown_to_latex_command)}) ...')
         if code := too.delegate(markdown_to_latex_command, 'markdown-to-latex'):

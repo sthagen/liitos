@@ -64,10 +64,10 @@ FromFormatSpec = typer.Option(
     help='from format specification handed over to pandoc',
 )
 FilterCSList = typer.Option(
-    FILTER_CS_LIST,
+    'DEFAULT_FILTER',
     '-F',
     '--filters',
-    help='comma separated list of filters handed over to pandoc (in order)',
+    help='comma separated list of filters handed over to pandoc (in order) or empty to apply no filter',
 )
 Verbosity = typer.Option(
     False,
@@ -153,7 +153,7 @@ def _verify_call_vector(
         'label': label,
         'patch_tables': patch_tables,
         'from_format_spec': from_format_spec if from_format_spec else FROM_FORMAT_SPEC,
-        'filter_cs_list': filter_cs_list if filter_cs_list else FILTER_CS_LIST,
+        'filter_cs_list': filter_cs_list if filter_cs_list != 'DEFAULT_FILTER' else FILTER_CS_LIST,
     }
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
