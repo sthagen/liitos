@@ -116,7 +116,7 @@ def weave(
         for n, line in enumerate(lines):
             if TOKEN_ADJUSTED_PUSHDOWN in line:
                 lines[n] = line.replace(TOKEN_ADJUSTED_PUSHDOWN, f'{pushdown}em')
-                log.error(f'set adjusted pushdown value {pushdown}em')
+                log.info(f'set adjusted pushdown value {pushdown}em')
                 break
 
     if not layout['layout']['global']['has_changes']:
