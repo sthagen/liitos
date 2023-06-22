@@ -1,5 +1,11 @@
 # Changes
 
+2023.6.22
+:    * Adapted example to show how to enable line break hints in title like data (<https://todo.sr.ht/~sthagen/liitos/34>) and how to achieve an empty subtitle
+* Backported package to python 3.9 (<https://todo.sr.ht/~sthagen/liitos/43>)
+* Fixed the filter argument parsing to allow no filter at all (<https://todo.sr.ht/~sthagen/liitos/42>)
+* Fixed the log level for adjusted pushdown value set (<https://todo.sr.ht/~sthagen/liitos/41>)
+
 2023.6.17
 :    * Enabled control over showing approvals, changes, and notices (<https://todo.sr.ht/~sthagen/liitos/39>)
 * Moved SBOM noise into folder and added SPDX SBOM (derived) in multiple file formats 
