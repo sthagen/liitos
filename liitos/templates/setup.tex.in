@@ -37,6 +37,14 @@
     ItalicFont={VALUE.SLOT},%%_PATCH_%_ITALIC_%_FONT_%%
     BoldItalicFont={VALUE.SLOT}%%_PATCH_%_BOLDITALIC_%_FONT_%%
 ]{VALUE.SLOT}%%_PATCH_%_MAIN_%_FONT_%%
+\setsansfont[
+    Path = VALUE.SLOT,%%_PATCH_%_FONT_%_PATH_%%
+    Extension = VALUE.SLOT,%%_PATCH_%_FONT_%_SUFFIX_%%
+    Ligatures = TeX,
+    BoldFont={VALUE.SLOT},%%_PATCH_%_BOLD_%_FONT_%%
+    ItalicFont={VALUE.SLOT},%%_PATCH_%_ITALIC_%_FONT_%%
+    BoldItalicFont={VALUE.SLOT}%%_PATCH_%_BOLDITALIC_%_FONT_%%
+]{VALUE.SLOT}%%_PATCH_%_MAIN_%_FONT_%%
 \usepackage{VALUE.SLOT}%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%
 
 % use upquote if available, for straight quotes in verbatim environments
