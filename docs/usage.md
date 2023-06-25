@@ -33,7 +33,7 @@
 ❯ Splice (Finnish liitos) contributions. version 2023.1.21+parent.85ecfd90
 ```
 
-## Eject 
+## Eject
 
 You can eject template files to modify these and provide externally per environment variables for overriding the built-in variants.
 
@@ -241,7 +241,7 @@ Invalid asset link of facet for target document key:
 
 ## Render
 
-Note: Since version 2023.1.21 an optional `-l,--label` parameter allows to provide a call string for 
+Note: Since version 2023.1.21 an optional `-l,--label` parameter allows to provide a call string for
 labeling the resulting pdf file. Example: `... --label 'etiketti --enforce'`
 (that could be using the [`etiketti` script from the package with the same name](https://pypi.org/project/etiketti/)).
 
@@ -756,7 +756,7 @@ The purpose of the package / tool is to encourage convention based authoring in 
 
 ### Rendering
 
-The [example/deep/](https://git.sr.ht/~sthagen/liitos/tree/default/item/example/deep) folder in the source repository 
+The [example/deep/](https://git.sr.ht/~sthagen/liitos/tree/default/item/example/deep) folder in the source repository
 shows how documents can be distributed across subfolders and how the linkage per the data files (in this case) works:
 
 - structure.yml
@@ -879,8 +879,12 @@ The example `deep` demonstrates this by only including `meta-deep.yml` (indicati
 document:
   import: meta-base.yml
   patch:
+    footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
     header_id: P99999
     header_date: PUBLICATIONDATE
+    toc_level: 3
+    list_of_figures: ''  # empty string to enable lof
+    list_of_tables: ''  # empty string to enable lot
 ```
 
 Again the spelling and case of the keys are significant.
@@ -898,10 +902,13 @@ patch
 
 We see that in above example we add/overwrite
 
+1. change the default outer footer value for normal pages to display current and last page count
 1. the document id (key `header_id` as it appears only in the header of the rendered document)
 1. the publication date per `header_date` to the magical term `PUBLICATIONDATE` resulting during rendering
    in the date of rendering displayed as `DD MON YYYY` eg. on 2022-12-04 this would be `04 DEC 2022`
-
+1. set the level of headings to show in the table of contents (toc) to be 3 instead of 2
+1. enable the list of figures
+1. enable the list of tables
 
 The base meta data files (imported by other meta data files or standing for themselves is only one meta data file is needed)
 in the example `deep` provide most known keys to demonstrate the features:
@@ -1037,7 +1044,7 @@ with open('a1.md') as fp:
     print(fp.read())
 \```
 
- - - 8< - - 
+ - - 8< - -
 
 \include{sub/as.md}
 
@@ -1201,7 +1208,7 @@ There are two commands that you can inject into the markdown before tables (`exa
 Table: A caption for a table \label{table:left-middle-right-too}
 ```
 
-This will force the second column to have 20% of width, the third to have 70%, and the first column 
+This will force the second column to have 20% of width, the third to have 70%, and the first column
 width will be calculated as 10% (100% - 20% - 70%).
 
 The fontsize of the table (for now also the caption, sorry) will be set to the latex fontsize `\tiny`.

@@ -2,6 +2,7 @@
 document:
   import: meta-base.yml
   patch:
+    footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
     header_id: P99999
     header_date: PUBLICATIONDATE
     toc_level: 3

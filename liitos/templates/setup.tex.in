@@ -23,6 +23,7 @@
 \usepackage{ragged2e}
 \RaggedRight
 
+\usepackage{lastpage}
 \usepackage{amsmath,amssymb}
 \usepackage{setspace}
 \setstretch{1.2}
@@ -209,7 +210,7 @@
   }
   \ifoot*{\upshape{\footnotesize \theMetaPropInfo}}
   \cfoot*{}
-  \ofoot*{\upshape{\footnotesize \theMetaPageNumPrefix { } \thepage}}
+  \ofoot*{\upshape{\footnotesize VALUE.SLOT}}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%
   \setlength{\headheight}{29.6mm}%% ... tuned
   \setlength{\footheight}{18mm}%% ... tuned
 }

@@ -46,6 +46,7 @@ WEAVE_DEFAULTS = {
     'fixed_font_package': 'sourcecodepro',
     'code_fontsize': r'\scriptsize',
     'chosen_logo': '/opt/logo/liitos-logo.png',
+    'footer_outer_field_normal_pages': r'\theMetaPageNumPrefix { } \thepage { }',
     'adjustable_vertical_space': '2.5em',
 }
 ACROSS = {
@@ -332,6 +333,27 @@ def weave_setup_chosen_logo(
 
 
 @no_type_check
+def weave_setup_footer_outer_field_normal_pages(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the footer_outer_field_normal_pages from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    if mapper.get('footer_outer_field_normal_pages'):
+        footer_outer_field_normal_pages = mapper.get('footer_outer_field_normal_pages')
+        return text.replace(VALUE_SLOT, footer_outer_field_normal_pages)
+    else:
+        log.warning(
+            'footer_outer_field_normal_pages value missing ...'
+            f' setting default ({defaults["footer_outer_field_normal_pages"]})'
+        )
+        return text.replace(VALUE_SLOT, defaults['footer_outer_field_normal_pages'])
+
+
+@no_type_check
 def dispatch_setup_weaver(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
@@ -347,6 +369,7 @@ def dispatch_setup_weaver(
         '%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%': weave_setup_fixed_font_package,
         '%%_PATCH_%_CODE_%_FONTSIZE_%%': weave_setup_code_fontsize,
         '%%_PATCH_%_CHOSEN_%_LOGO_%%': weave_setup_chosen_logo,
+        '%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%': weave_setup_footer_outer_field_normal_pages,
     }
     for trigger, weaver in dispatch.items():
         if text.rstrip().endswith(trigger):
