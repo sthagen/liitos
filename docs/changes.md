@@ -1,5 +1,9 @@
 # Changes
 
+2023.6.25
+:    * Enabled page x / y option in footers or any other outer footer value (<https://todo.sr.ht/~sthagen/liitos/46>)
+* Fixed the impact of the upstream sans titles behavior change (<https://todo.sr.ht/~sthagen/liitos/44>)
+
 2023.6.22
 :    * Adapted example to show how to enable line break hints in title like data (<https://todo.sr.ht/~sthagen/liitos/34>) and how to achieve an empty subtitle
 * Backported package to python 3.9 (<https://todo.sr.ht/~sthagen/liitos/43>)
@@ -8,7 +12,7 @@
 
 2023.6.17
 :    * Enabled control over showing approvals, changes, and notices (<https://todo.sr.ht/~sthagen/liitos/39>)
-* Moved SBOM noise into folder and added SPDX SBOM (derived) in multiple file formats 
+* Moved SBOM noise into folder and added SPDX SBOM (derived) in multiple file formats
 
 2023.5.13
 :    * Templates: ensure horizontal header lines for title page are of same length as in other header (<https://todo.sr.ht/~sthagen/liitos/30>)
