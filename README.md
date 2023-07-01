@@ -11,6 +11,7 @@ Third party dependencies are documented in the folder [third-party](docs/third-p
 [![wheel](https://img.shields.io/pypi/wheel/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
 [![supported-versions](https://img.shields.io/pypi/pyversions/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
 [![supported-implementations](https://img.shields.io/pypi/implementation/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
+[![maintenance-status](https://img.shields.io/github/commit-activity/y/sthagen/liitos.svg?style=flat)](https://git.sr.ht/~sthagen/liitos/log)
 
 ## Documentation
 
