@@ -4,10 +4,10 @@
 
 Versions of laskea currently being supported with security updates.
 
-| Version     | Supported          |
-| ----------- | ------------------ |
-| 2023.6.25   | :white_check_mark: |
-| < 2023.6.25 | :x:                |
+| Version(s)  | Supported |
+|:----------- |:--------- |
+| 2023.6.25   | yes       |
+| < 2023.6.25 | no        |
 
 ## Reporting a Vulnerability
 
