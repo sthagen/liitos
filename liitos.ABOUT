@@ -5,7 +5,7 @@ version: 2023.6.25
 spec_version: 1.0
 home_url: https://git.sr.ht/~sthagen/liitos
 news_url: https://libraries.io/pypi/liitos/versions.atom
-date: 2023-06-18
+date: 2023-06-25
 about_resource: ./
 libraries_io_url: https://libraries.io/pypi/liitos?number=2023.6.25
 vcs_tool: git
