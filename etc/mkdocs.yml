@@ -1,5 +1,7 @@
 site_name: Liitos
 site_description: "Splice (Finnish: liitos) contributions."
+docs_dir: ../docs
+site_dir: ../site
 
 theme:
   name: 'material'
