@@ -13,7 +13,6 @@ digraph {
 	msgspec [label="msgspec\n0.16.0"]
 	psutil [label="psutil\n5.9.5"]
 	pyyaml [label="PyYAML\n6.0"]
-	shellingham [label="shellingham\n1.5.0.post1"]
 	six [label="six\n1.16.0"]
 	smmap [label="smmap\n5.0.0"]
 	taksonomia -> "py-cpuinfo" [label=">=9.0.0"]

@@ -5,7 +5,6 @@ foran==2023.6.19
 └── typer [required: >=0.9.0, installed: 0.9.0]
     ├── click [required: >=7.1.1,<9.0.0, installed: 8.1.3]
     └── typing-extensions [required: >=3.7.4.3, installed: 4.4.0]
-shellingham==1.5.0.post1
 taksonomia==2023.6.18
 ├── lxml [required: >=4.9.2, installed: 4.9.2]
 ├── msgspec [required: >=0.16.0, installed: 0.16.0]
