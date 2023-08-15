@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json) with SHA256 checksum ([1eb24386 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json.sha256 "sha256:1eb2438609b141be1d9d089c04145c02cc9e2be17b32c1e654391ac46304dffa")).
-<!--[[[end]]] (checksum: 30d94ea151d7f31f19a5d1421be102c7)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json) with SHA256 checksum ([13953429 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json.sha256 "sha256:139534292f73a37f6f9858f8cf628ba73ecea6a13a7b1661420e07c919468285")).
+<!--[[[end]]] (checksum: e6cc35795f04624a13c30429a2084a43)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -47,20 +47,6 @@ Base graphviz file in dot format: [Trees of the direct dependencies](package-dep
 
 <!--[[[fill dependency_tree_console_text()]]]-->
 ````console
-foran==2023.6.19
-├── GitPython [required: >=3.1.31, installed: 3.1.32]
-│   └── gitdb [required: >=4.0.1,<5, installed: 4.0.10]
-│       └── smmap [required: >=3.0.1,<6, installed: 5.0.0]
-└── typer [required: >=0.9.0, installed: 0.9.0]
-    ├── click [required: >=7.1.1,<9.0.0, installed: 8.1.6]
-    └── typing-extensions [required: >=3.7.4.3, installed: 4.7.1]
-taksonomia==2023.6.18
-├── lxml [required: >=4.9.2, installed: 4.9.3]
-├── msgspec [required: >=0.16.0, installed: 0.18.0]
-├── psutil [required: >=5.9.5, installed: 5.9.5]
-├── py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
-└── PyYAML [required: >=6.0, installed: 6.0.1]
-treelib==1.6.4
-└── six [required: Any, installed: 1.16.0]
+
 ````
-<!--[[[end]]] (checksum: 42edcfee9c22d0f62dd317833d1d1953)-->
+<!--[[[end]]] (checksum: 3c785458cb78583f093698f578ae7d19)-->
