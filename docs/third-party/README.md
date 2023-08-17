@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json) with SHA256 checksum ([8beda7b8 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json.sha256 "sha256:8beda7b8abf84f2fe44f76925c26dad1c2569a05c27bf738b8a5fe55f7e826ef")).
-<!--[[[end]]] (checksum: 095163f0514887c46452830cc90e07c8)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json) with SHA256 checksum ([75f44e29 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json.sha256 "sha256:75f44e294f4bce99ed5eed4ba275711aac7b03482dc51b160bd8176a03de14d5")).
+<!--[[[end]]] (checksum: 73df16d968e1a53cb35204730554660a)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -14,11 +14,11 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 |:-------------------------------------------------------|:------------------------------------------------------------|:------------------------|:---------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------|
 | [PyYAML](https://pyyaml.org/)                          | [6.0.1](https://pypi.org/project/PyYAML/6.0.1/)             | MIT License             | Kirill Simonov                   | YAML parser and emitter for Python                                                                                                        |
 | [foran](https://git.sr.ht/~sthagen/foran)              | [2023.6.19](https://pypi.org/project/foran/2023.6.19/)      | MIT License             | Stefan Hagen <stefan@hagen.link> | In front or behind (Danish: foran eller bagved)? Answering the question if a local repository status is in front of or behind its remote. |
-| [shellingham](https://github.com/sarugaku/shellingham) | [1.5.2](https://pypi.org/project/shellingham/1.5.2/)        | ISC License (ISCL)      | Tzu-ping Chung                   | Tool to Detect Surrounding Shell                                                                                                          |
+| [shellingham](https://github.com/sarugaku/shellingham) | [1.5.3](https://pypi.org/project/shellingham/1.5.3/)        | ISC License (ISCL)      | Tzu-ping Chung                   | Tool to Detect Surrounding Shell                                                                                                          |
 | [taksonomia](https://git.sr.ht/~sthagen/taksonomia)    | [2023.6.18](https://pypi.org/project/taksonomia/2023.6.18/) | MIT License             | Stefan Hagen <stefan@hagen.link> | Taxonomy (Finnish: taksonomia) of a folder tree, guided by conventions.                                                                   |
 | [treelib](https://github.com/caesar0301/treelib)       | [1.6.4](https://pypi.org/project/treelib/1.6.4/)            | Apache Software License | Xiaming Chen                     | A Python 2/3 implementation of tree structure.                                                                                            |
 | [typer](https://github.com/tiangolo/typer)             | [0.9.0](https://pypi.org/project/typer/0.9.0/)              | MIT License             | Sebastián Ramírez                | Typer, build great CLIs. Easy to code. Based on Python type hints.                                                                        |
-<!--[[[end]]] (checksum: b2791fb1af1dbace3ace40ca03837aeb)-->
+<!--[[[end]]] (checksum: 4663281b8358a463bdeaf3bf601cdc62)-->
 
 ### Indirect Dependencies
 
@@ -55,7 +55,7 @@ foran==2023.6.19
 └── typer [required: >=0.9.0, installed: 0.9.0]
     ├── click [required: >=7.1.1,<9.0.0, installed: 8.1.6]
     └── typing-extensions [required: >=3.7.4.3, installed: 4.7.1]
-shellingham==1.5.2
+shellingham==1.5.3
 taksonomia==2023.6.18
 ├── lxml [required: >=4.9.2, installed: 4.9.3]
 ├── msgspec [required: >=0.16.0, installed: 0.18.0]
@@ -65,4 +65,4 @@ taksonomia==2023.6.18
 treelib==1.6.4
 └── six [required: Any, installed: 1.16.0]
 ````
-<!--[[[end]]] (checksum: f653af3c0e60dfbb6dbcc8f569728c94)-->
+<!--[[[end]]] (checksum: 0c933ed23594ad5f50b42eda686c7ac9)-->
