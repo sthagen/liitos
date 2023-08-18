@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json) with SHA256 checksum ([75f44e29 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json.sha256 "sha256:75f44e294f4bce99ed5eed4ba275711aac7b03482dc51b160bd8176a03de14d5")).
-<!--[[[end]]] (checksum: 73df16d968e1a53cb35204730554660a)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json) with SHA256 checksum ([60109099 ...](https://git.sr.ht/~sthagen/liitos/blob/default/sbom/cdx.json.sha256 "sha256:60109099ea4d280306781d24beceaf454de4eea14118b2c6a8ca2bae0187fa83")).
+<!--[[[end]]] (checksum: c62e5ebd81f99d3fd544e2805aa35152)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -16,9 +16,9 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 | [foran](https://git.sr.ht/~sthagen/foran)              | [2023.6.19](https://pypi.org/project/foran/2023.6.19/)      | MIT License             | Stefan Hagen <stefan@hagen.link> | In front or behind (Danish: foran eller bagved)? Answering the question if a local repository status is in front of or behind its remote. |
 | [shellingham](https://github.com/sarugaku/shellingham) | [1.5.3](https://pypi.org/project/shellingham/1.5.3/)        | ISC License (ISCL)      | Tzu-ping Chung                   | Tool to Detect Surrounding Shell                                                                                                          |
 | [taksonomia](https://git.sr.ht/~sthagen/taksonomia)    | [2023.6.18](https://pypi.org/project/taksonomia/2023.6.18/) | MIT License             | Stefan Hagen <stefan@hagen.link> | Taxonomy (Finnish: taksonomia) of a folder tree, guided by conventions.                                                                   |
-| [treelib](https://github.com/caesar0301/treelib)       | [1.6.4](https://pypi.org/project/treelib/1.6.4/)            | Apache Software License | Xiaming Chen                     | A Python 2/3 implementation of tree structure.                                                                                            |
+| [treelib](https://github.com/caesar0301/treelib)       | [1.7.0](https://pypi.org/project/treelib/1.7.0/)            | Apache Software License | Xiaming Chen                     | A Python implementation of tree structure.                                                                                                |
 | [typer](https://github.com/tiangolo/typer)             | [0.9.0](https://pypi.org/project/typer/0.9.0/)              | MIT License             | Sebastián Ramírez                | Typer, build great CLIs. Easy to code. Based on Python type hints.                                                                        |
-<!--[[[end]]] (checksum: 4663281b8358a463bdeaf3bf601cdc62)-->
+<!--[[[end]]] (checksum: b33f9093b0c6dabb7a015421e75a1019)-->
 
 ### Indirect Dependencies
 
@@ -62,7 +62,7 @@ taksonomia==2023.6.18
 ├── psutil [required: >=5.9.5, installed: 5.9.5]
 ├── py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
 └── PyYAML [required: >=6.0, installed: 6.0.1]
-treelib==1.6.4
+treelib==1.7.0
 └── six [required: Any, installed: 1.16.0]
 ````
-<!--[[[end]]] (checksum: 0c933ed23594ad5f50b42eda686c7ac9)-->
+<!--[[[end]]] (checksum: 93a4600dc7081acf79ef185febed3afa)-->

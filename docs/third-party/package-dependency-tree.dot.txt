@@ -23,7 +23,7 @@ digraph {
 	taksonomia -> pyyaml [label=">=6.0"]
 	taksonomia [label="taksonomia\n2023.6.18"]
 	treelib -> six [label=any]
-	treelib [label="treelib\n1.6.4"]
+	treelib [label="treelib\n1.7.0"]
 	typer -> "typing-extensions" [label=">=3.7.4.3"]
 	typer -> click [label=">=7.1.1,<9.0.0"]
 	typer [label="typer\n0.9.0"]

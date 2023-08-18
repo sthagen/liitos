@@ -105,8 +105,8 @@
     {
         "key": "treelib",
         "package_name": "treelib",
-        "installed_version": "1.6.4",
-        "required_version": "1.6.4",
+        "installed_version": "1.7.0",
+        "required_version": "1.7.0",
         "dependencies": [
             {
                 "key": "six",
