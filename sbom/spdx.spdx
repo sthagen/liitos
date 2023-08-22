@@ -1,0 +1,136 @@
+SPDXVersion: SPDX-2.3
+DataLicense: CC0-1.0
+DocumentNamespace: https://cyclonedx/e66cdb0e-8fad-4515-ba2f-d0b497862d91_1
+DocumentName: From-Cyclone-DX
+SPDXID: SPDXRef-DOCUMENT
+
+## Creation Information
+Creator: Tool: CycloneDX:cyclonedx-bom-3.11.2
+Creator: Tool: CycloneDX:cyclonedx-python-lib-3.1.5
+Creator: Tool: CycloneToSpdx-0.1.4
+Created: 2023-08-22T18:45:49Z
+CreatorComment: <text>Converted from CycloneDX spec version 1.4</text>
+LicenseListVersion: 3.21
+## Annotations
+Annotator: Tool: CycloneToSpdx
+AnnotationDate: 2023-08-22T18:45:52Z
+AnnotationComment: <text>MISSING_CDX_PROPERTY:extensions={}</text>
+AnnotationType: OTHER
+SPDXREF: SPDXRef-DOCUMENT
+## Relationships
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-6584a2eb-966e-44cf-9a32-d3343319af26
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-9e6e3c6f-748d-4c11-a6d0-96b80a495c39
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-b8e97adf-df28-498f-a658-1d94f3f0c602
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-d4d9b1a2-8cdf-49b7-8f63-620c3c0e297d
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-ec35bea9-5ba8-48ca-875e-ed2e62432f9c
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-f3855278-2c5e-48a2-8716-5344541bbaad
+
+## Package Information
+PackageName: PyYAML
+SPDXID: SPDXRef-6584a2eb-966e-44cf-9a32-d3343319af26
+PackageVersion: 6.0.1
+PackageDownloadLocation: NOASSERTION
+PrimaryPackagePurpose: LIBRARY
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+ExternalRef: PACKAGE-MANAGER purl pkg:pypi/pyyaml@6.0.1
+## Annotations
+Annotator: Tool: CycloneToSpdx
+AnnotationDate: 2023-08-22T18:45:52Z
+AnnotationComment: <text>MISSING_CDX_PROPERTY:componentType="LIBRARY"</text>
+AnnotationType: OTHER
+SPDXREF: SPDXRef-6584a2eb-966e-44cf-9a32-d3343319af26
+FilesAnalyzed: false
+
+## Package Information
+PackageName: foran
+SPDXID: SPDXRef-9e6e3c6f-748d-4c11-a6d0-96b80a495c39
+PackageVersion: 2023.6.19
+PackageDownloadLocation: NOASSERTION
+PrimaryPackagePurpose: LIBRARY
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+ExternalRef: PACKAGE-MANAGER purl pkg:pypi/foran@2023.6.19
+## Annotations
+Annotator: Tool: CycloneToSpdx
+AnnotationDate: 2023-08-22T18:45:52Z
+AnnotationComment: <text>MISSING_CDX_PROPERTY:componentType="LIBRARY"</text>
+AnnotationType: OTHER
+SPDXREF: SPDXRef-9e6e3c6f-748d-4c11-a6d0-96b80a495c39
+FilesAnalyzed: false
+
+## Package Information
+PackageName: shellingham
+SPDXID: SPDXRef-d4d9b1a2-8cdf-49b7-8f63-620c3c0e297d
+PackageVersion: 1.5.3
+PackageDownloadLocation: NOASSERTION
+PrimaryPackagePurpose: LIBRARY
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+ExternalRef: PACKAGE-MANAGER purl pkg:pypi/shellingham@1.5.3
+## Annotations
+Annotator: Tool: CycloneToSpdx
+AnnotationDate: 2023-08-22T18:45:52Z
+AnnotationComment: <text>MISSING_CDX_PROPERTY:componentType="LIBRARY"</text>
+AnnotationType: OTHER
+SPDXREF: SPDXRef-d4d9b1a2-8cdf-49b7-8f63-620c3c0e297d
+FilesAnalyzed: false
+
+## Package Information
+PackageName: taksonomia
+SPDXID: SPDXRef-ec35bea9-5ba8-48ca-875e-ed2e62432f9c
+PackageVersion: 2023.6.18
+PackageDownloadLocation: NOASSERTION
+PrimaryPackagePurpose: LIBRARY
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+ExternalRef: PACKAGE-MANAGER purl pkg:pypi/taksonomia@2023.6.18
+## Annotations
+Annotator: Tool: CycloneToSpdx
+AnnotationDate: 2023-08-22T18:45:52Z
+AnnotationComment: <text>MISSING_CDX_PROPERTY:componentType="LIBRARY"</text>
+AnnotationType: OTHER
+SPDXREF: SPDXRef-ec35bea9-5ba8-48ca-875e-ed2e62432f9c
+FilesAnalyzed: false
+
+## Package Information
+PackageName: treelib
+SPDXID: SPDXRef-b8e97adf-df28-498f-a658-1d94f3f0c602
+PackageVersion: 1.7.0
+PackageDownloadLocation: NOASSERTION
+PrimaryPackagePurpose: LIBRARY
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+ExternalRef: PACKAGE-MANAGER purl pkg:pypi/treelib@1.7.0
+## Annotations
+Annotator: Tool: CycloneToSpdx
+AnnotationDate: 2023-08-22T18:45:52Z
+AnnotationComment: <text>MISSING_CDX_PROPERTY:componentType="LIBRARY"</text>
+AnnotationType: OTHER
+SPDXREF: SPDXRef-b8e97adf-df28-498f-a658-1d94f3f0c602
+FilesAnalyzed: false
+
+## Package Information
+PackageName: typer
+SPDXID: SPDXRef-f3855278-2c5e-48a2-8716-5344541bbaad
+PackageVersion: 0.9.0
+PackageDownloadLocation: NOASSERTION
+PrimaryPackagePurpose: LIBRARY
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+ExternalRef: PACKAGE-MANAGER purl pkg:pypi/typer@0.9.0
+## Annotations
+Annotator: Tool: CycloneToSpdx
+AnnotationDate: 2023-08-22T18:45:52Z
+AnnotationComment: <text>MISSING_CDX_PROPERTY:componentType="LIBRARY"</text>
+AnnotationType: OTHER
+SPDXREF: SPDXRef-f3855278-2c5e-48a2-8716-5344541bbaad
+FilesAnalyzed: false
+
+
