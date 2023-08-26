@@ -7,7 +7,7 @@ Splice (Finnish: liitos) contributions.
 Third party dependencies are documented in the folder [third-party](third-party/README.md).
 
 [![version](https://img.shields.io/pypi/v/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
-[![downloads](https://pepy.tech/badge/liitos/month)](https://pepy.tech/project/liitos)
+[![downloads](https://static.pepy.tech/badge/liitos/month)](https://pepy.tech/project/liitos)
 [![wheel](https://img.shields.io/pypi/wheel/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
 [![supported-versions](https://img.shields.io/pypi/pyversions/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
 [![supported-implementations](https://img.shields.io/pypi/implementation/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
