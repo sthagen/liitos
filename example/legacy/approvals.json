@@ -1,0 +1,12 @@
+ {
+    "columns": [
+      "Approvals",
+      "Name"
+    ],
+    "rows": [
+      ["Author", "An Author"],
+      ["Review", "A Reviewer"],
+      ["Approved", "An App Rover"]
+    ]
+  }
+

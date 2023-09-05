@@ -1,0 +1,7 @@
+prod_kind:
+- legacy:
+    approvals: approvals.json
+    bind: bind.txt
+    changes: changes.json
+    meta: meta-deep.yml
+    render: true
