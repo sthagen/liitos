@@ -79,6 +79,7 @@ clean: clocal
 	@rm -f `find . -type f -name '*~' `
 	@rm -f `find . -type f -name '.*~' `
 	@rm -rf .cache htmlcov *.egg-info build dist/*
+	@rm -rf .benchmarks .hypothesis .*_cache
 	@rm -f .coverage .coverage.* *.log
 	@echo skipping not yet working pip uninstall $(package)
 	@rm -fr site/*
