@@ -38,6 +38,7 @@ types:
 .PHONY: test
 test: clean
 	python -m liitos render example/deep -t prod_kind -f deep 2>&1 | grep -e WARNING -e ERROR
+	python -m liitos render example/legacy -t prod_kind -f legacy 2>&1 | grep -e WARNING -e ERROR
 	$(pytest)
 
 .PHONY: testcov
@@ -69,7 +70,7 @@ baseline:
 
 .PHONY: clocal
 clocal:
-	@rm -rf example/{deep,no-date,no-date-iss-rev-moved}/render
+	@rm -rf example/{deep,legacy,no-date,no-date-iss-rev-moved}/render
 	@rm -f inventory.*
 
 .PHONY: clean
