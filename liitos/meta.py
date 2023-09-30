@@ -47,7 +47,10 @@ WEAVE_DEFAULTS = {
     'code_fontsize': r'\scriptsize',
     'chosen_logo': '/opt/logo/liitos-logo.png',
     'footer_outer_field_normal_pages': r'\theMetaPageNumPrefix { } \thepage { }',
-    'adjustable_vertical_space': '2.5em',
+    'approvals_adjustable_vertical_space': '2.5em',
+    'change_log_tune_header_sep': '-0em',
+    'proprietary_information_adjustable_vertical_space': '-0em',
+    'proprietary_information_tune_header_sep': '-0em',
 }
 ACROSS = {
     'eff_font_folder': '',
@@ -798,6 +801,20 @@ def weave_meta_part_change_log_description_label(
 
 
 @no_type_check
+def weave_meta_part_with_default_slot(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+    slot: str,
+) -> str:
+    """Do the conditional weaving of slot if text matches else used default (and log a warning)."""
+    if mapper.get(slot):
+        return text.replace(VALUE_SLOT, mapper[slot])
+    else:
+        log.warning(f'{slot} value missing ...' f' setting default ({WEAVE_DEFAULTS[slot]})')
+        return text.replace(VALUE_SLOT, WEAVE_DEFAULTS[slot])
+
+
+@no_type_check
 def weave_meta_part_approvals_adjustable_vertical_space(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
@@ -806,14 +823,43 @@ def weave_meta_part_approvals_adjustable_vertical_space(
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%')
     """
-    if mapper.get('approvals_adjustable_vertical_space'):
-        return text.replace(VALUE_SLOT, mapper['approvals_adjustable_vertical_space'])
-    else:
-        log.warning(
-            'approvals_adjustable_vertical_space value missing ...'
-            f' setting default ({WEAVE_DEFAULTS["adjustable_vertical_space"]})'
-        )
-        return text.replace(VALUE_SLOT, WEAVE_DEFAULTS['adjustable_vertical_space'])
+    return weave_meta_part_with_default_slot(mapper, text, 'approvals_adjustable_vertical_space')
+
+
+@no_type_check
+def weave_meta_part_proprietary_information_adjustable_vertical_space(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the proprietary_information_adjustable_vertical_space from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%')
+    """
+    return weave_meta_part_with_default_slot(mapper, text, 'proprietary_information_adjustable_vertical_space')
+
+
+@no_type_check
+def weave_meta_part_proprietary_information_tune_header_sep(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the proprietary_information_tune_header_sep from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_BLURB_%_TUNE_%_HEADER_%_SEP_%%')
+    """
+    return weave_meta_part_with_default_slot(mapper, text, 'proprietary_information_tune_header_sep')
+
+
+@no_type_check
+def weave_meta_part_change_log_tune_header_sep(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the change_log_tune_header_sep from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHANGE_%_LOG_%_TUNE_%_HEADER_%_SEP_%%')
+    """
+    return weave_meta_part_with_default_slot(mapper, text, 'change_log_tune_header_sep')
 
 
 @no_type_check
@@ -963,6 +1009,9 @@ def dispatch_meta_weaver(
         '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': weave_meta_part_change_log_author_label,
         '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': weave_meta_part_change_log_description_label,
         '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': weave_meta_part_approvals_adjustable_vertical_space,
+        '%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': weave_meta_part_proprietary_information_adjustable_vertical_space,  # noqa
+        '%%_PATCH_%_BLURB_%_TUNE_%_HEADER_%_SEP_%%': weave_meta_part_proprietary_information_tune_header_sep,
+        '%%_PATCH_%_CHANGE_%_LOG_%_TUNE_%_HEADER_%_SEP_%%': weave_meta_part_change_log_tune_header_sep,
         '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': weave_meta_part_approvals_role_label,
         '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': weave_meta_part_approvals_name_label,
         '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': weave_meta_part_approvals_date_and_signature_label,

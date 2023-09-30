@@ -1,7 +1,7 @@
 % |-- changes - cut - marker - top -->
 \hypertarget{status-and-change-log}{%
 \section*{Status and Change Log}\label{status-and-change-log}}
-
+\vspace*{\theTuneChangesHeaderSep}
 \begin{longtable}[]{|
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
@@ -24,11 +24,12 @@ THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 % <-- changes - cut - marker - bottom --|
 
 \vskip \AdustedPushdown% <-- Do not change this line if using liitos to manage the content
+\vspace*{\theBlurbAdjustableVerticalSpace}
 
 % |-- notices - cut - marker - top -->
 \hypertarget{proprietary-information}{%
 \section*{Proprietary Information}\label{proprietary-information}}
-
+\vspace*{\theTuneBlurbHeaderSep}
 \theProprietaryInformation
 % <-- notices - cut - marker - bottom --|
 

@@ -39,10 +39,11 @@ def test_meta_dispatch():
         '%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%': meta.weave_meta_part_change_log_date_label,
         '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': meta.weave_meta_part_change_log_author_label,
         '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': meta.weave_meta_part_change_log_description_label,
-        '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': meta.weave_meta_part_approvals_adjustable_vertical_space,
+        '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': meta.weave_meta_part_approvals_adjustable_vertical_space,  # noqa
         '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': meta.weave_meta_part_approvals_role_label,
         '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': meta.weave_meta_part_approvals_name_label,
-        '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': meta.weave_meta_part_approvals_date_and_signature_label,
+        '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': meta.weave_meta_part_approvals_date_and_signature_label,  # noqa
+        '%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': meta.weave_meta_part_proprietary_information_adjustable_vertical_space,  # noqa
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': meta.weave_meta_part_header_issue_revision_combined,
         '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': meta.weave_meta_part_proprietary_information,
     }
@@ -66,6 +67,7 @@ def test_meta_dispatch():
         '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': 'Approvals',
         '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': 'Name',
         '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': 'Date and Signature',
+        '%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': '-0em',
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': r'Iss \theMetaIssCode, Rev \theMetaRevCode',
         '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': 'Proprietary Information MISSING',
     }
@@ -95,10 +97,10 @@ def test_meta_dispatch_explicit():
         '%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%': meta.weave_meta_part_change_log_date_label,
         '%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%': meta.weave_meta_part_change_log_author_label,
         '%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%': meta.weave_meta_part_change_log_description_label,
-        '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': meta.weave_meta_part_approvals_adjustable_vertical_space,
+        '%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': meta.weave_meta_part_approvals_adjustable_vertical_space,  # noqa
         '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': meta.weave_meta_part_approvals_role_label,
         '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': meta.weave_meta_part_approvals_name_label,
-        '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': meta.weave_meta_part_approvals_date_and_signature_label,
+        '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': meta.weave_meta_part_approvals_date_and_signature_label,  # noqa
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': meta.weave_meta_part_header_issue_revision_combined,
         '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': meta.weave_meta_part_proprietary_information,
     }

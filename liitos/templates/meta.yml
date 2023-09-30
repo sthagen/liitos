@@ -12,6 +12,7 @@ document:
     change_log_description_label: Description
     change_log_issue_label: Iss.
     change_log_revision_label: Rev.
+    change_log_tune_header_sep: '-0em'
     chosen_logo: /opt/logo/liitos-logo.png
     code_fontsize: \scriptsize
     fixed_font_package: sourcecodepro
@@ -41,6 +42,8 @@ document:
     list_of_tables: '%'  # empty string to enable lot
     main_font: ITCFranklinGothicStd-Book
     proprietary_information: /opt/legal/proprietary-information.txt
+    proprietary_information_adjustable_vertical_space: '-0em'
+    proprietary_information_tune_header_sep: '-0em'
     revision: '00'
     sub_title: ' '
     title: null

@@ -26,6 +26,13 @@
 \newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%
 % Vertical adjustable space between subtitle and top of approvals table
 \newcommand{\theApprovalsAdjustableVerticalSpace}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%
+% Vertical adjustable space between changes table and top of blurb
+\newcommand{\theBlurbAdjustableVerticalSpace}{VALUE.SLOT}%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%
+% Vertical adjustable space tuning between blurb heading and blurb itself
+\newcommand{\theTuneBlurbHeaderSep}{VALUE.SLOT}%%_PATCH_%_BLURB_%_TUNE_%_HEADER_%_SEP_%%
+% Vertical adjustable space tuning between changes heading and table
+\newcommand{\theTuneChangesHeaderSep}{VALUE.SLOT}%%_PATCH_%_CHANGE_%_LOG_%_TUNE_%_HEADER_%_SEP_%%
+
 % PDF Metadata:
 %\hypersetup{%
 %  pdfinfo = {%
