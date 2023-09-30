@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json) with SHA256 checksum ([c63d9ecb ...](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json.sha256 "sha256:c63d9ecbbdf2e01d142d6d9dd495c0915b0476aeac067214b1b3e65ebea81aca")).
-<!--[[[end]]] (checksum: 51ac7dadfd23bc35fa20b800d2910e29)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json) with SHA256 checksum ([9db133f4 ...](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json.sha256 "sha256:9db133f4a19520fa5580e739e0ba315aed1eb15c60096602c02854109a0d9cb2")).
+<!--[[[end]]] (checksum: a06d09b6464e78aca9bf0774e723f889)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -25,14 +25,14 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 <!--[[[fill indirect_dependencies_table()]]]-->
 | Name                                                           | Version                                              | License     | Author                         | Description (from packaging data)                                                                |
 |:---------------------------------------------------------------|:-----------------------------------------------------|:------------|:-------------------------------|:-------------------------------------------------------------------------------------------------|
-| [GitPython](https://github.com/gitpython-developers/GitPython) | [3.1.32](https://pypi.org/project/GitPython/3.1.32/) | BSD License | Sebastian Thiel, Michael Trier | GitPython is a Python library used to interact with Git repositories                             |
+| [GitPython](https://github.com/gitpython-developers/GitPython) | [3.1.37](https://pypi.org/project/GitPython/3.1.37/) | BSD License | Sebastian Thiel, Michael Trier | GitPython is a Python library used to interact with Git repositories                             |
 | [click](https://palletsprojects.com/p/click/)                  | [8.1.6](https://pypi.org/project/click/8.1.6/)       | BSD License | UNKNOWN                        | Composable command line interface toolkit                                                        |
 | [gitdb](https://github.com/gitpython-developers/gitdb)         | [4.0.10](https://pypi.org/project/gitdb/4.0.10/)     | BSD License | Sebastian Thiel                | Git Object Database                                                                              |
 | [lxml](https://lxml.de/)                                       | [4.9.3](https://pypi.org/project/lxml/4.9.3/)        | BSD License | lxml dev team                  | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
 | [psutil](https://github.com/giampaolo/psutil)                  | [5.9.5](https://pypi.org/project/psutil/5.9.5/)      | BSD License | Giampaolo Rodola               | Cross-platform lib for process and system monitoring in Python.                                  |
 | [py-cpuinfo](https://github.com/workhorsy/py-cpuinfo)          | [9.0.0](https://pypi.org/project/py-cpuinfo/9.0.0/)  | MIT License | Matthew Brennan Jones          | Get CPU info with pure Python                                                                    |
 | [smmap](https://github.com/gitpython-developers/smmap)         | [5.0.0](https://pypi.org/project/smmap/5.0.0/)       | BSD License | Sebastian Thiel                | A pure Python implementation of a sliding window memory map manager                              |
-<!--[[[end]]] (checksum: 6806a52cef667802406da6a24220b905)-->
+<!--[[[end]]] (checksum: 7f6843d452e4567a462d7ff0b22577ab)-->
 
 ## Dependency Tree(s)
 
@@ -49,7 +49,7 @@ Base graphviz file in dot format: [Trees of the direct dependencies](package-dep
 <!--[[[fill dependency_tree_console_text()]]]-->
 ````console
 foran==2023.6.19
-├── GitPython [required: >=3.1.31, installed: 3.1.32]
+├── GitPython [required: >=3.1.31, installed: 3.1.37]
 │   └── gitdb [required: >=4.0.1,<5, installed: 4.0.10]
 │       └── smmap [required: >=3.0.1,<6, installed: 5.0.0]
 └── typer [required: >=0.9.0, installed: 0.9.0]
@@ -65,4 +65,4 @@ taksonomia==2023.6.18
 treelib==1.7.0
 └── six [required: Any, installed: 1.16.0]
 ````
-<!--[[[end]]] (checksum: 93a4600dc7081acf79ef185febed3afa)-->
+<!--[[[end]]] (checksum: e7c810d9fec4f493ad2ba13ad539aab4)-->
