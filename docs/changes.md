@@ -1,5 +1,8 @@
 # Changes
 
+2023.10.3
+:    * Added some vertical space tuning parameters
+
 2023.6.25
 :    * Enabled page x / y option in footers or any other outer footer value (<https://todo.sr.ht/~sthagen/liitos/46>)
 * Fixed the impact of the upstream sans titles behavior change (<https://todo.sr.ht/~sthagen/liitos/44>)
