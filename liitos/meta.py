@@ -685,8 +685,8 @@ def weave_meta_part_header_date(
                 pub_date = pub_date_today
             return text.replace(VALUE_SLOT, pub_date)
         else:
-            log.warning(f'header_date value missing ... setting default as today({pub_date_today})')
-            return text.replace(VALUE_SLOT, pub_date_today)
+            log.warning('header_date value missing ... setting default as empty(" ")')
+            return text.replace(VALUE_SLOT, ' ')
 
 
 @no_type_check
