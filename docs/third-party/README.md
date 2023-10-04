@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json) with SHA256 checksum ([0d70d354 ...](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json.sha256 "sha256:0d70d3548a65d07dcc6ed60d9f8d7b13c17fa4e45e8cdec552fb972e1d6c29f3")).
-<!--[[[end]]] (checksum: c9fbd22bbc2d08edea35225d775f8326)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json) with SHA256 checksum ([a29644dc ...](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json.sha256 "sha256:a29644dcb9e1ecff25ae91e35f3cdd5e3e1f7766c9b432542c2f444736e2b70a")).
+<!--[[[end]]] (checksum: 5c441e530cea4c44c8a85d46ebe18adc)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -23,16 +23,16 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 ### Indirect Dependencies
 
 <!--[[[fill indirect_dependencies_table()]]]-->
-| Name                                                           | Version                                              | License     | Author                         | Description (from packaging data)                                                                |
-|:---------------------------------------------------------------|:-----------------------------------------------------|:------------|:-------------------------------|:-------------------------------------------------------------------------------------------------|
-| [GitPython](https://github.com/gitpython-developers/GitPython) | [3.1.37](https://pypi.org/project/GitPython/3.1.37/) | BSD License | Sebastian Thiel, Michael Trier | GitPython is a Python library used to interact with Git repositories                             |
-| [click](https://palletsprojects.com/p/click/)                  | [8.1.6](https://pypi.org/project/click/8.1.6/)       | BSD License | UNKNOWN                        | Composable command line interface toolkit                                                        |
-| [gitdb](https://github.com/gitpython-developers/gitdb)         | [4.0.10](https://pypi.org/project/gitdb/4.0.10/)     | BSD License | Sebastian Thiel                | Git Object Database                                                                              |
-| [lxml](https://lxml.de/)                                       | [4.9.3](https://pypi.org/project/lxml/4.9.3/)        | BSD License | lxml dev team                  | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
-| [psutil](https://github.com/giampaolo/psutil)                  | [5.9.5](https://pypi.org/project/psutil/5.9.5/)      | BSD License | Giampaolo Rodola               | Cross-platform lib for process and system monitoring in Python.                                  |
-| [py-cpuinfo](https://github.com/workhorsy/py-cpuinfo)          | [9.0.0](https://pypi.org/project/py-cpuinfo/9.0.0/)  | MIT License | Matthew Brennan Jones          | Get CPU info with pure Python                                                                    |
-| [smmap](https://github.com/gitpython-developers/smmap)         | [5.0.0](https://pypi.org/project/smmap/5.0.0/)       | BSD License | Sebastian Thiel                | A pure Python implementation of a sliding window memory map manager                              |
-<!--[[[end]]] (checksum: 7f6843d452e4567a462d7ff0b22577ab)-->
+| Name                                                           | Version                                              | License     | Author                                | Description (from packaging data)                                                                |
+|:---------------------------------------------------------------|:-----------------------------------------------------|:------------|:--------------------------------------|:-------------------------------------------------------------------------------------------------|
+| [GitPython](https://github.com/gitpython-developers/GitPython) | [3.1.37](https://pypi.org/project/GitPython/3.1.37/) | BSD License | Sebastian Thiel, Michael Trier        | GitPython is a Python library used to interact with Git repositories                             |
+| [click](https://palletsprojects.com/p/click/)                  | [8.1.6](https://pypi.org/project/click/8.1.6/)       | BSD License | Pallets <contact@palletsprojects.com> | Composable command line interface toolkit                                                        |
+| [gitdb](https://github.com/gitpython-developers/gitdb)         | [4.0.10](https://pypi.org/project/gitdb/4.0.10/)     | BSD License | Sebastian Thiel                       | Git Object Database                                                                              |
+| [lxml](https://lxml.de/)                                       | [4.9.3](https://pypi.org/project/lxml/4.9.3/)        | BSD License | lxml dev team                         | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
+| [psutil](https://github.com/giampaolo/psutil)                  | [5.9.5](https://pypi.org/project/psutil/5.9.5/)      | BSD License | Giampaolo Rodola                      | Cross-platform lib for process and system monitoring in Python.                                  |
+| [py-cpuinfo](https://github.com/workhorsy/py-cpuinfo)          | [9.0.0](https://pypi.org/project/py-cpuinfo/9.0.0/)  | MIT License | Matthew Brennan Jones                 | Get CPU info with pure Python                                                                    |
+| [smmap](https://github.com/gitpython-developers/smmap)         | [5.0.0](https://pypi.org/project/smmap/5.0.0/)       | BSD License | Sebastian Thiel                       | A pure Python implementation of a sliding window memory map manager                              |
+<!--[[[end]]] (checksum: 41b8e22c62dae0cbdf87ffd7128b7d91)-->
 
 ## Dependency Tree(s)
 
