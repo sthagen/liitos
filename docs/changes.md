@@ -1,5 +1,7 @@
 # Changes
 
+2023.10.5
+:    * Fixed inconsistent default for header date - now default is empty and not the current date as value
 2023.10.4
 :    * Changed some defaults to minimize noise in meta files
 
