@@ -11,7 +11,9 @@ def test_weave_meta_part_proprietary_information_on_empty_ok():
 
 
 def test_weave_meta_part_proprietary_information_on_value_slot_ok():
-    assert meta.weave_meta_part_proprietary_information({}, '-VALUE.SLOT+') == '-Proprietary Information MISSING+'
+    assert (
+        meta.weave_meta_part_proprietary_information({}, '-VALUE.SLOT+') == '-/opt/legal/proprietary-information.txt+'
+    )  # noqa
 
 
 def test_meta_dispatch_no_match_let_pass_empty():
@@ -69,7 +71,7 @@ def test_meta_dispatch():
         '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': 'Date and Signature',
         '%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': '-0em',
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': r'Iss \theMetaIssCode, Rev \theMetaRevCode',
-        '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': 'Proprietary Information MISSING',
+        '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': '/opt/legal/proprietary-information.txt',
     }
     mapper = {'title': '', 'header_date': '01 FEB 2345'}
     value_slot_container = '-VALUE.SLOT+'

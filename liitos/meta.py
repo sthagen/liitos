@@ -49,6 +49,7 @@ WEAVE_DEFAULTS = {
     'footer_outer_field_normal_pages': r'\theMetaPageNumPrefix { } \thepage { }',
     'approvals_adjustable_vertical_space': '2.5em',
     'change_log_tune_header_sep': '-0em',
+    'proprietary_information': '/opt/legal/proprietary-information.txt',
     'proprietary_information_adjustable_vertical_space': '-0em',
     'proprietary_information_tune_header_sep': '-0em',
 }
@@ -66,7 +67,6 @@ def process_meta(aspects: str) -> Union[gat.Meta, int]:
         log.error(f'destructure failed to find non-empty meta file at {meta_path}')
         return 1
     if meta_path.suffix.lower() not in ('.yaml', '.yml'):
-        log.error(f'meta file format per suffix ({meta_path.suffix}) not supported')
         return 1
     with open(meta_path, 'rt', encoding=ENCODING) as handle:
         metadata = yaml.safe_load(handle)
@@ -648,8 +648,8 @@ def weave_meta_part_header_date_label(
             pub_date_label = ' '  # single space to please the backend parser
         return text.replace(VALUE_SLOT, pub_date_label)
     else:
-        log.warning('header_date_label value missing ... setting default(Date:)')
-        return text.replace(VALUE_SLOT, 'Date:')
+        log.warning('header_date_label value missing ... setting default(" ")')
+        return text.replace(VALUE_SLOT, ' ')
 
 
 @no_type_check
@@ -980,8 +980,18 @@ def weave_meta_part_proprietary_information(
             log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
         return text.replace(VALUE_SLOT, prop_info)
     else:
-        log.warning('proprietary_information value missing ... setting default (Proprietary Information MISSING)')
-        return text.replace(VALUE_SLOT, 'Proprietary Information MISSING')
+        log.warning('proprietary_information value missing ... setting default from module ...')
+        prop_info = WEAVE_DEFAULTS['proprietary_information']
+        if pathlib.Path(prop_info).is_file():
+            try:
+                prop_info_from_file = pathlib.Path(prop_info).open().read()
+                prop_info = prop_info_from_file
+            except (OSError, UnicodeDecodeError) as err:
+                log.error(f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}')
+                log.warning(f'using value ({prop_info}) directly for proprietary_information')
+        else:
+            log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
+        return text.replace(VALUE_SLOT, prop_info)
 
 
 @no_type_check
