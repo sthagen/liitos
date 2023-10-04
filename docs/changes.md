@@ -1,5 +1,8 @@
 # Changes
 
+2023.10.4
+:    * Changed some defaults to minimize noise in meta files
+
 2023.10.3
 :    * Added some vertical space tuning parameters
 
