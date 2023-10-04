@@ -46,6 +46,7 @@ WEAVE_DEFAULTS = {
     'fixed_font_package': 'sourcecodepro',
     'code_fontsize': r'\scriptsize',
     'chosen_logo': '/opt/logo/liitos-logo.png',
+    'footer_frame_note': os.getenv('LIITOS_FOOTER_FRAME_NOTE', ' '),  # TODO
     'footer_outer_field_normal_pages': r'\theMetaPageNumPrefix { } \thepage { }',
     'approvals_adjustable_vertical_space': '2.5em',
     'change_log_tune_header_sep': '-0em',
@@ -700,8 +701,8 @@ def weave_meta_part_footer_frame_note(
     if mapper.get('footer_frame_note'):
         return text.replace(VALUE_SLOT, mapper['footer_frame_note'])
     else:
-        log.warning('footer_frame_note value missing ... setting default (VERY CONSEQUENTIAL)')
-        return text.replace(VALUE_SLOT, 'VERY CONSEQUENTIAL')
+        log.warning('footer_frame_note value missing ... setting default from module / environment ...')
+        return text.replace(VALUE_SLOT, WEAVE_DEFAULTS['footer_frame_note'])
 
 
 @no_type_check

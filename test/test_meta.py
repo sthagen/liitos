@@ -58,7 +58,7 @@ def test_meta_dispatch():
         '%%_PATCH_%_ISSUE_%%': '01',
         '%%_PATCH_%_REVISION_%%': '00',
         '%%_PATCH_%_DATE_%%': '01 FEB 2345',
-        '%%_PATCH_%_FRAME_%_NOTE_%%': 'VERY CONSEQUENTIAL',
+        '%%_PATCH_%_FRAME_%_NOTE_%%': ' ',
         '%%_PATCH_%_FOOT_%_PAGE_%_COUNTER_%_LABEL_%%': 'Page',
         '%%_PATCH_%_CHANGELOG_%_ISSUE_%_LABEL_%%': 'Iss.',
         '%%_PATCH_%_CHANGELOG_%_REVISION_%_LABEL_%%': 'Rev.',
