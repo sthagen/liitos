@@ -11,9 +11,7 @@ def test_weave_meta_part_proprietary_information_on_empty_ok():
 
 
 def test_weave_meta_part_proprietary_information_on_value_slot_ok():
-    assert (
-        meta.weave_meta_part_proprietary_information({}, '-VALUE.SLOT+') == '-/opt/legal/proprietary-information.txt+'
-    )  # noqa
+    assert meta.weave_meta_part_proprietary_information({}, '-VALUE.SLOT+') == '-This is a notice.\n+'  # noqa
 
 
 def test_meta_dispatch_no_match_let_pass_empty():
@@ -71,15 +69,16 @@ def test_meta_dispatch():
         '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': 'Date and Signature',
         '%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': '-0em',
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': r'Iss \theMetaIssCode, Rev \theMetaRevCode',
-        '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': '/opt/legal/proprietary-information.txt',
+        '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': 'This is a notice.',
     }
     mapper = {'title': '', 'header_date': '01 FEB 2345'}
     value_slot_container = '-VALUE.SLOT+'
     wrapper = {'document': {'common': {**mapper}}}
     for trigger, weaver in dispatch.items():
-        assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}+'
+        hack = '\n' if trigger == '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%' else ''
+        assert weaver(mapper, value_slot_container) == f'-{expected[trigger]}{hack}+'
         value_wrapper = f'-VALUE.SLOT+{trigger}'
-        assert meta.weave_meta_meta(wrapper, [value_wrapper]) == [f'-{expected[trigger]}+{trigger}', '\n']
+        assert meta.weave_meta_meta(wrapper, [value_wrapper]) == [f'-{expected[trigger]}{hack}+{trigger}', '\n']
 
 
 def test_meta_dispatch_explicit():
