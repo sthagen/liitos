@@ -101,7 +101,7 @@ COMMA = ','
 
 
 class Table:
-    """Some adhoc structure to encapsulate tje source and target table."""
+    """Some adhoc structure to encapsulate the source and target table."""
 
     SourceMapType = list[tuple[int, str]]
     ColumnsType = dict[str, dict[str, Union[float, int, str]]]
