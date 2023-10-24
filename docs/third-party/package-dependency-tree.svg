@@ -27,7 +27,7 @@
 <title>gitpython</title>
 <ellipse fill="none" stroke="black" cx="561.97" cy="-249.96" rx="50.56" ry="28.99"/>
 <text text-anchor="middle" x="561.97" y="-253.16" font-family="Times,serif" font-size="14.00">GitPython</text>
-<text text-anchor="middle" x="561.97" y="-236.66" font-family="Times,serif" font-size="14.00">3.1.37</text>
+<text text-anchor="middle" x="561.97" y="-236.66" font-family="Times,serif" font-size="14.00">3.1.40</text>
 </g>
 <!-- foran&#45;&gt;gitpython -->
 <g id="edge1" class="edge">
@@ -111,7 +111,7 @@
 <title>shellingham</title>
 <ellipse fill="none" stroke="black" cx="737.97" cy="-360.44" rx="58.51" ry="28.99"/>
 <text text-anchor="middle" x="737.97" y="-363.64" font-family="Times,serif" font-size="14.00">shellingham</text>
-<text text-anchor="middle" x="737.97" y="-347.14" font-family="Times,serif" font-size="14.00">1.5.3</text>
+<text text-anchor="middle" x="737.97" y="-347.14" font-family="Times,serif" font-size="14.00">1.5.4</text>
 </g>
 <!-- taksonomia -->
 <g id="node10" class="node">

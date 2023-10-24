@@ -3,13 +3,13 @@
     "Author": "Sebastian Thiel, Michael Trier",
     "Description": "GitPython is a Python library used to interact with Git repositories",
     "License": "BSD License",
-    "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.12/envs/liitos-3-10-12/lib/python3.10/site-packages/GitPython-3.1.37.dist-info/LICENSE",
+    "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.12/envs/liitos-3-10-12/lib/python3.10/site-packages/GitPython-3.1.40.dist-info/LICENSE",
     "LicenseText": "Copyright (C) 2008, 2009 Michael Trier and contributors\nAll rights reserved.\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions\nare met:\n\n* Redistributions of source code must retain the above copyright\nnotice, this list of conditions and the following disclaimer.\n\n* Redistributions in binary form must reproduce the above copyright\nnotice, this list of conditions and the following disclaimer in the\ndocumentation and/or other materials provided with the distribution.\n\n* Neither the name of the GitPython project nor the names of\nits contributors may be used to endorse or promote products derived\nfrom this software without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\nLIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\nA PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT\nOWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,\nSPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED\nTO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\nPROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\nLIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\nNEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\nSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n",
     "Name": "GitPython",
     "NoticeFile": "UNKNOWN",
     "NoticeText": "UNKNOWN",
     "URL": "https://github.com/gitpython-developers/GitPython",
-    "Version": "3.1.37"
+    "Version": "3.1.40"
   },
   {
     "Author": "Kirill Simonov",
@@ -99,13 +99,13 @@
     "Author": "Tzu-ping Chung",
     "Description": "Tool to Detect Surrounding Shell",
     "License": "ISC License (ISCL)",
-    "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.12/envs/liitos-3-10-12/lib/python3.10/site-packages/shellingham-1.5.3.dist-info/LICENSE",
+    "LicenseFile": "/Users/ruth/.pyenv/versions/3.10.12/envs/liitos-3-10-12/lib/python3.10/site-packages/shellingham-1.5.4.dist-info/LICENSE",
     "LicenseText": "Copyright (c) 2018, Tzu-ping Chung <uranusjr@gmail.com>\n\nPermission to use, copy, modify, and distribute this software for any\npurpose with or without fee is hereby granted, provided that the above\ncopyright notice and this permission notice appear in all copies.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\" AND THE AUTHOR DISCLAIMS ALL WARRANTIES\nWITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF\nMERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR\nANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES\nWHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN\nACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF\nOR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.\n",
     "Name": "shellingham",
     "NoticeFile": "UNKNOWN",
     "NoticeText": "UNKNOWN",
     "URL": "https://github.com/sarugaku/shellingham",
-    "Version": "1.5.3"
+    "Version": "1.5.4"
   },
   {
     "Author": "Sebastian Thiel",
