@@ -2,18 +2,15 @@
 
 Splice (Finnish: liitos) contributions.
 
-[License: MIT](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE) |
-[Country of origin: Switzerland](https://git.sr.ht/~sthagen/liitos/tree/default/item/COUNTRY-OF-ORIGIN) |
-[Export control classification number(ECCN): EAR99](https://git.sr.ht/~sthagen/liitos/tree/default/item/EXPORT-CONTROL-CLASSIFICATION-NUMBER)
+[![license](badges/license-spdx-mit.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE)
+[![Country of Origin](badges/country-of-origin-name-switzerland-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/COUNTRY-OF-ORIGIN)
+[![Export Classification Control Number (ECCN)](badges/export-control-classification-number_eccn-ear99-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/EXPORT-CONTROL-CLASSIFICATION-NUMBER)
+[![Configuration](badges/configuration-sbom.svg)](third-party/index.html)
 
-Third party dependencies are documented in the folder [third-party](third-party/README.md).
-
-[![version](https://img.shields.io/pypi/v/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
-[![downloads](https://static.pepy.tech/badge/liitos/month)](https://pepy.tech/project/liitos)
-[![wheel](https://img.shields.io/pypi/wheel/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
-[![supported-versions](https://img.shields.io/pypi/pyversions/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
-[![supported-implementations](https://img.shields.io/pypi/implementation/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
-[![maintenance-status](https://img.shields.io/github/commit-activity/y/sthagen/liitos.svg?style=flat)](https://git.sr.ht/~sthagen/liitos/log)
+[![Version](https://img.shields.io/pypi/v/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
+[![Downloads](https://static.pepy.tech/badge/liitos/month)](https://pepy.tech/project/liitos)
+[![Supported Versions](https://img.shields.io/pypi/pyversions/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
+[![Maintenance Status](https://img.shields.io/github/commit-activity/y/sthagen/liitos.svg?style=flat)](https://git.sr.ht/~sthagen/liitos/log)
 
 ## Bug Tracker
 
