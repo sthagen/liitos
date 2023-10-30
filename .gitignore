@@ -142,3 +142,4 @@ current-bandit.json
 # Local specific ignores
 inventory.*
 render/
+book
