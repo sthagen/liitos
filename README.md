@@ -8,7 +8,7 @@ Splice (Finnish: liitos) contributions.
 [![Configuration](docs/badges/configuration-sbom.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/docs/third-party/README.md)
 
 [![Version](https://img.shields.io/pypi/v/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
-[![Downloads](https://static.pepy.tech/badge/liitos/month)](https://pepy.tech/project/liitos)
+[![Downloads](docs/badges/downloads-per-month.svg)](https://pepy.tech/project/liitos)
 [![Supported Versions](https://img.shields.io/pypi/pyversions/liitos.svg?style=flat)](https://pypi.python.org/pypi/liitos/)
 [![Maintenance Status](docs/badges/commits-per-year.svg)](https://git.sr.ht/~sthagen/liitos/log)
 
