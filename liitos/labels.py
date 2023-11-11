@@ -8,7 +8,7 @@ NO_LABEL = 'no-label-found-ERROR'
 
 def is_include_graphics(text: str) -> bool:
     """Only DRY."""
-    token = r'\includegraphics'  # noqa
+    token = r'\includegraphics'  # nosec B105
     pos_after = len(token)
     return len(text) > len(token) and text.startswith(token) and text[pos_after] in ('[', '{')
 
