@@ -68,12 +68,11 @@ def inject(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) 
                     log.error(
                         f'failed to extract file path token for caption lookup from {line.strip()} with err: {err}'
                     )
-                outgoing.append('')  # TODO(sthagen) - why do we sometimes received joined strings?
-                outgoing.append(r'\begin{figure}')
-                outgoing.append(r'\centering')
+                outgoing.append(r'\begin{figure}' + '\n')
+                outgoing.append(r'\centering' + '\n')
                 outgoing.append(line)
-                outgoing.append(r'\caption{' + captain + ' ' + adhoc_label + '}')
-                outgoing.append(r'\end{figure}')
+                outgoing.append(r'\caption{' + captain + ' ' + adhoc_label + '}' + '\n')
+                outgoing.append(r'\end{figure}' + '\n')
             elif is_include_graphics(line) and precondition_met:
                 log.info(f'within a figure environment at line #{slot + 1}')
                 log.info(line.rstrip())
@@ -106,8 +105,8 @@ def inject(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) 
                 caption_text = '\n'.join(caption)
                 if r'\label{' not in caption_text:
                     caption_text = f"{caption_text.rstrip().rstrip('}')} {label}" + '}'
-                # if caption == caption.strip():
-                #    caption += '\n'
+                if caption_text == caption_text.rstrip():
+                    caption_text += '\n'
                 outgoing.append(caption_text)
                 outgoing.append(line)
                 modus = 'copy'
