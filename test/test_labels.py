@@ -54,3 +54,20 @@ def test_inject_precondition_and_include():
         'z',
     ]
     assert labels.inject(correct_match) == injected
+
+
+def test_is_include_graphics():
+    assert labels.is_include_graphics(r'\includegraphics[') is True
+    assert labels.is_include_graphics(r'\includegraphics{') is True
+    assert labels.is_include_graphics(r'\includegraphics[]') is True
+    assert labels.is_include_graphics(r'\includegraphics{}\n') is True
+    assert labels.is_include_graphics(r'\includegraphics') is False
+    assert labels.is_include_graphics(r'\includegraphic[') is False
+    assert labels.is_include_graphics('') is False
+
+
+def test_extract_image_path():
+    assert labels.extract_image_path(r'\includegraphics{a/b}') == 'a/b'
+    assert labels.extract_image_path(r'\includegraphics[]{a/b}') == 'a/b'
+    assert labels.extract_image_path(r'\includegraphics[]{}\n') == r'}\n'
+    assert labels.extract_image_path('') == 'IMAGE_PATH_NOT_FOUND'
