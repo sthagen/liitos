@@ -9,3 +9,4 @@ packages:
 - psutil
 - py-cpuinfo
 - smmap
+- typing-extensions
