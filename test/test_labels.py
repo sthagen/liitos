@@ -1,3 +1,4 @@
+import json
 import liitos.labels as labels
 
 
@@ -16,42 +17,41 @@ def test_inject_precondition():
 
 
 def test_inject_not_precondition():
-    partial_matches = ['a', r'\includegraphics{', 'z']
+    partial_matches = ['a\n', r'\includegraphics{' + '\n', 'z\n']
     augmented_content = [
-        'a',
-        '',
-        r'\begin{figure}',
-        r'\centering',
-        r'\includegraphics{',
-        r'\caption{MISSING-CAPTION-IN-MARKDOWN FIX-AT-SOURCE}',
-        r'\end{figure}',
-        'z',
+        'a\n',
+        r'\begin{figure}' + '\n',
+        r'\centering' + '\n',
+        r'\includegraphics{' + '\n',
+        r'\caption{MISSING-CAPTION-IN-MARKDOWN FIX-AT-SOURCE}' + '\n',
+        r'\end{figure}' + '\n',
+        'z\n',
     ]
     assert labels.inject(partial_matches) == augmented_content
 
 
 def test_inject_precondition_and_include():
     correct_match = [
-        'a',
-        '',
-        r'\begin{figure}',
-        r'\centering',
-        r'\includegraphics{images/blue.png}',
-        r'\caption{Caption Text Blue}',
-        r'\end{figure}',
-        '',
-        'z',
+        'a\n',
+        '\n',
+        r'\begin{figure}' + '\n',
+        r'\centering' + '\n',
+        r'\includegraphics{images/blue.png}' + '\n',
+        r'\caption{Caption Text Blue}' + '\n',
+        r'\end{figure}' + '\n',
+        '\n',
+        'z\n',
     ]
     injected = [
-        'a',
-        '',
-        r'\begin{figure}',
-        r'\centering',
-        r'\includegraphics{images/blue.png}',
-        r'\caption{Caption Text Blue \label{fig:blue}}',
-        r'\end{figure}',
-        '',
-        'z',
+        'a\n',
+        '\n',
+        r'\begin{figure}' + '\n',
+        r'\centering' + '\n',
+        r'\includegraphics{images/blue.png}' + '\n',
+        r'\caption{Caption Text Blue \label{fig:blue}}' + '\n',
+        r'\end{figure}' + '\n',
+        '\n',
+        'z\n',
     ]
     assert labels.inject(correct_match) == injected
 
@@ -71,3 +71,11 @@ def test_extract_image_path():
     assert labels.extract_image_path(r'\includegraphics[]{a/b}') == 'a/b'
     assert labels.extract_image_path(r'\includegraphics[]{}\n') == r'}\n'
     assert labels.extract_image_path('') == 'IMAGE_PATH_NOT_FOUND'
+
+
+def test_inject_regression_bug48():
+    lookup = json.load(open('test/fixtures/bugs/labels/lookup.json', 'rt', encoding='utf-8'))
+    incoming = open('test/fixtures/bugs/labels/document-pre-labels.tex', 'rt', encoding='utf-8').readlines()
+    reference = open('test/fixtures/bugs/labels/document-post-labels.tex', 'rt', encoding='utf-8').readlines()
+    outgoing = labels.inject(incoming, lookup)
+    assert outgoing == reference
