@@ -512,6 +512,18 @@ def weave_meta_part_header_title(
 
 
 @no_type_check
+def weave_meta_part_title_slug(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the title slug deriving from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%_SLUG_%%')
+    """
+    return text.replace(VALUE_SLOT, mapper['title'].replace('\\\\', '').replace('  ', ' '))
+
+
+@no_type_check
 def weave_meta_part_title(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
@@ -1003,6 +1015,7 @@ def dispatch_meta_weaver(
     """Dispatch the meta weaver by mapping to handled groups per source marker."""
     dispatch = {
         '%%_PATCH_%_HEADER_%_TITLE_%%': weave_meta_part_header_title,
+        '%%_PATCH_%_TITLE_%_SLUG_%%': weave_meta_part_title_slug,
         '%%_PATCH_%_MAIN_%_TITLE_%%': weave_meta_part_title,
         '%%_PATCH_%_SUB_%_TITLE_%%': weave_meta_part_sub_title,
         '%%_PATCH_%_TYPE_%%': weave_meta_part_header_type,

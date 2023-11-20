@@ -1,4 +1,5 @@
 %% first titlepage (book front matter)
+\pdfbookmark[startatroot,bold]{\theTitleSlug}{doctitle}
 \mbox{}\vskip 10em
 \begin{flushleft}{%%
   \setstretch{2}
