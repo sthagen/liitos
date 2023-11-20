@@ -1,5 +1,12 @@
 # Changes
 
+2023.11.20
+:    * Fixed remove newline commands from title for document attributes (<https://todo.sr.ht/~sthagen/liitos/53>)
+* Implemented enable inject of document level title bookmark in PDF (<https://todo.sr.ht/~sthagen/liitos/49>)
+* Implemented enable inject of section level changelog bookmark in PDF (<https://todo.sr.ht/~sthagen/liitos/50>)
+* Implemented enable inject of section level proprietary information bookmark in PDF (<https://todo.sr.ht/~sthagen/liitos/51>)
+* Implemented enable inject of section level table of contents bookmark in PDF (<https://todo.sr.ht/~sthagen/liitos/52>)
+
 2023.11.11
 :    * Fixed bug in label injector where figure parsing leaves out log points (<https://todo.sr.ht/~sthagen/liitos/48>)
 
