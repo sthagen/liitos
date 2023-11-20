@@ -20,6 +20,7 @@
 \renewcommand*\contentsname{Table of Contents}
 {
 \setcounter{tocdepth}{VALUE.SLOT}%%_PATCH_%_TOC_%_LEVEL_%%
+\pdfbookmark[section,bold]{\contentsname}{toc}
 \tableofcontents
 }
 
