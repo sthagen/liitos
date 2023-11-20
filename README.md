@@ -2,7 +2,7 @@
 
 Splice (Finnish: liitos) contributions.
 
-[![License](docs/badges/license-spdx-mit.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE)
+[![License](https://codes.dilettant.life/docs/liitos/badges/license-spdx-mit.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE)
 [![Country of Origin](docs/badges/country-of-origin-name-switzerland-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/COUNTRY-OF-ORIGIN)
 [![Export Classification Control Number (ECCN)](docs/badges/export-control-classification-number_eccn-ear99-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/EXPORT-CONTROL-CLASSIFICATION-NUMBER)
 [![Configuration](docs/badges/configuration-sbom.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/docs/third-party/README.md)
