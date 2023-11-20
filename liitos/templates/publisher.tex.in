@@ -28,6 +28,7 @@ THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 \vspace*{\theBlurbAdjustableVerticalSpace}
 
 % |-- notices - cut - marker - top -->
+\pdfbookmark[section]{Proprietary Information}{propinfo}
 \hypertarget{proprietary-information}{%
 \section*{Proprietary Information}\label{proprietary-information}}
 \vspace*{\theTuneBlurbHeaderSep}
