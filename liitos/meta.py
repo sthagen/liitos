@@ -520,7 +520,7 @@ def weave_meta_part_title_slug(
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%_SLUG_%%')
     """
-    return text.replace(VALUE_SLOT, mapper['title'].replace('\\\\', '').replace('  ', ' '))
+    return text.replace(VALUE_SLOT, mapper['title'].replace('\\\\', '').replace('  ', ' ').title())
 
 
 @no_type_check
