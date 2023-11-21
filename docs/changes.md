@@ -1,5 +1,8 @@
 # Changes
 
+2023.11.21
+:    * Implemented ensure the document title bookmark is in Title Case (<https://todo.sr.ht/~sthagen/liitos/54>)
+
 2023.11.20
 :    * Fixed remove newline commands from title for document attributes (<https://todo.sr.ht/~sthagen/liitos/53>)
 * Implemented enable inject of document level title bookmark in PDF (<https://todo.sr.ht/~sthagen/liitos/49>)
