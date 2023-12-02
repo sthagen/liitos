@@ -1,0 +1,18 @@
+{
+  "liitos": {
+    "version": "7.3.2",
+    "timestamp": "2023-12-02T15:24:32.697594",
+    "branch_coverage": true,
+    "show_contexts": true,
+    "covered_lines": 2349,
+    "num_statements": 2855,
+    "percent_covered": 80.54658385093168,
+    "percent_covered_display": "80.55",
+    "missing_lines": 506,
+    "excluded_lines": 2,
+    "num_branches": 1170,
+    "num_partial_branches": 179,
+    "covered_branches": 893,
+    "missing_branches": 277
+  }
+}
