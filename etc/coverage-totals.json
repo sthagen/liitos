@@ -1,7 +1,7 @@
 {
   "liitos": {
-    "version": "7.3.2",
-    "timestamp": "2023-12-02T15:24:32.697594",
+    "coverage_tool_version": "7.3.2",
+    "timestamp": "2023-12-02 16:09:56 +00:00",
     "branch_coverage": true,
     "show_contexts": true,
     "covered_lines": 2349,
@@ -13,6 +13,38 @@
     "num_branches": 1170,
     "num_partial_branches": 179,
     "covered_branches": 893,
-    "missing_branches": 277
+    "missing_branches": 277,
+    "node_id": "c79891e5-aabf-3a83-95b9-588edcd8327f",
+    "nfiles": 19,
+    "files": [
+      "liitos/__init__.py",
+      "liitos/approvals.py",
+      "liitos/captions.py",
+      "liitos/changes.py",
+      "liitos/cli.py",
+      "liitos/concat.py",
+      "liitos/configure.py",
+      "liitos/description_lists.py",
+      "liitos/eject.py",
+      "liitos/figures.py",
+      "liitos/gather.py",
+      "liitos/labels.py",
+      "liitos/liitos.py",
+      "liitos/meta.py",
+      "liitos/patch.py",
+      "liitos/render.py",
+      "liitos/tables.py",
+      "liitos/template_loader.py",
+      "liitos/tools.py"
+    ],
+    "blake3": "c24a0676f6533cce02255deb7e79d9311907d35299dbffc2e9a3e469b8c11832",
+    "blake2": "7c8b4592fd9178fef7fb1d65490232f069d319486f5a2b9d4603c5e278748e8901ce62c6c8238817252a87c935a3172e3cf34e6c97620652af13c109398b985f",
+    "sha512": "c61155a68ac3a658277a31925adb9fe1c96ec7de6ba9aa5d733ee1d0d9df25771ed671ad473146ee5529810cb45801e0fcd34cd48909225a2a6cc5e76319737e",
+    "sha384": "77173355445c6e53094de4510104e847f1d00a9b793a5110bbee8ac6e1a31f62a081d900aea3cd276cc4557ae8d391c5",
+    "sha256": "bd78cba4899dd854dc234b606e34beff13921f3b94230388f9ac1079e5b6c769",
+    "sha1": "b4b28eb85982c409288877c250022da3e0db670c",
+    "md5": "245c747da05732ed920a73eca7ff072d",
+    "python_version": "3.10.12",
+    "entropy": 4.865236
   }
 }
