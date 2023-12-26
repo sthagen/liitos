@@ -38,6 +38,45 @@ VENDORED_SVG_PAT = re.compile(r'^.+\]\([^.]+\.[^.]+\.svg\ .+$')
 
 
 @no_type_check
+def read_patches(folder_path: pathlib.Path, patches_path: pathlib.Path) -> tuple[list[tuple[str, str]], bool]:
+    """Ja ja."""
+    patches = []
+    need_patching = False
+    log.info(f'inspecting any patch spec file ({patches_path}) ...')
+    if patches_path.is_file() and patches_path.stat().st_size:
+        target_path = folder_path / PATCH_SPEC_NAME
+        shutil.copy(patches_path, target_path)
+        try:
+            with open(patches_path, 'rt', encoding=ENCODING) as handle:
+                patch_spec = yaml.safe_load(handle)
+            need_patching = True
+        except (OSError, UnicodeDecodeError) as err:
+            log.error(f'failed to load patch spec from ({patches_path}) with ({err}) - patching will be skipped')
+            need_patching = False
+        if need_patching:
+            try:
+                patches = [(rep, lace) for rep, lace in patch_spec]
+                patch_pair_count = len(patches)
+                if not patch_pair_count:
+                    need_patching = False
+                    log.warning('- ignoring empty patch spec')
+                else:
+                    log.info(
+                        f'- loaded {patch_pair_count} patch pair{"" if patch_pair_count == 1 else "s"}'
+                        f' from patch spec file ({patches_path})'
+                    )
+            except ValueError as err:
+                log.error(f'- failed to parse patch spec from ({patch_spec}) with ({err}) - patching will be skipped')
+                need_patching = False
+    else:
+        if patches_path.is_file():
+            log.warning(f'- ignoring empty patch spec file ({patches_path})')
+        else:
+            log.info(f'- no patch spec file ({patches_path}) detected')
+    return patches, need_patching
+
+
+@no_type_check
 def der(
     doc_root: Union[str, pathlib.Path],
     structure_name: str,
@@ -71,40 +110,7 @@ def der(
     rel_concat_folder_path = pathlib.Path('render/pdf/')
     rel_concat_folder_path.mkdir(parents=True, exist_ok=True)
 
-    patches = []
-    need_patching = False
-    patch_spec_path = pathlib.Path(PATCH_SPEC_NAME)
-    log.info(f'inspecting any patch spec file ({patch_spec_path}) ...')
-    if patch_spec_path.is_file() and patch_spec_path.stat().st_size:
-        target_path = rel_concat_folder_path / PATCH_SPEC_NAME
-        shutil.copy(patch_spec_path, target_path)
-        try:
-            with open(patch_spec_path, 'rt', encoding=ENCODING) as handle:
-                patch_spec = yaml.safe_load(handle)
-            need_patching = True
-        except (OSError, UnicodeDecodeError) as err:
-            log.error(f'failed to load patch spec from ({patch_spec_path}) with ({err}) - patching will be skipped')
-            need_patching = False
-        if need_patching:
-            try:
-                patches = [(rep, lace) for rep, lace in patch_spec]
-                patch_pair_count = len(patches)
-                if not patch_pair_count:
-                    need_patching = False
-                    log.warning('- ignoring empty patch spec')
-                else:
-                    log.info(
-                        f'- loaded {patch_pair_count} patch pair{"" if patch_pair_count == 1 else "s"}'
-                        f' from patch spec file ({patch_spec_path})'
-                    )
-            except ValueError as err:
-                log.error(f'- failed to parse patch spec from ({patch_spec}) with ({err}) - patching will be skipped')
-                need_patching = False
-    else:
-        if patch_spec_path.is_file():
-            log.warning(f'- ignoring empty patch spec file ({patch_spec_path})')
-        else:
-            log.info(f'- no patch spec file ({patch_spec_path}) detected')
+    patches, need_patching = read_patches(rel_concat_folder_path, pathlib.Path(PATCH_SPEC_NAME))
 
     os.chdir(rel_concat_folder_path)
     log.info(f'render (this processor) teleported into the render/pdf location ({os.getcwd()}/)')
@@ -299,7 +305,7 @@ def der(
                         m_loc = v
                     else:
                         pass
-                token = f'{m_loc}/{m_filename}.{m_format}'
+                token = f'{m_loc}/{m_filename}.{m_format}'  # noqa
                 if token in mermaid_caption_map:
                     log.warning('Duplicate token, same caption?')
                     log.warning(f'-   prior: {token} -> {m_caption}')
