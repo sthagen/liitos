@@ -6,7 +6,17 @@ from typing import Dict, List, Set, Tuple, Union
 
 import yaml
 
-from liitos import ENCODING, log
+from liitos import (
+    DEFAULT_STRUCTURE_NAME,
+    KEY_APPROVALS,
+    KEY_BIND,
+    KEY_CHANGES,
+    KEY_LAYOUT,
+    KEY_META,
+    KEYS_REQUIRED,
+    ENCODING,
+    log,
+)
 
 PathLike = Union[str, pathlib.Path]
 
@@ -21,14 +31,6 @@ Targets = Set[str]
 Facets = Dict[str, Targets]
 Payload = Union[Approvals, Binder, Changes, Meta]
 Verification = Tuple[bool, str]
-
-DEFAULT_STRUCTURE_NAME = 'structure.yml'
-KEY_APPROVALS = 'approvals'
-KEY_BIND = 'bind'
-KEY_CHANGES = 'changes'
-KEY_LAYOUT = 'layout'
-KEY_META = 'meta'
-KEYS_REQUIRED = (KEY_APPROVALS, KEY_BIND, KEY_CHANGES, KEY_META)
 
 
 def load_structure(path: PathLike = DEFAULT_STRUCTURE_NAME) -> Structure:

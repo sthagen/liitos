@@ -8,6 +8,7 @@ import yaml
 
 import liitos.gather as gat
 import liitos.template_loader as template
+import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, log
 
 METADATA_TEMPLATE = os.getenv('LIITOS_METADATA_TEMPLATE', '')
@@ -61,7 +62,7 @@ ACROSS = {
 
 
 @no_type_check
-def process_meta(aspects: str) -> Union[gat.Meta, int]:
+def process_meta(aspects: dict[str, str]) -> Union[gat.Meta, int]:
     """TODO."""
     meta_path = DOC_BASE / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
@@ -1100,39 +1101,17 @@ def weave(
         log.error(f'structure does not provide ({target_code})')
         return 1
 
-    if len(targets) == 1:
-        target = targets[0]
-        facets = sorted(list(facet.keys())[0] for facet in structure[target])
-        log.info(f'found single target ({target}) with facets ({facets})')
+    if len(targets) != 1:
+        log.warning(f'unexpected count of targets ({len(targets)}) from ({targets})')
+        return 0
 
-        if facet_code not in facets:
-            log.error(f'structure does not provide facet ({facet_code}) for target ({target_code})')
-            return 1
+    ok, aspect_map = too.load_target(targets, target_code, facet_code, structure)
+    if not ok:
+        return 1
 
-        aspect_map = {}
-        for data in structure[target]:
-            if facet_code in data:
-                aspect_map = data[facet_code]
-                break
-        missing_keys = [key for key in gat.KEYS_REQUIRED if key not in aspect_map]
-        if missing_keys:
-            log.error(
-                f'structure does not provide all expected aspects {sorted(gat.KEYS_REQUIRED)}'
-                f' for target ({target_code}) and facet ({facet_code})'
-            )
-            log.error(f'- the found aspects: {sorted(aspect_map.keys())}')
-            log.error(f'- missing aspects:   {sorted(missing_keys)}')
-            return 1
-        if sorted(aspect_map.keys()) != sorted(gat.KEYS_REQUIRED):
-            log.warning(
-                f'structure does not strictly provide the expected aspects {sorted(gat.KEYS_REQUIRED)}'
-                f' for target ({target_code}) and facet ({facet_code})'
-            )
-            log.warning(f'- found the following aspects instead:                   {sorted(aspect_map.keys())} instead')
-
-        metadata = process_meta(aspect_map)
-        if isinstance(metadata, int):
-            return 1
+    metadata = process_meta(aspect_map)
+    if isinstance(metadata, int):
+        return 1
 
     metadata_template = template.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in metadata_template.split('\n')]

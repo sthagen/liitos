@@ -12,6 +12,7 @@ import treelib  # type: ignore
 import yaml
 
 import liitos.gather as gat
+import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, log
 
 ALT_INJECTOR_HACK = 'INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC'
@@ -71,7 +72,7 @@ class RedirectedStdout:
 
 
 @no_type_check
-def process_approvals(aspects: str) -> Union[gat.Approvals, int]:
+def process_approvals(aspects: dict[str, str]) -> Union[gat.Approvals, int]:
     """TODO."""
     approvals_path = DOC_BASE / aspects[gat.KEY_APPROVALS]
     if not approvals_path.is_file() or not approvals_path.stat().st_size:
@@ -96,7 +97,7 @@ def process_approvals(aspects: str) -> Union[gat.Approvals, int]:
 
 
 @no_type_check
-def process_binder(aspects: str) -> Union[gat.Binder, int]:
+def process_binder(aspects: dict[str, str]) -> Union[gat.Binder, int]:
     """TODO."""
     bind_path = DOC_BASE / aspects[gat.KEY_BIND]
     if not bind_path.is_file() or not bind_path.stat().st_size:
@@ -116,7 +117,7 @@ def process_binder(aspects: str) -> Union[gat.Binder, int]:
 
 
 @no_type_check
-def process_changes(aspects: str) -> Union[gat.Changes, int]:
+def process_changes(aspects: dict[str, str]) -> Union[gat.Changes, int]:
     """TODO."""
     changes_path = DOC_BASE / aspects[gat.KEY_CHANGES]
     if not changes_path.is_file() or not changes_path.stat().st_size:
@@ -141,7 +142,7 @@ def process_changes(aspects: str) -> Union[gat.Changes, int]:
 
 
 @no_type_check
-def process_meta(aspects: str) -> Union[gat.Meta, int]:
+def process_meta(aspects: dict[str, str]) -> Union[gat.Meta, int]:
     """TODO."""
     meta_path = DOC_BASE / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
@@ -412,71 +413,83 @@ def concatenate(
         log.error(f'structure does not provide ({target_code})')
         return 1
 
-    if len(targets) == 1:
-        target = targets[0]
-        facets = sorted(list(facet.keys())[0] for facet in structure[target])
-        log.info(f'found single target ({target}) with facets ({facets})')
+    if len(targets) != 1:
+        log.warning(f'unexpected count of targets ({len(targets)}) from ({targets})')
+        return 0
 
-        if facet_code not in facets:
-            log.error(f'structure does not provide facet ({facet_code}) for target ({target_code})')
-            return 1
+    ok, aspect_map = too.load_target(targets, target_code, facet_code, structure)
+    if not ok:
+        return 1
 
-        aspect_map = {}
-        for data in structure[target]:
-            if facet_code in data:
-                aspect_map = data[facet_code]
-                break
-        missing_keys = [key for key in gat.KEYS_REQUIRED if key not in aspect_map]
-        if missing_keys:
-            log.error(
-                f'structure does not provide all expected aspects {sorted(gat.KEYS_REQUIRED)}'
-                f' for target ({target_code}) and facet ({facet_code})'
-            )
-            log.error(f'- the found aspects: {sorted(aspect_map.keys())}')
-            log.error(f'- missing aspects:   {sorted(missing_keys)}')
-            return 1
-        if sorted(aspect_map.keys()) != sorted(gat.KEYS_REQUIRED):
-            log.warning(
-                f'structure does not strictly provide the expected aspects {sorted(gat.KEYS_REQUIRED)}'
-                f' for target ({target_code}) and facet ({facet_code})'
-            )
-            log.warning(f'- found the following aspects instead:                   {sorted(aspect_map.keys())} instead')
+    approvals = process_approvals(aspect_map)
+    if isinstance(approvals, int):
+        return 1
+    binder = process_binder(aspect_map)
+    if isinstance(binder, int):
+        return 1
+    changes = process_changes(aspect_map)
+    if isinstance(changes, int):
+        return 1
+    metadata = process_meta(aspect_map)
+    if isinstance(metadata, int):
+        return 1
 
-        approvals = process_approvals(aspect_map)
-        if isinstance(approvals, int):
-            return 1
-        binder = process_binder(aspect_map)
-        if isinstance(binder, int):
-            return 1
-        changes = process_changes(aspect_map)
-        if isinstance(changes, int):
-            return 1
-        metadata = process_meta(aspect_map)
-        if isinstance(metadata, int):
-            return 1
+    root = SLASH
+    root_path = str(pathlib.Path.cwd().resolve()).rstrip(SLASH) + SLASH
+    tree = treelib.Tree()
+    tree.create_node(root, root)
+    documents = {}
+    insert_regions = {}
+    img_collector = []
+    log.info(LOG_SEPARATOR)
+    log.info('processing binder ...')
+    for entry in binder:
+        path = DOC_BASE / entry
+        log.debug(f'- {entry} as {path}')
+        with open(path, 'rt', encoding=ENCODING) as handle:
+            documents[entry] = [line.rstrip() for line in handle.readlines()]
+        insert_regions[entry] = []
+        in_region = False
+        begin, end = 0, 0
+        include = ''
+        tree.create_node(entry, entry, parent=root)
+        for slot, line in enumerate(documents[entry]):
+            if line.startswith(IMG_LINE_STARTSWITH):
+                documents[entry][slot] = adapt_image(line, img_collector, entry, root_path)
+            log.debug(f'{slot :02d}|{line.rstrip()}')
+            if not in_region:
+                if line.startswith(READ_SLOT_FENCE_BEGIN):
+                    in_region = True
+                    begin = slot
+                    continue
+                if line.startswith(INCLUDE_SLOT):
+                    include = line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
+                    insert_regions[entry].append(((slot, slot), include))
+                    tree.create_node(include, include, parent=entry)
+                    include = ''
+                    continue
+            if in_region:
+                if line.startswith(READ_SLOT_CONTEXT_BEGIN):
+                    include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                elif line.startswith(READ_SLOT_FENCE_END):
+                    end = slot
+                    insert_regions[entry].append(((begin, end), include))
+                    tree.create_node(include, include, parent=entry)
+                    in_region = False
+                    begin, end = 0, 0
+                    include = ''
 
-        root = SLASH
-        root_path = str(pathlib.Path.cwd().resolve()).rstrip(SLASH) + SLASH
-        tree = treelib.Tree()
-        tree.create_node(root, root)
-        documents = {}
-        insert_regions = {}
-        img_collector = []
-        log.info(LOG_SEPARATOR)
-        log.info('processing binder ...')
-        for entry in binder:
-            path = DOC_BASE / entry
-            log.debug(f'- {entry} as {path}')
-            with open(path, 'rt', encoding=ENCODING) as handle:
-                documents[entry] = [line.rstrip() for line in handle.readlines()]
-            insert_regions[entry] = []
+        for coords, include in insert_regions[entry]:  # include is anchored on DOC_BASE
+            ref_path = DOC_BASE / include
+            with open(ref_path, 'rt', encoding=ENCODING) as handle:
+                documents[include] = [line.rstrip() for line in handle.readlines()]
+            insert_regions[include] = []
             in_region = False
             begin, end = 0, 0
-            include = ''
-            tree.create_node(entry, entry, parent=root)
-            for slot, line in enumerate(documents[entry]):
+            sub_include = ''
+            for slot, line in enumerate(documents[include]):
                 if line.startswith(IMG_LINE_STARTSWITH):
-                    documents[entry][slot] = adapt_image(line, img_collector, entry, root_path)
+                    documents[include][slot] = adapt_image(line, img_collector, include, root_path)
                 log.debug(f'{slot :02d}|{line.rstrip()}')
                 if not in_region:
                     if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -484,33 +497,31 @@ def concatenate(
                         begin = slot
                         continue
                     if line.startswith(INCLUDE_SLOT):
-                        include = line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
-                        insert_regions[entry].append(((slot, slot), include))
-                        tree.create_node(include, include, parent=entry)
-                        include = ''
+                        harvest_include(line, slot, insert_regions, tree, include)
                         continue
                 if in_region:
                     if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                        include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                        sub_include = line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
+                        sub_include = str(pathlib.Path(include).parent / sub_include)
                     elif line.startswith(READ_SLOT_FENCE_END):
                         end = slot
-                        insert_regions[entry].append(((begin, end), include))
-                        tree.create_node(include, include, parent=entry)
+                        insert_regions[include].append(((begin, end), sub_include))
+                        tree.create_node(sub_include, sub_include, parent=include)
                         in_region = False
                         begin, end = 0, 0
-                        include = ''
+                        sub_include = ''
 
-            for coords, include in insert_regions[entry]:  # include is anchored on DOC_BASE
-                ref_path = DOC_BASE / include
+            for coords, sub_include in insert_regions[include]:
+                ref_path = DOC_BASE / sub_include
                 with open(ref_path, 'rt', encoding=ENCODING) as handle:
-                    documents[include] = [line.rstrip() for line in handle.readlines()]
-                insert_regions[include] = []
+                    documents[sub_include] = [line.rstrip() for line in handle.readlines()]
+                insert_regions[sub_include] = []
                 in_region = False
                 begin, end = 0, 0
-                sub_include = ''
-                for slot, line in enumerate(documents[include]):
+                sub_sub_include = ''
+                for slot, line in enumerate(documents[sub_include]):
                     if line.startswith(IMG_LINE_STARTSWITH):
-                        documents[include][slot] = adapt_image(line, img_collector, include, root_path)
+                        documents[sub_include][slot] = adapt_image(line, img_collector, sub_include, root_path)
                     log.debug(f'{slot :02d}|{line.rstrip()}')
                     if not in_region:
                         if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -518,33 +529,35 @@ def concatenate(
                             begin = slot
                             continue
                         if line.startswith(INCLUDE_SLOT):
-                            harvest_include(line, slot, insert_regions, tree, include)
+                            harvest_include(line, slot, insert_regions, tree, sub_include)
                             continue
                     if in_region:
                         if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                            sub_include = (
+                            sub_sub_include = (
                                 line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
                             )
-                            sub_include = str(pathlib.Path(include).parent / sub_include)
+                            sub_sub_include = str(pathlib.Path(sub_include).parent / sub_sub_include)
                         elif line.startswith(READ_SLOT_FENCE_END):
                             end = slot
-                            insert_regions[include].append(((begin, end), sub_include))
-                            tree.create_node(sub_include, sub_include, parent=include)
+                            insert_regions[sub_include].append(((begin, end), sub_sub_include))
+                            tree.create_node(sub_sub_include, sub_sub_include, parent=sub_include)
                             in_region = False
                             begin, end = 0, 0
-                            sub_include = ''
+                            sub_sub_include = ''
 
-                for coords, sub_include in insert_regions[include]:
-                    ref_path = DOC_BASE / sub_include
+                for coords, sub_sub_include in insert_regions[sub_include]:
+                    ref_path = DOC_BASE / sub_sub_include
                     with open(ref_path, 'rt', encoding=ENCODING) as handle:
-                        documents[sub_include] = [line.rstrip() for line in handle.readlines()]
-                    insert_regions[sub_include] = []
+                        documents[sub_sub_include] = [line.rstrip() for line in handle.readlines()]
+                    insert_regions[sub_sub_include] = []
                     in_region = False
                     begin, end = 0, 0
-                    sub_sub_include = ''
-                    for slot, line in enumerate(documents[sub_include]):
+                    sub_sub_sub_include = ''
+                    for slot, line in enumerate(documents[sub_sub_include]):
                         if line.startswith(IMG_LINE_STARTSWITH):
-                            documents[sub_include][slot] = adapt_image(line, img_collector, sub_include, root_path)
+                            documents[sub_sub_include][slot] = adapt_image(
+                                line, img_collector, sub_sub_include, root_path
+                            )
                         log.debug(f'{slot :02d}|{line.rstrip()}')
                         if not in_region:
                             if line.startswith(READ_SLOT_FENCE_BEGIN):
@@ -552,34 +565,34 @@ def concatenate(
                                 begin = slot
                                 continue
                             if line.startswith(INCLUDE_SLOT):
-                                harvest_include(line, slot, insert_regions, tree, sub_include)
+                                harvest_include(line, slot, insert_regions, tree, sub_sub_include)
                                 continue
                         if in_region:
                             if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                                sub_sub_include = (
+                                sub_sub_sub_include = (
                                     line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
                                 )
-                                sub_sub_include = str(pathlib.Path(sub_include).parent / sub_sub_include)
+                                sub_sub_sub_include = str(pathlib.Path(sub_sub_include).parent / sub_sub_sub_include)
                             elif line.startswith(READ_SLOT_FENCE_END):
                                 end = slot
-                                insert_regions[sub_include].append(((begin, end), sub_sub_include))
-                                tree.create_node(sub_sub_include, sub_sub_include, parent=sub_include)
+                                insert_regions[sub_sub_include].append(((begin, end), sub_sub_sub_include))
+                                tree.create_node(sub_sub_sub_include, sub_sub_sub_include, parent=sub_sub_include)
                                 in_region = False
                                 begin, end = 0, 0
-                                sub_sub_include = ''
+                                sub_sub_sub_include = ''
 
-                    for coords, sub_sub_include in insert_regions[sub_include]:
-                        ref_path = DOC_BASE / sub_sub_include
+                    for coords, sub_sub_sub_include in insert_regions[sub_include]:
+                        ref_path = DOC_BASE / sub_sub_sub_include
                         with open(ref_path, 'rt', encoding=ENCODING) as handle:
-                            documents[sub_sub_include] = [line.rstrip() for line in handle.readlines()]
-                        insert_regions[sub_sub_include] = []
+                            documents[sub_sub_sub_include] = [line.rstrip() for line in handle.readlines()]
+                        insert_regions[sub_sub_sub_include] = []
                         in_region = False
                         begin, end = 0, 0
-                        sub_sub_sub_include = ''
-                        for slot, line in enumerate(documents[sub_sub_include]):
+                        sub_sub_sub_sub_include = ''
+                        for slot, line in enumerate(documents[sub_sub_sub_include]):
                             if line.startswith(IMG_LINE_STARTSWITH):
-                                documents[sub_sub_include][slot] = adapt_image(
-                                    line, img_collector, sub_sub_include, root_path
+                                documents[sub_sub_sub_include][slot] = adapt_image(
+                                    line, img_collector, sub_sub_sub_include, root_path
                                 )
                             log.debug(f'{slot :02d}|{line.rstrip()}')
                             if not in_region:
@@ -588,120 +601,76 @@ def concatenate(
                                     begin = slot
                                     continue
                                 if line.startswith(INCLUDE_SLOT):
-                                    harvest_include(line, slot, insert_regions, tree, sub_sub_include)
+                                    harvest_include(line, slot, insert_regions, tree, sub_sub_sub_include)
                                     continue
                             if in_region:
                                 if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                                    sub_sub_sub_include = (
+                                    sub_sub_sub_sub_include = (
                                         line.replace(READ_SLOT_CONTEXT_BEGIN, '').split(')', 1)[0].strip("'").strip('"')
                                     )
-                                    sub_sub_sub_include = str(
-                                        pathlib.Path(sub_sub_include).parent / sub_sub_sub_include
+                                    sub_sub_sub_sub_include = str(
+                                        pathlib.Path(sub_sub_sub_include).parent / sub_sub_sub_sub_include
                                     )
                                 elif line.startswith(READ_SLOT_FENCE_END):
                                     end = slot
-                                    insert_regions[sub_sub_include].append(((begin, end), sub_sub_sub_include))
-                                    tree.create_node(sub_sub_sub_include, sub_sub_sub_include, parent=sub_sub_include)
+                                    insert_regions[sub_sub_sub_include].append(((begin, end), sub_sub_sub_include))
+                                    tree.create_node(
+                                        sub_sub_sub_sub_include, sub_sub_sub_sub_include, parent=sub_sub_sub_include
+                                    )
                                     in_region = False
                                     begin, end = 0, 0
-                                    sub_sub_sub_include = ''
+                                    sub_sub_sub_sub_include = ''
 
-                        for coords, sub_sub_sub_include in insert_regions[sub_include]:
-                            ref_path = DOC_BASE / sub_sub_sub_include
-                            with open(ref_path, 'rt', encoding=ENCODING) as handle:
-                                documents[sub_sub_sub_include] = [line.rstrip() for line in handle.readlines()]
-                            insert_regions[sub_sub_sub_include] = []
-                            in_region = False
-                            begin, end = 0, 0
-                            sub_sub_sub_sub_include = ''
-                            for slot, line in enumerate(documents[sub_sub_sub_include]):
-                                if line.startswith(IMG_LINE_STARTSWITH):
-                                    documents[sub_sub_sub_include][slot] = adapt_image(
-                                        line, img_collector, sub_sub_sub_include, root_path
-                                    )
-                                log.debug(f'{slot :02d}|{line.rstrip()}')
-                                if not in_region:
-                                    if line.startswith(READ_SLOT_FENCE_BEGIN):
-                                        in_region = True
-                                        begin = slot
-                                        continue
-                                    if line.startswith(INCLUDE_SLOT):
-                                        harvest_include(line, slot, insert_regions, tree, sub_sub_sub_include)
-                                        continue
-                                if in_region:
-                                    if line.startswith(READ_SLOT_CONTEXT_BEGIN):
-                                        sub_sub_sub_sub_include = (
-                                            line.replace(READ_SLOT_CONTEXT_BEGIN, '')
-                                            .split(')', 1)[0]
-                                            .strip("'")
-                                            .strip('"')
-                                        )
-                                        sub_sub_sub_sub_include = str(
-                                            pathlib.Path(sub_sub_sub_include).parent / sub_sub_sub_sub_include
-                                        )
-                                    elif line.startswith(READ_SLOT_FENCE_END):
-                                        end = slot
-                                        insert_regions[sub_sub_sub_include].append(((begin, end), sub_sub_sub_include))
-                                        tree.create_node(
-                                            sub_sub_sub_sub_include, sub_sub_sub_sub_include, parent=sub_sub_sub_include
-                                        )
-                                        in_region = False
-                                        begin, end = 0, 0
-                                        sub_sub_sub_sub_include = ''
+    top_down_paths = tree.paths_to_leaves()
+    bottom_up_paths = [list(reversed(td_p)) for td_p in top_down_paths]
+    log.info(LOG_SEPARATOR)
+    log.info('resulting tree:')
+    with RedirectedStdout() as out:
+        tree.show()
+        for row in str(out).rstrip('\n').split('\n'):
+            log.info(row)
 
-        top_down_paths = tree.paths_to_leaves()
-        bottom_up_paths = [list(reversed(td_p)) for td_p in top_down_paths]
-        log.info(LOG_SEPARATOR)
-        log.info('resulting tree:')
-        with RedirectedStdout() as out:
-            tree.show()
-            for row in str(out).rstrip('\n').split('\n'):
-                log.info(row)
+    log.info(LOG_SEPARATOR)
+    log.info(f'provisioning chains for the {len(bottom_up_paths)} bottom up leaf paths:')
+    for num, leaf_path in enumerate(bottom_up_paths):
+        the_way_up = f'|-> {leaf_path[0]}' if len(leaf_path) == 1 else f'{" -> ".join(leaf_path)}'
+        log.info(f'{num :2d}: {the_way_up}')
 
-        log.info(LOG_SEPARATOR)
-        log.info(f'provisioning chains for the {len(bottom_up_paths)} bottom up leaf paths:')
-        for num, leaf_path in enumerate(bottom_up_paths):
-            the_way_up = f'|-> {leaf_path[0]}' if len(leaf_path) == 1 else f'{" -> ".join(leaf_path)}'
-            log.info(f'{num :2d}: {the_way_up}')
+    concat = {}
+    log.info(LOG_SEPARATOR)
+    log.info(f'dependencies for the {len(insert_regions)} document parts:')
+    for key, regions in insert_regions.items():
+        num_in = len(regions)
+        dashes = '-' * num_in
+        incl_disp = f'( {num_in} include{"" if num_in == 1 else "s"} )'
+        indicator = '(no includes)' if not regions else f'<{dashes + incl_disp + dashes}'
+        log.info(f'- part {key} {indicator}')
+        for region in regions:
+            between = f'between lines {region[0][0] :3d} and {region[0][1] :3d}'
+            insert = f'include fragment {region[1]}'
+            log.info(f'  + {between} {insert}')
+        if not regions:  # No includes
+            concat[key] = '\n'.join(documents[key]) + '\n'
+            log.info(f'  * did concat {key} document for insertion')
 
-        concat = {}
-        log.info(LOG_SEPARATOR)
-        log.info(f'dependencies for the {len(insert_regions)} document parts:')
-        for key, regions in insert_regions.items():
-            num_in = len(regions)
-            dashes = '-' * num_in
-            incl_disp = f'( {num_in} include{"" if num_in == 1 else "s"} )'
-            indicator = '(no includes)' if not regions else f'<{dashes + incl_disp + dashes}'
-            log.info(f'- part {key} {indicator}')
-            for region in regions:
-                between = f'between lines {region[0][0] :3d} and {region[0][1] :3d}'
-                insert = f'include fragment {region[1]}'
-                log.info(f'  + {between} {insert}')
-            if not regions:  # No includes
-                concat[key] = '\n'.join(documents[key]) + '\n'
-                log.info(f'  * did concat {key} document for insertion')
+    chains = [leaf_path for leaf_path in bottom_up_paths]
+    log.info(LOG_SEPARATOR)
+    log.info(f'starting insertions bottom up for the {len(chains)} inclusion chains:')
+    todo = [[job for job in chain if job not in concat] for chain in chains]
+    while todo != [[]]:
+        todo = rollup(todo, documents, insert_regions, concat)
 
-        chains = [leaf_path for leaf_path in bottom_up_paths]
-        log.info(LOG_SEPARATOR)
-        log.info(f'starting insertions bottom up for the {len(chains)} inclusion chains:')
-        todo = [[job for job in chain if job not in concat] for chain in chains]
-        while todo != [[]]:
-            todo = rollup(todo, documents, insert_regions, concat)
+    log.info(LOG_SEPARATOR)
+    log.info('writing final concat markdown to document.md')
+    with open('document.md', 'wt', encoding=ENCODING) as handle:
+        handle.write('\n'.join(concat[bind] for bind in binder) + '\n')
 
-        log.info(LOG_SEPARATOR)
-        log.info('writing final concat markdown to document.md')
-        with open('document.md', 'wt', encoding=ENCODING) as handle:
-            handle.write('\n'.join(concat[bind] for bind in binder) + '\n')
-
-        log.info(LOG_SEPARATOR)
-        log.info('collecting assets (images and diagrams)')
-        collect_assets(img_collector)
-        log.info(LOG_SEPARATOR)
-        log.info(f'concat result document (document.md) and artifacts are within folder ({os.getcwd()}/)')
-        log.info(LOG_SEPARATOR)
-        log.info('processing complete - SUCCESS')
-        log.info(LOG_SEPARATOR)
-        return 0
-
-    log.error(f'structure data files with other than one target currently not supported - found targets ({targets})')
-    return 1
+    log.info(LOG_SEPARATOR)
+    log.info('collecting assets (images and diagrams)')
+    collect_assets(img_collector)
+    log.info(LOG_SEPARATOR)
+    log.info(f'concat result document (document.md) and artifacts are within folder ({os.getcwd()}/)')
+    log.info(LOG_SEPARATOR)
+    log.info('processing complete - SUCCESS')
+    log.info(LOG_SEPARATOR)
+    return 0

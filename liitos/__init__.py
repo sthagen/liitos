@@ -37,6 +37,14 @@ LOG_PATH = pathlib.Path(LOG_FOLDER, LOG_FILE) if LOG_FOLDER.is_dir() else pathli
 LOG_LEVEL = logging.INFO
 LOG_SEPARATOR = '- ' * 80
 
+DEFAULT_STRUCTURE_NAME = 'structure.yml'
+KEY_APPROVALS = 'approvals'
+KEY_BIND = 'bind'
+KEY_CHANGES = 'changes'
+KEY_LAYOUT = 'layout'
+KEY_META = 'meta'
+KEYS_REQUIRED = (KEY_APPROVALS, KEY_BIND, KEY_CHANGES, KEY_META)
+
 try:
     SHELL = shellingham.detect_shell()
 except shellingham.ShellDetectionFailure:
@@ -122,9 +130,16 @@ __all__: List[str] = [
     'APP_ALIAS',
     'APP_ENV',
     'APP_VERSION',
+    'DEFAULT_STRUCTURE_NAME',
     'ENCODING',
     'FILTER_CS_LIST',
     'FROM_FORMAT_SPEC',
+    'KEY_APPROVALS',
+    'KEY_BIND',
+    'KEY_CHANGES',
+    'KEY_LAYOUT',
+    'KEY_META',
+    'KEYS_REQUIRED',
     'LATEX_PAYLOAD_NAME',
     'LOG_SEPARATOR',
     'TOOL_VERSION_COMMAND_MAP',

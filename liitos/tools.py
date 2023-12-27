@@ -9,7 +9,14 @@ import foran.foran as api  # type: ignore
 from foran.report import generate_report  # type: ignore
 from taksonomia.taksonomia import Taxonomy  # type: ignore
 
-from liitos import ENCODING, LATEX_PAYLOAD_NAME, TOOL_VERSION_COMMAND_MAP, ToolKey, log
+from liitos import (
+    ENCODING,
+    KEYS_REQUIRED,
+    LATEX_PAYLOAD_NAME,
+    TOOL_VERSION_COMMAND_MAP,
+    ToolKey,
+    log,
+)
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -196,3 +203,39 @@ def execute_filter(
     log_unified_diff(text_lines, patched_lines)
 
     return patched_lines
+
+
+@no_type_check
+def load_target(targets, target_code: str, facet_code: str, structure) -> tuple[bool, dict[str, str]]:
+    """DRY."""
+    target = targets[0]
+    facets = sorted(list(facet.keys())[0] for facet in structure[target])
+    log.info(f'found single target ({target}) with facets ({facets})')
+
+    if facet_code not in facets:
+        log.error(f'structure does not provide facet ({facet_code}) for target ({target_code})')
+        return False, {}
+
+    aspect_map = {}
+    for data in structure[target]:
+        if facet_code in data:
+            aspect_map = data[facet_code]
+            break
+    missing_keys = [key for key in KEYS_REQUIRED if key not in aspect_map]
+    if missing_keys:
+        log.error(
+            f'structure does not provide all expected aspects {sorted(KEYS_REQUIRED)}'
+            f' for target ({target_code}) and facet ({facet_code})'
+        )
+        log.error(f'- the found aspects: {sorted(aspect_map.keys())}')
+        log.error(f'- missing aspects:   {sorted(missing_keys)}')
+        return False, {}
+
+    if sorted(aspect_map.keys()) != sorted(KEYS_REQUIRED):
+        log.debug(
+            f'structure does not strictly provide the expected aspects {sorted(KEYS_REQUIRED)}'
+            f' for target ({target_code}) and facet ({facet_code})'
+        )
+        log.debug(f'- found the following aspects instead:                   {sorted(aspect_map.keys())} instead')
+
+    return True, aspect_map
