@@ -52,7 +52,7 @@ def test_meta_dispatch():
         '%%_PATCH_%_MAIN_%_TITLE_%%': '',
         '%%_PATCH_%_SUB_%_TITLE_%%': ' ',
         '%%_PATCH_%_TYPE_%%': 'Engineering Document',
-        '%%_PATCH_%_ID_%%': 'P99999',
+        '%%_PATCH_%_ID_%%': 'N/A',
         '%%_PATCH_%_ISSUE_%%': '01',
         '%%_PATCH_%_REVISION_%%': '00',
         '%%_PATCH_%_DATE_%%': '01 FEB 2345',
