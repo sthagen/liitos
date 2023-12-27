@@ -263,39 +263,7 @@ def der(
 
     log.info(LOG_SEPARATOR)
 
-    doc = json.load(open(out_doc, 'rt', encoding=ENCODING))
-    blocks = doc['blocks']
-    mermaid_caption_map = {}
-    for b in blocks:
-        if b['t'] == 'CodeBlock' and b['c'][0]:
-            is_mermaid = False
-            try:
-                is_mermaid = b['c'][0][1][0] == 'mermaid'
-                atts = b['c'][0][2]
-            except IndexError:
-                continue
-
-            if not is_mermaid:
-                continue
-            m_caption, m_filename, m_format, m_loc = '', '', '', ''
-            for k, v in atts:
-                if k == 'caption':
-                    m_caption = v
-                elif k == 'filename':
-                    m_filename = v
-                elif k == 'format':
-                    m_format = v
-                elif k == 'loc':
-                    m_loc = v
-                else:
-                    pass
-            token = f'{m_loc}/{m_filename}.{m_format}'  # noqa
-            if token in mermaid_caption_map:
-                log.warning('Duplicate token, same caption?')
-                log.warning(f'-   prior: {token} -> {m_caption}')
-                log.warning(f'- current: {token} -> {mermaid_caption_map[token]}')
-            mermaid_caption_map[token] = m_caption
-
+    mermaid_caption_map = too.mermaid_captions_from_json_ast(out_doc)
     log.info(LOG_SEPARATOR)
     # no KISS too.ensure_separate_log_lines(json.dumps, [mermaid_caption_map, 2])
     for line in json.dumps(mermaid_caption_map, indent=2).split('\n'):

@@ -1,6 +1,7 @@
 import datetime as dti
 import difflib
 import hashlib
+import json
 import pathlib
 import subprocess  # nosec B404
 from typing import Any, Callable, Union, no_type_check
@@ -239,3 +240,40 @@ def load_target(targets, target_code: str, facet_code: str, structure) -> tuple[
         log.debug(f'- found the following aspects instead:                   {sorted(aspect_map.keys())} instead')
 
     return True, aspect_map
+
+
+@no_type_check
+def mermaid_captions_from_json_ast(json_ast_path: Union[str, pathlib.Path]) -> dict[str, str]:
+    """Separation of concerns."""
+    doc = json.load(open(json_ast_path, 'rt', encoding=ENCODING))
+    blocks = doc['blocks']
+    mermaid_caption_map = {}
+    for b in blocks:
+        if b['t'] == 'CodeBlock' and b['c'][0]:
+            try:
+                is_mermaid = b['c'][0][1][0] == 'mermaid'
+                atts = b['c'][0][2]
+            except IndexError:
+                continue
+
+            if not is_mermaid:
+                continue
+            m_caption, m_filename, m_format, m_loc = '', '', '', ''
+            for k, v in atts:
+                if k == 'caption':
+                    m_caption = v
+                elif k == 'filename':
+                    m_filename = v
+                elif k == 'format':
+                    m_format = v
+                elif k == 'loc':
+                    m_loc = v
+                else:
+                    pass
+            token = f'{m_loc}/{m_filename}.{m_format}'  # noqa
+            if token in mermaid_caption_map:
+                log.warning('Duplicate token, same caption?')
+                log.warning(f'-   prior: {token} -> {m_caption}')
+                log.warning(f'- current: {token} -> {mermaid_caption_map[token]}')
+            mermaid_caption_map[token] = m_caption
+    return mermaid_caption_map
