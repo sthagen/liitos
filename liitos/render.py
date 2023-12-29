@@ -119,30 +119,9 @@ def der(
     log.info('Assessing the local version control status (compared to upstream) ...')
     too.ensure_separate_log_lines(too.vcs_probe)
 
-    if not STRUCTURE_PATH.is_file() or not STRUCTURE_PATH.stat().st_size:
-        log.error(f'render failed to find non-empty structure file at {STRUCTURE_PATH}')
-        return 1
-
-    with open(STRUCTURE_PATH, 'rt', encoding=ENCODING) as handle:
-        structure = yaml.safe_load(handle)
-
-    targets = sorted(structure.keys())
-
-    if not targets:
-        log.error(f'structure at ({STRUCTURE_PATH}) does not provide any targets')
-        return 1
-
-    if target_code not in targets:
-        log.error(f'structure does not provide ({target_code})')
-        return 1
-
-    if len(targets) != 1:
-        log.warning(f'unexpected count of targets ({len(targets)}) from ({targets})')
-        return 0
-
-    ok, aspect_map = too.load_target(targets, target_code, facet_code, structure)
-    if not ok:
-        return 1
+    ok, aspect_map = too.load_target(target_code, facet_code)
+    if not ok or not aspect_map:
+        return 0 if ok else 1
 
     do_render = aspect_map.get('render', None)
     if do_render is not None:

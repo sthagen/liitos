@@ -1084,30 +1084,9 @@ def weave(
     os.chdir(rel_concat_folder_path)
     log.info(f'meta (this processor) teleported into the render/pdf location ({os.getcwd()}/)')
 
-    if not STRUCTURE_PATH.is_file() or not STRUCTURE_PATH.stat().st_size:
-        log.error(f'meta failed to find non-empty structure file at {STRUCTURE_PATH}')
-        return 1
-
-    with open(STRUCTURE_PATH, 'rt', encoding=ENCODING) as handle:
-        structure = yaml.safe_load(handle)
-
-    targets = sorted(structure.keys())
-
-    if not targets:
-        log.error(f'structure at ({STRUCTURE_PATH}) does not provide any targets')
-        return 1
-
-    if target_code not in targets:
-        log.error(f'structure does not provide ({target_code})')
-        return 1
-
-    if len(targets) != 1:
-        log.warning(f'unexpected count of targets ({len(targets)}) from ({targets})')
-        return 0
-
-    ok, aspect_map = too.load_target(targets, target_code, facet_code, structure)
-    if not ok:
-        return 1
+    ok, aspect_map = too.load_target(target_code, facet_code)
+    if not ok or not aspect_map:
+        return 0 if ok else 1
 
     metadata = process_meta(aspect_map)
     if isinstance(metadata, int):

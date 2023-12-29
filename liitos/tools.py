@@ -6,6 +6,8 @@ import pathlib
 import subprocess  # nosec B404
 from typing import Any, Callable, Union, no_type_check
 
+import yaml
+
 import foran.foran as api  # type: ignore
 from foran.report import generate_report  # type: ignore
 from taksonomia.taksonomia import Taxonomy  # type: ignore
@@ -18,6 +20,8 @@ from liitos import (
     ToolKey,
     log,
 )
+
+PathLike = Union[str, pathlib.Path]
 
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -207,8 +211,31 @@ def execute_filter(
 
 
 @no_type_check
-def load_target(targets, target_code: str, facet_code: str, structure) -> tuple[bool, dict[str, str]]:
+def load_target(
+    target_code: str, facet_code: str, structure_path: PathLike = STRUCTURE_PATH
+) -> tuple[bool, dict[str, str]]:
     """DRY."""
+    if not structure_path.is_file() or not structure_path.stat().st_size:
+        log.error(f'render failed to find non-empty structure file at {structure_path}')
+        return False, {}
+
+    with open(structure_path, 'rt', encoding=ENCODING) as handle:
+        structure = yaml.safe_load(handle)
+
+    targets = sorted(structure.keys())
+
+    if not targets:
+        log.error(f'structure at ({structure_path}) does not provide any targets')
+        return False, {}
+
+    if target_code not in targets:
+        log.error(f'structure does not provide ({target_code})')
+        return False, {}
+
+    if len(targets) != 1:
+        log.warning(f'unexpected count of targets ({len(targets)}) from ({targets})')
+        return True, {}
+
     target = targets[0]
     facets = sorted(list(facet.keys())[0] for facet in structure[target])
     log.info(f'found single target ({target}) with facets ({facets})')
