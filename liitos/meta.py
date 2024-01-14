@@ -521,7 +521,11 @@ def weave_meta_part_title_slug(
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%_SLUG_%%')
     """
-    return text.replace(VALUE_SLOT, mapper['title'].replace('\\\\', '').replace('  ', ' ').title())
+    if mapper.get('bookmark_title'):
+        return text.replace(VALUE_SLOT, mapper['bookmark_title'])
+    else:
+        log.info('bookmark_title value missing ... setting default (the slugged title value)')
+        return text.replace(VALUE_SLOT, mapper['title'].replace('\\\\', '').replace('  ', ' ').title())
 
 
 @no_type_check

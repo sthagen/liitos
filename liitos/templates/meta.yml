@@ -7,6 +7,7 @@ document:
     approvals_role_label: Approvals
     bold_font: ITCFranklinGothicStd-Demi
     bold_italic_font: ITCFranklinGothicStd-DemiIt
+    bookmark_title: null
     change_log_author_label: Author
     change_log_date_label: Date
     change_log_description_label: Description
