@@ -1,5 +1,8 @@
 # Changes
 
+2024.1.14
+:    * Added bookmark title parameter to override the title slug for bookmarking
+
 2023.11.21
 :    * Implemented ensure the document title bookmark is in Title Case (<https://todo.sr.ht/~sthagen/liitos/54>)
 
