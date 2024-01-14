@@ -423,9 +423,9 @@ def concatenate(
     log.info(LOG_SEPARATOR)
     log.info('processing binder ...')
     for entry in binder:
-        path = DOC_BASE / entry
-        log.debug(f'- {entry} as {path}')
-        with open(path, 'rt', encoding=ENCODING) as handle:
+        ref_path = DOC_BASE / entry
+        log.debug(f'- {entry} as {ref_path}')
+        with open(ref_path, 'rt', encoding=ENCODING) as handle:
             documents[entry] = [line.rstrip() for line in handle.readlines()]
         insert_regions[entry] = []
         in_region = False
