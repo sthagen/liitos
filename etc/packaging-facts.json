@@ -12,7 +12,7 @@
       "Programming Language :: Python :: 3.12",
       "Programming Language :: Python :: 3.9"
     ],
-    "description": "# Liitos\n\nSplice (Finnish: liitos) contributions.\n\n[![License](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/license-spdx-mit.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE)\n[![Country of Origin](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/country-of-origin-name-switzerland-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/COUNTRY-OF-ORIGIN)\n[![Export Classification Control Number (ECCN)](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/export-control-classification-number_eccn-ear99-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/EXPORT-CONTROL-CLASSIFICATION-NUMBER)\n[![Configuration](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/configuration-sbom.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/docs/third-party/README.md)\n\n[![Version](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/latest-release.svg)](https://pypi.python.org/pypi/liitos/)\n[![Downloads](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/downloads-per-month.svg)](https://pepy.tech/project/liitos)\n[![Python](https://git.sr.ht/~sthagen/liitos/blob/default/docs//badges/python-versions.svg)](https://pypi.python.org/pypi/liitos/)\n[![Maintenance Status](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/commits-per-year.svg)](https://git.sr.ht/~sthagen/liitos/log)\n\n## Documentation\n\nUser and developer [documentation of liitos](https://codes.dilettant.life/docs/liitos).\n\n## Bug Tracker\n\nAny feature requests or bug reports shall go to the [todos of liitos](https://todo.sr.ht/~sthagen/liitos).\n\n## Primary Source repository\n\nThe main source of `liitos` is on a mountain in central Switzerland.\nWe use distributed version control (git).\nThere is no central hub.\nEvery clone can become a new source for the benefit of all.\nThe preferred public clones of `liitos` are:\n\n* [on codeberg](https://codeberg.org/sthagen/liitos) - a democratic community-driven, non-profit software development platform operated by Codeberg e.V.\n* [at sourcehut](https://git.sr.ht/~sthagen/liitos) - a collection of tools useful for software development.\n\n## Contributions\n\nPlease do not submit \"pull requests\" (I found no way to disable that \"feature\" on GitHub).\nIf you like to share small changes under the repositories license please kindly do so by sending a patchset.\nYou can either send such a patchset per email using [git send-email](https://git-send-email.io) or \nif you are a sourcehut user by selecting \"Prepare a patchset\" on the summary page of your fork at [sourcehut](https://git.sr.ht/).\n\n## Support\n\nPlease kindly submit issues at https://todo.sr.ht/~sthagen/liitos or write plain text email to ~sthagen/liitos@lists.sr.ht to submit patches and request support. Thanks.\n\n# Status\n\nExperimental.\n\n**Note**: The default branch is `default`. \n",
+    "description": "# Liitos\n\nSplice (Finnish: liitos) contributions.\n\n[![License](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/license-spdx-mit.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE)\n[![Country of Origin](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/country-of-origin-name-switzerland-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/COUNTRY-OF-ORIGIN)\n[![Export Classification Control Number (ECCN)](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/export-control-classification-number_eccn-ear99-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/EXPORT-CONTROL-CLASSIFICATION-NUMBER)\n[![Configuration](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/configuration-sbom.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/docs/third-party/README.md)\n\n[![Version](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/latest-release.svg)](https://pypi.python.org/pypi/liitos/)\n[![Downloads](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/downloads-per-month.svg)](https://pepy.tech/project/liitos)\n[![Python](https://git.sr.ht/~sthagen/liitos/blob/default/docs//badges/python-versions.svg)](https://pypi.python.org/pypi/liitos/)\n[![Maintenance Status](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/commits-per-year.svg)](https://git.sr.ht/~sthagen/liitos/log)\n\n## Documentation\n\nUser and developer [documentation of liitos](https://codes.dilettant.life/docs/liitos).\n\n## Bug Tracker\n\nAny feature requests or bug reports shall go to the [todos of liitos](https://todo.sr.ht/~sthagen/liitos).\n\n## Primary Source repository\n\nThe main source of `liitos` is on a mountain in central Switzerland.\nWe use distributed version control (git).\nThere is no central hub.\nEvery clone can become a new source for the benefit of all.\nThe preferred public clone of `liitos` is:\n\n* [at sourcehut](https://git.sr.ht/~sthagen/liitos) - a collection of tools useful for software development.\n\n## Contributions\n\nPlease do not submit \"pull requests\" (I found no way to disable that \"feature\" on GitHub).\nIf you like to share small changes under the repositories license please kindly do so by sending a patchset.\nYou can either send such a patchset per email using [git send-email](https://git-send-email.io) or \nif you are a sourcehut user by selecting \"Prepare a patchset\" on the summary page of your fork at [sourcehut](https://git.sr.ht/).\n\n## Support\n\nPlease kindly submit issues at https://todo.sr.ht/~sthagen/liitos or write plain text email to ~sthagen/liitos@lists.sr.ht to submit patches and request support. Thanks.\n\n# Status\n\nExperimental.\n\n**Note**: The default branch is `default`. \n",
     "description_content_type": "text/markdown",
     "docs_url": null,
     "download_url": "",
@@ -37,7 +37,7 @@
       "Source-Code": "https://git.sr.ht/~sthagen/liitos",
       "Test-Coverage": "https://codes.dilettant.life/coverage/liitos"
     },
-    "release_url": "https://pypi.org/project/liitos/2023.11.21/",
+    "release_url": "https://pypi.org/project/liitos/2024.1.14/",
     "requires_dist": [
       "PyYAML >=6.0.1",
       "foran >=2023.6.19",
@@ -56,11 +56,11 @@
     ],
     "requires_python": ">=3.9",
     "summary": "Splice (Finnish liitos) contributions.",
-    "version": "2023.11.21",
+    "version": "2024.1.14",
     "yanked": false,
     "yanked_reason": null
   },
-  "last_serial": 20736464,
+  "last_serial": 21424084,
   "releases": {
     "2022.10.18": [
       {
@@ -2217,48 +2217,92 @@
         "yanked": false,
         "yanked_reason": null
       }
+    ],
+    "2024.1.14": [
+      {
+        "comment_text": "",
+        "digests": {
+          "blake2b_256": "52b45191d2ed3ba3a2206ef4a1ec933185020c3016e9065d7c1ad31e58cf72fb",
+          "md5": "ac6edc28ced27a716178ca38a501baa7",
+          "sha256": "1a98d54af53a133cbc5ec2453c4efef7287f7e444a65755488734578361e440d"
+        },
+        "downloads": -1,
+        "filename": "liitos-2024.1.14-py3-none-any.whl",
+        "has_sig": false,
+        "md5_digest": "ac6edc28ced27a716178ca38a501baa7",
+        "packagetype": "bdist_wheel",
+        "python_version": "py3",
+        "requires_python": ">=3.9",
+        "size": 60583,
+        "upload_time": "2024-01-14T20:26:00",
+        "upload_time_iso_8601": "2024-01-14T20:26:00.675995Z",
+        "url": "https://files.pythonhosted.org/packages/52/b4/5191d2ed3ba3a2206ef4a1ec933185020c3016e9065d7c1ad31e58cf72fb/liitos-2024.1.14-py3-none-any.whl",
+        "yanked": false,
+        "yanked_reason": null
+      },
+      {
+        "comment_text": "",
+        "digests": {
+          "blake2b_256": "b67484664694b22b83073df808097c8c4b1112b3b99e66dfe1d86897461ddebe",
+          "md5": "540b5a1a26d861e2275cab8f26e5c7e2",
+          "sha256": "5016b860bf20a8fbce31aeeed9796ffa4a23c8b2bd75c1896b5a5bfc2545d161"
+        },
+        "downloads": -1,
+        "filename": "liitos-2024.1.14.tar.gz",
+        "has_sig": false,
+        "md5_digest": "540b5a1a26d861e2275cab8f26e5c7e2",
+        "packagetype": "sdist",
+        "python_version": "source",
+        "requires_python": ">=3.9",
+        "size": 62118,
+        "upload_time": "2024-01-14T20:26:03",
+        "upload_time_iso_8601": "2024-01-14T20:26:03.071027Z",
+        "url": "https://files.pythonhosted.org/packages/b6/74/84664694b22b83073df808097c8c4b1112b3b99e66dfe1d86897461ddebe/liitos-2024.1.14.tar.gz",
+        "yanked": false,
+        "yanked_reason": null
+      }
     ]
   },
   "urls": [
     {
       "comment_text": "",
       "digests": {
-        "blake2b_256": "a180ae257ef9f16b1db9399eba89a81fe999140f4ad44a4ff2c92c5a4f1688b8",
-        "md5": "c67d7f34f0310ee34347d3ea50fcfe95",
-        "sha256": "20c902fcacabf0846175037ad34ed653b710005e999a6cf2f86b96a151a3f701"
+        "blake2b_256": "52b45191d2ed3ba3a2206ef4a1ec933185020c3016e9065d7c1ad31e58cf72fb",
+        "md5": "ac6edc28ced27a716178ca38a501baa7",
+        "sha256": "1a98d54af53a133cbc5ec2453c4efef7287f7e444a65755488734578361e440d"
       },
       "downloads": -1,
-      "filename": "liitos-2023.11.21-py3-none-any.whl",
+      "filename": "liitos-2024.1.14-py3-none-any.whl",
       "has_sig": false,
-      "md5_digest": "c67d7f34f0310ee34347d3ea50fcfe95",
+      "md5_digest": "ac6edc28ced27a716178ca38a501baa7",
       "packagetype": "bdist_wheel",
       "python_version": "py3",
       "requires_python": ">=3.9",
-      "size": 61037,
-      "upload_time": "2023-11-21T18:29:34",
-      "upload_time_iso_8601": "2023-11-21T18:29:34.529915Z",
-      "url": "https://files.pythonhosted.org/packages/a1/80/ae257ef9f16b1db9399eba89a81fe999140f4ad44a4ff2c92c5a4f1688b8/liitos-2023.11.21-py3-none-any.whl",
+      "size": 60583,
+      "upload_time": "2024-01-14T20:26:00",
+      "upload_time_iso_8601": "2024-01-14T20:26:00.675995Z",
+      "url": "https://files.pythonhosted.org/packages/52/b4/5191d2ed3ba3a2206ef4a1ec933185020c3016e9065d7c1ad31e58cf72fb/liitos-2024.1.14-py3-none-any.whl",
       "yanked": false,
       "yanked_reason": null
     },
     {
       "comment_text": "",
       "digests": {
-        "blake2b_256": "dbb7398b2d9bb915fdc8608a59e5b782500456c48d644726ef03f87226563b5e",
-        "md5": "e8d9fd9dc37be36536975e67a702b261",
-        "sha256": "1c027c0f8340e495b8ea84bc82c3a0093ff78f51de32b3f77c6ae87acacb27f1"
+        "blake2b_256": "b67484664694b22b83073df808097c8c4b1112b3b99e66dfe1d86897461ddebe",
+        "md5": "540b5a1a26d861e2275cab8f26e5c7e2",
+        "sha256": "5016b860bf20a8fbce31aeeed9796ffa4a23c8b2bd75c1896b5a5bfc2545d161"
       },
       "downloads": -1,
-      "filename": "liitos-2023.11.21.tar.gz",
+      "filename": "liitos-2024.1.14.tar.gz",
       "has_sig": false,
-      "md5_digest": "e8d9fd9dc37be36536975e67a702b261",
+      "md5_digest": "540b5a1a26d861e2275cab8f26e5c7e2",
       "packagetype": "sdist",
       "python_version": "source",
       "requires_python": ">=3.9",
-      "size": 62438,
-      "upload_time": "2023-11-21T18:29:36",
-      "upload_time_iso_8601": "2023-11-21T18:29:36.918331Z",
-      "url": "https://files.pythonhosted.org/packages/db/b7/398b2d9bb915fdc8608a59e5b782500456c48d644726ef03f87226563b5e/liitos-2023.11.21.tar.gz",
+      "size": 62118,
+      "upload_time": "2024-01-14T20:26:03",
+      "upload_time_iso_8601": "2024-01-14T20:26:03.071027Z",
+      "url": "https://files.pythonhosted.org/packages/b6/74/84664694b22b83073df808097c8c4b1112b3b99e66dfe1d86897461ddebe/liitos-2024.1.14.tar.gz",
       "yanked": false,
       "yanked_reason": null
     }
