@@ -194,10 +194,10 @@
   \clearpairofpagestyles
   \ihead*{%%
     \upshape
-    \begin{tabular*}{117mm}[t]{@{}p{55mm}p{35mm}p{25mm}@{}}%% ... tuned ... effective 115mm
+    \begin{tabular*}{117mm}[t]{@{}p{24mm}p{35mm}p{56mm}@{}}%% ... tuned ... effective 115mm
      \strut \\
       \multicolumn{3}{l}{\hskip -0.6em \LARGE\theMetaTitle} \hfill \strut \\%% ... tuned the hskip to align left without gap
-      \hline {\footnotesize \textbf{\theMetaType}} \hfill & \hfill & \hfill \strut \\
+      \hline \multicolumn{3}{l}{\hskip -0.6em \footnotesize \textbf{\theMetaType}} \hfill \strut \\
       \hline {\footnotesize \theMetaDocIdLabel} \hfill & {\footnotesize \theMetaIssRevLabel} \hfill & {\footnotesize \theMetaDateLabel} \hfill \strut \\
       {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\
     \end{tabular*}
@@ -220,10 +220,10 @@
   \clearpairofpagestyles
   \ihead*{%%
     \upshape
-    \begin{tabular*}{117mm}[t]{@{}p{55mm}p{35mm}p{25mm}@{}}%% ... tuned ... effective 115mm
+    \begin{tabular*}{117mm}[t]{@{}p{24mm}p{35mm}p{56mm}@{}}%% ... tuned ... effective 115mm
      \strut \\
       \multicolumn{3}{l}{\hskip -0.6em \LARGE\theMetaTitle} \hfill \strut \\%% ... tuned the hskip to align left without gap
-      \hline {\footnotesize \textbf{\theMetaType}} \hfill & \hfill & \hfill \strut \\
+      \hline \multicolumn{3}{l}{\hskip -0.6em \footnotesize \textbf{\theMetaType}} \hfill \strut \\
       \hline {\footnotesize \theMetaDocIdLabel} \hfill & {\footnotesize \theMetaIssRevLabel} \hfill & {\footnotesize \theMetaDateLabel} \hfill \strut \\
       {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\
     \end{tabular*}
