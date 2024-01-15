@@ -152,7 +152,7 @@ __all__: List[str] = [
 
 def parse_csl(csl: str) -> List[str]:
     """DRY."""
-    return [fmt.strip().lower() for fmt in csl.split(COMMA) if fmt.strip()]
+    return [fmt.strip() for fmt in csl.split(COMMA) if fmt.strip()]
 
 
 @no_type_check
