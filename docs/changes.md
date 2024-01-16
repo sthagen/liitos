@@ -1,5 +1,11 @@
 # Changes
 
+2024.1.16
+:    * Added context discovery (builder node id, source hash, and source hint) yielding coordinates in place and time
+* Experimental change to centered and upper-cased fake section titles on publisher page (eject template to revert)
+* Opinionated short-term change to header geometry
+* Removed lower case smoothing from filter list parsing (Bugfix, as this blocked mixed case paths to filters)
+
 2024.1.14
 :    * Added bookmark title parameter to override the title slug for bookmarking
 
