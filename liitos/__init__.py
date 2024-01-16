@@ -45,6 +45,8 @@ KEY_LAYOUT = 'layout'
 KEY_META = 'meta'
 KEYS_REQUIRED = (KEY_APPROVALS, KEY_BIND, KEY_CHANGES, KEY_META)
 
+CONTEXT: dict[str, str] = {}
+
 try:
     SHELL = shellingham.detect_shell()
 except shellingham.ShellDetectionFailure:
@@ -132,6 +134,7 @@ __all__: List[str] = [
     'APP_VERSION',
     'DEFAULT_STRUCTURE_NAME',
     'ENCODING',
+    'CONTEXT',
     'FILTER_CS_LIST',
     'FROM_FORMAT_SPEC',
     'KEY_APPROVALS',
