@@ -3,6 +3,7 @@
 2024.1.16
 :    * Added context discovery (builder node id, source hash, and source hint) yielding coordinates in place and time
 * Experimental change to centered and upper-cased fake section titles on publisher page (eject template to revert)
+* Fixed the incoming markdown documents tree display
 * Opinionated short-term change to header geometry
 * Removed lower case smoothing from filter list parsing (Bugfix, as this blocked mixed case paths to filters)
 
