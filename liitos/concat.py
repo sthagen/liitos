@@ -48,6 +48,8 @@ IMG_LINE_STARTSWITH = '!['
 MD_IMG_PATTERN = re.compile(r'^!\[(?P<cap>[^(]*)\]\((?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$')
 MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r'^(?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$')
 
+NL = '\n'
+
 
 @no_type_check
 class RedirectedStdout:
@@ -604,10 +606,8 @@ def concatenate(
     bottom_up_paths = [list(reversed(td_p)) for td_p in top_down_paths]
     log.info(LOG_SEPARATOR)
     log.info('resulting tree:')
-    with RedirectedStdout() as out:
-        tree.show()
-        for row in str(out).rstrip('\n').split('\n'):
-            log.info(row)
+    for edge in str(tree).split(NL):
+        log.info(edge)
 
     log.info(LOG_SEPARATOR)
     log.info(f'provisioning chains for the {len(bottom_up_paths)} bottom up leaf paths:')
