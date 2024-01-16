@@ -3,7 +3,9 @@ import difflib
 import hashlib
 import json
 import pathlib
+import platform
 import subprocess  # nosec B404
+import uuid
 from typing import Any, Callable, Union, no_type_check
 
 import yaml
@@ -13,6 +15,7 @@ from foran.report import generate_report  # type: ignore
 from taksonomia.taksonomia import Taxonomy  # type: ignore
 
 from liitos import (
+    CONTEXT,
     ENCODING,
     KEYS_REQUIRED,
     LATEX_PAYLOAD_NAME,
@@ -76,15 +79,27 @@ def vcs_probe():
         api.local_commits(repo, status)
         api.local_staged(repo, status)
         api.local_files(repo, status)
+        CONTEXT['source_hash'] = f'sha1:{status.commit}'
         try:
             repo_root_folder = repo.git.rev_parse(show_toplevel=True)
+            path = pathlib.Path(repo_root_folder)
+            anchor = path.parent.name
+            here = path.name
+            CONTEXT['source_hint'] = f'{anchor}/{here}'
             yield f'Root     ({repo_root_folder})'
-        except Exception:
+        except Exception:  # noqa
+            CONTEXT['source_hint'] = 'info:plain:built-outside-of-version-control'
             yield 'WARNING - ignored exception when assessing repo root folder location'
         for line in generate_report(status):
             yield line.rstrip()
-    except Exception:
+    except Exception:  # noqa
+        CONTEXT['source_hash'] = 'info:plain:built-outside-of-version-control'
         yield 'WARNING - we seem to not be within a git repository clone'
+
+
+def node_id() -> str:
+    """Generate the build node identifier."""
+    return str(uuid.uuid3(uuid.NAMESPACE_DNS, platform.node()))
 
 
 def report_taxonomy(target_path: pathlib.Path) -> None:
