@@ -19,6 +19,7 @@ import liitos.patch as pat
 import liitos.tables as tab
 import liitos.tools as too
 from liitos import (
+    CONTEXT,
     ENCODING,
     FROM_FORMAT_SPEC,
     LATEX_PAYLOAD_NAME,
@@ -118,6 +119,11 @@ def der(
     log.info(LOG_SEPARATOR)
     log.info('Assessing the local version control status (compared to upstream) ...')
     too.ensure_separate_log_lines(too.vcs_probe)
+    CONTEXT['builder_node_id'] = too.node_id()
+    log.info('Context noted with:')
+    log.info(f'- builder-node-id({CONTEXT.get("builder_node_id")})')
+    log.info(f'- source-hash({CONTEXT.get("source_hash")})')
+    log.info(f'- source-hint({CONTEXT.get("source_hint")})')
 
     ok, aspect_map = too.load_target(target_code, facet_code)
     if not ok or not aspect_map:
@@ -377,8 +383,18 @@ def der(
 
     if str(options.get('label', '')).strip():
         labeling_call = str(options['label']).strip().split()
+        labeling_call.extend(
+            [
+                '--key-value-pairs',
+                (
+                    f'BuilderNodeID={CONTEXT["builder_node_id"]}'
+                    f',SourceHash={CONTEXT["source_hash"]}'
+                    f',SourceHint={CONTEXT["source_hint"]}'
+                ),
+            ]
+        )
         log.info(LOG_SEPARATOR)
-        log.info(f'Labeling the resulting pdf file per ({options["label"]})')
+        log.info(f'Labeling the resulting pdf file per ({" ".join(labeling_call)})')
         too.delegate(labeling_call, 'label-pdf')
         log.info(LOG_SEPARATOR)
 
