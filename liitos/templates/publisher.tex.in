@@ -1,7 +1,7 @@
 % |-- changes - cut - marker - top -->
 \pdfbookmark[section]{Status and Change Log}{status}
 \hypertarget{status-and-change-log}{%
-\section*{Status and Change Log}\label{status-and-change-log}}
+\section*{\fakesection{\MakeUppercase{Status and Change Log}}}\label{status-and-change-log}}
 \vspace*{\theTuneChangesHeaderSep}
 \begin{longtable}[]{|
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
@@ -30,7 +30,7 @@ THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 % |-- notices - cut - marker - top -->
 \pdfbookmark[section]{Proprietary Information}{propinfo}
 \hypertarget{proprietary-information}{%
-\section*{Proprietary Information}\label{proprietary-information}}
+\section*{\fakesection{\MakeUppercase{Proprietary Information}}}\label{proprietary-information}}
 \vspace*{\theTuneBlurbHeaderSep}
 \theProprietaryInformation
 % <-- notices - cut - marker - bottom --|

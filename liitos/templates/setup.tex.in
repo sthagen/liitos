@@ -138,6 +138,9 @@
     afterindent=false
 ]{paragraph,subparagraph}
 
+% Fake some section alignment
+\def\fakesection#1{\hskip 6em \hfil #1\hfil}
+
 % patch the toc to allow for level 4 without page floods
 \BeforeTOCHead[toc]{%
   \KOMAoptions{parskip=false}% no parskip in ToC
