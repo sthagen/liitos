@@ -35,4 +35,4 @@ THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 \theProprietaryInformation
 % <-- notices - cut - marker - bottom --|
 
-\pagenumbering{arabic}
+%\pagenumbering{arabic}% TODO make consistent with numbering scheme
