@@ -14,6 +14,30 @@
 % |-- approvals - cut - marker - top -->
 \vskip \theApprovalsAdjustableVerticalSpace%default for single line titles is 2.5em
 \vskip \ExtraPushdown
+
+% Layout east
+%\begin{large}
+%\addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
+%\addtolength\belowrulesep{0.35ex}
+%\begin{longtable}[]{|
+%  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|
+%  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4000}}|
+%  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4800}}|}
+%\hline
+%\begin{minipage}[b]{\linewidth}\raggedright
+%\ \mbox{\textbf{\theApprovalsRoleLabel}}
+%\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+%\mbox{\textbf{\theApprovalsNameLabel}}
+%\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+%\mbox{\textbf{\theApprovalsDateAndSignatureLabel}}
+%\end{minipage} \\[0.5ex]
+%\hline
+%\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]
+%\hline
+%\end{longtable}
+%\end{large}
+
+% Layout south
 \begin{large}
 \addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
 \addtolength\belowrulesep{0.35ex}
@@ -34,4 +58,5 @@
 \hline
 \end{longtable}
 \end{large}
+
 % <-- approvals - cut - marker - bottom --|

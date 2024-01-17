@@ -19,6 +19,33 @@
 | Name                | Au. Thor | Re. Viewer | Ap. Prover | Au. Thorizer |
 | Date <br> Signature |          |            |            |              |
 
+requires more dynamic LaTeX generation:
+
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% <- fixed
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.1500}}|% at least
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.1500}}|% two but
+% ... can be more columns for every role
+}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\ \mbox{\textbf{\theDepartmentLabel}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{THE.DEP.SLOT}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{THE.DEP.SLOT}}
+...
+\end{minipage} \\[0.5ex]
+\hline
+\ \mbox{\textbf{\theApprovalsRoleLabel}} & \mbox{THE.ROLE.SLOT} & \mbox{THE.ROLE.SLOT} ... \\[0.5ex]
+\hline
+\ \mbox{\textbf{\theApprovalsNameLabel}} & \mbox{THE.NAME.SLOT} & \mbox{THE.NAME.SLOT} ... \\[0.5ex]
+\hline
+\ \mbox{\textbf{\theApprovalsDateAndSignatureLabel}} & \mbox{} & \mbox{} ... \\[0.5ex]
+\hline
+
+\end{longtable}
+
 """
 import os
 import pathlib
