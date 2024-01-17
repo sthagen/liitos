@@ -1,5 +1,9 @@
 # Changes
 
+2024.1.17
+:    * Changed page numbering to start on title page (breaking change)
+* Refactored approvals module
+
 2024.1.16
 :    * Added context discovery (builder node id, source hash, and source hint) yielding coordinates in place and time
 * Experimental change to centered and upper-cased fake section titles on publisher page (eject template to revert)
