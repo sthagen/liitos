@@ -21,6 +21,7 @@
 
 requires more dynamic LaTeX generation:
 
+```
 \begin{longtable}[]{|
   >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% <- fixed
   >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.1500}}|% at least
@@ -45,6 +46,7 @@ requires more dynamic LaTeX generation:
 \hline
 
 \end{longtable}
+```
 
 """
 import os
@@ -53,7 +55,7 @@ from typing import Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template_loader as template
-from liitos import ENCODING, LOG_SEPARATOR, log
+from liitos import ENCODING, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, log
 
 PathLike = Union[str, pathlib.Path]
 
@@ -76,7 +78,7 @@ CUT_MARKER_TOP = '% |-- approvals - cut - marker - top -->'
 CUT_MARKER_BOTTOM = '% <-- approvals - cut - marker - bottom --|'
 
 
-def get_layout(layout_path: PathLike) -> dict[str, dict[str, dict[str, bool]]]:
+def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[str, dict[str, dict[str, bool]]]:
     """DRY."""
     layout = {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
     if layout_path:
@@ -146,7 +148,7 @@ def weave(
     facet_key: str,
     options: dict[str, Union[bool, str]],
 ) -> int:
-    """Later alligator."""
+    """Map the approvals data to a table on the titlepage."""
     log.info(LOG_SEPARATOR)
     log.info('entered signatures weave function ...')
     structure, asset_map = gat.prelude(
@@ -158,7 +160,7 @@ def weave(
     )
 
     layout_path = asset_map[target_key][facet_key].get(gat.KEY_LAYOUT, '')
-    layout = get_layout(layout_path)
+    layout = get_layout(layout_path, target_key=target_key, facet_key=facet_key)
     log.info(f'{layout=}')
 
     log.info(LOG_SEPARATOR)
@@ -188,6 +190,8 @@ def weave(
         lines = list(remove_target_region_gen(lines))
 
     log.info(LOG_SEPARATOR)
+    approvals_strategy = options.get('approvals_strategy', KNOWN_APPROVALS_STRATEGIES[0])
+    log.info(f'selected approvals layout strategy is ({approvals_strategy})')
     log.info(f'weaving in the approvals from {signatures_path}...')
     for n, line in enumerate(lines):
         if TOKEN_EXTRA_PUSHDOWN in line:

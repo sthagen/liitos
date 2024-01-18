@@ -46,6 +46,8 @@ KEY_META = 'meta'
 KEYS_REQUIRED = (KEY_APPROVALS, KEY_BIND, KEY_CHANGES, KEY_META)
 
 CONTEXT: dict[str, str] = {}
+KNOWN_APPROVALS_STRATEGIES = ('south', 'east')
+APPROVALS_STRATEGY = os.getenv('LIITOS_APPROVALS_STRATEGY', '').lower()
 
 try:
     SHELL = shellingham.detect_shell()
@@ -132,6 +134,7 @@ __all__: List[str] = [
     'APP_ALIAS',
     'APP_ENV',
     'APP_VERSION',
+    'APPROVALS_STRATEGY',
     'DEFAULT_STRUCTURE_NAME',
     'ENCODING',
     'CONTEXT',
@@ -143,6 +146,7 @@ __all__: List[str] = [
     'KEY_LAYOUT',
     'KEY_META',
     'KEYS_REQUIRED',
+    'KNOWN_APPROVALS_STRATEGIES',
     'LATEX_PAYLOAD_NAME',
     'LOG_SEPARATOR',
     'TOOL_VERSION_COMMAND_MAP',

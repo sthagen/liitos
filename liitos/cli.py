@@ -19,8 +19,10 @@ import liitos.tools as too
 from liitos import (
     APP_NAME,
     APP_VERSION,
+    APPROVALS_STRATEGY,
     FILTER_CS_LIST,
     FROM_FORMAT_SPEC,
+    KNOWN_APPROVALS_STRATEGIES,
     LOG_SEPARATOR,
     QUIET,
     TOOL_VERSION_COMMAND_MAP,
@@ -147,6 +149,23 @@ def _verify_call_vector(
         print(f'requested tree root at ({doc}) does not exist', file=sys.stderr)
         return 2, f'requested tree root at ({doc}) does not exist', '', {}
 
+    approvals_strategy = None
+    if not APPROVALS_STRATEGY:
+        approvals_strategy = KNOWN_APPROVALS_STRATEGIES[0]
+        log.info(
+            'No preference in environment for approvals strategy (APPROVALS_STRATEGY)'
+            f' using default ({approvals_strategy})'
+        )
+    elif APPROVALS_STRATEGY not in KNOWN_APPROVALS_STRATEGIES:
+        approvals_strategy = KNOWN_APPROVALS_STRATEGIES[0]
+        log.info(
+            'Value in environment for approvals strategy (APPROVALS_STRATEGY)'
+            f' not in ({", ".join(KNOWN_APPROVALS_STRATEGIES)}) - using default ({approvals_strategy})'
+        )
+    else:
+        approvals_strategy = APPROVALS_STRATEGY
+        log.info(f'Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ({approvals_strategy})')
+
     options: dict[str, Union[bool, str]] = {
         'quiet': QUIET and not verbose and not strict,
         'strict': strict,
@@ -155,6 +174,7 @@ def _verify_call_vector(
         'patch_tables': patch_tables,
         'from_format_spec': from_format_spec if from_format_spec else FROM_FORMAT_SPEC,
         'filter_cs_list': filter_cs_list if filter_cs_list != 'DEFAULT_FILTER' else FILTER_CS_LIST,
+        'approvals_strategy': approvals_strategy,
     }
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
