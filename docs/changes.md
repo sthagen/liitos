@@ -1,5 +1,8 @@
 # Changes
 
+2024.1.18
+:    * Added feature flag and eastward spike
+
 2024.1.17
 :    * Changed page numbering to start on title page (breaking change)
 * Refactored approvals module
