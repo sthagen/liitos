@@ -17,6 +17,8 @@
 \newcommand{\theChangeLogDateLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_DATE_%_LABEL_%%
 \newcommand{\theChangeLogAuthorLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_AUTHOR_%_LABEL_%%
 \newcommand{\theChangeLogDescLabel}{VALUE.SLOT}%%_PATCH_%_CHANGELOG_%_DESCRIPTION_%_LABEL_%%
+\newcommand{\theApprovalsDepartmentLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_LABEL_%%
+\newcommand{\theApprovalsDepartmentValue}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%
 \newcommand{\theApprovalsRoleLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%
 \newcommand{\theApprovalsNameLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%
 \newcommand{\theApprovalsDateAndSignatureLabel}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%

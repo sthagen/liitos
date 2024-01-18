@@ -74,8 +74,47 @@ FORMAT_DATE = '%d %b %Y'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
 COLUMNS_EXPECTED = ['name', 'role']
-CUT_MARKER_TOP = '% |-- approvals - cut - marker - top -->'
-CUT_MARKER_BOTTOM = '% <-- approvals - cut - marker - bottom --|'
+APPROVALS_CUT_MARKER_TOP = '% |-- approvals - cut - marker - top -->'
+APPROVALS_CUT_MARKER_BOTTOM = '% <-- approvals - cut - marker - bottom --|'
+
+LAYOUT_SOUTH_CUT_MARKER_TOP = '% |-- layout south - cut - marker - top -->'
+LAYOUT_SOUTH_CUT_MARKER_BOTTOM = '% <-- layout south - cut - marker - bottom --|'
+
+NL = '\n'
+YAGNI = r"""% |-- layout east - cut - marker - top -->
+\begin{large}
+\addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
+\addtolength\belowrulesep{0.35ex}
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% <- fixed
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% at least
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% two but
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% two but
+% ... can be more columns for every role
+}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\ \mbox{\textbf{\theApprovalsDepartmentLabel}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{\theApprovalsDepartmentValue}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{\theApprovalsDepartmentValue}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{\theApprovalsDepartmentValue}}
+% ... can be more columns
+\end{minipage} \\[0.5ex]
+\hline
+\ \mbox{\textbf{\theApprovalsRoleLabel}} & \mbox{THE.ROLE0.SLOT} & \mbox{THE.ROLE1.SLOT} & \mbox{THE.ROLE2.SLOT} \\[0.5ex]
+\hline
+\ \mbox{\textbf{\theApprovalsNameLabel}} & \mbox{THE.NAME0.SLOT} & \mbox{THE.NAME1.SLOT} & \mbox{THE.NAME2.SLOT} \\[0.5ex]
+\hline
+\ \mbox{\textbf{Date}} \mbox{\textbf{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }} \mbox{\textbf{\ Signature}} \mbox{\textbf{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }} & \mbox{} & \mbox{} & \mbox{} \\[0.5ex]
+\hline
+
+\end{longtable}
+\end{large}
+% <-- layout east - cut - marker - bottom --|
+"""
 
 
 def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[str, dict[str, dict[str, bool]]]:
@@ -125,17 +164,46 @@ def normalize(signatures: object, channel: str, columns_expected: list[str]) -> 
     return [{'role': approval['role'], 'name': approval['name']} for approval in signatures[0]['approvals']]
 
 
+def inject_southwards(lines: list[str], rows: list[str], pushdown: float) -> None:
+    """Deploy approvals data per southern layout strategy per updating the lines list in place."""
+    for n, line in enumerate(lines):
+        if TOKEN_EXTRA_PUSHDOWN in line:
+            lines[n] = line.replace(TOKEN_EXTRA_PUSHDOWN, f'{pushdown}em')
+            continue
+        if line == TOKEN:
+            lines[n] = GLUE.join(rows)
+            break
+    if lines[-1]:  # Need separating empty line?
+        lines.append(NL)
+
+
+def inject_eastwards(lines: list[str], normalized: list[dict[str, str]], pushdown: float) -> None:
+    """Deploy approvals data per eastern layout strategy per updating the lines list in place."""
+    for n, line in enumerate(lines):
+        if TOKEN_EXTRA_PUSHDOWN in line:
+            lines[n] = line.replace(TOKEN_EXTRA_PUSHDOWN, f'{pushdown}em')
+            break
+    hack = YAGNI
+    log.info('logical model for approvals table is:')
+    for slot, entry in enumerate(normalized):
+        log.info(f'- {entry["role"]} <-- {entry["name"]}')
+        hack = hack.replace(f'THE.ROLE{slot}.SLOT', entry['role']).replace(f'THE.NAME{slot}.SLOT', entry['name'])
+    lines.extend(hack.split(NL))
+    if lines[-1]:  # Need separating empty line?
+        lines.append(NL)
+
+
 @no_type_check
-def remove_target_region_gen(text_lines: list[str]):
-    """Return generator that yields only the lines beyond the cut mark region."""
+def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str):
+    """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru]."""
     in_section = False
     for line in text_lines:
         if not in_section:
-            if CUT_MARKER_TOP in line:
+            if from_cut in line:
                 in_section = True
                 continue
         if in_section:
-            if CUT_MARKER_BOTTOM in line:
+            if thru_cut in line:
                 in_section = False
             continue
         yield line
@@ -187,24 +255,21 @@ def weave(
 
     if not layout['layout']['global']['has_approvals']:
         log.info('removing approvals from document layout')
-        lines = list(remove_target_region_gen(lines))
+        lines = list(remove_target_region_gen(lines, APPROVALS_CUT_MARKER_TOP, APPROVALS_CUT_MARKER_BOTTOM))
 
     log.info(LOG_SEPARATOR)
+    log.info(f'weaving in the approvals from {signatures_path}...')
     approvals_strategy = options.get('approvals_strategy', KNOWN_APPROVALS_STRATEGIES[0])
     log.info(f'selected approvals layout strategy is ({approvals_strategy})')
-    log.info(f'weaving in the approvals from {signatures_path}...')
-    for n, line in enumerate(lines):
-        if TOKEN_EXTRA_PUSHDOWN in line:
-            lines[n] = line.replace(TOKEN_EXTRA_PUSHDOWN, f'{pushdown}em')
-            continue
-        if line == TOKEN:
-            lines[n] = GLUE.join(rows)
-            break
+    if approvals_strategy == 'south':
+        inject_southwards(lines, rows, pushdown)
+    else:  # default is east
+        lines = list(remove_target_region_gen(lines, LAYOUT_SOUTH_CUT_MARKER_TOP, LAYOUT_SOUTH_CUT_MARKER_BOTTOM))
+        inject_eastwards(lines, logical_model, pushdown)
 
-    if lines[-1]:
-        lines.append('\n')
-
-    with open(BOOKMATTER_PATH, 'wt', encoding=ENCODING) as handle:
+    effective_path = pathlib.Path(layout_path).parent / BOOKMATTER_PATH
+    log.info(f'Writing effective bookmatter file to ({effective_path})')
+    with open(effective_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
     log.info(LOG_SEPARATOR)
 

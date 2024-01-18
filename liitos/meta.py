@@ -881,6 +881,38 @@ def weave_meta_part_change_log_tune_header_sep(
 
 
 @no_type_check
+def weave_meta_part_approvals_department_label(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the approvals_department_label from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_LABEL_%%')
+    """
+    if mapper.get('approvals_department_label'):
+        return text.replace(VALUE_SLOT, mapper['approvals_department_label'])
+    else:
+        log.info('approvals_department_label value missing ... setting default (Department)')
+        return text.replace(VALUE_SLOT, 'Department')
+
+
+@no_type_check
+def weave_meta_part_approvals_department_value(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the approvals_department_value from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%')
+    """
+    if mapper.get('approvals_department_value'):
+        return text.replace(VALUE_SLOT, mapper['approvals_department_value'])
+    else:
+        log.info('approvals_department_value value missing ... setting default ( )')
+        return text.replace(VALUE_SLOT, ' ')
+
+
+@no_type_check
 def weave_meta_part_approvals_role_label(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
@@ -1041,6 +1073,8 @@ def dispatch_meta_weaver(
         '%%_PATCH_%_BLURB_%_ADJUSTABLE_%_VERTICAL_%_SPACE_%%': weave_meta_part_proprietary_information_adjustable_vertical_space,  # noqa
         '%%_PATCH_%_BLURB_%_TUNE_%_HEADER_%_SEP_%%': weave_meta_part_proprietary_information_tune_header_sep,
         '%%_PATCH_%_CHANGE_%_LOG_%_TUNE_%_HEADER_%_SEP_%%': weave_meta_part_change_log_tune_header_sep,
+        '%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_LABEL_%%': weave_meta_part_approvals_department_label,
+        '%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%': weave_meta_part_approvals_department_value,
         '%%_PATCH_%_APPROVALS_%_ROLE_%_LABEL_%%': weave_meta_part_approvals_role_label,
         '%%_PATCH_%_APPROVALS_%_NAME_%_LABEL_%%': weave_meta_part_approvals_name_label,
         '%%_PATCH_%_APPROVALS_%_DATE_%_AND_%_SIGNATURE_%_LABEL_%%': weave_meta_part_approvals_date_and_signature_label,
