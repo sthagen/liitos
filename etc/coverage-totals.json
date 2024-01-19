@@ -1,19 +1,19 @@
 {
   "liitos": {
     "coverage_tool_version": "7.4.0",
-    "timestamp": "2024-01-17 21:01:35 +00:00",
+    "timestamp": "2024-01-19 19:13:23 +00:00",
     "branch_coverage": true,
     "show_contexts": true,
-    "covered_lines": 2346,
-    "num_statements": 2841,
-    "percent_covered": 80.90566037735849,
-    "percent_covered_display": "80.91",
-    "missing_lines": 495,
-    "excluded_lines": 2,
-    "num_branches": 1134,
-    "num_partial_branches": 166,
-    "covered_branches": 870,
-    "missing_branches": 264,
+    "covered_lines": 2409,
+    "num_statements": 2924,
+    "percent_covered": 80.68459657701712,
+    "percent_covered_display": "80.68",
+    "missing_lines": 515,
+    "excluded_lines": 3,
+    "num_branches": 1166,
+    "num_partial_branches": 171,
+    "covered_branches": 891,
+    "missing_branches": 275,
     "node_id": "c79891e5-aabf-3a83-95b9-588edcd8327f",
     "nfiles": 19,
     "files": [
@@ -37,14 +37,14 @@
       "liitos/template_loader.py",
       "liitos/tools.py"
     ],
-    "blake3": "564c95699d57eaee94586d2a9e9e7ba6b0629da6cdd0f08a5d31ed33d3f35d62",
-    "blake2": "e5b72460b129710a6852e2e3a22f4efb4e6fde1ad2e82fb9a2f4097dd1e01d192c1cd5b4229849202dfdc3d97e482a202f3df4dac91ee52495213d7f2a813974",
-    "sha512": "9e8937da463af794cb83fb9087cb3999aafdf65df92a99ef0f71233a9db9b788910b42c219722bf0e1b364422a22ee1d8229ed17a18d7ad49edbfaa2b3fc199e",
-    "sha384": "82a3c1b37e730bd247702799dea602de713b36ea7d0aa5461e766090d454388aecce3dc221e88838e3abd1c1d7fda21f",
-    "sha256": "f4dae8c04dfdef4037bc871563b0f2d0ef6586325ed67c5f15f4e7524d6ba2e9",
-    "sha1": "e0014271401fa1639b053b1652a905dd9129757b",
-    "md5": "ac311cfb32bcb1e392fb6932f393bab9",
+    "blake3": "4befebf42c359827d039cbd81acfddadf7e119c0ddbaa408ec8778738112e247",
+    "blake2": "5ead311d632272461b4f7b19e2b2d25d644a5c82f9e85c2fdb4bd8ae6959eb64764798cf3be507d46320925a00201a942460b8671ba58b0982b69120a76a0313",
+    "sha512": "fbc8fbc8dd96c7928b1095eaad4c0e92662679fec827d1e0a07d04cb87399da967ca1fd667095496731a791582e7fa78260804304ca601db587583909aa5814d",
+    "sha384": "268db4722db21cd4b80486c300834bbd083d5ede83bbbad272cc3906e49e07444dfe6e450b3030fda026b75192c5201a",
+    "sha256": "0ab9509409a6527f8e6076f096b7cce68b0d5230154944d7146ac64eac66e9c6",
+    "sha1": "13316d32de87db162c0997f2fb64257c2b5f37ca",
+    "md5": "41aa59b7eafc61fff910f1cb5ccfa3a0",
     "python_version": "3.10.13",
-    "entropy": 4.919287
+    "entropy": 4.934493
   }
 }
