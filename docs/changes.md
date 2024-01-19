@@ -1,5 +1,8 @@
 # Changes
 
+2024.1.19
+:    * Enabled eastward approvals table(s)
+
 2024.1.18
 :    * Added feature flag and eastward spike
 
