@@ -11,6 +11,10 @@
 | Approver   | Ap. Prover.  |                    |
 | Authorizer | Au. Thorizer |                    |
 
+Table: The table is simple to grow by appending rows.
+
+The southern layout relies on the skeleton in the bookmatter.tex.in template.
+
 # Layout `east` (the new default)
 
 | Department          |    AB    |     AB     |     AB     |     AB.      |
@@ -19,35 +23,12 @@
 | Name                | Au. Thor | Re. Viewer | Ap. Prover | Au. Thorizer |
 | Date <br> Signature |          |            |            |              |
 
-requires more dynamic LaTeX generation:
+Table: This table can only grow towards the right margin and a limit of only 4 role bearers is reasonable
 
-```
-\begin{longtable}[]{|
-  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% <- fixed
-  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.1500}}|% at least
-  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.1500}}|% two but
-% ... can be more columns for every role
-}
-\hline
-\begin{minipage}[b]{\linewidth}\raggedright
-\ \mbox{\textbf{\theDepartmentLabel}}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\mbox{\textbf{THE.DEP.SLOT}}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\mbox{\textbf{THE.DEP.SLOT}}
-...
-\end{minipage} \\[0.5ex]
-\hline
-\ \mbox{\textbf{\theApprovalsRoleLabel}} & \mbox{THE.ROLE.SLOT} & \mbox{THE.ROLE.SLOT} ... \\[0.5ex]
-\hline
-\ \mbox{\textbf{\theApprovalsNameLabel}} & \mbox{THE.NAME.SLOT} & \mbox{THE.NAME.SLOT} ... \\[0.5ex]
-\hline
-\ \mbox{\textbf{\theApprovalsDateAndSignatureLabel}} & \mbox{} & \mbox{} ... \\[0.5ex]
-\hline
+The eastern layout requires more dynamic LaTeX generation and thus generates the construct
+from the data inside this module.
 
-\end{longtable}
-```
-
+For more than 4 role bearers a second table should be placed below the first, to keep the cell content readable.
 """
 import os
 import pathlib
@@ -81,34 +62,28 @@ LAYOUT_SOUTH_CUT_MARKER_TOP = '% |-- layout south - cut - marker - top -->'
 LAYOUT_SOUTH_CUT_MARKER_BOTTOM = '% <-- layout south - cut - marker - bottom --|'
 
 NL = '\n'
-YAGNI = r"""% |-- layout east - cut - marker - top -->
+BASE_TABLE = r"""% |-- layout east - cut - marker - top -->
 \begin{large}
 \addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
 \addtolength\belowrulesep{0.35ex}
 \begin{longtable}[]{|
-  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% <- fixed
-  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% at least
-  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% two but
-  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% two but
-% ... can be more columns for every role
-}
+ >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% <- fixed
+$HEAD.BLOCK$}
 \hline
-\begin{minipage}[b]{\linewidth}\raggedright
-\ \mbox{\textbf{\theApprovalsDepartmentLabel}}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\mbox{\textbf{\theApprovalsDepartmentValue}}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\mbox{\textbf{\theApprovalsDepartmentValue}}
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\mbox{\textbf{\theApprovalsDepartmentValue}}
-% ... can be more columns
-\end{minipage} \\[0.5ex]
+\begin{minipage}[b]{\linewidth}\raggedright\ \mbox{\textbf{\theApprovalsDepartmentLabel}}\end{minipage}%
+$ORGA.BLOCK$ \\[0.5ex]
 \hline
-\ \mbox{\textbf{\theApprovalsRoleLabel}} & \mbox{THE.ROLE0.SLOT} & \mbox{THE.ROLE1.SLOT} & \mbox{THE.ROLE2.SLOT} \\[0.5ex]
+\ \mbox{\textbf{\theApprovalsRoleLabel}}%
+$ROLE.BLOCK$
+ \\[0.5ex]
 \hline
-\ \mbox{\textbf{\theApprovalsNameLabel}} & \mbox{THE.NAME0.SLOT} & \mbox{THE.NAME1.SLOT} & \mbox{THE.NAME2.SLOT} \\[0.5ex]
+\ \mbox{\textbf{\theApprovalsNameLabel}}%
+$NAME.BLOCK$
+ \\[0.5ex]
 \hline
-\ \mbox{\textbf{Date}} \mbox{\textbf{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }} \mbox{\textbf{\ Signature}} \mbox{\textbf{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }} & \mbox{} & \mbox{} & \mbox{} \\[0.5ex]
+\ \mbox{\textbf{Date}} \mbox{\textbf{\ }} \mbox{\textbf{\ Signature}}%
+$SIGN.BLOCK$
+ \\[0.5ex]
 \hline
 
 \end{longtable}
@@ -116,15 +91,80 @@ YAGNI = r"""% |-- layout east - cut - marker - top -->
 % <-- layout east - cut - marker - bottom --|
 """
 
+HEAD_CELL = r' >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|'
+ORGA_CELL = r' & \begin{minipage}[b]{\linewidth}\raggedright\mbox{\textbf{\theApprovalsDepartmentValue}}\end{minipage}'
+ROLE_CELL = r' & \mbox{THE.ROLE$RANK$.SLOT}'
+NAME_CELL = r' & \mbox{THE.NAME$RANK$.SLOT}'
+SIGN_CELL = r' & \mbox{}'
+
+
+def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
+    """Inject the blocks derived from the approvals data to yield the fill-in scaffold."""
+    bearers = len(normalized)
+    table_max_members = 4
+    total_max_members = table_max_members * 2
+    if bearers > total_max_members:
+        raise NotImplementedError(
+            f'Please use southwards layout for more than {total_max_members} role bearers;'
+            f' found ({bearers}) entries in approvals data source.'
+        )
+
+    # First up to 4 entries got into upper table and final upt to 4 entries (if any) to lower table
+    upper, lower = normalized[:4], normalized[4:]  # upper limit index guaranteed to be <= total_max_members
+    uppers, lowers = len(upper), len(lower)
+    log.info(f'SPLIT {uppers}, {lowers}, {bearers}')
+    log.info(f'UPPER: {list(range(uppers))}')
+    head_block = (f'{HEAD_CELL}{NL}' * uppers).rstrip(NL)
+    orga_block = (f'{ORGA_CELL}{NL}' * uppers).rstrip(NL)  # TODO: later value comes from approvals source
+    role_block = NL.join(ROLE_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
+    name_block = NL.join(NAME_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
+    sign_block = f'{SIGN_CELL}{NL}' * uppers
+    upper_table = (
+        BASE_TABLE.replace('$HEAD.BLOCK$', head_block)
+        .replace('$ORGA.BLOCK$', orga_block)
+        .replace('$ROLE.BLOCK$', role_block)
+        .replace('$NAME.BLOCK$', name_block)
+        .replace('$SIGN.BLOCK$', sign_block)
+    )
+
+    for thing in upper_table.split(NL):
+        log.debug(thing)
+
+    if not lowers:
+        return upper_table
+
+    log.info(f'LOWER: {list(range(uppers, bearers))}')
+    head_block = (f'{HEAD_CELL}{NL}' * lowers).rstrip(NL)
+    orga_block = (f'{ORGA_CELL}{NL}' * lowers).rstrip(NL)  # TODO: later value comes from approvals source
+    role_block = NL.join(ROLE_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
+    name_block = NL.join(NAME_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
+    sign_block = f'{SIGN_CELL}{NL}' * lowers
+
+    lower_table = (
+        BASE_TABLE.replace('$HEAD.BLOCK$', head_block)
+        .replace('$ORGA.BLOCK$', orga_block)
+        .replace('$ROLE.BLOCK$', role_block)
+        .replace('$NAME.BLOCK$', name_block)
+        .replace('$SIGN.BLOCK$', sign_block)
+    )
+
+    for thing in lower_table.split(NL):
+        log.debug(thing)
+
+    return f'{upper_table}{NL}{lower_table}'
+
 
 def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[str, dict[str, dict[str, bool]]]:
-    """DRY."""
+    """Boolean layout decisions on bookmatter and publisher page conten.
+
+    Deprecated as the known use cases evolved into a different direction ...
+    """
     layout = {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
     if layout_path:
         log.info(f'loading layout from {layout_path=} for approvals')
-        layout = gat.load_layout(facet_key, target_key, layout_path)[0]  # type: ignore
-    else:
-        log.info('using default layout for approvals')
+        return gat.load_layout(facet_key, target_key, layout_path)[0]  # type: ignore
+
+    log.info('using default layout for approvals')
     return layout
 
 
@@ -183,7 +223,7 @@ def inject_eastwards(lines: list[str], normalized: list[dict[str, str]], pushdow
         if TOKEN_EXTRA_PUSHDOWN in line:
             lines[n] = line.replace(TOKEN_EXTRA_PUSHDOWN, f'{pushdown}em')
             break
-    hack = YAGNI
+    hack = eastern_scaffold(normalized)
     log.info('logical model for approvals table is:')
     for slot, entry in enumerate(normalized):
         log.info(f'- {entry["role"]} <-- {entry["name"]}')
