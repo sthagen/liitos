@@ -92,7 +92,7 @@ $SIGN.BLOCK$
 """
 
 HEAD_CELL = r' >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|'
-ORGA_CELL = r' & \begin{minipage}[b]{\linewidth}\raggedright\mbox{\textbf{\theApprovalsDepartmentValue}}\end{minipage}'
+ORGA_CELL = r' & \begin{minipage}[b]{\linewidth}\raggedright\mbox{\textbf{THE.ORGA$RANK$.SLOT}}\end{minipage}'
 ROLE_CELL = r' & \mbox{THE.ROLE$RANK$.SLOT}'
 NAME_CELL = r' & \mbox{THE.NAME$RANK$.SLOT}'
 SIGN_CELL = r' & \mbox{}'
@@ -115,7 +115,7 @@ def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
     log.info(f'SPLIT {uppers}, {lowers}, {bearers}')
     log.info(f'UPPER: {list(range(uppers))}')
     head_block = (f'{HEAD_CELL}{NL}' * uppers).rstrip(NL)
-    orga_block = (f'{ORGA_CELL}{NL}' * uppers).rstrip(NL)  # TODO: later value comes from approvals source
+    orga_block = NL.join(ORGA_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
     role_block = NL.join(ROLE_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
     name_block = NL.join(NAME_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
     sign_block = f'{SIGN_CELL}{NL}' * uppers
@@ -135,7 +135,7 @@ def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
 
     log.info(f'LOWER: {list(range(uppers, bearers))}')
     head_block = (f'{HEAD_CELL}{NL}' * lowers).rstrip(NL)
-    orga_block = (f'{ORGA_CELL}{NL}' * lowers).rstrip(NL)  # TODO: later value comes from approvals source
+    orga_block = NL.join(ORGA_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
     role_block = NL.join(ROLE_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
     name_block = NL.join(NAME_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
     sign_block = f'{SIGN_CELL}{NL}' * lowers
@@ -206,7 +206,10 @@ def normalize(signatures: object, channel: str, columns_expected: list[str]) -> 
     if channel == JSON_CHANNEL:
         return [{'role': role, 'name': name} for role, name in signatures[0]['rows']]
 
-    return [{'role': approval['role'], 'name': approval['name']} for approval in signatures[0]['approvals']]
+    return [
+        {'orga': approval.get('orga', ''), 'role': approval['role'], 'name': approval['name']}
+        for approval in signatures[0]['approvals']
+    ]
 
 
 def inject_southwards(lines: list[str], rows: list[str], pushdown: float) -> None:
@@ -231,8 +234,13 @@ def inject_eastwards(lines: list[str], normalized: list[dict[str, str]], pushdow
     hack = eastern_scaffold(normalized)
     log.info('logical model for approvals table is:')
     for slot, entry in enumerate(normalized):
-        log.info(f'- {entry["role"]} <-- {entry["name"]}')
-        hack = hack.replace(f'THE.ROLE{slot}.SLOT', entry['role']).replace(f'THE.NAME{slot}.SLOT', entry['name'])
+        orga = entry['orga'] if entry['orga'] else r'\theApprovalsDepartmentValue'
+        log.info(f'- {entry["role"]} <-- {entry["name"]} (from {orga})')
+        hack = (
+            hack.replace(f'THE.ORGA{slot}.SLOT', orga)
+            .replace(f'THE.ROLE{slot}.SLOT', entry['role'])
+            .replace(f'THE.NAME{slot}.SLOT', entry['name'])
+        )
     lines.extend(hack.split(NL))
     if lines[-1]:  # Need separating empty line?
         lines.append(NL)
