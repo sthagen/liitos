@@ -1,5 +1,8 @@
 # Changes
 
+2024.1.20
+:    * Removed extra bold typing of main title for title page
+
 2024.1.19
 :    * Enabled eastward approvals table(s)
 
