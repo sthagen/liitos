@@ -1,7 +1,10 @@
 approvals:
 - name: An Author
   role: Author
+  orga: CoreDevs
 - name: A Reviewer
   role: Review
+  orga: Community
 - name: An App Rover
   role: Approved
+  orga: BDFL

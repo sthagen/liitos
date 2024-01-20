@@ -54,7 +54,7 @@ GLUE = '\n\\hline\n'
 FORMAT_DATE = '%d %b %Y'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
-COLUMNS_EXPECTED = ['name', 'role']
+COLUMNS_EXPECTED = ['name', 'role', 'orga']
 APPROVALS_CUT_MARKER_TOP = '% |-- approvals - cut - marker - top -->'
 APPROVALS_CUT_MARKER_BOTTOM = '% <-- approvals - cut - marker - bottom --|'
 
@@ -176,6 +176,11 @@ def derive_model(model_path: PathLike) -> tuple[str, list[str]]:
     return channel, columns_expected
 
 
+def columns_are_present(columns_present: list[str], columns_expected: list[str]) -> bool:
+    """Ensure the needed columns are present."""
+    return all(column in columns_expected for column in columns_present)
+
+
 @no_type_check
 def normalize(signatures: object, channel: str, columns_expected: list[str]) -> list[dict[str, str]]:
     """Normalize the channel specific topology of the model into a logical model.
@@ -183,7 +188,7 @@ def normalize(signatures: object, channel: str, columns_expected: list[str]) -> 
     On error an empty logical model is returned.
     """
     if channel == JSON_CHANNEL:
-        if signatures[0]['columns'] != columns_expected:
+        if not columns_are_present(signatures[0]['columns'], columns_expected):
             log.error('unexpected column model!')
             log.error(f'-  expected: ({columns_expected})')
             log.error(f'- but found: ({signatures[0]["columns"]})')
@@ -192,7 +197,7 @@ def normalize(signatures: object, channel: str, columns_expected: list[str]) -> 
     if channel == YAML_CHANNEL:
         for slot, approval in enumerate(signatures[0]['approvals'], start=1):
             log.debug(f'{slot=}, {approval=}')
-            if sorted(approval) != sorted(columns_expected):
+            if not columns_are_present(approval, columns_expected):
                 log.error('unexpected column model!')
                 log.error(f'-  expected: ({columns_expected})')
                 log.error(f'- but found: ({sorted(approval)}) in slot #{slot}')
