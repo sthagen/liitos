@@ -35,7 +35,6 @@ def test_approvals_legacy():
 
 
 def test_eastern_scaffold():
-
     normalized = [{'role': 'role', 'name': 'name'}]
     table = approvals.eastern_scaffold(normalized)
     assert table
