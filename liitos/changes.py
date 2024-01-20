@@ -1,11 +1,13 @@
 """Weave the content of the changes data file into the output structure (for now LaTeX)."""
 import os
 import pathlib
-from typing import Union
+from typing import Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template_loader as template
 from liitos import ENCODING, LOG_SEPARATOR, log
+
+PathLike = Union[str, pathlib.Path]
 
 PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
 PUBLISHER_TEMPLATE_IS_EXTERNAL = bool(PUBLISHER_TEMPLATE)
@@ -29,6 +31,76 @@ TOKEN_ADJUSTED_PUSHDOWN = r'\AdustedPushdown'  # nosec B105
 DEFAULT_ADJUSTED_PUSHDOWN_VALUE = 14
 
 
+def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[str, dict[str, dict[str, bool]]]:
+    """Boolean layout decisions on bookmatter and publisher page conten.
+
+    Deprecated as the known use cases evolved into a different direction ...
+    """
+    layout = {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
+    if layout_path:
+        log.info(f'loading layout from {layout_path=} for changes and notices')
+        return gat.load_layout(facet_key, target_key, layout_path)[0]  # type: ignore
+
+    log.info('using default layout for approvals')
+    return layout
+
+
+def derive_model(model_path: PathLike) -> tuple[str, list[str]]:
+    """Derive the model as channel type and column model from the given path."""
+    channel = JSON_CHANNEL if str(model_path).endswith('.json') else YAML_CHANNEL
+    columns_expected = COLUMNS_MINIMAL if channel == JSON_CHANNEL else COLUMNS_EXPECTED
+
+    return channel, columns_expected
+
+
+def columns_are_present(columns_present: list[str], columns_expected: list[str]) -> bool:
+    """Ensure the needed columns are present."""
+    return all(column in columns_expected for column in columns_present)
+
+
+@no_type_check
+def normalize(changes: object, channel: str, columns_expected: list[str]) -> list[dict[str, str]]:
+    """Normalize the channel specific topology of the model into a logical model.
+
+    On error an empty logical model is returned.
+    """
+    if channel == JSON_CHANNEL:
+        for slot, change in enumerate(changes[0]['changes'], start=1):
+            if not set(columns_expected).issubset(set(change)):
+                log.error('unexpected column model!')
+                log.error(f'-  expected: ({columns_expected})')
+                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
+                log.error(f'- but found: ({change}) for entry #{slot}')
+                return []
+
+    if channel == YAML_CHANNEL:
+        for slot, change in enumerate(changes[0]['changes'], start=1):
+            model = sorted(change.keys())
+            if not set(COLUMNS_MINIMAL).issubset(set(model)):
+                log.error('unexpected column model!')
+                log.error(f'-  expected: ({columns_expected})')
+                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
+                log.error(f'- but found: ({model}) in slot {slot}')
+                return []
+
+    model = []
+    if channel == JSON_CHANNEL:
+        for change in changes[0]['changes']:
+            issue, author, summary = change['issue'], change['author'], change['summary']
+            revision = change.get('revision', DEFAULT_REVISION)
+            model.append({'issue': issue, 'revision': revision, 'author': author, 'summary': summary})
+        return model
+
+    for change in changes[0]['changes']:
+        author = change['author']
+        issue = change['issue']
+        revision = change.get('revision', DEFAULT_REVISION)
+        summary = change['summary']
+        model.append({'issue': issue, 'revision': revision, 'author': author, 'summary': summary})
+
+    return model
+
+
 def weave(
     doc_root: Union[str, pathlib.Path],
     structure_name: str,
@@ -43,24 +115,15 @@ def weave(
         doc_root=doc_root, structure_name=structure_name, target_key=target_key, facet_key=facet_key, command='changes'
     )
 
-    layout = {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
     layout_path = asset_map[target_key][facet_key].get(gat.KEY_LAYOUT, '')
-    if layout_path:
-        log.info(f'loading layout from {layout_path=} for changes and notices')
-        layout = gat.load_layout(facet_key, target_key, layout_path)[0]  # type: ignore
-    else:
-        log.info('using default layout for changes and notices')
+    layout = get_layout(layout_path, target_key=target_key, facet_key=facet_key)
     log.info(f'{layout=}')
 
     log.info(LOG_SEPARATOR)
-
-    channel = YAML_CHANNEL
-    columns_expected = COLUMNS_EXPECTED
     changes_path = asset_map[target_key][facet_key][gat.KEY_CHANGES]
-    if str(changes_path).endswith('.json'):
-        channel = JSON_CHANNEL
-
+    channel, columns_expected = derive_model(changes_path)
     log.info(f'detected changes channel ({channel}) weaving in from ({changes_path})')
+
     log.info(f'loading changes from {changes_path=}')
     changes = gat.load_changes(facet_key, target_key, changes_path)
     log.info(f'{changes=}')
@@ -68,46 +131,15 @@ def weave(
     log.info(LOG_SEPARATOR)
     log.info('plausibility tests for changes ...')
 
-    rows = []
-    if channel == JSON_CHANNEL:
-        for slot, change in enumerate(changes[0]['changes'], start=1):
-            if not set(COLUMNS_MINIMAL).issubset(set(change)):
-                log.error('unexpected column model!')
-                log.error(f'-  expected: ({columns_expected})')
-                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
-                log.error(f'- but found: ({change}) for entry #{slot}')
-                return 1
+    logical_model = normalize(changes, channel=channel, columns_expected=columns_expected)
 
-        for change in changes[0]['changes']:
-            issue, author, summary = change['issue'], change['author'], change['summary']  # type: ignore
-            revision = change.get('revision', DEFAULT_REVISION)  # type: ignore
-            rows.append(
-                ROW_TEMPLATE.replace('issue', issue)
-                .replace('revision', revision)
-                .replace('author', author)
-                .replace('summary', summary)
-            )
-    else:
-        for slot, change in enumerate(changes[0]['changes'], start=1):
-            model = sorted(change.keys())  # type: ignore
-            if not set(COLUMNS_MINIMAL).issubset(set(model)):
-                log.error('unexpected column model!')
-                log.error(f'-  expected: ({columns_expected})')
-                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
-                log.error(f'- but found: ({model}) in slot {slot}')
-                return 1
-
-        for change in changes[0]['changes']:
-            author = change['author']  # type: ignore
-            issue = change['issue']  # type: ignore
-            revision = change.get('revision', DEFAULT_REVISION)  # type: ignore
-            summary = change['summary']  # type: ignore
-            rows.append(
-                ROW_TEMPLATE.replace('issue', issue)
-                .replace('revision', revision)
-                .replace('author', author)
-                .replace('summary', summary)
-            )
+    rows = [
+        ROW_TEMPLATE.replace('issue', kv['issue'])
+        .replace('revision', kv['revision'])
+        .replace('author', kv['author'])
+        .replace('summary', kv['summary'])
+        for kv in logical_model
+    ]
 
     pushdown = DEFAULT_ADJUSTED_PUSHDOWN_VALUE
     log.info(f'calculated adjusted pushdown to be {pushdown}em')
