@@ -1,7 +1,7 @@
 % Variables from meta data:
 \newcommand{\theMetaTitle}{VALUE.SLOT}%%_PATCH_%_HEADER_%_TITLE_%%
 \newcommand{\theTitleSlug}{VALUE.SLOT}%%_PATCH_%_TITLE_%_SLUG_%%
-\newcommand{\theBoxedTitle}{\textbf{\textrm{VALUE.SLOT}}}%%_PATCH_%_MAIN_%_TITLE_%%
+\newcommand{\theBoxedTitle}{\textrm{VALUE.SLOT}}%%_PATCH_%_MAIN_%_TITLE_%%
 \newcommand{\theBoxedSubTitle}{\textrm{VALUE.SLOT}}%%_PATCH_%_SUB_%_TITLE_%%
 \newcommand{\theMetaType}{VALUE.SLOT}%%_PATCH_%_TYPE_%%
 \newcommand{\theMetaDocIdLabel}{VALUE.SLOT}%%_PATCH_%_ID_%_LABEL_%%
