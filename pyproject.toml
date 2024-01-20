@@ -43,7 +43,7 @@ Test-Coverage = "https://codes.dilettant.life/coverage/liitos"
 liitos = "liitos.cli:app"
 
 [tool.setuptools.packages.find]
-include = ["liitos", "liitos.templates", "example"]
+include = ["liitos", "liitos.placeholders", "liitos.templates", "example"]
 exclude = ["test*"]
 
 [tool.black]
