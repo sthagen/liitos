@@ -1,5 +1,8 @@
 # Changes
 
+2024.1.22
+:    * Hotfix adding the placeholder resources to the published package
+
 2024.1.21
 :    * Activated the new per person orga field to approvals
 * Enabled placeholder manager to replace missing JPG, PNG, SVG resource among others
