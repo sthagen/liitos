@@ -2,6 +2,8 @@ import copy
 import os
 import pathlib
 
+import pytest
+
 import liitos.gather as gather
 from liitos import KEY_LAYOUT
 
@@ -343,3 +345,10 @@ def test_load_changes_failing_format():
     data, msg = gather.load_changes(facet, target, path)
     assert data == []
     assert msg == f'{label} requires json or yaml format in assets for facet ({facet}) of target ({target})'
+
+
+def test_error_context_not_implemented():
+    err = ZeroDivisionError()
+    with pytest.raises(NotImplementedError) as excinfo:
+        gather.error_context(None, 'Rookie', None, None, None, ZeroDivisionError())
+    assert f'error context not implemented for error ({err})' in str(excinfo.value)

@@ -67,7 +67,12 @@ def verify_facet(name: str, target: str, facet_map: Facets) -> Verification:
 
 
 def error_context(
-    payload: Payload, label: str, facet: str, target: str, path: PathLike, err: Union[FileNotFoundError, KeyError]
+    payload: Payload,
+    label: str,
+    facet: str,
+    target: str,
+    path: PathLike,
+    err: Union[FileNotFoundError, KeyError, ValueError],
 ) -> Tuple[Payload, str]:
     """Provide harmonized context for the error situation as per parameters."""
     if isinstance(err, FileNotFoundError):
