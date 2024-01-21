@@ -3,6 +3,7 @@ import os
 import pathlib
 
 import liitos.gather as gather
+from liitos import KEY_LAYOUT
 
 TEST_PREFIX = pathlib.Path('test', 'fixtures', 'basic')
 DEFAULT_STRUCTURE_PATH = TEST_PREFIX / gather.DEFAULT_STRUCTURE_NAME
@@ -298,6 +299,37 @@ def test_verify_assets_empty_changes():
 
 
 def test_load_layout():
-    data, msg = gather.load_layout('target', 'facet', LAYOUT_ALL_PATH)
+    data, msg = gather.load_layout('facet', 'target', LAYOUT_ALL_PATH)
     assert data == {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
     assert not msg
+
+
+def test_load_layout_failing_path():
+    facet = 'facet'
+    target = 'target'
+    path = 'no-file-here'
+    label = 'Metadata'
+    data, msg = gather.load_layout(facet, target, path)
+    assert data == {}
+    assert msg == f'{label} link not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+
+
+def test_layout():
+    facet = 'facet'
+    target = 'target'
+    path = LAYOUT_ALL_PATH
+    asset_struct = {target: {facet: {KEY_LAYOUT: path}}}
+    data, msg = gather.layout(facet, target, asset_struct)
+    assert data == {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
+    assert not msg
+
+
+def test_layout_failing_path():
+    facet = 'facet'
+    target = 'target'
+    path = 'no-file-here'
+    asset_struct = {target: {facet: {KEY_LAYOUT: path}}}
+    label = 'Metadata'
+    data, msg = gather.layout(facet, target, asset_struct)
+    assert data == {}
+    assert msg == f'{label} link not found at ({path}) or invalid for facet ({facet}) of target ({target})'
