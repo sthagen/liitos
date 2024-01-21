@@ -31,3 +31,17 @@ def test_changes_legacy():
     restore = os.getcwd()
     assert changes.weave(**parameters) == 0
     os.chdir(restore)
+
+
+def test_normalize_json_columns_mismatch():
+    changes_in = [{'changes': ['columns', 'are', 'unexpected']}]
+    channel = changes.JSON_CHANNEL
+    columns_expected = changes.COLUMNS_EXPECTED
+    assert changes.normalize(changes=changes_in, channel=channel, columns_expected=columns_expected) == []
+
+
+def test_normalize_yaml_columns_mismatch():
+    changes_in = [{'changes': [{'columns': 'are', 'not': 'expected'}]}]
+    channel = changes.YAML_CHANNEL
+    columns_expected = changes.COLUMNS_EXPECTED
+    assert changes.normalize(changes=changes_in, channel=channel, columns_expected=columns_expected) == []
