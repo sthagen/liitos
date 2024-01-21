@@ -2,7 +2,7 @@
 
 2024.1.21
 :    * Activated the new per person orga field to approvals
-* Added placeholder manager to replace missing JPG, PNG, SVG resource among others
+* Enabled placeholder manager to replace missing JPG, PNG, SVG resource among others
 * Fixed and extended command line interface
 
 2024.1.20
