@@ -294,7 +294,7 @@ class Table:
                 continue
 
     def parse_column_first_head(self) -> None:
-        """Parse the head to extract the columns.
+        r"""Parse the head to extract the columns.
 
         \begin{minipage}[b]{\linewidth}\raggedright
         Parameter
@@ -337,7 +337,7 @@ class Table:
                 break
 
     def parse_column_other_head(self) -> None:
-        """Parse the other heads to extract the column labelss.
+        r"""Parse the other heads to extract the column labelss.
 
         \endfirsthead
         \toprule\noalign{}
@@ -382,7 +382,7 @@ class Table:
                 break
 
     def parse_data_rows(self) -> None:
-        """Parse the data rows.
+        r"""Parse the data rows.
 
         \endlastfoot
         A2 & B2 & C2 & D2 \\
