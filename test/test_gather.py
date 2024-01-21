@@ -333,3 +333,13 @@ def test_layout_failing_path():
     data, msg = gather.layout(facet, target, asset_struct)
     assert data == {}
     assert msg == f'{label} link not found at ({path}) or invalid for facet ({facet}) of target ({target})'
+
+
+def test_load_changes_failing_format():
+    facet = 'facet'
+    target = 'target'
+    path = 'not-present.wrong-suffix'
+    label = 'Changes'
+    data, msg = gather.load_changes(facet, target, path)
+    assert data == []
+    assert msg == f'{label} requires json or yaml format in assets for facet ({facet}) of target ({target})'
