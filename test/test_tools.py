@@ -51,3 +51,11 @@ def test_remove_target_region_gen():
     expected = ['1', '5']
     filtered = list(too.remove_target_region_gen(text_lines, from_cut, thru_cut))
     assert filtered == expected
+
+
+def test_report_missing():
+    assert too.report('not known') == 42
+
+
+def test_report_git():
+    assert too.report('git') == 0
