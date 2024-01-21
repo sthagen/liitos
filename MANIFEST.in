@@ -2,3 +2,9 @@ include LICENSE
 include README.md
 include liitos/templates/*.in
 include liitos/templates/*.yml
+include liitos/placeholders/*.jpg
+include liitos/placeholders/*.pdf
+include liitos/placeholders/*.png
+include liitos/placeholders/*.svg
+include liitos/placeholders/*.tiff
+include liitos/placeholders/*.webp
