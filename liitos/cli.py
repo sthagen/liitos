@@ -20,6 +20,7 @@ from liitos import (
     APP_NAME,
     APP_VERSION,
     APPROVALS_STRATEGY,
+    DEFAULT_STRUCTURE_NAME,
     FILTER_CS_LIST,
     FROM_FORMAT_SPEC,
     KNOWN_APPROVALS_STRATEGIES,
@@ -43,7 +44,7 @@ DocumentRoot = typer.Option(
     help='Root of the document tree to visit. Optional\n(default: positional tree root value)',
 )
 StructureName = typer.Option(
-    gat.DEFAULT_STRUCTURE_NAME,
+    DEFAULT_STRUCTURE_NAME,
     '-s',
     '--structure',
     help='structure mapping file (default: {gat.DEFAULT_STRUCTURE_NAME})',
@@ -62,7 +63,6 @@ FacetName = typer.Option(
 )
 FromFormatSpec = typer.Option(
     FROM_FORMAT_SPEC,
-    '-s',
     '--from-format-spec',
     help='from format specification handed over to pandoc',
 )
@@ -80,7 +80,6 @@ Verbosity = typer.Option(
 )
 Strictness = typer.Option(
     False,
-    '-s',
     '--strict',
     help='Ouput noisy warnings on console (default is False)',
 )
@@ -101,6 +100,12 @@ PatchTables = typer.Option(
     '-p',
     '--patch-tables',
     help='Patch tables EXPERIMENTAL (default is False)',
+)
+ApprovalsStrategy = typer.Option(
+    '',
+    '-a',
+    '--approvals-strategy',
+    help=f'optional approvals layout strategy in ({", ".join(KNOWN_APPROVALS_STRATEGIES)})',
 )
 
 
@@ -129,10 +134,12 @@ def _verify_call_vector(
     strict: bool,
     label: str = '',
     patch_tables: bool = False,
-    from_format_spec: str = '',
+    from_format_spec: str = FROM_FORMAT_SPEC,
     filter_cs_list: str = '',
+    approvals_strategy: str = '',
 ) -> tuple[int, str, str, dict[str, Union[bool, str]]]:
     """DRY"""
+    log.debug(f'verifier received: {locals()}')
     doc = doc_root.strip()
     if not doc and doc_root_pos:
         doc = doc_root_pos
@@ -143,28 +150,28 @@ def _verify_call_vector(
     doc_root_path = pathlib.Path(doc)
     if doc_root_path.exists():
         if not doc_root_path.is_dir():
-            print(f'requested tree root at ({doc}) is not a folder', file=sys.stderr)
-            return 2, f'requested tree root at ({doc}) is not a folder', '', {}
+            print(f'requested tree root at ({doc}) is not a folder reachable from ({os.getcwd()})', file=sys.stderr)
+            return 2, f'requested tree root at ({doc}) is not a folder reachable from ({os.getcwd()})', '', {}
     else:
-        print(f'requested tree root at ({doc}) does not exist', file=sys.stderr)
-        return 2, f'requested tree root at ({doc}) does not exist', '', {}
+        print(f'requested tree root at ({doc}) does not exist as seen from ({os.getcwd()})', file=sys.stderr)
+        return 2, f'requested tree root at ({doc}) does not exist as seen from ({os.getcwd()})', '', {}
 
-    approvals_strategy = None
-    if not APPROVALS_STRATEGY:
-        approvals_strategy = KNOWN_APPROVALS_STRATEGIES[0]
-        log.info(
-            'No preference in environment for approvals strategy (APPROVALS_STRATEGY)'
-            f' using default ({approvals_strategy})'
-        )
-    elif APPROVALS_STRATEGY not in KNOWN_APPROVALS_STRATEGIES:
+    if not approvals_strategy:
+        approvals_strategy = APPROVALS_STRATEGY
+        log.info(f'Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ({approvals_strategy})')
+        if not approvals_strategy:
+            approvals_strategy = KNOWN_APPROVALS_STRATEGIES[0]
+            log.info(
+                'No preference in environment for approvals strategy (APPROVALS_STRATEGY)'
+                f' using default ({approvals_strategy})'
+            )
+
+    if approvals_strategy not in KNOWN_APPROVALS_STRATEGIES:
         approvals_strategy = KNOWN_APPROVALS_STRATEGIES[0]
         log.info(
             'Value in environment for approvals strategy (APPROVALS_STRATEGY)'
             f' not in ({", ".join(KNOWN_APPROVALS_STRATEGIES)}) - using default ({approvals_strategy})'
         )
-    else:
-        approvals_strategy = APPROVALS_STRATEGY
-        log.info(f'Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ({approvals_strategy})')
 
     options: dict[str, Union[bool, str]] = {
         'quiet': QUIET and not verbose and not strict,
@@ -176,8 +183,11 @@ def _verify_call_vector(
         'filter_cs_list': filter_cs_list if filter_cs_list != 'DEFAULT_FILTER' else FILTER_CS_LIST,
         'approvals_strategy': approvals_strategy,
     }
+    log.debug(f'Post verifier: {options=}')
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
+    elif options.get('quiet'):
+        logging.getLogger().setLevel(logging.ERROR)
     return 0, '', doc, options
 
 
@@ -194,7 +204,9 @@ def verify(  # noqa
     """
     Verify the structure definition against the file system.
     """
-    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
+    code, message, doc, options = _verify_call_vector(
+        doc_root=doc_root, doc_root_pos=doc_root_pos, verbose=verbose, strict=strict
+    )
     if code:
         log.error(message)
         return code
@@ -217,7 +229,9 @@ def approvals(  # noqa
     """
     Weave in the approvals for facet of target within document root.
     """
-    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
+    code, message, doc, options = _verify_call_vector(
+        doc_root=doc_root, doc_root_pos=doc_root_pos, verbose=verbose, strict=strict
+    )
     if code:
         log.error(message)
         return 2
@@ -240,7 +254,9 @@ def changes(  # noqa
     """
     Weave in the changes for facet of target within document root.
     """
-    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
+    code, message, doc, options = _verify_call_vector(
+        doc_root=doc_root, doc_root_pos=doc_root_pos, verbose=verbose, strict=strict
+    )
     if code:
         log.error(message)
         return 2
@@ -252,6 +268,7 @@ def changes(  # noqa
 
 @app.command('concat')
 def concat(  # noqa
+    *,
     doc_root_pos: str = typer.Argument(''),
     doc_root: str = DocumentRoot,
     structure: str = StructureName,
@@ -263,7 +280,9 @@ def concat(  # noqa
     """
     Concatenate the markdown tree for facet of target within render/pdf below document root.
     """
-    code, message, doc, options = _verify_call_vector(doc_root, doc_root_pos, verbose, strict)
+    code, message, doc, options = _verify_call_vector(
+        doc_root=doc_root, doc_root_pos=doc_root_pos, verbose=verbose, strict=strict
+    )
     if code:
         log.error(message)
         return 2
@@ -286,19 +305,21 @@ def render(  # noqa
     patch_tables: bool = PatchTables,
     from_format_spec: str = FromFormatSpec,
     filter_cs_list: str = FilterCSList,
+    approvals_strategy: str = ApprovalsStrategy,
 ) -> int:
     """
     Render the markdown tree for facet of target within render/pdf below document root.
     """
     code, message, doc, options = _verify_call_vector(
-        doc_root,
-        doc_root_pos,
-        verbose,
-        strict,
+        doc_root=doc_root,
+        doc_root_pos=doc_root_pos,
+        verbose=verbose,
+        strict=strict,
         label=label,
         patch_tables=patch_tables,
         from_format_spec=from_format_spec,
         filter_cs_list=filter_cs_list,
+        approvals_strategy=approvals_strategy,
     )
     if code:
         log.error(message)
