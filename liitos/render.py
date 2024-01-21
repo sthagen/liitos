@@ -93,7 +93,6 @@ def der(
     if not facet_code.strip() or not target_code.strip():
         log.error(f'render requires non-empty target ({target_code}) and facet ({facet_code}) codes')
         return 2
-
     log.info(f'parsed target ({target_code}) and facet ({facet_code}) from request')
 
     from_format_spec = options.get('from_format_spec', FROM_FORMAT_SPEC)
@@ -218,7 +217,8 @@ def der(
                 remaining_attempts -= 1
             if not source_asset.is_file():
                 log.warning(
-                    f'- resource ({old}) still not present at ({source_asset}) after {remaining_attempts} attempts'
+                    f'- resource ({old}) still not present at ({source_asset})'
+                    f' as seen from ({os.getcwd()}) after {remaining_attempts} attempts'
                     f' and ({round(remaining_attempts * INTER_PROCESS_SYNC_SECS, 0) :.0f} seconds waiting)'
                 )
             shutil.move(source_asset, target_asset)
