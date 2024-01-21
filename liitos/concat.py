@@ -12,6 +12,7 @@ import treelib  # type: ignore
 import yaml
 
 import liitos.gather as gat
+import liitos.placeholder_loader as plh
 import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, log
 
@@ -362,12 +363,38 @@ def collect_assets(collector: list[str]) -> None:
         if IMAGES_FOLDER in img_path:
             source_asset = DOC_BASE / img_path
             target_asset = images / pathlib.Path(img_path).name
-            shutil.copy(source_asset, target_asset)
+            try:
+                shutil.copy(source_asset, target_asset)
+            except FileNotFoundError as err:
+                log.error(err)
+                suffix = source_asset.suffix
+                if suffix in plh.READING_OPTIONS:
+                    resource = [res for res in plh.RESOURCES if res.endswith(suffix)][0]
+                    kind, data = plh.load_resource(resource)
+                    if kind == 'str':
+                        with open(target_asset, 'wt', encoding=ENCODING) as handle:
+                            handle.write(data)
+                    else:
+                        with open(target_asset, 'wb') as handle:
+                            handle.write(data)
             continue
         if DIAGRAMS_FOLDER in img_path:
             source_asset = DOC_BASE / img_path
             target_asset = diagrams / pathlib.Path(img_path).name
-            shutil.copy(source_asset, target_asset)
+            try:
+                shutil.copy(source_asset, target_asset)
+            except FileNotFoundError as err:
+                log.error(err)
+                suffix = source_asset.suffix
+                if suffix in plh.READING_OPTIONS:
+                    resource = [res for res in plh.RESOURCES if res.endswith(suffix)][0]
+                    kind, data = plh.load_resource(resource)
+                    if kind == 'str':
+                        with open(target_asset, 'wt', encoding=ENCODING) as handle:
+                            handle.write(data)
+                    else:
+                        with open(target_asset, 'wb') as handle:
+                            handle.write(data)
 
 
 @no_type_check
