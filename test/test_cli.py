@@ -1,4 +1,5 @@
 import os
+import logging
 import pathlib
 
 from typer.testing import CliRunner
@@ -10,6 +11,7 @@ from liitos.cli import app
 runner = CliRunner()
 
 EXAMPLE_DEEP_PREFIX = pathlib.Path('example', 'deep')
+ROLLUP_PATH = pathlib.Path('test', 'fixtures', 'rollup', '1')
 TEST_PREFIX = pathlib.Path('test', 'fixtures', 'basic')
 DEFAULT_STRUCTURE_PATH = TEST_PREFIX / gather.DEFAULT_STRUCTURE_NAME
 TEST_TARGET = 'abc'
@@ -121,7 +123,59 @@ def test_command_approvals_base():
 
 
 def test_command_render_deep():
+    os.chdir(OLE_WD)
     result = runner.invoke(
         app, ['render', '-d', f'{EXAMPLE_DEEP_PREFIX}', '-f', 'deep', '-s', 'structure.yml', '-t', 'prod_kind', '-v']
     )
+    assert result.exit_code == 0
+
+
+def test_command_render_approval_strategy_unknown():
+    result = runner.invoke(
+        app,
+        [
+            'render',
+            '-d',
+            f'{EXAMPLE_DEEP_PREFIX}',
+            '-f',
+            'deep',
+            '-s',
+            'structure.yml',
+            '-t',
+            'prod_kind',
+            '-a',
+            'no-layout',
+        ],
+    )
     assert result.exit_code == 2
+
+
+def test_command_render_rollup(caplog):
+    os.chdir(OLE_WD)
+    caplog.set_level(logging.ERROR)
+    result = runner.invoke(app, ['render', '-d', f'{ROLLUP_PATH}', '-f', 'rollup-1', '-t', 'prod_kind'])
+    assert result.exit_code == 0
+    assert not caplog.text
+
+
+def test_command_render_rollup_eastwards(caplog):
+    os.chdir(OLE_WD)
+    caplog.set_level(logging.ERROR)
+    result = runner.invoke(app, ['render', '-d', f'{ROLLUP_PATH}', '-f', 'rollup-1', '-t', 'prod_kind', '-a', 'east'])
+    assert result.exit_code == 0
+    assert not caplog.text
+
+
+def test_command_report(caplog):
+    caplog.set_level(logging.WARNING)
+    result = runner.invoke(app, ['report'])
+    assert result.exit_code == 0
+    assert "ERROR tool-version-of-liitos process (['liitos', 'version']) returned 127" in caplog.text
+
+
+def test_command_reject_unknown(caplog):
+    caplog.set_level(logging.ERROR)
+    unknown_template = 'unknown-template'
+    result = runner.invoke(app, ['eject', unknown_template])
+    assert result.exit_code == 2
+    assert f'eject of unknown template ({unknown_template}) requested' in caplog.text
