@@ -251,7 +251,7 @@ class Table:
         self.transform_widths()
 
     def parse_column_widths(self) -> None:
-        """Parse the column width declarations to initialize the columns data.
+        r"""Parse the column width declarations to initialize the columns data.
 
         \begin{longtable}[]{@{}%wun-based-line-9
           >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1118}}
