@@ -4,6 +4,7 @@ import hashlib
 import json
 import pathlib
 import platform
+import re
 import subprocess  # nosec B404
 import uuid
 from typing import Any, Callable, Generator, Union, no_type_check
@@ -37,6 +38,8 @@ LOG_SEPARATOR = '- ' * 80
 INTER_PROCESS_SYNC_SECS = 0.1
 INTER_PROCESS_SYNC_ATTEMPTS = 10
 
+IS_BORING = re.compile(r'\(.*texmf-dist/tex.*\.')
+
 
 def hash_file(path: pathlib.Path, hasher: Union[Callable[..., Any], None] = None) -> str:
     """Return the SHA512 hex digest of the data from file."""
@@ -53,6 +56,9 @@ def hash_file(path: pathlib.Path, hasher: Union[Callable[..., Any], None] = None
 def log_subprocess_output(pipe, prefix: str):
     for line in iter(pipe.readline, b''):  # b'\n'-separated lines
         cand = line.decode(encoding=ENCODING).rstrip()
+        if IS_BORING.search(cand):
+            log.debug(cand)
+            continue
         if cand.strip().strip('[])yex'):
             if any(
                 [
