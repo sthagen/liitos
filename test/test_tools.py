@@ -42,3 +42,12 @@ def test_report_taxonomy():
 def test_unified_diff():
     ud = list(too.unified_diff(['foo'], ['bar']))
     assert ud == ['--- before', '+++ after', '@@ -1 +1 @@', '-foo', '+bar']
+
+
+def test_remove_target_region_gen():
+    from_cut = '2'
+    thru_cut = '4'
+    text_lines = ['1', from_cut, '3', thru_cut, '5']
+    expected = ['1', '5']
+    filtered = list(too.remove_target_region_gen(text_lines, from_cut, thru_cut))
+    assert filtered == expected

@@ -6,7 +6,7 @@ import pathlib
 import platform
 import subprocess  # nosec B404
 import uuid
-from typing import Any, Callable, Union, no_type_check
+from typing import Any, Callable, Generator, Union, no_type_check
 
 import yaml
 
@@ -319,3 +319,18 @@ def mermaid_captions_from_json_ast(json_ast_path: Union[str, pathlib.Path]) -> d
                 log.warning(f'- current: {token} -> {mermaid_caption_map[token]}')
             mermaid_caption_map[token] = m_caption
     return mermaid_caption_map
+
+
+def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str) -> Generator[str, None, None]:
+    """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru]."""
+    in_section = False
+    for line in text_lines:
+        if not in_section:
+            if from_cut in line:
+                in_section = True
+                continue
+        if in_section:
+            if thru_cut in line:
+                in_section = False
+            continue
+        yield line

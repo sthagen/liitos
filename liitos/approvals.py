@@ -36,6 +36,7 @@ from typing import Generator, Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template_loader as template
+import liitos.tools as too
 from liitos import ENCODING, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, log
 
 PathLike = Union[str, pathlib.Path]
@@ -246,21 +247,6 @@ def inject_eastwards(lines: list[str], normalized: list[dict[str, str]], pushdow
         lines.append(NL)
 
 
-def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str) -> Generator[str, None, None]:
-    """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru]."""
-    in_section = False
-    for line in text_lines:
-        if not in_section:
-            if from_cut in line:
-                in_section = True
-                continue
-        if in_section:
-            if thru_cut in line:
-                in_section = False
-            continue
-        yield line
-
-
 def weave(
     doc_root: Union[str, pathlib.Path],
     structure_name: str,
@@ -307,7 +293,7 @@ def weave(
 
     if not layout['layout']['global']['has_approvals']:
         log.info('removing approvals from document layout')
-        lines = list(remove_target_region_gen(lines, APPROVALS_CUT_MARKER_TOP, APPROVALS_CUT_MARKER_BOTTOM))
+        lines = list(too.remove_target_region_gen(lines, APPROVALS_CUT_MARKER_TOP, APPROVALS_CUT_MARKER_BOTTOM))
 
     log.info(LOG_SEPARATOR)
     log.info(f'weaving in the approvals from {signatures_path}...')
@@ -316,7 +302,7 @@ def weave(
     if approvals_strategy == 'south':
         inject_southwards(lines, rows, pushdown)
     else:  # default is east
-        lines = list(remove_target_region_gen(lines, LAYOUT_SOUTH_CUT_MARKER_TOP, LAYOUT_SOUTH_CUT_MARKER_BOTTOM))
+        lines = list(too.remove_target_region_gen(lines, LAYOUT_SOUTH_CUT_MARKER_TOP, LAYOUT_SOUTH_CUT_MARKER_BOTTOM))
         inject_eastwards(lines, logical_model, pushdown)
 
     effective_path = pathlib.Path(layout_path).parent / BOOKMATTER_PATH

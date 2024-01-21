@@ -5,6 +5,7 @@ from typing import Generator, Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template_loader as template
+import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, log
 
 PathLike = Union[str, pathlib.Path]
@@ -112,21 +113,6 @@ def adjust_pushdown_gen(text_lines: list[str], pushdown: float) -> Generator[str
         yield line
 
 
-def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str) -> Generator[str, None, None]:
-    """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru]."""
-    in_section = False
-    for line in text_lines:
-        if not in_section:
-            if from_cut in line:
-                in_section = True
-                continue
-        if in_section:
-            if thru_cut in line:
-                in_section = False
-            continue
-        yield line
-
-
 def weave(
     doc_root: Union[str, pathlib.Path],
     structure_name: str,
@@ -180,11 +166,11 @@ def weave(
 
     if not layout['layout']['global']['has_changes']:
         log.info('removing changes from document layout')
-        lines = list(remove_target_region_gen(lines, CUT_MARKER_CHANGES_TOP, CUT_MARKER_CHANGES_BOTTOM))
+        lines = list(too.remove_target_region_gen(lines, CUT_MARKER_CHANGES_TOP, CUT_MARKER_CHANGES_BOTTOM))
 
     if not layout['layout']['global']['has_notices']:
         log.info('removing notices from document layout')
-        lines = list(remove_target_region_gen(lines, CUT_MARKER_NOTICES_TOP, CUT_MARKER_NOTICES_BOTTOM))
+        lines = list(too.remove_target_region_gen(lines, CUT_MARKER_NOTICES_TOP, CUT_MARKER_NOTICES_BOTTOM))
 
     log.info(LOG_SEPARATOR)
     log.info('weaving in the changes from {changes_path} ...')
