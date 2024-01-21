@@ -20,6 +20,8 @@ TEST_STRUCTURE = {
 }
 TEST_MAKE_MISSING = 'missing-this-file-for-'
 
+LAYOUT_ALL_PATH = pathlib.Path('test/fixtures/layout/all.yml')
+
 
 def test_load_structure():
     structure = gather.load_structure(DEFAULT_STRUCTURE_PATH)
@@ -293,3 +295,9 @@ def test_verify_assets_empty_changes():
     expected = f'changes asset for facet ({TEST_FACET}) of target ({TEST_TARGET}) is invalid'
     assert message == expected
     assert not predicate
+
+
+def test_load_layout():
+    data, msg = gather.load_layout('target', 'facet', LAYOUT_ALL_PATH)
+    assert data == {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
+    assert not msg

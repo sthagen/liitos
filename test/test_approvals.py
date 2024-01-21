@@ -6,6 +6,7 @@ import liitos.approvals as approvals
 BASIC_FIXTURE_ROOT = pathlib.Path('test', 'fixtures', 'basic')
 EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 EXAMPLE_LEGACY_DOC_ROOT = pathlib.Path('example', 'legacy')
+LAYOUT_ALL_PATH = pathlib.Path('test/fixtures/layout/all.yml')
 
 
 def test_approvals():
@@ -184,3 +185,8 @@ def test_inject_southwards():
     lines = ['a']
     approvals.inject_southwards(lines, rows=[], pushdown=42.0)
     assert lines == ['a', '\n']
+
+
+def test_get_layout_from_path():
+    data = approvals.get_layout(LAYOUT_ALL_PATH, 'target', 'facet')
+    assert data == {'layout': {'global': {'has_approvals': True, 'has_changes': True, 'has_notices': True}}}
