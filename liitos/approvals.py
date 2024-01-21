@@ -32,7 +32,7 @@ For more than 4 role bearers a second table should be placed below the first, to
 """
 import os
 import pathlib
-from typing import Union, no_type_check
+from typing import Generator, Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template_loader as template
@@ -246,8 +246,7 @@ def inject_eastwards(lines: list[str], normalized: list[dict[str, str]], pushdow
         lines.append(NL)
 
 
-@no_type_check
-def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str):
+def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str) -> Generator[str, None, None]:
     """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru]."""
     in_section = False
     for line in text_lines:
