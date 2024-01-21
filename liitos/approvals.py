@@ -32,7 +32,7 @@ For more than 4 role bearers a second table should be placed below the first, to
 """
 import os
 import pathlib
-from typing import Generator, Union, no_type_check
+from typing import Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template_loader as template
@@ -61,6 +61,9 @@ APPROVALS_CUT_MARKER_BOTTOM = '% <-- approvals - cut - marker - bottom --|'
 
 LAYOUT_SOUTH_CUT_MARKER_TOP = '% |-- layout south - cut - marker - top -->'
 LAYOUT_SOUTH_CUT_MARKER_BOTTOM = '% <-- layout south - cut - marker - bottom --|'
+
+EASTERN_TABLE_MAX_MEMBERS = 4
+EASTERN_TOTAL_MAX_MEMBERS = EASTERN_TABLE_MAX_MEMBERS * 2
 
 NL = '\n'
 BASE_TABLE = r"""% |-- layout east - cut - marker - top -->
@@ -102,8 +105,8 @@ SIGN_CELL = r' & \mbox{}'
 def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
     """Inject the blocks derived from the approvals data to yield the fill-in scaffold."""
     bearers = len(normalized)
-    table_max_members = 4
-    total_max_members = table_max_members * 2
+    table_max_members = EASTERN_TABLE_MAX_MEMBERS
+    total_max_members = EASTERN_TOTAL_MAX_MEMBERS
     if bearers > total_max_members:
         raise NotImplementedError(
             f'Please use southwards layout for more than {total_max_members} role bearers;'
@@ -111,7 +114,7 @@ def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
         )
 
     # First up to 4 entries got into upper table and final upt to 4 entries (if any) to lower table
-    upper, lower = normalized[:4], normalized[4:]  # upper limit index guaranteed to be <= total_max_members
+    upper, lower = normalized[:table_max_members], normalized[table_max_members:]
     uppers, lowers = len(upper), len(lower)
     log.info(f'SPLIT {uppers}, {lowers}, {bearers}')
     log.info(f'UPPER: {list(range(uppers))}')
@@ -243,7 +246,7 @@ def inject_eastwards(lines: list[str], normalized: list[dict[str, str]], pushdow
             .replace(f'THE.NAME{slot}.SLOT', entry['name'])
         )
     lines.extend(hack.split(NL))
-    if lines[-1]:  # Need separating empty line?
+    if lines[-1]:  # pragma: no cover
         lines.append(NL)
 
 
