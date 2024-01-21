@@ -1,5 +1,9 @@
 # Changes
 
+2024.1.21
+:    * Activated the new per person orga field to approvals
+* Fixed and extended command line interface
+
 2024.1.20
 :    * Removed extra bold typing of main title for title page
 
