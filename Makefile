@@ -71,6 +71,7 @@ baseline:
 .PHONY: clocal
 clocal:
 	@rm -rf example/{deep,legacy,no-date,no-date-iss-rev-moved}/render
+	@rm -rf test/fixtures/rollup/{1,img-missing}/render
 	@rm -f inventory.*
 
 .PHONY: clean

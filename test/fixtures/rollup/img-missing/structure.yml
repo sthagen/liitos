@@ -1,0 +1,7 @@
+prod_kind:
+- rollup-1:
+    approvals: approvals.yml
+    bind: bind.txt
+    changes: changes.yml
+    meta: meta.yml
+    render: true
