@@ -1,7 +1,7 @@
 """Weave the content of the changes data file into the output structure (for now LaTeX)."""
 import os
 import pathlib
-from typing import Union, no_type_check
+from typing import Generator, Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template_loader as template
@@ -29,6 +29,8 @@ CUT_MARKER_NOTICES_TOP = '% |-- notices - cut - marker - top -->'
 CUT_MARKER_NOTICES_BOTTOM = '% <-- notices - cut - marker - bottom --|'
 TOKEN_ADJUSTED_PUSHDOWN = r'\AdustedPushdown'  # nosec B105
 DEFAULT_ADJUSTED_PUSHDOWN_VALUE = 14
+
+NL = '\n'
 
 
 def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[str, dict[str, dict[str, bool]]]:
@@ -101,6 +103,30 @@ def normalize(changes: object, channel: str, columns_expected: list[str]) -> lis
     return model
 
 
+def adjust_pushdown_gen(text_lines: list[str], pushdown: float) -> Generator[str, None, None]:
+    """Update the pushdown line filtering the incoming lines."""
+    for line in text_lines:
+        if TOKEN_ADJUSTED_PUSHDOWN in line:
+            line = line.replace(TOKEN_ADJUSTED_PUSHDOWN, f'{pushdown}em')
+            log.info(f'set adjusted pushdown value {pushdown}em')
+        yield line
+
+
+def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str) -> Generator[str, None, None]:
+    """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru]."""
+    in_section = False
+    for line in text_lines:
+        if not in_section:
+            if from_cut in line:
+                in_section = True
+                continue
+        if in_section:
+            if thru_cut in line:
+                in_section = False
+            continue
+        yield line
+
+
 def weave(
     doc_root: Union[str, pathlib.Path],
     structure_name: str,
@@ -145,48 +171,20 @@ def weave(
     log.info(f'calculated adjusted pushdown to be {pushdown}em')
 
     publisher_template = template.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
-    lines = [line.rstrip() for line in publisher_template.split('\n')]
+    lines = [line.rstrip() for line in publisher_template.split(NL)]
 
-    if not any(TOKEN_ADJUSTED_PUSHDOWN in line for line in lines):
-        log.error(TOKEN_ADJUSTED_PUSHDOWN, 'not in lines of template?????')
+    if any(TOKEN_ADJUSTED_PUSHDOWN in line for line in lines):
+        lines = list(adjust_pushdown_gen(lines, pushdown))
     else:
-        for n, line in enumerate(lines):
-            if TOKEN_ADJUSTED_PUSHDOWN in line:
-                lines[n] = line.replace(TOKEN_ADJUSTED_PUSHDOWN, f'{pushdown}em')
-                log.info(f'set adjusted pushdown value {pushdown}em')
-                break
+        log.error(f'token ({TOKEN_ADJUSTED_PUSHDOWN}) not found - template mismatch')
 
     if not layout['layout']['global']['has_changes']:
         log.info('removing changes from document layout')
-        in_section = False
-        keep = []
-        for line in lines:
-            if not in_section:
-                if CUT_MARKER_CHANGES_TOP in line:
-                    in_section = True
-                    continue
-            if in_section:
-                if CUT_MARKER_CHANGES_BOTTOM in line:
-                    in_section = False
-                continue
-            keep.append(line)
-        lines = keep
+        lines = list(remove_target_region_gen(lines, CUT_MARKER_CHANGES_TOP, CUT_MARKER_CHANGES_BOTTOM))
 
     if not layout['layout']['global']['has_notices']:
         log.info('removing notices from document layout')
-        in_section = False
-        keep = []
-        for line in lines:
-            if not in_section:
-                if CUT_MARKER_NOTICES_TOP in line:
-                    in_section = True
-                    continue
-            if in_section:
-                if CUT_MARKER_NOTICES_BOTTOM in line:
-                    in_section = False
-                continue
-            keep.append(line)
-        lines = keep
+        lines = list(remove_target_region_gen(lines, CUT_MARKER_NOTICES_TOP, CUT_MARKER_NOTICES_BOTTOM))
 
     log.info(LOG_SEPARATOR)
     log.info('weaving in the changes from {changes_path} ...')
