@@ -3,7 +3,7 @@ import pathlib
 import pkgutil
 from typing import Union
 
-from liitos import ENCODING, log
+from liitos import ENCODING, PathLike, log
 
 RESOURCES = (
     'placeholders/this-resource-is-missing.jpg',
@@ -33,7 +33,7 @@ WRITING_OPTIONS: dict[str, dict[str, Union[list[str], dict[str, str], None]]] = 
 }
 
 
-def load_resource(resource: str, is_complete_path: bool = False) -> tuple[str, Union[bytes, str]]:
+def load_resource(resource: PathLike, is_complete_path: bool = False) -> tuple[str, Union[bytes, str]]:
     """Load the template either from the package resources or an external path."""
     from_path = pathlib.Path(resource)
     suffix = from_path.suffix
@@ -53,10 +53,10 @@ def load_resource(resource: str, is_complete_path: bool = False) -> tuple[str, U
         args = READING_OPTIONS[suffix].get('args')
         kwargs = READING_OPTIONS[suffix].get('kwargs')
         if READING_OPTIONS[suffix].get('kwargs'):
-            return 'str', pkgutil.get_data(__package__, resource).decode(**kwargs)  # type: ignore
-        return 'bytes', pkgutil.get_data(__package__, resource)  # type: ignore
+            return 'str', pkgutil.get_data(__package__, str(resource)).decode(**kwargs)  # type: ignore
+        return 'bytes', pkgutil.get_data(__package__, str(resource))  # type: ignore
 
-    return 'bytes', pkgutil.get_data(__package__, resource)  # type: ignore
+    return 'bytes', pkgutil.get_data(__package__, str(resource))  # type: ignore
 
 
 def eject(argv: Union[list[str], None] = None) -> int:
@@ -88,3 +88,23 @@ def eject(argv: Union[list[str], None] = None) -> int:
         log.warning(f'suffix ({suffix}) empty or not in ({", ".join(WRITING_OPTIONS.keys())})')
 
     return 0
+
+
+def dump_placeholder(target: PathLike) -> tuple[int, str]:
+    """Write out the placeholder matching the file type per suffix."""
+    suffix = pathlib.Path(target).suffix
+    proof = f'matching suffix ({suffix}) derived from target({target})'
+    if suffix in WRITING_OPTIONS:
+        args = WRITING_OPTIONS[suffix].get('args')
+        kwargs = WRITING_OPTIONS[suffix].get('kwargs')
+        resource = [res for res in RESOURCES if res.endswith(suffix)][0]
+        kind, data = load_resource(resource)
+        if kind == 'str':
+            with open(target, *args, **kwargs) as handle:  # type: ignore
+                handle.write(data)  # type: ignore
+            return 0, f'wrote text mode placeholder {proof}'
+        with open(target, *args) as handle:  # type: ignore
+            handle.write(data)  # type: ignore
+        return 0, f'wrote binary mode placeholder {proof}'
+
+    return 1, f'no placeholder found {proof}'

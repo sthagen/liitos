@@ -4,7 +4,7 @@ import logging
 import os
 import pathlib
 import shellingham  # type: ignore
-from typing import List, no_type_check
+from typing import Union, no_type_check
 
 # [[[fill git_describe()]]]
 __version__ = '2024.1.22+parent.gb58164ed'
@@ -48,6 +48,8 @@ KEYS_REQUIRED = (KEY_APPROVALS, KEY_BIND, KEY_CHANGES, KEY_META)
 CONTEXT: dict[str, str] = {}
 KNOWN_APPROVALS_STRATEGIES = ('south', 'east')
 APPROVALS_STRATEGY = os.getenv('LIITOS_APPROVALS_STRATEGY', '').lower()
+
+PathLike = Union[str, pathlib.Path]
 
 try:
     SHELL = shellingham.detect_shell()
@@ -130,7 +132,7 @@ ToolKey = str
 TS_FORMAT_LOG = '%Y-%m-%dT%H:%M:%S'
 TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'
 
-__all__: List[str] = [
+__all__: list[str] = [
     'APP_ALIAS',
     'APP_ENV',
     'APP_VERSION',
@@ -149,6 +151,7 @@ __all__: List[str] = [
     'KNOWN_APPROVALS_STRATEGIES',
     'LATEX_PAYLOAD_NAME',
     'LOG_SEPARATOR',
+    'PathLike',
     'TOOL_VERSION_COMMAND_MAP',
     'ToolKey',
     'TS_FORMAT_PAYLOADS',
@@ -157,7 +160,7 @@ __all__: List[str] = [
 ]
 
 
-def parse_csl(csl: str) -> List[str]:
+def parse_csl(csl: str) -> list[str]:
     """DRY."""
     return [fmt.strip() for fmt in csl.split(COMMA) if fmt.strip()]
 

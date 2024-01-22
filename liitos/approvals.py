@@ -37,9 +37,7 @@ from typing import Union, no_type_check
 import liitos.gather as gat
 import liitos.template_loader as template
 import liitos.tools as too
-from liitos import ENCODING, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, log
-
-PathLike = Union[str, pathlib.Path]
+from liitos import ENCODING, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
 
 BOOKMATTER_TEMPLATE = os.getenv('LIITOS_BOOKMATTER_TEMPLATE', '')
 BOOKMATTER_TEMPLATE_IS_EXTERNAL = bool(BOOKMATTER_TEMPLATE)

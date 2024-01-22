@@ -3,7 +3,7 @@ import pathlib
 import pkgutil
 from typing import Union
 
-from liitos import ENCODING
+from liitos import ENCODING, PathLike
 
 RESOURCES = (
     'templates/approvals.yml',
@@ -21,13 +21,13 @@ RESOURCES = (
 )
 
 
-def load_resource(resource: str, is_complete_path: bool = False) -> str:
+def load_resource(resource: PathLike, is_complete_path: bool = False) -> str:
     """Load the template either from the package resources or an external path."""
     if is_complete_path:
         with open(resource, 'rt', encoding=ENCODING) as handle:
             return handle.read()
     else:
-        return pkgutil.get_data(__package__, resource).decode(encoding=ENCODING)  # type: ignore
+        return pkgutil.get_data(__package__, str(resource)).decode(encoding=ENCODING)  # type: ignore
 
 
 def eject(argv: Union[list[str], None] = None) -> int:

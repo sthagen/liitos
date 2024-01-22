@@ -6,9 +6,8 @@ from typing import Generator, Union, no_type_check
 import liitos.gather as gat
 import liitos.template_loader as template
 import liitos.tools as too
-from liitos import ENCODING, LOG_SEPARATOR, log
+from liitos import ENCODING, LOG_SEPARATOR, PathLike, log
 
-PathLike = Union[str, pathlib.Path]
 
 PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
 PUBLISHER_TEMPLATE_IS_EXTERNAL = bool(PUBLISHER_TEMPLATE)

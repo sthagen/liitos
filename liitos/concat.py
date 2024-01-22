@@ -367,16 +367,8 @@ def collect_assets(collector: list[str]) -> None:
                 shutil.copy(source_asset, target_asset)
             except FileNotFoundError as err:
                 log.error(err)
-                suffix = source_asset.suffix
-                if suffix in plh.READING_OPTIONS:
-                    resource = [res for res in plh.RESOURCES if res.endswith(suffix)][0]
-                    kind, data = plh.load_resource(resource)
-                    if kind == 'str':
-                        with open(target_asset, 'wt', encoding=ENCODING) as handle:
-                            handle.write(data)
-                    else:
-                        with open(target_asset, 'wb') as handle:
-                            handle.write(data)
+                code, msg = plh.dump_placeholder(target_asset)
+                log.warning(msg) if code else log.info(msg)
             continue
         if DIAGRAMS_FOLDER in img_path:
             source_asset = DOC_BASE / img_path
@@ -385,16 +377,8 @@ def collect_assets(collector: list[str]) -> None:
                 shutil.copy(source_asset, target_asset)
             except FileNotFoundError as err:
                 log.error(err)
-                suffix = source_asset.suffix
-                if suffix in plh.READING_OPTIONS:
-                    resource = [res for res in plh.RESOURCES if res.endswith(suffix)][0]
-                    kind, data = plh.load_resource(resource)
-                    if kind == 'str':
-                        with open(target_asset, 'wt', encoding=ENCODING) as handle:
-                            handle.write(data)
-                    else:
-                        with open(target_asset, 'wb') as handle:
-                            handle.write(data)
+                code, msg = plh.dump_placeholder(target_asset)
+                log.warning(msg) if code else log.info(msg)
 
 
 @no_type_check
