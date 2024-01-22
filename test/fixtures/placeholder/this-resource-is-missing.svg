@@ -1,0 +1,11 @@
+<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .small { font: italic 13px sans-serif; }
+    .what { font: bold 30px sans-serif; fill: gray; }
+    .problem { font: italic 40px serif; fill: red; }
+  </style>
+  <text x="20" y="35" class="small">This</text>
+  <text x="45" y="35" class="what">resource</text>
+  <text x="55" y="65" class="small">is</text>
+  <text x="65" y="65" class="problem">Missing!</text>
+</svg>

@@ -1,7 +1,7 @@
 """Eject templates and configurations."""
 import pathlib
 
-import liitos.template_loader as template
+import liitos.template as tpl
 from liitos import ENCODING, log
 
 THINGS = {
@@ -34,7 +34,7 @@ def this(thing: str, out: str = '') -> int:
     if len(guesses) > 1:
         log.error(f'eject of ambiguous template ({thing}) requested - matches ({", ".join(guesses)})')
         return 2
-    content = template.load_resource(THINGS[guesses[0]], False)
+    content = tpl.load_resource(THINGS[guesses[0]], False)
     if not out:
         print(content)
         return 0

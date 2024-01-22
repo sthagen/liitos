@@ -12,7 +12,7 @@ import treelib  # type: ignore
 import yaml
 
 import liitos.gather as gat
-import liitos.placeholder_loader as plh
+import liitos.placeholder as plh
 import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, log
 

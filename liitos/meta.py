@@ -7,7 +7,7 @@ from typing import Union, no_type_check
 import yaml
 
 import liitos.gather as gat
-import liitos.template_loader as template
+import liitos.template as tpl
 import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, log
 
@@ -1130,19 +1130,19 @@ def weave(
     if isinstance(metadata, int):
         return 1
 
-    metadata_template = template.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_EXTERNAL)
+    metadata_template = tpl.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in metadata_template.split('\n')]
     lines = weave_meta_meta(metadata, lines)
     with open(METADATA_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    driver_template = template.load_resource(DRIVER_TEMPLATE, DRIVER_TEMPLATE_IS_EXTERNAL)
+    driver_template = tpl.load_resource(DRIVER_TEMPLATE, DRIVER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in driver_template.split('\n')]
     lines = weave_meta_driver(metadata, lines)
     with open(DRIVER_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    setup_template = template.load_resource(SETUP_TEMPLATE, SETUP_TEMPLATE_IS_EXTERNAL)
+    setup_template = tpl.load_resource(SETUP_TEMPLATE, SETUP_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in setup_template.split('\n')]
     lines = weave_meta_setup(metadata, lines)
     with open(SETUP_PATH, 'wt', encoding=ENCODING) as handle:

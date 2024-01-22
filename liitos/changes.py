@@ -4,7 +4,7 @@ import pathlib
 from typing import Generator, Union, no_type_check
 
 import liitos.gather as gat
-import liitos.template_loader as template
+import liitos.template as tpl
 import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, PathLike, log
 
@@ -155,7 +155,7 @@ def weave(
     pushdown = DEFAULT_ADJUSTED_PUSHDOWN_VALUE
     log.info(f'calculated adjusted pushdown to be {pushdown}em')
 
-    publisher_template = template.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
+    publisher_template = tpl.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in publisher_template.split(NL)]
 
     if any(TOKEN_ADJUSTED_PUSHDOWN in line for line in lines):

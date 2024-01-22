@@ -2,10 +2,10 @@ import os
 import pathlib
 import tempfile
 
-import liitos.placeholder_loader as placeholder
+import liitos.placeholder as placeholder
 from liitos import ENCODING
 
-ALIEN_PATH = pathlib.Path('test', 'fixtures', 'templates', 'alien')
+ALIEN_PATH = pathlib.Path('test', 'fixtures', 'template', 'alien')
 EXTERNAL_PATH = pathlib.Path('test', 'fixtures', 'placeholder', 'this-resource-is-missing.svg')
 
 

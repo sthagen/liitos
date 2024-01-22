@@ -35,7 +35,7 @@ import pathlib
 from typing import Union, no_type_check
 
 import liitos.gather as gat
-import liitos.template_loader as template
+import liitos.template as tpl
 import liitos.tools as too
 from liitos import ENCODING, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
 
@@ -289,7 +289,7 @@ def weave(
     pushdown = EXTRA_OFFSET_EM - 2 * len(rows)
     log.info(f'calculated extra pushdown to be {pushdown}em')
 
-    bookmatter_template = template.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_EXTERNAL)
+    bookmatter_template = tpl.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_EXTERNAL)
     lines = [line.rstrip() for line in bookmatter_template.split('\n')]
 
     if not layout['layout']['global']['has_approvals']:
