@@ -46,7 +46,7 @@ def load_resource(resource: str, is_complete_path: bool = False) -> tuple[str, U
                     return 'str', handle.read()
             with open(from_path, *args) as handle:  # type: ignore
                 return 'bytes', handle.read()
-        with open(from_path, 'rb') as handle:  # type: ignore
+        with open(from_path, 'rb') as handle:
             return 'bytes', handle.read()
 
     if suffix and suffix in READING_OPTIONS:
