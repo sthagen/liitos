@@ -1,4 +1,5 @@
 """Splice (Finnish liitos) contributions."""
+
 import datetime as dti
 import logging
 import os

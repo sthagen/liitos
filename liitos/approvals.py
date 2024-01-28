@@ -30,6 +30,7 @@ from the data inside this module.
 
 For more than 4 role bearers a second table should be placed below the first, to keep the cell content readable.
 """
+
 import os
 import pathlib
 from typing import Union, no_type_check

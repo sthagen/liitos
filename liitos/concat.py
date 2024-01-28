@@ -1,4 +1,5 @@
 """Given a target and facet, concatenate a tree of markdown files to a single file rewriting all image refs."""
+
 import json
 import os
 import pathlib

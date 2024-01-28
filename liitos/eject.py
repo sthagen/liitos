@@ -1,4 +1,5 @@
 """Eject templates and configurations."""
+
 import pathlib
 
 import liitos.template as tpl

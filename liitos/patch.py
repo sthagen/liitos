@@ -1,4 +1,5 @@
 """Apply all pairs in patches to incoming."""
+
 from collections.abc import Iterable
 
 from liitos import log

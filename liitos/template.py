@@ -1,4 +1,5 @@
 """Loader function for templates."""
+
 import pathlib
 import pkgutil
 from typing import Union

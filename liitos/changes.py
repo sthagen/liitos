@@ -1,4 +1,5 @@
 """Weave the content of the changes data file into the output structure (for now LaTeX)."""
+
 import os
 import pathlib
 from typing import Generator, Union, no_type_check

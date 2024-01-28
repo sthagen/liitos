@@ -1,4 +1,5 @@
 """Gather the structure and discover the content."""
+
 import json
 import os
 import pathlib

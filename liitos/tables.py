@@ -1,4 +1,5 @@
 """Apply all pairs in patch module on document."""
+
 import re
 from collections.abc import Iterable, Iterator
 from typing import Union, no_type_check

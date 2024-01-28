@@ -1,4 +1,5 @@
 """Render the concat document to pdf."""
+
 import json
 import os
 import pathlib

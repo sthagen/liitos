@@ -1,4 +1,5 @@
 """Loader function for placeholders (mostly images)."""
+
 import pathlib
 import pkgutil
 from typing import Union

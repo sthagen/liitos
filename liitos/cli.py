@@ -1,4 +1,5 @@
 """Command line interface for splice (Finnish liitos) contributions."""
+
 import datetime as dti
 import logging
 import os

@@ -1,4 +1,5 @@
 """Weave the content of the meta file(s) of metadata.tex.in into the output metadata.tex."""
+
 import datetime as dti
 import os
 import pathlib
