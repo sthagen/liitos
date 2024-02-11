@@ -1,8 +1,8 @@
 # Third Party Dependencies
 
 <!--[[[fill sbom_sha256()]]]-->
-The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json) with SHA256 checksum ([452b16fd ...](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json.sha256 "sha256:452b16fd850c6a10aa8447579495bacabb75ef6327cafa8f1cb283ee0ce2c9fb")).
-<!--[[[end]]] (checksum: a17dd6e4a4da0f31d0461d17ab7968a3)-->
+The [SBOM in CycloneDX v1.4 JSON format](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json) with SHA256 checksum ([e3b0c442 ...](https://git.sr.ht/~sthagen/liitos/blob/default/etc/sbom/cdx.json.sha256 "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")).
+<!--[[[end]]] (checksum: f8d0aa790aa554a010d70923f497c620)-->
 ## Licenses 
 
 JSON files with complete license info of: [direct dependencies](direct-dependency-licenses.json) | [all dependencies](all-dependency-licenses.json)
@@ -28,12 +28,12 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 | [GitPython](https://github.com/gitpython-developers/GitPython)   | [3.1.41](https://pypi.org/project/GitPython/3.1.41/)       | BSD License                        | Sebastian Thiel, Michael Trier                                                        | GitPython is a Python library used to interact with Git repositories                             |
 | [click](https://palletsprojects.com/p/click/)                    | [8.1.7](https://pypi.org/project/click/8.1.7/)             | BSD License                        | Pallets <contact@palletsprojects.com>                                                 | Composable command line interface toolkit                                                        |
 | [gitdb](https://github.com/gitpython-developers/gitdb)           | [4.0.11](https://pypi.org/project/gitdb/4.0.11/)           | BSD License                        | Sebastian Thiel                                                                       | Git Object Database                                                                              |
-| [lxml](https://lxml.de/)                                         | [5.0.1](https://pypi.org/project/lxml/5.0.1/)              | BSD License                        | lxml dev team                                                                         | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
-| [psutil](https://github.com/giampaolo/psutil)                    | [5.9.7](https://pypi.org/project/psutil/5.9.7/)            | BSD License                        | Giampaolo Rodola                                                                      | Cross-platform lib for process and system monitoring in Python.                                  |
+| [lxml](https://lxml.de/)                                         | [5.1.0](https://pypi.org/project/lxml/5.1.0/)              | BSD License                        | lxml dev team                                                                         | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
+| [psutil](https://github.com/giampaolo/psutil)                    | [5.9.8](https://pypi.org/project/psutil/5.9.8/)            | BSD License                        | Giampaolo Rodola                                                                      | Cross-platform lib for process and system monitoring in Python.                                  |
 | [py-cpuinfo](https://github.com/workhorsy/py-cpuinfo)            | [9.0.0](https://pypi.org/project/py-cpuinfo/9.0.0/)        | MIT License                        | Matthew Brennan Jones                                                                 | Get CPU info with pure Python                                                                    |
 | [smmap](https://github.com/gitpython-developers/smmap)           | [5.0.1](https://pypi.org/project/smmap/5.0.1/)             | BSD License                        | Sebastian Thiel                                                                       | A pure Python implementation of a sliding window memory map manager                              |
 | [typing_extensions](https://github.com/python/typing_extensions) | [4.9.0](https://pypi.org/project/typing_extensions/4.9.0/) | Python Software Foundation License | "Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee" <levkivskyi@gmail.com> | Backported and Experimental Type Hints for Python 3.8+                                           |
-<!--[[[end]]] (checksum: 076431848c69a96c26859ec00a998d41)-->
+<!--[[[end]]] (checksum: 8c2a02f766c506204008dc0394e6c043)-->
 
 ## Dependency Tree(s)
 
@@ -58,12 +58,12 @@ foran==2023.6.19
     └── typing-extensions [required: >=3.7.4.3, installed: 4.9.0]
 shellingham==1.5.4
 taksonomia==2023.6.18
-├── lxml [required: >=4.9.2, installed: 5.0.1]
-├── msgspec [required: >=0.16.0, installed: 0.18.5]
-├── psutil [required: >=5.9.5, installed: 5.9.7]
+├── lxml [required: >=4.9.2, installed: 5.1.0]
+├── msgspec [required: >=0.16.0, installed: 0.18.6]
+├── psutil [required: >=5.9.5, installed: 5.9.8]
 ├── py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
 └── PyYAML [required: >=6.0, installed: 6.0.1]
 treelib==1.7.0
 └── six [required: Any, installed: 1.16.0]
 ````
-<!--[[[end]]] (checksum: 0974c9c30459a62cf3c1a79a56e67004)-->
+<!--[[[end]]] (checksum: d6d5ac16e1b40828b3657fa181a3c747)-->

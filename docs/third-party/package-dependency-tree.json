@@ -68,21 +68,21 @@
             {
                 "key": "lxml",
                 "package_name": "lxml",
-                "installed_version": "5.0.1",
+                "installed_version": "5.1.0",
                 "required_version": ">=4.9.2",
                 "dependencies": []
             },
             {
                 "key": "msgspec",
                 "package_name": "msgspec",
-                "installed_version": "0.18.5",
+                "installed_version": "0.18.6",
                 "required_version": ">=0.16.0",
                 "dependencies": []
             },
             {
                 "key": "psutil",
                 "package_name": "psutil",
-                "installed_version": "5.9.7",
+                "installed_version": "5.9.8",
                 "required_version": ">=5.9.5",
                 "dependencies": []
             },

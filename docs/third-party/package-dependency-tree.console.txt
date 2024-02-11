@@ -7,9 +7,9 @@ foran==2023.6.19
     └── typing-extensions [required: >=3.7.4.3, installed: 4.9.0]
 shellingham==1.5.4
 taksonomia==2023.6.18
-├── lxml [required: >=4.9.2, installed: 5.0.1]
-├── msgspec [required: >=0.16.0, installed: 0.18.5]
-├── psutil [required: >=5.9.5, installed: 5.9.7]
+├── lxml [required: >=4.9.2, installed: 5.1.0]
+├── msgspec [required: >=0.16.0, installed: 0.18.6]
+├── psutil [required: >=5.9.5, installed: 5.9.8]
 ├── py-cpuinfo [required: >=9.0.0, installed: 9.0.0]
 └── PyYAML [required: >=6.0, installed: 6.0.1]
 treelib==1.7.0
