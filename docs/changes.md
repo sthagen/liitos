@@ -1,5 +1,8 @@
 # Changes
 
+2024.2.11
+:    * Intermediate case changes on bookmark case for changes, blurb, and toc
+
 2024.1.22
 :    * Hotfix adding the placeholder resources to the published package
 
