@@ -1,5 +1,5 @@
 % |-- changes - cut - marker - top -->
-\pdfbookmark[section]{Status and Change Log}{status}
+\pdfbookmark[section]{STATUS AND CHANGE LOG}{status}
 \hypertarget{status-and-change-log}{%
 \section*{\fakesection{\MakeUppercase{Status and Change Log}}}\label{status-and-change-log}}
 \vspace*{\theTuneChangesHeaderSep}
@@ -28,7 +28,7 @@ THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 \vspace*{\theBlurbAdjustableVerticalSpace}
 
 % |-- notices - cut - marker - top -->
-\pdfbookmark[section]{Proprietary Information}{propinfo}
+\pdfbookmark[section]{PROPRIETARY INFORMATION}{propinfo}
 \hypertarget{proprietary-information}{%
 \section*{\fakesection{\MakeUppercase{Proprietary Information}}}\label{proprietary-information}}
 \vspace*{\theTuneBlurbHeaderSep}
