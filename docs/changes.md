@@ -1,5 +1,9 @@
 # Changes
 
+2024.2.12
+:    * Adjusted indent and numwidth for the most used section levels in toc
+* Reduced afterskip vertical separation from section title to start of text
+
 2024.2.11
 :    * Intermediate case changes on bookmark case for changes, blurb, and toc
 
