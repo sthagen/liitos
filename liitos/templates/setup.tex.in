@@ -152,10 +152,9 @@
 %\DeclareTOCStyleEntry[beforeskip=.5cm]{chapter}{chapter}
 \DeclareTOCStyleEntry[beforeskip=.3cm]{section}{section}
 \DeclareTOCStyleEntry[beforeskip=.1cm]{default}{subsection}
-\DeclareTOCStyleEntry[numwidth=3em]{section}{section}
-\DeclareTOCStyleEntry[numwidth=3em]{section}{subsection}
-\DeclareTOCStyleEntry[numwidth=3em]{section}{paragraph}
-\DeclareTOCStyleEntry[numwidth=3em]{section}{subparagraph}
+\DeclareTOCStyleEntry[numwidth=1.5em,indent=0em]{section}{section}
+\DeclareTOCStyleEntry[numwidth=2.5em,indent=1em]{section}{subsection}
+\DeclareTOCStyleEntry[numwidth=3.5em,indent=3em]{section}{subsubsection}
 
 % Provide the Shaded and Highlighting environments in case code comes along
 \usepackage{color}
