@@ -147,8 +147,8 @@
   \RedeclareSectionCommand[afterskip=1sp minus 1sp]{section}% (was chapter) no skip after ToC title
 }
 %\DeclareTOCStyleEntry[beforeskip=.5cm]{chapter}{chapter}
-\DeclareTOCStyleEntry[beforeskip=.3cm]{section}{section}
-\DeclareTOCStyleEntry[beforeskip=.1cm]{default}{subsection}
+\DeclareTOCStyleEntry[beforeskip=.3cm, tocindent=1em]{section}{section}
+\DeclareTOCStyleEntry[beforeskip=.1cm, tocindent=1em]{default}{subsection}
 
 % Provide the Shaded and Highlighting environments in case code comes along
 \usepackage{color}
