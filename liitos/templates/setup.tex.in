@@ -139,7 +139,7 @@
 ]{paragraph,subparagraph}
 \RedeclareSectionCommands[
     afterskip=0.02\baselineskip,
-]{section,subsection}
+]{section,subsection, subsubsection,paragraph,subparagraph}
 
 % Fake some section alignment
 \def\fakesection#1{\hskip 6em \hfil #1\hfil}
