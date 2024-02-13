@@ -139,7 +139,7 @@
 ]{paragraph,subparagraph}
 \RedeclareSectionCommands[
     afterskip=0.02\baselineskip,
-]{section,subsection, subsubsection,paragraph,subparagraph}
+]{section,subsection,subsubsection,paragraph,subparagraph}
 
 % Fake some section alignment
 \def\fakesection#1{\hskip 6em \hfil #1\hfil}
@@ -155,6 +155,8 @@
 \DeclareTOCStyleEntry[numwidth=1.5em,indent=0em]{section}{section}
 \DeclareTOCStyleEntry[numwidth=2.5em,indent=1em]{section}{subsection}
 \DeclareTOCStyleEntry[numwidth=3.5em,indent=3em]{section}{subsubsection}
+\DeclareTOCStyleEntry[numwidth=4.5em,indent=5em]{section}{paragraph}
+\DeclareTOCStyleEntry[numwidth=5.5em,indent=7em]{section}{subparagraph}
 
 % Provide the Shaded and Highlighting environments in case code comes along
 \usepackage{color}
