@@ -1,5 +1,9 @@
 # Changes
 
+2024.2.13
+:    * Enabled TOC indent reduction also for level 4 sections (<https://todo.sr.ht/~sthagen/liitos/59>)
+* Enabled vertical afterskip compression also for level 3 and 4 headings (<https://todo.sr.ht/~sthagen/liitos/58>)
+
 2024.2.12
 :    * Adjusted indent and numwidth for the most used section levels in toc
 * Reduced afterskip vertical separation from section title to start of text
