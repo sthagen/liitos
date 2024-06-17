@@ -12,7 +12,7 @@
   draft=false,
   overfullrule=false,
   sfdefaults=false,%egregdoesnotlikesansseriftitles,
-  toc=sectionentrywithdots,%%TODO_PARAMETRIZE________________________________________________
+  VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%
 ]{scrartcl}
 \usepackage{bookmark}
 \bookmarksetup{
@@ -30,7 +30,7 @@
 \usepackage{lastpage}
 \usepackage{amsmath,amssymb}
 \usepackage{setspace}
-\setstretch{1.2}
+%%%%\setstretch{\theStretch}
 \usepackage{iftex}
 \usepackage{unicode-math}
 \usepackage{fontspec}
@@ -120,6 +120,8 @@
 \usepackage{selnolig}  % disable illegal ligatures
 
 \input{metadata.tex}%% Job specific variable values used for the specific document target
+
+\setstretch{\theStretch}%%%%%%%%---------------------------?????
 
 \setcounter{table}{-2}%% give some leeway (invisibly) to signature and change history table
 \renewcommand{\thetable}{\arabic{table}}

@@ -55,6 +55,9 @@ WEAVE_DEFAULTS = {
     'proprietary_information': '/opt/legal/proprietary-information.txt',
     'proprietary_information_adjustable_vertical_space': '-0em',
     'proprietary_information_tune_header_sep': '-0em',
+    'stretch': '1.04',  # old default was 1.2
+    'lox_indent': r'\hspace*{0.40\textwidth}',  # old default was '' for left align
+    'toc_all_dots': '',  # old default was not toc all dots, so '%' would restore
 }
 ACROSS = {
     'eff_font_folder': '',
@@ -358,6 +361,26 @@ def weave_setup_footer_outer_field_normal_pages(
         )
         return text.replace(VALUE_SLOT, defaults['footer_outer_field_normal_pages'])
 
+@no_type_check
+def weave_setup_toc_all_dots(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the toc_all_dots from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_TOC_ALL_DOTS_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    if mapper.get('toc_all_dots'):
+        footer_outer_field_normal_pages = mapper.get('toc_all_dots')
+        return text.replace(VALUE_SLOT, toc_all_dots)
+    else:
+        log.info(
+            'toc_all_dots value missing ...'
+            f' setting default ({defaults["toc_all_dots"]})'
+        )
+        return text.replace(VALUE_SLOT, defaults['toc_all_dots'])
+
 
 @no_type_check
 def dispatch_setup_weaver(
@@ -376,6 +399,7 @@ def dispatch_setup_weaver(
         '%%_PATCH_%_CODE_%_FONTSIZE_%%': weave_setup_code_fontsize,
         '%%_PATCH_%_CHOSEN_%_LOGO_%%': weave_setup_chosen_logo,
         '%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%': weave_setup_footer_outer_field_normal_pages,
+        '%%_PATCH_%_TOC_ALL_DOTS_%%': weave_setup_toc_all_dots,
     }
     for trigger, weaver in dispatch.items():
         if text.rstrip().endswith(trigger):
@@ -1046,6 +1070,30 @@ def weave_meta_part_proprietary_information(
 
 
 @no_type_check
+def weave_meta_part_stretch(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the stretch from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_STRETCH_%%')
+    """
+    return weave_meta_part_with_default_slot(mapper, text, 'stretch')
+
+
+@no_type_check
+def weave_meta_part_lox_indent(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the lox_indent from mapper or default.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_LOX_INDENT_%%')
+    """
+    return weave_meta_part_with_default_slot(mapper, text, 'lox_indent')
+
+
+@no_type_check
 def dispatch_meta_weaver(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
@@ -1082,6 +1130,8 @@ def dispatch_meta_weaver(
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%': weave_meta_part_header_issue_revision_combined_label,
         '%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%': weave_meta_part_header_issue_revision_combined,
         '%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%': weave_meta_part_proprietary_information,
+        '%%_PATCH_%_STRETCH_%%': weave_meta_part_stretch,
+        '%%_PATCH_%_LOX_INDENT_%%': weave_meta_part_lox_indent,
     }
     for trigger, weaver in dispatch.items():
         if text.rstrip().endswith(trigger):

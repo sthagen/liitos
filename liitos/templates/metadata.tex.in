@@ -35,6 +35,10 @@
 \newcommand{\theTuneBlurbHeaderSep}{VALUE.SLOT}%%_PATCH_%_BLURB_%_TUNE_%_HEADER_%_SEP_%%
 % Vertical adjustable space tuning between changes heading and table
 \newcommand{\theTuneChangesHeaderSep}{VALUE.SLOT}%%_PATCH_%_CHANGE_%_LOG_%_TUNE_%_HEADER_%_SEP_%%
+% set stretch (old fixed value was 1.2) impacts paragraphs and tables mainly
+\newcommand{\theStretch}{VALUE.SLOT}%%_PATCH_%_STRETCH_%%
+% center the lists of something headings was previously indent zero (i.e. left aligned)
+\newcommand{\theLOXIndent}{VALUE.SLOT}%%_PATCH_%_LOX_INDENT_%%
 
 % PDF Metadata:
 %\hypersetup{%
