@@ -25,7 +25,7 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 <!--[[[fill indirect_dependencies_table()]]]-->
 | Name                                                             | Version                                                    | License                            | Author                                                                                | Description (from packaging data)                                                                |
 |:-----------------------------------------------------------------|:-----------------------------------------------------------|:-----------------------------------|:--------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------|
-| [GitPython](https://github.com/gitpython-developers/GitPython)   | [3.1.41](https://pypi.org/project/GitPython/3.1.41/)       | BSD License                        | Sebastian Thiel, Michael Trier                                                        | GitPython is a Python library used to interact with Git repositories                             |
+| [GitPython](https://github.com/gitpython-developers/GitPython)   | [3.1.43](https://pypi.org/project/GitPython/3.1.43/)       | BSD License                        | Sebastian Thiel, Michael Trier                                                        | GitPython is a Python library used to interact with Git repositories                             |
 | [click](https://palletsprojects.com/p/click/)                    | [8.1.7](https://pypi.org/project/click/8.1.7/)             | BSD License                        | Pallets <contact@palletsprojects.com>                                                 | Composable command line interface toolkit                                                        |
 | [gitdb](https://github.com/gitpython-developers/gitdb)           | [4.0.11](https://pypi.org/project/gitdb/4.0.11/)           | BSD License                        | Sebastian Thiel                                                                       | Git Object Database                                                                              |
 | [lxml](https://lxml.de/)                                         | [5.1.0](https://pypi.org/project/lxml/5.1.0/)              | BSD License                        | lxml dev team                                                                         | Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API. |
@@ -33,7 +33,7 @@ JSON files with complete license info of: [direct dependencies](direct-dependenc
 | [py-cpuinfo](https://github.com/workhorsy/py-cpuinfo)            | [9.0.0](https://pypi.org/project/py-cpuinfo/9.0.0/)        | MIT License                        | Matthew Brennan Jones                                                                 | Get CPU info with pure Python                                                                    |
 | [smmap](https://github.com/gitpython-developers/smmap)           | [5.0.1](https://pypi.org/project/smmap/5.0.1/)             | BSD License                        | Sebastian Thiel                                                                       | A pure Python implementation of a sliding window memory map manager                              |
 | [typing_extensions](https://github.com/python/typing_extensions) | [4.9.0](https://pypi.org/project/typing_extensions/4.9.0/) | Python Software Foundation License | "Guido van Rossum, Jukka Lehtosalo, Łukasz Langa, Michael Lee" <levkivskyi@gmail.com> | Backported and Experimental Type Hints for Python 3.8+                                           |
-<!--[[[end]]] (checksum: 8c2a02f766c506204008dc0394e6c043)-->
+<!--[[[end]]] (checksum: 8b3e562151c13a8b45ea9e83a79f867a)-->
 
 ## Dependency Tree(s)
 
@@ -50,12 +50,12 @@ Base graphviz file in dot format: [Trees of the direct dependencies](package-dep
 <!--[[[fill dependency_tree_console_text()]]]-->
 ````console
 foran==2023.6.19
-├── GitPython [required: >=3.1.31, installed: 3.1.41]
+├── GitPython [required: >=3.1.31, installed: 3.1.43]
 │   └── gitdb [required: >=4.0.1,<5, installed: 4.0.11]
 │       └── smmap [required: >=3.0.1,<6, installed: 5.0.1]
 └── typer [required: >=0.9.0, installed: 0.9.0]
     ├── click [required: >=7.1.1,<9.0.0, installed: 8.1.7]
-    └── typing-extensions [required: >=3.7.4.3, installed: 4.9.0]
+    └── typing_extensions [required: >=3.7.4.3, installed: 4.9.0]
 shellingham==1.5.4
 taksonomia==2023.6.18
 ├── lxml [required: >=4.9.2, installed: 5.1.0]
@@ -66,4 +66,4 @@ taksonomia==2023.6.18
 treelib==1.7.0
 └── six [required: Any, installed: 1.16.0]
 ````
-<!--[[[end]]] (checksum: d6d5ac16e1b40828b3657fa181a3c747)-->
+<!--[[[end]]] (checksum: 5b99ddbcc36b0c91bfdfbcfd9369de10)-->

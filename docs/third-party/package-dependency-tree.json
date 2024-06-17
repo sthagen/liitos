@@ -8,7 +8,7 @@
             {
                 "key": "gitpython",
                 "package_name": "GitPython",
-                "installed_version": "3.1.41",
+                "installed_version": "3.1.43",
                 "required_version": ">=3.1.31",
                 "dependencies": [
                     {
@@ -43,7 +43,7 @@
                     },
                     {
                         "key": "typing-extensions",
-                        "package_name": "typing-extensions",
+                        "package_name": "typing_extensions",
                         "installed_version": "4.9.0",
                         "required_version": ">=3.7.4.3",
                         "dependencies": []

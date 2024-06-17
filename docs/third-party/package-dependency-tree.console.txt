@@ -1,10 +1,10 @@
 foran==2023.6.19
-├── GitPython [required: >=3.1.31, installed: 3.1.41]
+├── GitPython [required: >=3.1.31, installed: 3.1.43]
 │   └── gitdb [required: >=4.0.1,<5, installed: 4.0.11]
 │       └── smmap [required: >=3.0.1,<6, installed: 5.0.1]
 └── typer [required: >=0.9.0, installed: 0.9.0]
     ├── click [required: >=7.1.1,<9.0.0, installed: 8.1.7]
-    └── typing-extensions [required: >=3.7.4.3, installed: 4.9.0]
+    └── typing_extensions [required: >=3.7.4.3, installed: 4.9.0]
 shellingham==1.5.4
 taksonomia==2023.6.18
 ├── lxml [required: >=4.9.2, installed: 5.1.0]

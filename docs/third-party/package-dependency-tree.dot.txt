@@ -1,6 +1,6 @@
 digraph {
 	"py-cpuinfo" [label="py-cpuinfo\n9.0.0"]
-	"typing-extensions" [label="typing-extensions\n4.9.0"]
+	"typing-extensions" [label="typing_extensions\n4.9.0"]
 	click [label="click\n8.1.7"]
 	foran -> gitpython [label=">=3.1.31"]
 	foran -> typer [label=">=0.9.0"]
@@ -8,7 +8,7 @@ digraph {
 	gitdb -> smmap [label=">=3.0.1,<6"]
 	gitdb [label="gitdb\n4.0.11"]
 	gitpython -> gitdb [label=">=4.0.1,<5"]
-	gitpython [label="GitPython\n3.1.41"]
+	gitpython [label="GitPython\n3.1.43"]
 	lxml [label="lxml\n5.1.0"]
 	msgspec [label="msgspec\n0.18.6"]
 	psutil [label="psutil\n5.9.8"]
