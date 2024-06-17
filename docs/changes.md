@@ -1,5 +1,10 @@
 # Changes
 
+2024.6.17
+:    * Enabled list of x left indent
+* Enabled set of stretch (mostly for text and tables)
+* Enabled toc al dots
+
 2024.2.13
 :    * Enabled TOC indent reduction also for level 4 sections (<https://todo.sr.ht/~sthagen/liitos/59>)
 * Enabled vertical afterskip compression also for level 3 and 4 headings (<https://todo.sr.ht/~sthagen/liitos/58>)
