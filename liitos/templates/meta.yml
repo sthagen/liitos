@@ -43,11 +43,15 @@ document:
     italic_font: ITCFranklinGothicStd-BookIt
     list_of_figures: '%'  # empty string to enable lof
     list_of_tables: '%'  # empty string to enable lot
+    lox_indent: \hspace*{0.40\textwidth}  # old default was '' for left align
     main_font: ITCFranklinGothicStd-Book
     proprietary_information: /opt/legal/proprietary-information.txt
     proprietary_information_adjustable_vertical_space: '-0em'
     proprietary_information_tune_header_sep: '-0em'
     revision: '00'
+    stretch: '1.04'  # old default was '1.2'
     sub_title: ' '
     title: null
+    toc_all_dots: ' '  # old default was not toc all dots, so '%' would restore
     toc_level: 2
+
