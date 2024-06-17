@@ -982,47 +982,59 @@ The eject command when used to produce a `meta-base.yml` template provides all k
 ---
 document:
   common:
-    title: null
-    header_title: null
-    sub_title: ' '
-    header_type: Engineering Document
-    header_id_show: true
-    header_id: null
-    header_id_label: 'Doc. ID:'
-    issue: '01'
-    revision: '00'
-    header_issue_revision_combined_show: true
-    header_issue_revision_combined: null
-    header_issue_revision_combined_label: 'Issue, Revision:'
-    header_date_enable_auto: true
-    header_date_show: true
-    header_date: null
-    header_date_label: 'Date:'
-    footer_frame_note: null
-    footer_page_number_prefix: Page
+    approvals_adjustable_vertical_space: '2.5em'
+    approvals_date_and_signature_label: Date and Signature
+    approvals_department_label: Department
+    approvals_department_value: ABC
+    approvals_name_label: Name
+    approvals_role_label: Approvals
+    bold_font: ITCFranklinGothicStd-Demi
+    bold_italic_font: ITCFranklinGothicStd-DemiIt
+    bookmark_title: null
+    change_log_author_label: Author
+    change_log_date_label: Date
+    change_log_description_label: Description
     change_log_issue_label: Iss.
     change_log_revision_label: Rev.
-    change_log_date_label: Date
-    change_log_author_label: Author
-    change_log_description_label: Description
-    approvals_adjustable_vertical_space: '2.5em'
-    approvals_role_label: Approvals
-    approvals_name_label: Name
-    approvals_date_and_signature_label: Date and Signature
-    proprietary_information: /opt/legal/proprietary-information.txt
-    toc_level: 2
-    list_of_figures: '%'  # empty string to enable lof
-    list_of_tables: '%'  # empty string to enable lot
+    change_log_tune_header_sep: '-0em'
+    chosen_logo: /opt/logo/liitos-logo.png
+    code_fontsize: \scriptsize
+    fixed_font_package: sourcecodepro
     font_path: /opt/fonts/
     font_suffix: .otf
-    bold_font: ITCFranklinGothicStd-Demi
+    footer_frame_note: null
+    footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
+    footer_page_number_prefix: Page
+    has_approvals: true
+    has_changes: true
+    has_notices: true
+    header_date: null
+    header_date_enable_auto: true
+    header_date_label: 'Date:'
+    header_date_show: true
+    header_id: null
+    header_id_label: 'Doc. ID:'
+    header_id_show: true
+    header_issue_revision_combined: null
+    header_issue_revision_combined_label: 'Issue, Revision:'
+    header_issue_revision_combined_show: true
+    header_title: null
+    header_type: Engineering Document
+    issue: '01'
     italic_font: ITCFranklinGothicStd-BookIt
-    bold_italic_font: ITCFranklinGothicStd-DemiIt
+    list_of_figures: '%'  # empty string to enable lof
+    list_of_tables: '%'  # empty string to enable lot
+    lox_indent: \hspace*{0.40\textwidth}  # old default was '' for left align
     main_font: ITCFranklinGothicStd-Book
-    fixed_font_package: sourcecodepro
-    code_fontsize: \scriptsize
-    chosen_logo: /opt/logo/liitos-logo.png
-
+    proprietary_information: /opt/legal/proprietary-information.txt
+    proprietary_information_adjustable_vertical_space: '-0em'
+    proprietary_information_tune_header_sep: '-0em'
+    revision: '00'
+    stretch: '1.04'  # old default was '1.2'
+    sub_title: ' '
+    title: null
+    toc_all_dots: ' '  # old default was not toc all dots, so '%' would restore
+    toc_level: 2
 ```
 ### Including Markdown Files
 
