@@ -18,16 +18,18 @@
 \include{publisher.tex}
 
 \newpage
-\renewcommand*\contentsname{Table of Contents}
+\renewcommand*\contentsname{\hspace*{0.40\textwidth}Table of Contents}%%TODO_PARAMETRIZE_____________
 {
 \setcounter{tocdepth}{VALUE.SLOT}%%_PATCH_%_TOC_%_LEVEL_%%
 \pdfbookmark[section,bold]{TABLE OF CONTENTS}{toc}
 \tableofcontents
 }
 
+\renewcommand*\listfigurename{\hspace*{0.40\textwidth}List of Figures}%%TODO_PARAMETRIZE_____________
 VALUE.SLOT\newpage\listoffigures%%_PATCH_%_LOF_%%
 %%DEBUG There are \TotalValue{totalfigures} figures in this document
 
+\renewcommand*\listtablename{\hspace*{0.40\textwidth}List of Tables}%%TODO_PARAMETRIZE_____________
 VALUE.SLOT\newpage\listoftables%%_PATCH_%_LOT_%%
 %%DEBUG There are \TotalValue{totaltables} tables in this document
 %%Note: Subtract 2 from value to get real entry count for lot

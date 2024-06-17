@@ -12,6 +12,7 @@
   draft=false,
   overfullrule=false,
   sfdefaults=false,%egregdoesnotlikesansseriftitles,
+  toc=sectionentrywithdots,%%TODO_PARAMETRIZE________________________________________________
 ]{scrartcl}
 \usepackage{bookmark}
 \bookmarksetup{
