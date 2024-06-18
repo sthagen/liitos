@@ -1,5 +1,9 @@
 # Changes
 
+2024.6.18
+:    * Added new layout to the approvals table (WIP)
+* Added upper case transformer to TOC (WIP)
+
 2024.6.17
 :    * Enabled list of x left indent
 * Enabled set of stretch (mostly for text and tables)
