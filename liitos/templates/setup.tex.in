@@ -161,7 +161,7 @@
 \DeclareTOCStyleEntry[numwidth=4.5em,indent=5em]{section}{paragraph}
 \DeclareTOCStyleEntry[numwidth=5.5em,indent=7em]{section}{subparagraph}
 
-% Can we simply upper case TOC entries fomr level 1 and 2 sections?
+% Can we simply upper case TOC entries for level 1 and 2 sections?
 \ExplSyntaxOn
 \cs_new_eq:NN \ToUppercase \text_uppercase:n
 \ExplSyntaxOff
