@@ -3,6 +3,7 @@
 2024.6.18
 :    * Added new layout to the approvals table (WIP)
 * Added upper case transformer to TOC (WIP)
+* Fixed bug in toc_all_dots implementation
 
 2024.6.17
 :    * Enabled list of x left indent
