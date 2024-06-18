@@ -161,6 +161,17 @@
 \DeclareTOCStyleEntry[numwidth=4.5em,indent=5em]{section}{paragraph}
 \DeclareTOCStyleEntry[numwidth=5.5em,indent=7em]{section}{subparagraph}
 
+% Can we simply upper case TOC entries fomr level 1 and 2 sections?
+\ExplSyntaxOn
+\cs_new_eq:NN \ToUppercase \text_uppercase:n
+\ExplSyntaxOff
+\renewcommand\addsectiontocentry[2]{%
+  \addtocentrydefault{section}{#1}{\texorpdfstring{\expandafter\ToUppercase\expandafter{#2}}{#2}}%
+}
+\renewcommand\addsubsectiontocentry[2]{%
+  \addtocentrydefault{subsection}{#1}{\texorpdfstring{\expandafter\ToUppercase\expandafter{#2}}{#2}}%
+}
+
 % Provide the Shaded and Highlighting environments in case code comes along
 \usepackage{color}
 \usepackage{fancyvrb}
