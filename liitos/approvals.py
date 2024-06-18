@@ -17,7 +17,7 @@ The southern layout relies on the skeleton in the bookmatter.tex.in template.
 
 # Layout `east` (the new default)
 
-| Department          |    AB    |     AB     |     AB     |     AB.      |
+|     Department      |    AB    |     AB     |     AB     |     AB.      |
 |:--------------------|:--------:|:----------:|:----------:|:------------:|
 | Approvals           |  Author  |  Reviewer  |  Approver  |  Authorizer  |
 | Name                | Au. Thor | Re. Viewer | Ap. Prover | Au. Thorizer |
@@ -73,7 +73,7 @@ BASE_TABLE = r"""% |-- layout east - cut - marker - top -->
  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|% <- fixed
 $HEAD.BLOCK$}
 \hline
-\begin{minipage}[b]{\linewidth}\raggedright\ \mbox{\textbf{\theApprovalsDepartmentLabel}}\end{minipage}%
+\begin{minipage}[b]{\linewidth}\raggedright\ \centering \textbf{\theApprovalsDepartmentLabel}\end{minipage}%
 $ORGA.BLOCK$ \\[0.5ex]
 \hline
 \ \mbox{\textbf{\theApprovalsRoleLabel}}%
@@ -95,9 +95,9 @@ $SIGN.BLOCK$
 """
 
 HEAD_CELL = r' >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|'
-ORGA_CELL = r' & \begin{minipage}[b]{\linewidth}\raggedright\mbox{\textbf{THE.ORGA$RANK$.SLOT}}\end{minipage}'
-ROLE_CELL = r' & \mbox{THE.ROLE$RANK$.SLOT}'
-NAME_CELL = r' & \mbox{THE.NAME$RANK$.SLOT}'
+ORGA_CELL = r' & \begin{minipage}[b]{\linewidth}\centering\arraybackslash \textbf{THE.ORGA$RANK$.SLOT}\end{minipage}'
+ROLE_CELL = r' & \centering\arraybackslash THE.ROLE$RANK$.SLOT'
+NAME_CELL = r' & \centering\arraybackslash THE.NAME$RANK$.SLOT'
 SIGN_CELL = r' & \mbox{}'
 
 
