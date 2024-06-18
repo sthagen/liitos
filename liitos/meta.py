@@ -361,6 +361,7 @@ def weave_setup_footer_outer_field_normal_pages(
         )
         return text.replace(VALUE_SLOT, defaults['footer_outer_field_normal_pages'])
 
+
 @no_type_check
 def weave_setup_toc_all_dots(
     mapper: dict[str, Union[str, int, bool, None]],
@@ -372,13 +373,10 @@ def weave_setup_toc_all_dots(
     """
     defaults = {**WEAVE_DEFAULTS}
     if mapper.get('toc_all_dots'):
-        footer_outer_field_normal_pages = mapper.get('toc_all_dots')
+        toc_all_dots = mapper.get('toc_all_dots')
         return text.replace(VALUE_SLOT, toc_all_dots)
     else:
-        log.info(
-            'toc_all_dots value missing ...'
-            f' setting default ({defaults["toc_all_dots"]})'
-        )
+        log.info('toc_all_dots value missing ...' f' setting default ({defaults["toc_all_dots"]})')
         return text.replace(VALUE_SLOT, defaults['toc_all_dots'])
 
 
