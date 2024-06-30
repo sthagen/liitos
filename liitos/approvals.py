@@ -66,7 +66,7 @@ EASTERN_TOTAL_MAX_MEMBERS = EASTERN_TABLE_MAX_MEMBERS * 2
 
 NL = '\n'
 BASE_TABLE = r"""% |-- layout east - cut - marker - top -->
-\begin{large}
+\begin{small}
 \addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
 \addtolength\belowrulesep{0.35ex}
 \begin{longtable}[]{|
@@ -84,19 +84,19 @@ $ROLE.BLOCK$
 $NAME.BLOCK$
  \\[0.5ex]
 \hline
-\ \mbox{\textbf{Date}} \mbox{\textbf{\ }} \mbox{\textbf{\ Signature}}%
+\ \mbox{\textbf{Date}} \mbox{\textbf{\ \ \ \ \ \ }} \mbox{\textbf{\ Signature}}%
 $SIGN.BLOCK$
  \\[0.5ex]
 \hline
 
 \end{longtable}
-\end{large}
+\end{small}
 % <-- layout east - cut - marker - bottom --|
 """
 
 HEAD_CELL = r' >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|'
 ORGA_CELL = r' & \begin{minipage}[b]{\linewidth}\centering\arraybackslash \textbf{THE.ORGA$RANK$.SLOT}\end{minipage}'
-ROLE_CELL = r' & \centering\arraybackslash THE.ROLE$RANK$.SLOT'
+ROLE_CELL = r' & \centering\arraybackslash \textbf{THE.ROLE$RANK$.SLOT}'
 NAME_CELL = r' & \centering\arraybackslash THE.NAME$RANK$.SLOT'
 SIGN_CELL = r' & \mbox{}'
 

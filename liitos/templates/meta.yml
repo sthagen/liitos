@@ -1,7 +1,7 @@
 ---
 document:
   common:
-    approvals_adjustable_vertical_space: '2.5em'
+    approvals_adjustable_vertical_space: -4.0em
     approvals_date_and_signature_label: Date and Signature
     approvals_department_label: Department
     approvals_department_value: ABC
@@ -15,13 +15,13 @@ document:
     change_log_description_label: Description
     change_log_issue_label: Iss.
     change_log_revision_label: Rev.
-    change_log_tune_header_sep: '-0em'
+    change_log_tune_header_sep: 0.1em
     chosen_logo: /opt/logo/liitos-logo.png
     code_fontsize: \scriptsize
     fixed_font_package: sourcecodepro
     font_path: /opt/fonts/
     font_suffix: .otf
-    footer_frame_note: null
+    footer_frame_note: Some Proprietary Information
     footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
     footer_page_number_prefix: Page
     has_approvals: true
@@ -37,8 +37,8 @@ document:
     header_issue_revision_combined: null
     header_issue_revision_combined_label: 'Issue, Revision:'
     header_issue_revision_combined_show: true
-    header_title: null
-    header_type: Engineering Document
+    header_title: SOME GENERIC
+    header_type: Type of Document
     issue: '01'
     italic_font: ITCFranklinGothicStd-BookIt
     list_of_figures: '%'  # empty string to enable lof
@@ -46,8 +46,8 @@ document:
     lox_indent: \hspace*{0.40\textwidth}  # old default was '' for left align
     main_font: ITCFranklinGothicStd-Book
     proprietary_information: /opt/legal/proprietary-information.txt
-    proprietary_information_adjustable_vertical_space: '-0em'
-    proprietary_information_tune_header_sep: '-0em'
+    proprietary_information_adjustable_vertical_space: -1.7em
+    proprietary_information_tune_header_sep: 0.1em
     revision: '00'
     stretch: '1.04'  # old default was '1.2'
     sub_title: ' '
