@@ -36,6 +36,22 @@ def scale(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
                     outgoing.append(line)
                 modus = 'copy'
                 rescale = NO_RESCALE
+            elif r'\pandocbounded{\includegraphics' in line:
+                if rescale != NO_RESCALE:
+                    log.info(f'- found the scale target start at line #{slot + 1}|{line}')
+                    target = line.replace(r'\pandocbounded{\includegraphics', '').replace('[keepaspectratio]', '')
+                    parts = target.split('}}')
+                    rest = ''
+                    if len(parts) >= 1:
+                        inside = parts[0] + '}'
+                        if len(parts) == 2:
+                            rest = parts[1].lstrip('}')
+                    option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}\\textheight]'
+                    outgoing.append(f'\\includegraphics{option}{inside}{rest}')
+                else:
+                    outgoing.append(line)
+                modus = 'copy'
+                rescale = NO_RESCALE
             else:
                 outgoing.append(line)
 
