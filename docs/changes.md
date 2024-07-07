@@ -1,5 +1,10 @@
 # Changes
 
+2024.7.7
+:    * Added parsing and setup code for pandoc 3.2.1+
+* Added some user wishes
+* Introduced new anonymized cnages layout
+
 2024.6.18
 :    * Added new layout to the approvals table (WIP)
 * Added upper case transformer to TOC (WIP)
