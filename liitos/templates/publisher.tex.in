@@ -3,6 +3,7 @@
 \hypertarget{status-and-change-log}{%
 \section*{\fakesection{\MakeUppercase{Status and Change Log}}}\label{status-and-change-log}}
 \vspace*{\theTuneChangesHeaderSep}
+% |-- layout named - cut - marker - top -->
 \begin{longtable}[]{|
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
   >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
@@ -22,6 +23,8 @@
 THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 \hline
 \end{longtable}
+% <-- layout named - cut - marker - bottom --|
+% |-- layout anonymized - insert - marker --|
 % <-- changes - cut - marker - bottom --|
 
 \vskip \AdustedPushdown% <-- Do not change this line if using liitos to manage the content

@@ -1,4 +1,32 @@
-"""Weave the content of the changes data file into the output structure (for now LaTeX)."""
+"""Weave the content of the changes data file into the output structure (for now LaTeX).
+
+# Supported Table Layouts
+
+# Layout `named` (the old default)
+
+| Iss. | Rev. | Author           | Description                                 |
+|:-----|:-----|:-----------------|:--------------------------------------------|
+| 001  | 00   | Ann Author       | Initial issue                               |
+| 001  | 01   | Another Author   | The mistakes were fixed                     |
+| 002  | 00   | That was them    | Other mistakes, maybe, who knows, not ours? |
+
+Table: The named table is simple to grow by appending rows.
+
+The named layout relies on the skeleton in the pubisher.tex.in template.
+
+# Layout `anonymous` (the new default)
+
+| Iss. | Rev. | Description                                                    |
+|:-----|:-----|:---------------------------------------------------------------|
+| 001  | 00   | Initial issue                                                  |
+| 001  | 01   | The mistakes were fixed                                        |
+| 002  | 00   | Other mistakes, maybe, who knows, not ours?                    |
+
+Table: This anonymous table is also simple to grow by appending rows.
+
+The anonymous layout requires more dynamic LaTeX generation and thus generates the construct
+from the data inside this module.
+"""
 
 import os
 import pathlib
@@ -16,14 +44,15 @@ if not PUBLISHER_TEMPLATE:
     PUBLISHER_TEMPLATE = 'templates/publisher.tex.in'
 
 PUBLISHER_PATH = pathlib.Path('render/pdf/publisher.tex')
-TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
+CHANGE_ROW_TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 DEFAULT_REVISION = '00'
-ROW_TEMPLATE = r'issue & revision & author & summary \\'
+ROW_TEMPLATE_NAMED = r'issue & revision & author & summary \\'
+ROW_TEMPLATE_ANONYMOUS = r'issue & revision & summary \\'
 GLUE = '\n\\hline\n'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
 COLUMNS_EXPECTED = sorted(['author', 'date', 'issue', 'revision', 'summary'])
-COLUMNS_MINIMAL = sorted(['author', 'issue', 'summary'])
+COLUMNS_MINIMAL = sorted(['issue', 'summary'])  # removed zero slot 'author' for data driven anonymous layout option
 CUT_MARKER_CHANGES_TOP = '% |-- changes - cut - marker - top -->'
 CUT_MARKER_CHANGES_BOTTOM = '% <-- changes - cut - marker - bottom --|'
 CUT_MARKER_NOTICES_TOP = '% |-- notices - cut - marker - top -->'
@@ -31,7 +60,30 @@ CUT_MARKER_NOTICES_BOTTOM = '% <-- notices - cut - marker - bottom --|'
 TOKEN_ADJUSTED_PUSHDOWN = r'\AdustedPushdown'  # nosec B105
 DEFAULT_ADJUSTED_PUSHDOWN_VALUE = 14
 
+LAYOUT_NAMED_CUT_MARKER_TOP = '% |-- layout named - cut - marker - top -->'
+LAYOUT_NAMED_CUT_MARKER_BOTTOM = '% <-- layout named - cut - marker - bottom --|'
+LAYOUT_ANONYMIZED_INSERT_MARKER ='% |-- layout anonymized - insert - marker --|'
+
 NL = '\n'
+TABLE_ANONYMOUS_PRE = r"""\
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.8500}}|}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogIssLabel}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogRevLabel}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogDescLabel}
+\end{minipage} \\
+\hline
+"""
+TABLE_ANONYMOUS_ROWS = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.DESCRIPTION \\'
+TABLE_ANONYMOUS_POST = r"""\hline
+\end{longtable}
+"""
 
 
 def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[str, dict[str, dict[str, bool]]]:
@@ -89,13 +141,13 @@ def normalize(changes: object, channel: str, columns_expected: list[str]) -> lis
     model = []
     if channel == JSON_CHANNEL:
         for change in changes[0]['changes']:
-            issue, author, summary = change['issue'], change['author'], change['summary']
+            issue, author, summary = change['issue'], change.get('author', None), change['summary']
             revision = change.get('revision', DEFAULT_REVISION)
             model.append({'issue': issue, 'revision': revision, 'author': author, 'summary': summary})
         return model
 
     for change in changes[0]['changes']:
-        author = change['author']
+        author = change.get('author', None)
         issue = change['issue']
         revision = change.get('revision', DEFAULT_REVISION)
         summary = change['summary']
@@ -145,13 +197,24 @@ def weave(
 
     logical_model = normalize(changes, channel=channel, columns_expected=columns_expected)
 
-    rows = [
-        ROW_TEMPLATE.replace('issue', kv['issue'])
-        .replace('revision', kv['revision'])
-        .replace('author', kv['author'])
-        .replace('summary', kv['summary'])
-        for kv in logical_model
-    ]
+    is_anonymized = any(entry.get('author') is None for entry in logical_model)
+    row_template = ROW_TEMPLATE_ANONYMOUS if is_anonymized else ROW_TEMPLATE_NAMED
+
+    if is_anonymized:
+        rows = [
+            ROW_TEMPLATE_ANONYMOUS.replace('issue', kv['issue'])
+            .replace('revision', kv['revision'])
+            .replace('summary', kv['summary'])
+            for kv in logical_model
+        ]
+    else:
+        rows = [
+            ROW_TEMPLATE_NAMED.replace('issue', kv['issue'])
+            .replace('revision', kv['revision'])
+            .replace('author', kv['author'])
+            .replace('summary', kv['summary'])
+            for kv in logical_model
+        ]
 
     pushdown = DEFAULT_ADJUSTED_PUSHDOWN_VALUE
     log.info(f'calculated adjusted pushdown to be {pushdown}em')
@@ -167,6 +230,9 @@ def weave(
     if not layout['layout']['global']['has_changes']:
         log.info('removing changes from document layout')
         lines = list(too.remove_target_region_gen(lines, CUT_MARKER_CHANGES_TOP, CUT_MARKER_CHANGES_BOTTOM))
+    elif is_anonymized:
+        log.info('removing named changes table skeleton from document layout')
+        lines = list(too.remove_target_region_gen(lines, LAYOUT_NAMED_CUT_MARKER_TOP, LAYOUT_NAMED_CUT_MARKER_BOTTOM))
 
     if not layout['layout']['global']['has_notices']:
         log.info('removing notices from document layout')
@@ -175,9 +241,15 @@ def weave(
     log.info(LOG_SEPARATOR)
     log.info('weaving in the changes from {changes_path} ...')
     for n, line in enumerate(lines):
-        if line.strip() == TOKEN:
-            lines[n] = GLUE.join(rows)
-            break
+        if is_anonymized:
+            if line.strip() == LAYOUT_ANONYMIZED_INSERT_MARKER:
+                table_text = TABLE_ANONYMOUS_PRE + GLUE.join(rows) + TABLE_ANONYMOUS_POST
+                lines[n] = table_text
+                break
+        else:
+            if line.strip() == CHANGE_ROW_TOKEN:
+                lines[n] = GLUE.join(rows)
+                break
     if lines[-1]:
         lines.append('\n')
     with open(PUBLISHER_PATH, 'wt', encoding=ENCODING) as handle:
