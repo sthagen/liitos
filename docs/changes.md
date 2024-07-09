@@ -1,5 +1,8 @@
 # Changes
 
+2024.7.9
+:    * Fixed the image distortion regression
+
 2024.7.7
 :    * Added parsing and setup code for pandoc 3.2.1+
 * Added some user wishes
