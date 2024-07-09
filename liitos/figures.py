@@ -30,7 +30,7 @@ def scale(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
                 if rescale != NO_RESCALE:
                     log.info(f'- found the scale target start at line #{slot + 1}|{line}')
                     target = line.replace(r'\includegraphics', '')
-                    option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}\\textheight]'
+                    option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}\\textheight,keepaspectratio]'
                     outgoing.append(f'\\includegraphics{option}{target}')
                 else:
                     outgoing.append(line)
@@ -46,7 +46,7 @@ def scale(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
                         inside = parts[0] + '}'
                         if len(parts) == 2:
                             rest = parts[1].lstrip('}')
-                    option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}\\textheight]'
+                    option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}\\textheight,keepaspectratio]'
                     outgoing.append(f'\\includegraphics{option}{inside}{rest}')
                 else:
                     outgoing.append(line)
