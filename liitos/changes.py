@@ -62,7 +62,7 @@ DEFAULT_ADJUSTED_PUSHDOWN_VALUE = 14
 
 LAYOUT_NAMED_CUT_MARKER_TOP = '% |-- layout named - cut - marker - top -->'
 LAYOUT_NAMED_CUT_MARKER_BOTTOM = '% <-- layout named - cut - marker - bottom --|'
-LAYOUT_ANONYMIZED_INSERT_MARKER ='% |-- layout anonymized - insert - marker --|'
+LAYOUT_ANONYMIZED_INSERT_MARKER = '% |-- layout anonymized - insert - marker --|'
 
 NL = '\n'
 TABLE_ANONYMOUS_PRE = r"""\
@@ -198,8 +198,6 @@ def weave(
     logical_model = normalize(changes, channel=channel, columns_expected=columns_expected)
 
     is_anonymized = any(entry.get('author') is None for entry in logical_model)
-    row_template = ROW_TEMPLATE_ANONYMOUS if is_anonymized else ROW_TEMPLATE_NAMED
-
     if is_anonymized:
         rows = [
             ROW_TEMPLATE_ANONYMOUS.replace('issue', kv['issue'])
