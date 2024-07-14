@@ -8,6 +8,10 @@ NO_LABEL = 'no-label-found-ERROR'
 
 def is_include_graphics(text: str) -> bool:
     """Only DRY."""
+    ntoken = r'\pandocbounded'  # nosec B105
+    pos_after = len(ntoken)
+    if len(text) > len(ntoken) and text.startswith(ntoken) and text[pos_after] in ('[', '{'):
+        return True
     token = r'\includegraphics'  # nosec B105
     pos_after = len(token)
     return len(text) > len(token) and text.startswith(token) and text[pos_after] in ('[', '{')
@@ -15,6 +19,8 @@ def is_include_graphics(text: str) -> bool:
 
 def extract_image_path(include_graphics_line: str) -> str:
     """We had a bug, so we isolate in a function."""
+    if include_graphics_line and 'pandocbounded{' in include_graphics_line:
+        return include_graphics_line.split('{', 2)[2].rstrip().rstrip('}')
     if include_graphics_line and '{' in include_graphics_line:
         return include_graphics_line.split('{', 1)[1].rstrip().rstrip('}')
     else:
