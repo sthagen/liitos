@@ -1,0 +1,12 @@
+---
+document:
+  import: meta-base.yml
+  patch:
+    approvals_adjustable_vertical_space: '-8.5em'
+    approvals_department_value: ABC
+    footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
+    header_id: P99999
+    header_date: PUBLICATIONDATE
+    toc_level: 2
+    list_of_figures: ''  # empty string to enable lof
+    list_of_tables: '%'  # empty string to enable lot
