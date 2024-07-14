@@ -1,5 +1,10 @@
 # Changes
 
+2024.7.14
+:    * Added regression test example for mermaid figures
+* Fixed mermaid figure regression
+* Migrated to all pandocbounded figure patching
+
 2024.7.9
 :    * Fixed the image distortion regression
 
