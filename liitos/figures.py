@@ -47,7 +47,7 @@ def scale(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
                         if len(parts) == 2:
                             rest = parts[1].lstrip('}')
                     option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}\\textheight,keepaspectratio]'
-                    outgoing.append(f'\\includegraphics{option}{inside}{rest}')
+                    outgoing.append(f'\\pandocbounded{{\\includegraphics{option}{inside}}}{rest}')
                 else:
                     outgoing.append(line)
                 modus = 'copy'
