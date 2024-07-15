@@ -389,8 +389,8 @@ def der(
                 '--key-value-pairs',
                 (
                     f'BuilderNodeID={CONTEXT["builder_node_id"]}'
-                    f',SourceHash={CONTEXT["source_hash"]}'
-                    f',SourceHint={CONTEXT["source_hint"]}'
+                    f',SourceHash={CONTEXT.get("source_hash", "no-source-hash-given")}'
+                    f',SourceHint={CONTEXT.get("source_hint", "no-source-hint-given")}'
                 ),
             ]
         )

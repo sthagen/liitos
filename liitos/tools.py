@@ -79,6 +79,8 @@ def log_subprocess_output(pipe, prefix: str):
 @no_type_check
 def vcs_probe():
     """Are we in front, on par, or behind with the upstream?"""
+    CONTEXT['source_hash'] = 'info:plain:built-outside-of-version-control'
+    CONTEXT['source_hint'] = 'info:plain:built-outside-of-version-control'
     try:
         repo = api.Repo('.', search_parent_directories=True)
         status = api.Status(repo)
@@ -94,12 +96,10 @@ def vcs_probe():
             CONTEXT['source_hint'] = f'{anchor}/{here}'
             yield f'Root     ({repo_root_folder})'
         except Exception:  # noqa
-            CONTEXT['source_hint'] = 'info:plain:built-outside-of-version-control'
             yield 'WARNING - ignored exception when assessing repo root folder location'
         for line in generate_report(status):
             yield line.rstrip()
     except Exception:  # noqa
-        CONTEXT['source_hash'] = 'info:plain:built-outside-of-version-control'
         yield 'WARNING - we seem to not be within a git repository clone'
 
 
