@@ -170,7 +170,7 @@ def test_command_report(caplog):
     caplog.set_level(logging.INFO)
     result = runner.invoke(app, ['report'])
     assert result.exit_code == 0
-    assert "tool-version-of-liitos process succeeded" in caplog.text
+    assert 'tool-version-of-liitos process succeeded' in caplog.text
 
 
 def test_command_reject_unknown(caplog):
