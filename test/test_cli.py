@@ -167,10 +167,10 @@ def test_command_render_rollup_eastwards(caplog):
 
 
 def test_command_report(caplog):
-    caplog.set_level(logging.WARNING)
+    caplog.set_level(logging.INFO)
     result = runner.invoke(app, ['report'])
     assert result.exit_code == 0
-    assert "ERROR tool-version-of-liitos process (['liitos', 'version']) returned 127" in caplog.text
+    assert "tool-version-of-liitos process succeeded" in caplog.text
 
 
 def test_command_reject_unknown(caplog):
