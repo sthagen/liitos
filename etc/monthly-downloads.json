@@ -3,7 +3,7 @@
     {
       "category": "3.10",
       "date": "2024-01",
-      "downloads": 215
+      "downloads": 182
     },
     {
       "category": "3.10",
@@ -33,12 +33,12 @@
     {
       "category": "3.10",
       "date": "2024-07",
-      "downloads": 114
+      "downloads": 135
     },
     {
       "category": "3.11",
       "date": "2024-01",
-      "downloads": 143
+      "downloads": 126
     },
     {
       "category": "3.11",
@@ -68,12 +68,12 @@
     {
       "category": "3.11",
       "date": "2024-07",
-      "downloads": 110
+      "downloads": 129
     },
     {
       "category": "3.12",
       "date": "2024-01",
-      "downloads": 136
+      "downloads": 120
     },
     {
       "category": "3.12",
@@ -103,17 +103,17 @@
     {
       "category": "3.12",
       "date": "2024-07",
-      "downloads": 110
+      "downloads": 130
     },
     {
       "category": "3.3",
       "date": "2024-01",
-      "downloads": 10
+      "downloads": 6
     },
     {
       "category": "3.8",
       "date": "2024-01",
-      "downloads": 68
+      "downloads": 60
     },
     {
       "category": "3.8",
@@ -143,7 +143,7 @@
     {
       "category": "3.8",
       "date": "2024-07",
-      "downloads": 105
+      "downloads": 121
     },
     {
       "category": "3.9",
@@ -158,7 +158,7 @@
     {
       "category": "null",
       "date": "2024-01",
-      "downloads": 527
+      "downloads": 466
     },
     {
       "category": "null",
@@ -188,7 +188,7 @@
     {
       "category": "null",
       "date": "2024-07",
-      "downloads": 220
+      "downloads": 265
     }
   ],
   "package": "liitos",
