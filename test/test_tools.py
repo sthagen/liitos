@@ -1,4 +1,5 @@
 import hashlib
+import os
 import pathlib
 
 import liitos.tools as too
@@ -14,9 +15,21 @@ EMPTY_SHA256 = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 EMPTY_SHA1 = 'da39a3ee5e6b4b0d3255bfef95601890afd80709'
 EMPTY_MD5 = 'd41d8cd98f00b204e9800998ecf8427e'
 
+RESTORE = os.getcwd()
+
+
+def setup():
+    os.chdir(RESTORE)
+
+
+def teardown():
+    os.chdir(RESTORE)
+
 
 def test_hash_file_default_on_empty():
+    os.chdir(RESTORE)
     assert too.hash_file(BASIC_FIXTURE_ROOT / 'empty.md') == EMPTY_SHA512
+    os.chdir(RESTORE)
 
 
 def test_hash_file_explicit_sha512_on_empty():

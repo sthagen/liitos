@@ -6,6 +6,16 @@ import liitos.concat as concat
 BASIC_FIXTURE_ROOT = pathlib.Path('test', 'fixtures', 'basic')
 EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 
+RESTORE = os.getcwd()
+
+
+def setup():
+    os.chdir(RESTORE)
+
+
+def teardown():
+    os.chdir(RESTORE)
+
 
 def test_adapt_image_images():
     collector = []
@@ -198,9 +208,9 @@ def test_concatenate_base():
         'facet_key': 'mn',
         'options': {},
     }
-    restore = os.getcwd()
+    os.chdir(RESTORE)
     assert concat.concatenate(**parameters) == 0
-    os.chdir(restore)
+    os.chdir(RESTORE)
 
 
 def test_concatenate_deep():
@@ -211,6 +221,6 @@ def test_concatenate_deep():
         'facet_key': 'deep',
         'options': {},
     }
-    restore = os.getcwd()
+    os.chdir(RESTORE)
     assert concat.concatenate(**parameters) == 0
-    os.chdir(restore)
+    os.chdir(RESTORE)

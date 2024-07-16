@@ -7,6 +7,16 @@ from liitos import FILTER_CS_LIST
 BASIC_FIXTURE_ROOT = pathlib.Path('test', 'fixtures', 'basic')
 EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 
+RESTORE = os.getcwd()
+
+
+def setup():
+    os.chdir(RESTORE)
+
+
+def teardown():
+    os.chdir(RESTORE)
+
 
 def test_ren_der():
     parameters = {
@@ -18,6 +28,6 @@ def test_ren_der():
             'filter_cs_list': FILTER_CS_LIST,
         },
     }
-    restore = os.getcwd()
+    os.chdir(RESTORE)
     assert render.der(**parameters) == 0
-    os.chdir(restore)
+    os.chdir(RESTORE)

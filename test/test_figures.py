@@ -38,19 +38,40 @@ def test_scale_copy_through():
 
 def test_scale_trigger_percent_complete_plus():
     incoming = ['', r'\scale=90\%', '', 'text', r'\includegraphics{', '', 'x']
-    outgoing = ['', '', 'text', r'\includegraphics[width=0.9\textwidth,height=0.9\textheight]{', '', 'x']
+    outgoing = [
+        '',
+        '',
+        'text',
+        r'\includegraphics[width=0.9\textwidth,height=0.9\textheight,keepaspectratio]{',
+        '',
+        'x',
+    ]
     assert figures.scale(incoming) == outgoing
 
 
 def test_scale_trigger_percent_tiny__complete_plus():
     incoming = ['', r'\scale=0.90000000000000000001\%', '', 'text', r'\includegraphics{', '', 'x']
-    outgoing = ['', '', 'text', r'\includegraphics[width=0.01\textwidth,height=0.01\textheight]{', '', 'x']
+    outgoing = [
+        '',
+        '',
+        'text',
+        r'\includegraphics[width=0.01\textwidth,height=0.01\textheight,keepaspectratio]{',
+        '',
+        'x',
+    ]
     assert figures.scale(incoming) == outgoing
 
 
 def test_scale_trigger_fraction_complete_plus():
     incoming = ['', r'\scale=0.90000000000000000001', '', 'text', r'\includegraphics{', '', 'x']
-    outgoing = ['', '', 'text', r'\includegraphics[width=0.9\textwidth,height=0.9\textheight]{', '', 'x']
+    outgoing = [
+        '',
+        '',
+        'text',
+        r'\includegraphics[width=0.9\textwidth,height=0.9\textheight,keepaspectratio]{',
+        '',
+        'x',
+    ]
     assert figures.scale(incoming) == outgoing
 
 
@@ -75,13 +96,13 @@ def test_scale_trigger_percent_complete_plus_another():
         '',
         '',
         'text',
-        r'\includegraphics[width=0.9\textwidth,height=0.9\textheight]{',
+        r'\includegraphics[width=0.9\textwidth,height=0.9\textheight,keepaspectratio]{',
         '',
         'x',
         '',
         '',
         'texte',
-        r'\includegraphics[width=0.92\textwidth,height=0.92\textheight]{x',
+        r'\includegraphics[width=0.92\textwidth,height=0.92\textheight,keepaspectratio]{x',
         '',
         'x',
     ]

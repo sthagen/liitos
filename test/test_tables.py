@@ -1,3 +1,4 @@
+import os
 import liitos.tables as tables
 
 TABLE_THREE_COLS = r"""\
@@ -20,6 +21,16 @@ L13 & M14 & R15 \\
 \bottomrule()
 \end{longtable}
 """
+
+RESTORE = os.getcwd()
+
+
+def setup():
+    os.chdir(RESTORE)
+
+
+def teardown():
+    os.chdir(RESTORE)
 
 
 def test_patch_empty():
@@ -46,6 +57,7 @@ def test_patch_tab_three_cols():
 
 
 def test_table():
+    os.chdir(RESTORE)
     with open('test/fixtures/random/tables.tex', 'rt', encoding='utf-8') as handle:
         lines_buffer = [line.rstrip() for line in handle.readlines()]
 
