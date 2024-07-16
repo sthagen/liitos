@@ -46,7 +46,7 @@ def inject(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) 
         if modus == 'copy':
             if is_include_graphics(line) and not precondition_met:
                 log.warning(f'graphics include outside of a figure environment at line #{slot + 1}')
-                log.error(f'line#{slot + 1}|{line.rstrip()}')
+                log.debug(f'line#{slot + 1}|{line.rstrip()}')
                 log.info('trying to fix temporarily ... watch for marker MISSING-CAPTION-IN-MARKDOWN')
                 adhoc_label = 'FIX-AT-SOURCE'
                 try:
