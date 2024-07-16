@@ -1,5 +1,10 @@
 # Changes
 
+2024.7.15
+:    * Enabled the labeling bridge in the absence of a git repo
+* Fixed failing make test with a little hammer
+* Reduced error level to info for a special case handled well
+
 2024.7.14
 :    * Added regression test example for mermaid figures
 * Fixed mermaid figure regression
