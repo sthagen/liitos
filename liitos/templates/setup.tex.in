@@ -182,7 +182,9 @@
 \renewcommand\addsubsectiontocentry[2]{%
   \addtocentrydefault{subsection}{#1}{\texorpdfstring{\expandafter\ToUppercase\expandafter{#2}}{#2}}%
 }
-
+% unbold level 3 and 4 etc sections
+\setkomafont{subsubsection}{\normalfont}
+\setkomafont{paragraph}{\normalfont}
 % Provide the Shaded and Highlighting environments in case code comes along
 \usepackage{color}
 \usepackage{fancyvrb}
