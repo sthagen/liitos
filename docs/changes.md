@@ -1,5 +1,9 @@
 # Changes
 
+2024.9.29
+:    * Enabled bold dotted lines for sections in table of contents (<https://todo.sr.ht/~sthagen/liitos/64>)
+* Implemented normal font weight of level 3+ headings (<https://todo.sr.ht/~sthagen/liitos/63>)
+
 2024.7.15
 :    * Enabled the labeling bridge in the absence of a git repo
 * Fixed failing make test with a little hammer
