@@ -14,6 +14,7 @@
   sfdefaults=false,%egregdoesnotlikesansseriftitles,
   VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%
 ]{scrartcl}
+\addtokomafont{sectionentrydots}{\bfseries}%%% MAYBE NOT SUCH A GOOD IDEA %%%
 \usepackage{bookmark}
 \bookmarksetup{
   open,
