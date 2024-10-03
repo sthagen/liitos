@@ -16,6 +16,8 @@ METADATA_TEMPLATE = os.getenv('LIITOS_METADATA_TEMPLATE', '')
 METADATA_TEMPLATE_IS_EXTERNAL = bool(METADATA_TEMPLATE)
 if not METADATA_TEMPLATE:
     METADATA_TEMPLATE = 'templates/metadata.tex.in'
+ext_meta = 'external ' if METADATA_TEMPLATE_IS_EXTERNAL else ''
+log.info(f'loading {ext_meta}metadata template from {METADATA_TEMPLATE} for mapping values to required keys')
 
 METADATA_PATH = pathlib.Path('metadata.tex')
 
@@ -23,6 +25,8 @@ SETUP_TEMPLATE = os.getenv('LIITOS_SETUP_TEMPLATE', '')
 SETUP_TEMPLATE_IS_EXTERNAL = bool(SETUP_TEMPLATE)
 if not SETUP_TEMPLATE:
     SETUP_TEMPLATE = 'templates/setup.tex.in'
+ext_setup = 'external ' if SETUP_TEMPLATE_IS_EXTERNAL else ''
+log.info(f'loading {ext_setup}setup layout template from {SETUP_TEMPLATE} for general document setup')
 
 SETUP_PATH = pathlib.Path('setup.tex')
 
@@ -30,6 +34,8 @@ DRIVER_TEMPLATE = os.getenv('LIITOS_DRIVER_TEMPLATE', '')
 DRIVER_TEMPLATE_IS_EXTERNAL = bool(DRIVER_TEMPLATE)
 if not DRIVER_TEMPLATE:
     DRIVER_TEMPLATE = 'templates/driver.tex.in'
+ext_driver = 'external ' if DRIVER_TEMPLATE_IS_EXTERNAL else ''
+log.info(f'loading {ext_driver}driver layout template from {DRIVER_TEMPLATE} for general document structure')
 
 DRIVER_PATH = pathlib.Path('driver.tex')
 

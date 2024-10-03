@@ -44,6 +44,8 @@ BOOKMATTER_TEMPLATE = os.getenv('LIITOS_BOOKMATTER_TEMPLATE', '')
 BOOKMATTER_TEMPLATE_IS_EXTERNAL = bool(BOOKMATTER_TEMPLATE)
 if not BOOKMATTER_TEMPLATE:
     BOOKMATTER_TEMPLATE = 'templates/bookmatter.tex.in'
+external = 'external ' if BOOKMATTER_TEMPLATE_IS_EXTERNAL else ''
+log.info(f'loading {external}bookmatter layout template from {BOOKMATTER_TEMPLATE} for title page incl. approvals')
 
 BOOKMATTER_PATH = pathlib.Path('render/pdf/bookmatter.tex')
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105

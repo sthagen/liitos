@@ -309,7 +309,14 @@ def render(  # noqa
     approvals_strategy: str = ApprovalsStrategy,
 ) -> int:
     """
-    Render the markdown tree for facet of target within render/pdf below document root.
+        Render the markdown tree for facet of target within render/pdf below document root.
+    \n
+        For ejected / customized templates set matching environment variables to the paths:\n
+        - LIITOS_BOOKMATTER_TEMPLATE (for title page incl. approvals table)\n
+        - LIITOS_PUBLISHER_TEMPLATE (for publisher page incl. changes and proprietary info)\n
+        - LIITOS_METADATA_TEMPLATE (values to required known keys used on LaTeX level)\n
+        - LIITOS_SETUP_TEMPLATE (general layout template)\n
+        - DRIVER_TEMPLATE (template for general structure)
     """
     code, message, doc, options = _verify_call_vector(
         doc_root=doc_root,
