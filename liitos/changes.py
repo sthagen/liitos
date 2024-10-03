@@ -42,12 +42,15 @@ PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
 PUBLISHER_TEMPLATE_IS_EXTERNAL = bool(PUBLISHER_TEMPLATE)
 if not PUBLISHER_TEMPLATE:
     PUBLISHER_TEMPLATE = 'templates/publisher.tex.in'
+external = 'external ' if PUBLISHER_TEMPLATE_IS_EXTERNAL else ''
+log.info(f'loading {external}publisher layout template from {PUBLISHER_TEMPLATE} for changes and notices')
 
 PUBLISHER_PATH = pathlib.Path('render/pdf/publisher.tex')
 CHANGE_ROW_TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 DEFAULT_REVISION = '00'
 ROW_TEMPLATE_NAMED = r'issue & revision & author & summary \\'
 ROW_TEMPLATE_ANONYMOUS = r'issue & revision & summary \\'
+ROW_TEMPLATE_ANONYMOUS_VERSION = r'issue & summary \\'
 GLUE = '\n\\hline\n'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
@@ -82,6 +85,23 @@ TABLE_ANONYMOUS_PRE = r"""\
 """
 TABLE_ANONYMOUS_ROWS = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.DESCRIPTION \\'
 TABLE_ANONYMOUS_POST = r"""\hline
+\end{longtable}
+"""
+
+TABLE_ANONYMOUS_VERSION_PRE = r"""\
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0800}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.8900}}|}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogIssLabel}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogDescLabel}
+\end{minipage} \\
+\hline
+"""
+TABLE_ANONYMOUS_VERSION_ROWS = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.DESCRIPTION \\'
+TABLE_ANONYMOUS_VERSION_POST = r"""\hline
 \end{longtable}
 """
 
@@ -143,15 +163,21 @@ def normalize(changes: object, channel: str, columns_expected: list[str]) -> lis
         for change in changes[0]['changes']:
             issue, author, summary = change['issue'], change.get('author', None), change['summary']
             revision = change.get('revision', DEFAULT_REVISION)
-            model.append({'issue': issue, 'revision': revision, 'author': author, 'summary': summary})
+            is_version = bool(change.get('version', False))
+            model.append(
+                {'issue': issue, 'revision': revision, 'author': author, 'summary': summary, 'is_version': is_version}
+            )
         return model
 
     for change in changes[0]['changes']:
         author = change.get('author', None)
         issue = change['issue']
         revision = change.get('revision', DEFAULT_REVISION)
+        is_version = bool(change.get('version', False))
         summary = change['summary']
-        model.append({'issue': issue, 'revision': revision, 'author': author, 'summary': summary})
+        model.append(
+            {'issue': issue, 'revision': revision, 'author': author, 'summary': summary, 'is_version': is_version}
+        )
 
     return model
 
@@ -198,13 +224,21 @@ def weave(
     logical_model = normalize(changes, channel=channel, columns_expected=columns_expected)
 
     is_anonymized = any(entry.get('author') is None for entry in logical_model)
+    is_version_semantics = False
     if is_anonymized:
-        rows = [
-            ROW_TEMPLATE_ANONYMOUS.replace('issue', kv['issue'])
-            .replace('revision', kv['revision'])
-            .replace('summary', kv['summary'])
-            for kv in logical_model
-        ]
+        if logical_model and logical_model[0].get('is_version', False):
+            is_version_semantics = True
+            rows = [
+                ROW_TEMPLATE_ANONYMOUS_VERSION.replace('issue', kv['issue']).replace('summary', kv['summary'])
+                for kv in logical_model
+            ]
+        else:
+            rows = [
+                ROW_TEMPLATE_ANONYMOUS.replace('issue', kv['issue'])
+                .replace('revision', kv['revision'])
+                .replace('summary', kv['summary'])
+                for kv in logical_model
+            ]
     else:
         rows = [
             ROW_TEMPLATE_NAMED.replace('issue', kv['issue'])
@@ -241,7 +275,10 @@ def weave(
     for n, line in enumerate(lines):
         if is_anonymized:
             if line.strip() == LAYOUT_ANONYMIZED_INSERT_MARKER:
-                table_text = TABLE_ANONYMOUS_PRE + GLUE.join(rows) + TABLE_ANONYMOUS_POST
+                if is_version_semantics:
+                    table_text = TABLE_ANONYMOUS_VERSION_PRE + GLUE.join(rows) + TABLE_ANONYMOUS_VERSION_POST
+                else:
+                    table_text = TABLE_ANONYMOUS_PRE + GLUE.join(rows) + TABLE_ANONYMOUS_POST
                 lines[n] = table_text
                 break
         else:
