@@ -1,5 +1,9 @@
 # Changes
 
+2024.10.3
+:    * Enhanced support for use of ejected / customized layouts
+* Provided detection of version semantics in changes data
+
 2024.9.29
 :    * Enabled bold dotted lines for sections in table of contents (<https://todo.sr.ht/~sthagen/liitos/64>)
 * Implemented normal font weight of level 3+ headings (<https://todo.sr.ht/~sthagen/liitos/63>)
