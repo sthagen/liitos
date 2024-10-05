@@ -10,34 +10,22 @@ import yaml
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, LOG_SEPARATOR, log
+from liitos import ENCODING, EXTERNALS, LOG_SEPARATOR, log
 
-METADATA_TEMPLATE = os.getenv('LIITOS_METADATA_TEMPLATE', '')
-METADATA_TEMPLATE_IS_EXTERNAL = bool(METADATA_TEMPLATE)
-if not METADATA_TEMPLATE:
-    METADATA_TEMPLATE = 'templates/metadata.tex.in'
-ext_meta = 'external ' if METADATA_TEMPLATE_IS_EXTERNAL else ''
-log.info(f'loading {ext_meta}metadata template from {METADATA_TEMPLATE} for mapping values to required keys')
+DRIVER_TEMPLATE_IS_CUSTOM = EXTERNALS['driver']['is_custom']
+DRIVER_TEMPLATE = str(EXTERNALS['driver']['id'])
+
+DRIVER_PATH = pathlib.Path('driver.tex')
+
+METADATA_TEMPLATE_IS_CUSTOM = EXTERNALS['metadata']['is_custom']
+METADATA_TEMPLATE = str(EXTERNALS['metadata']['id'])
 
 METADATA_PATH = pathlib.Path('metadata.tex')
 
-SETUP_TEMPLATE = os.getenv('LIITOS_SETUP_TEMPLATE', '')
-SETUP_TEMPLATE_IS_EXTERNAL = bool(SETUP_TEMPLATE)
-if not SETUP_TEMPLATE:
-    SETUP_TEMPLATE = 'templates/setup.tex.in'
-ext_setup = 'external ' if SETUP_TEMPLATE_IS_EXTERNAL else ''
-log.info(f'loading {ext_setup}setup layout template from {SETUP_TEMPLATE} for general document setup')
+SETUP_TEMPLATE_IS_CUSTOM = EXTERNALS['setup']['is_custom']
+SETUP_TEMPLATE = str(EXTERNALS['setup']['id'])
 
 SETUP_PATH = pathlib.Path('setup.tex')
-
-DRIVER_TEMPLATE = os.getenv('LIITOS_DRIVER_TEMPLATE', '')
-DRIVER_TEMPLATE_IS_EXTERNAL = bool(DRIVER_TEMPLATE)
-if not DRIVER_TEMPLATE:
-    DRIVER_TEMPLATE = 'templates/driver.tex.in'
-ext_driver = 'external ' if DRIVER_TEMPLATE_IS_EXTERNAL else ''
-log.info(f'loading {ext_driver}driver layout template from {DRIVER_TEMPLATE} for general document structure')
-
-DRIVER_PATH = pathlib.Path('driver.tex')
 
 VALUE_SLOT = 'VALUE.SLOT'
 DOC_BASE = pathlib.Path('..', '..')
@@ -45,24 +33,28 @@ STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 MAGIC_OF_TODAY = 'PUBLICATIONDATE'
 
 WEAVE_DEFAULTS = {
+    'approvals_adjustable_vertical_space': '2.5em',
+    'bold_font': 'ITCFranklinGothicStd-Demi',
+    'bold_italic_font': 'ITCFranklinGothicStd-DemiIt',
+    'bookmatter_path': '',
+    'change_log_tune_header_sep': '-0em',
+    'chosen_logo': '/opt/logo/liitos-logo.png',
+    'code_fontsize': r'\scriptsize',
+    'driver_path': '',
+    'fixed_font_package': 'sourcecodepro',
     'font_path': '/opt/fonts/',
     'font_suffix': '.otf',
-    'bold_font': 'ITCFranklinGothicStd-Demi',
-    'italic_font': 'ITCFranklinGothicStd-BookIt',
-    'bold_italic_font': 'ITCFranklinGothicStd-DemiIt',
-    'main_font': 'ITCFranklinGothicStd-Book',
-    'fixed_font_package': 'sourcecodepro',
-    'code_fontsize': r'\scriptsize',
-    'chosen_logo': '/opt/logo/liitos-logo.png',
     'footer_frame_note': os.getenv('LIITOS_FOOTER_FRAME_NOTE', ' '),  # TODO
     'footer_outer_field_normal_pages': r'\theMetaPageNumPrefix { } \thepage { }',
-    'approvals_adjustable_vertical_space': '2.5em',
-    'change_log_tune_header_sep': '-0em',
+    'italic_font': 'ITCFranklinGothicStd-BookIt',
+    'lox_indent': r'\hspace*{0.40\textwidth}',  # old default was '' for left align
+    'main_font': 'ITCFranklinGothicStd-Book',
     'proprietary_information': '/opt/legal/proprietary-information.txt',
     'proprietary_information_adjustable_vertical_space': '-0em',
     'proprietary_information_tune_header_sep': '-0em',
+    'publisher_path': '',
+    'setup_path': '',
     'stretch': '1.04',  # old default was 1.2
-    'lox_indent': r'\hspace*{0.40\textwidth}',  # old default was '' for left align
     'toc_all_dots': '',  # old default was not toc all dots, so '%' would restore
 }
 ACROSS = {
@@ -1185,19 +1177,19 @@ def weave(
     if isinstance(metadata, int):
         return 1
 
-    metadata_template = tpl.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_EXTERNAL)
+    metadata_template = tpl.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_CUSTOM)
     lines = [line.rstrip() for line in metadata_template.split('\n')]
     lines = weave_meta_meta(metadata, lines)
     with open(METADATA_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    driver_template = tpl.load_resource(DRIVER_TEMPLATE, DRIVER_TEMPLATE_IS_EXTERNAL)
+    driver_template = tpl.load_resource(DRIVER_TEMPLATE, DRIVER_TEMPLATE_IS_CUSTOM)
     lines = [line.rstrip() for line in driver_template.split('\n')]
     lines = weave_meta_driver(metadata, lines)
     with open(DRIVER_PATH, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    setup_template = tpl.load_resource(SETUP_TEMPLATE, SETUP_TEMPLATE_IS_EXTERNAL)
+    setup_template = tpl.load_resource(SETUP_TEMPLATE, SETUP_TEMPLATE_IS_CUSTOM)
     lines = [line.rstrip() for line in setup_template.split('\n')]
     lines = weave_meta_setup(metadata, lines)
     with open(SETUP_PATH, 'wt', encoding=ENCODING) as handle:

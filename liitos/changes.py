@@ -28,24 +28,19 @@ The anonymous layout requires more dynamic LaTeX generation and thus generates t
 from the data inside this module.
 """
 
-import os
 import pathlib
 from typing import Generator, Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, LOG_SEPARATOR, PathLike, log
+from liitos import ENCODING, EXTERNALS, LOG_SEPARATOR, PathLike, log
 
-
-PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
-PUBLISHER_TEMPLATE_IS_EXTERNAL = bool(PUBLISHER_TEMPLATE)
-if not PUBLISHER_TEMPLATE:
-    PUBLISHER_TEMPLATE = 'templates/publisher.tex.in'
-external = 'external ' if PUBLISHER_TEMPLATE_IS_EXTERNAL else ''
-log.info(f'loading {external}publisher layout template from {PUBLISHER_TEMPLATE} for changes and notices')
+PUBLISHER_TEMPLATE_IS_CUSTOM = bool(EXTERNALS['publisher']['is_custom'])
+PUBLISHER_TEMPLATE = str(EXTERNALS['publisher']['id'])
 
 PUBLISHER_PATH = pathlib.Path('render/pdf/publisher.tex')
+
 CHANGE_ROW_TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 DEFAULT_REVISION = '00'
 ROW_TEMPLATE_NAMED = r'issue & revision & author & summary \\'
@@ -251,7 +246,7 @@ def weave(
     pushdown = DEFAULT_ADJUSTED_PUSHDOWN_VALUE
     log.info(f'calculated adjusted pushdown to be {pushdown}em')
 
-    publisher_template = tpl.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_EXTERNAL)
+    publisher_template = tpl.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_CUSTOM)
     lines = [line.rstrip() for line in publisher_template.split(NL)]
 
     if any(TOKEN_ADJUSTED_PUSHDOWN in line for line in lines):

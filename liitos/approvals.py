@@ -31,23 +31,19 @@ from the data inside this module.
 For more than 4 role bearers a second table should be placed below the first, to keep the cell content readable.
 """
 
-import os
 import pathlib
 from typing import Union, no_type_check
 
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
+from liitos import ENCODING, EXTERNALS, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
 
-BOOKMATTER_TEMPLATE = os.getenv('LIITOS_BOOKMATTER_TEMPLATE', '')
-BOOKMATTER_TEMPLATE_IS_EXTERNAL = bool(BOOKMATTER_TEMPLATE)
-if not BOOKMATTER_TEMPLATE:
-    BOOKMATTER_TEMPLATE = 'templates/bookmatter.tex.in'
-external = 'external ' if BOOKMATTER_TEMPLATE_IS_EXTERNAL else ''
-log.info(f'loading {external}bookmatter layout template from {BOOKMATTER_TEMPLATE} for title page incl. approvals')
+BOOKMATTER_TEMPLATE_IS_CUSTOM = bool(EXTERNALS['bookmatter']['is_custom'])
+BOOKMATTER_TEMPLATE = str(EXTERNALS['bookmatter']['id'])
 
 BOOKMATTER_PATH = pathlib.Path('render/pdf/bookmatter.tex')
+
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105
 EXTRA_OFFSET_EM = 24
 TOKEN = r'\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]'  # nosec B105
@@ -292,7 +288,7 @@ def weave(
     pushdown = EXTRA_OFFSET_EM - 2 * len(rows)
     log.info(f'calculated extra pushdown to be {pushdown}em')
 
-    bookmatter_template = tpl.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_EXTERNAL)
+    bookmatter_template = tpl.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_CUSTOM)
     lines = [line.rstrip() for line in bookmatter_template.split('\n')]
 
     if not layout['layout']['global']['has_approvals']:

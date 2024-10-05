@@ -51,6 +51,7 @@ KNOWN_APPROVALS_STRATEGIES = ('south', 'east')
 APPROVALS_STRATEGY = os.getenv('LIITOS_APPROVALS_STRATEGY', '').lower()
 
 PathLike = Union[str, pathlib.Path]
+ExternalsType = dict[str, dict[str, Union[PathLike, bool]]]
 
 try:
     SHELL = shellingham.detect_shell()
@@ -130,6 +131,61 @@ TOOL_VERSION_COMMAND_MAP = {
 
 ToolKey = str
 
+EXTERNALS: ExternalsType = {
+    'bookmatter': {
+        'id': 'templates/bookmatter.tex.in',
+        'is_custom': False,
+    },
+    'driver': {
+        'id': 'templates/driver.tex.in',
+        'is_custom': False,
+    },
+    'publisher': {
+        'id': 'templates/publisher.tex.in',
+        'is_custom': False,
+    },
+    'metadata': {
+        'id': 'templates/metadata.tex.in',
+        'is_custom': False,
+    },
+    'setup': {
+        'id': 'templates/setup.tex.in',
+        'is_custom': False,
+    },
+}
+
+DRIVER_TEMPLATE = os.getenv('LIITOS_DRIVER_TEMPLATE', '')
+if DRIVER_TEMPLATE:
+    EXTERNALS['driver'] = {'id': DRIVER_TEMPLATE, 'is_custom': True}
+    ext_driver = 'external ' if EXTERNALS['driver']['is_custom'] else ''
+    log.info(f'loading {ext_driver}driver layout template from {DRIVER_TEMPLATE} for general document structure')
+
+BOOKMATTER_TEMPLATE = os.getenv('LIITOS_BOOKMATTER_TEMPLATE', '')
+if BOOKMATTER_TEMPLATE:
+    EXTERNALS['bookmatter'] = {'id': BOOKMATTER_TEMPLATE, 'is_custom': True}
+    ext_bookmatter = 'external ' if EXTERNALS['bookmatter']['is_custom'] else ''
+    log.info(
+        f'loading {ext_bookmatter}bookmatter layout template from {BOOKMATTER_TEMPLATE} for title page incl. approvals'
+    )
+
+METADATA_TEMPLATE = os.getenv('LIITOS_METADATA_TEMPLATE', '')
+if METADATA_TEMPLATE:
+    EXTERNALS['metadata'] = {'id': METADATA_TEMPLATE, 'is_custom': True}
+    ext_meta = 'external ' if EXTERNALS['metadata']['is_custom'] else ''
+    log.info(f'loading {ext_meta}metadata template from {METADATA_TEMPLATE} for mapping values to required keys')
+
+PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
+if PUBLISHER_TEMPLATE:
+    EXTERNALS['publisher'] = {'id': METADATA_TEMPLATE, 'is_custom': True}
+    ext_publisher = 'external ' if EXTERNALS['publisher']['is_custom'] else ''
+    log.info(f'loading {ext_publisher}publisher layout template from {PUBLISHER_TEMPLATE} for changes and notices')
+
+SETUP_TEMPLATE = os.getenv('LIITOS_SETUP_TEMPLATE', '')
+if SETUP_TEMPLATE:
+    EXTERNALS['setup'] = {'id': METADATA_TEMPLATE, 'is_custom': True}
+    ext_setup = 'external ' if EXTERNALS['setup']['is_custom'] else ''
+    log.info(f'loading {ext_setup}setup layout template from {SETUP_TEMPLATE} for general document setup')
+
 TS_FORMAT_LOG = '%Y-%m-%dT%H:%M:%S'
 TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'
 
@@ -140,6 +196,8 @@ __all__: list[str] = [
     'APPROVALS_STRATEGY',
     'DEFAULT_STRUCTURE_NAME',
     'ENCODING',
+    'EXTERNALS',
+    'ExternalsType',
     'CONTEXT',
     'FILTER_CS_LIST',
     'FROM_FORMAT_SPEC',
