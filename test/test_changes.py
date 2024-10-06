@@ -2,6 +2,7 @@ import os
 import pathlib
 
 import liitos.changes as changes
+from liitos import EXTERNALS
 
 EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 EXAMPLE_LEGACY_DOC_ROOT = pathlib.Path('example', 'legacy')
@@ -15,6 +16,7 @@ def test_changes_deep():
         'target_key': 'prod_kind',
         'facet_key': 'deep',
         'options': {},
+        'externals': EXTERNALS,
     }
     restore = os.getcwd()
     assert changes.weave(**parameters) == 0
@@ -28,6 +30,7 @@ def test_changes_legacy():
         'target_key': 'prod_kind',
         'facet_key': 'legacy',
         'options': {},
+        'externals': EXTERNALS,
     }
     restore = os.getcwd()
     assert changes.weave(**parameters) == 0

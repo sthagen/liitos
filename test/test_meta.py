@@ -2,6 +2,7 @@ import os
 import pathlib
 
 import liitos.meta as meta
+from liitos import EXTERNALS
 
 EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
 
@@ -304,6 +305,7 @@ def test_ren_der():
         'target_key': 'prod_kind',
         'facet_key': 'deep',
         'options': {},
+        'externals': EXTERNALS,
     }
     restore = os.getcwd()
     assert meta.weave(**parameters) == 0

@@ -1,5 +1,6 @@
 """Command line interface for splice (Finnish liitos) contributions."""
 
+import copy
 import datetime as dti
 import logging
 import os
@@ -22,6 +23,7 @@ from liitos import (
     APP_VERSION,
     APPROVALS_STRATEGY,
     DEFAULT_STRUCTURE_NAME,
+    EXTERNALS,
     FILTER_CS_LIST,
     FROM_FORMAT_SPEC,
     KNOWN_APPROVALS_STRATEGIES,
@@ -238,7 +240,14 @@ def approvals(  # noqa
         return 2
 
     return sys.exit(
-        sig.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+        sig.weave(
+            doc_root=doc,
+            structure_name=structure,
+            target_key=target,
+            facet_key=facet,
+            options=options,
+            externals=EXTERNALS,
+        )
     )
 
 
@@ -263,7 +272,14 @@ def changes(  # noqa
         return 2
 
     return sys.exit(
-        chg.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+        chg.weave(
+            doc_root=doc,
+            structure_name=structure,
+            target_key=target,
+            facet_key=facet,
+            options=options,
+            externals=EXTERNALS,
+        )
     )
 
 
@@ -343,21 +359,28 @@ def render(  # noqa
     idem = os.getcwd()
     doc = '../../'
     log.info(f'before met.weave(): {os.getcwd()} set doc ({doc})')
-    code = met.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    externals = copy.deepcopy(EXTERNALS)
+    code = met.weave(
+        doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options, externals=externals
+    )
     if code:
         return sys.exit(code)
 
     log.info(f'before sig.weave(): {os.getcwd()} set doc ({doc})')
     os.chdir(idem)
     log.info(f'relocated for sig.weave(): {os.getcwd()} with doc ({doc})')
-    code = sig.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    code = sig.weave(
+        doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options, externals=externals
+    )
     if code:
         return sys.exit(code)
 
     log.info(f'before chg.weave(): {os.getcwd()} set doc ({doc})')
     os.chdir(idem)
     log.info(f'relocated for chg.weave(): {os.getcwd()} with doc ({doc})')
-    code = chg.weave(doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options)
+    code = chg.weave(
+        doc_root=doc, structure_name=structure, target_key=target, facet_key=facet, options=options, externals=externals
+    )
     if code:
         return sys.exit(code)
 

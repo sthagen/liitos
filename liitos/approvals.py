@@ -37,7 +37,7 @@ from typing import Union, no_type_check
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, EXTERNALS, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
+from liitos import ENCODING, ExternalsType, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
 
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105
 EXTRA_OFFSET_EM = 24
@@ -248,6 +248,7 @@ def weave(
     target_key: str,
     facet_key: str,
     options: dict[str, Union[bool, str]],
+    externals: ExternalsType,
 ) -> int:
     """Map the approvals data to a table on the titlepage."""
     log.info(LOG_SEPARATOR)
@@ -283,8 +284,8 @@ def weave(
     pushdown = EXTRA_OFFSET_EM - 2 * len(rows)
     log.info(f'calculated extra pushdown to be {pushdown}em')
 
-    bookmatter_template_is_custom = bool(EXTERNALS['bookmatter']['is_custom'])
-    bookmatter_template = str(EXTERNALS['bookmatter']['id'])
+    bookmatter_template_is_custom = bool(externals['bookmatter']['is_custom'])
+    bookmatter_template = str(externals['bookmatter']['id'])
     bookmatter_path = pathlib.Path('render/pdf/bookmatter.tex')
 
     bookmatter_template = tpl.load_resource(bookmatter_template, bookmatter_template_is_custom)

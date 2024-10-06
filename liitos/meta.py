@@ -10,7 +10,7 @@ import yaml
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, EXTERNALS, LOG_SEPARATOR, log
+from liitos import ENCODING, ExternalsType, LOG_SEPARATOR, log
 
 VALUE_SLOT = 'VALUE.SLOT'
 DOC_BASE = pathlib.Path('..', '..')
@@ -34,6 +34,7 @@ WEAVE_DEFAULTS = {
     'italic_font': 'ITCFranklinGothicStd-BookIt',
     'lox_indent': r'\hspace*{0.40\textwidth}',  # old default was '' for left align
     'main_font': 'ITCFranklinGothicStd-Book',
+    'metadata_path': '',
     'proprietary_information': '/opt/legal/proprietary-information.txt',
     'proprietary_information_adjustable_vertical_space': '-0em',
     'proprietary_information_tune_header_sep': '-0em',
@@ -1132,7 +1133,12 @@ def weave_meta_meta(meta_map: gat.Meta, latex: list[str]) -> list[str]:
 
 @no_type_check
 def weave(
-    doc_root: Union[str, pathlib.Path], structure_name: str, target_key: str, facet_key: str, options: dict[str, bool]
+    doc_root: Union[str, pathlib.Path],
+    structure_name: str,
+    target_key: str,
+    facet_key: str,
+    options: dict[str, bool],
+    externals: ExternalsType,
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
@@ -1162,53 +1168,86 @@ def weave(
     if isinstance(metadata, int):
         return 1
 
-    if 'bookmatter_path' in metadata:
-        bookmatter_path_str = metadata['bookmatter_path']
+    meta_doc_common = metadata['document']['common']  # noqa
+    log.debug(f'in meta.weave {meta_doc_common=}')
+    log.debug(f'in meta.weave {externals=}')
+    if externals['bookmatter']['is_custom']:
+        log.info(
+            'per environment variable value request to load external bookmatter layout template'
+            f' from {externals["bookmatter"]["id"]} for title page incl. approvals'
+        )
+    log.debug(f'in meta.weave bookmatter_path is "{meta_doc_common.get("bookmatter_path", "NOT-PRESENT")}"')
+    if 'bookmatter_path' in meta_doc_common:
+        bookmatter_path_str = meta_doc_common['bookmatter_path']
         if bookmatter_path_str and isinstance(bookmatter_path_str, str):
-            EXTERNALS['bookmatter'] = {'id': bookmatter_path_str.strip(), 'is_custom': True}
+            externals['bookmatter'] = {'id': bookmatter_path_str.strip(), 'is_custom': True}
             log.info(
-                f'per environment variable value request to load external bookmatter layout template'
-                f' from {EXTERNALS["bookmatter"]["id"]} title page incl. approvals'
+                f'per configuration variable value request to load external bookmatter layout template'
+                f' from {externals["bookmatter"]["id"]} title page incl. approvals'
             )
 
-    if 'driver_path' in metadata:
-        driver_path_str = metadata['driver_path']
+    if externals['driver']['is_custom']:
+        log.info(
+            'per environment variable value request to load external driver layout template'
+            f' from {externals["driver"]["id"]} for general document structure'
+        )
+    log.debug(f'in meta.weave driver_path is "{meta_doc_common.get("driver_path", "NOT-PRESENT")}"')
+    if 'driver_path' in meta_doc_common:
+        driver_path_str = meta_doc_common['driver_path']
         if driver_path_str and isinstance(driver_path_str, str):
-            EXTERNALS['driver'] = {'id': driver_path_str.strip(), 'is_custom': True}
+            externals['driver'] = {'id': driver_path_str.strip(), 'is_custom': True}
             log.info(
-                f'per environment variable value request to load external driver layout template'
-                f' from {EXTERNALS["driver"]["id"]} for general document structure'
+                f'per configuration variable value request to load external driver layout template'
+                f' from {externals["driver"]["id"]} for general document structure'
             )
 
-    if 'metadata_path' in metadata:
-        metadata_path_str = metadata['metadata_path']
+    if externals['metadata']['is_custom']:
+        log.info(
+            'per environment variable value request to load external metadata template'
+            f' from {externals["metadata"]["id"]} for mapping values to required keys'
+        )
+    log.debug(f'in meta.weave metadata_path is "{meta_doc_common.get("metadata_path", "NOT-PRESENT")}"')
+    if 'metadata_path' in meta_doc_common:
+        metadata_path_str = meta_doc_common['metadata_path']
         if metadata_path_str and isinstance(metadata_path_str, str):
-            EXTERNALS['metadata'] = {'id': metadata_path_str.strip(), 'is_custom': True}
+            externals['metadata'] = {'id': metadata_path_str.strip(), 'is_custom': True}
             log.info(
-                f'per environment variable value request to load external metadata template'
-                f' from {EXTERNALS["metadata"]["id"]} for mapping values to required keys'
+                f'per configuration variable value request to load external metadata template'
+                f' from {externals["metadata"]["id"]} for mapping values to required keys'
             )
 
-    if 'publisher_path' in metadata:
-        publisher_path_str = metadata['publisher_path']
+    if externals['publisher']['is_custom']:
+        log.info(
+            'per environment variable value request to load external publisher layout template'
+            f' from {externals["publisher"]["id"]} for changes and notices'
+        )
+    log.debug(f'in meta.weave publisher_path is "{meta_doc_common.get("publisher_path", "NOT-PRESENT")}"')
+    if 'publisher_path' in meta_doc_common:
+        publisher_path_str = meta_doc_common['publisher_path']
         if publisher_path_str and isinstance(publisher_path_str, str):
-            EXTERNALS['publisher'] = {'id': publisher_path_str.strip(), 'is_custom': True}
+            externals['publisher'] = {'id': publisher_path_str.strip(), 'is_custom': True}
             log.info(
-                f'per environment variable value request to load external publisher layout template'
-                f' from {EXTERNALS["publisher"]["id"]} for changes and notices'
+                f'per configuration variable value request to load external publisher layout template'
+                f' from {externals["publisher"]["id"]} for changes and notices'
             )
 
-    if 'setup_path' in metadata:
-        setup_path_str = metadata['setup_path']
+    if externals['setup']['is_custom']:
+        log.info(
+            'per environment variable value request to load external setup layout template'
+            f' from {externals["setup"]["id"]} for general document setup'
+        )
+    log.debug(f'in meta.weave setup_path is "{meta_doc_common.get("setup_path", "NOT-PRESENT")}"')
+    if 'setup_path' in meta_doc_common:
+        setup_path_str = meta_doc_common['setup_path']
         if setup_path_str and isinstance(setup_path_str, str):
-            EXTERNALS['setup'] = {'id': setup_path_str.strip(), 'is_custom': True}
+            externals['setup'] = {'id': setup_path_str.strip(), 'is_custom': True}
             log.info(
-                f'per environment variable value request to load external setup layout template'
-                f' from {EXTERNALS["setup"]["id"]} for general document setup'
+                f'per configuration variable value request to load external setup layout template'
+                f' from {externals["setup"]["id"]} for general document setup'
             )
 
-    metadata_template_is_custom = EXTERNALS['metadata']['is_custom']
-    metadata_template = str(EXTERNALS['metadata']['id'])
+    metadata_template_is_custom = externals['metadata']['is_custom']
+    metadata_template = str(externals['metadata']['id'])
     metadata_path = pathlib.Path('metadata.tex')
 
     metadata_template = tpl.load_resource(metadata_template, metadata_template_is_custom)
@@ -1217,8 +1256,8 @@ def weave(
     with open(metadata_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    driver_template_is_custom = EXTERNALS['driver']['is_custom']
-    driver_template = str(EXTERNALS['driver']['id'])
+    driver_template_is_custom = externals['driver']['is_custom']
+    driver_template = str(externals['driver']['id'])
     driver_path = pathlib.Path('driver.tex')
 
     driver_template = tpl.load_resource(driver_template, driver_template_is_custom)
@@ -1227,8 +1266,8 @@ def weave(
     with open(driver_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    setup_template_is_custom = EXTERNALS['setup']['is_custom']
-    setup_template = str(EXTERNALS['setup']['id'])
+    setup_template_is_custom = externals['setup']['is_custom']
+    setup_template = str(externals['setup']['id'])
     setup_path = pathlib.Path('setup.tex')
 
     setup_template = tpl.load_resource(setup_template, setup_template_is_custom)

@@ -2,6 +2,7 @@ import os
 import pathlib
 
 import liitos.approvals as approvals
+from liitos import EXTERNALS
 
 BASIC_FIXTURE_ROOT = pathlib.Path('test', 'fixtures', 'basic')
 EXAMPLE_DEEP_DOC_ROOT = pathlib.Path('example', 'deep')
@@ -16,6 +17,7 @@ def test_approvals():
         'target_key': 'prod_kind',
         'facet_key': 'deep',
         'options': {},
+        'externals': EXTERNALS,
     }
     restore = os.getcwd()
     assert approvals.weave(**parameters) == 0
@@ -29,6 +31,7 @@ def test_approvals_legacy():
         'target_key': 'prod_kind',
         'facet_key': 'legacy',
         'options': {},
+        'externals': EXTERNALS,
     }
     restore = os.getcwd()
     assert approvals.weave(**parameters) == 0

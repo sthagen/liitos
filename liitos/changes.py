@@ -34,7 +34,7 @@ from typing import Generator, Union, no_type_check
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, EXTERNALS, LOG_SEPARATOR, PathLike, log
+from liitos import ENCODING, ExternalsType, LOG_SEPARATOR, PathLike, log
 
 CHANGE_ROW_TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 DEFAULT_REVISION = '00'
@@ -187,6 +187,7 @@ def weave(
     target_key: str,
     facet_key: str,
     options: dict[str, Union[bool, str]],
+    externals: ExternalsType,
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)
@@ -241,8 +242,8 @@ def weave(
     pushdown = DEFAULT_ADJUSTED_PUSHDOWN_VALUE
     log.info(f'calculated adjusted pushdown to be {pushdown}em')
 
-    publisher_template_is_custom = bool(EXTERNALS['publisher']['is_custom'])
-    publisher_template = str(EXTERNALS['publisher']['id'])
+    publisher_template_is_custom = bool(externals['publisher']['is_custom'])
+    publisher_template = str(externals['publisher']['id'])
     publisher_path = pathlib.Path('render/pdf/publisher.tex')
 
     publisher_template = tpl.load_resource(publisher_template, publisher_template_is_custom)
