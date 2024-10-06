@@ -1,5 +1,8 @@
 # Changes
 
+2024.10.6
+:    * Implemented runtime handling of templates per configuration overwriting environment paths
+
 2024.10.3
 :    * Enhanced support for use of ejected / customized layouts
 * Provided detection of version semantics in changes data
