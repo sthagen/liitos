@@ -241,6 +241,46 @@ Invalid asset link of facet for target document key:
 
 ## Render
 
+### Render - Help
+
+```console
+❯ liitos render --help
+
+ Usage: liitos render [OPTIONS] [DOC_ROOT_POS]
+
+ Render the markdown tree for facet of target within render/pdf below document root.
+ For ejected / customized templates set matching environment variables to the paths:
+ - LIITOS_BOOKMATTER_TEMPLATE (for title page incl. approvals table)
+ - LIITOS_PUBLISHER_TEMPLATE (for publisher page incl. changes and proprietary info)
+ - LIITOS_METADATA_TEMPLATE (values to required known keys used on LaTeX level)
+ - LIITOS_SETUP_TEMPLATE (general layout template)
+ - DRIVER_TEMPLATE (template for general structure)
+
+╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────╮
+│   doc_root_pos      [DOC_ROOT_POS]                                                                         │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --document-root       -d      TEXT  Root of the document tree to visit. Optional (default: positional tree │
+│                                     root value)                                                            │
+│ --structure           -s      TEXT  structure mapping file (default: {gat.DEFAULT_STRUCTURE_NAME})         │
+│                                     [default: structure.yml]                                               │
+│ --target              -t      TEXT  target document key                                                    │
+│ --facet               -f      TEXT  facet key of target document                                           │
+│ --label               -l      TEXT  optional label call to execute                                         │
+│ --verbose             -v            Verbose output (default is False)                                      │
+│ --strict                            Ouput noisy warnings on console (default is False)                     │
+│ --patch-tables        -p            Patch tables EXPERIMENTAL (default is False)                           │
+│ --from-format-spec            TEXT  from format specification handed over to pandoc [default: markdown]    │
+│ --filters             -F      TEXT  comma separated list of filters handed over to pandoc (in order) or    │
+│                                     empty to apply no filter                                               │
+│                                     [default: DEFAULT_FILTER]                                              │
+│ --approvals-strategy  -a      TEXT  optional approvals layout strategy in (south, east)                    │
+│ --help                -h            Show this message and exit.                                            │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```
+
+### Render Example and Notes
+
 Note: Since version 2023.1.21 an optional `-l,--label` parameter allows to provide a call string for
 labeling the resulting pdf file. Example: `... --label 'etiketti --enforce'`
 (that could be using the [`etiketti` script from the package with the same name](https://pypi.org/project/etiketti/)).
@@ -982,7 +1022,7 @@ The eject command when used to produce a `meta-base.yml` template provides all k
 ---
 document:
   common:
-    approvals_adjustable_vertical_space: '2.5em'
+    approvals_adjustable_vertical_space: -4.0em
     approvals_date_and_signature_label: Date and Signature
     approvals_department_label: Department
     approvals_department_value: ABC
@@ -991,18 +1031,20 @@ document:
     bold_font: ITCFranklinGothicStd-Demi
     bold_italic_font: ITCFranklinGothicStd-DemiIt
     bookmark_title: null
+    bookmatter_path: null
     change_log_author_label: Author
     change_log_date_label: Date
     change_log_description_label: Description
     change_log_issue_label: Iss.
     change_log_revision_label: Rev.
-    change_log_tune_header_sep: '-0em'
+    change_log_tune_header_sep: 0.1em
     chosen_logo: /opt/logo/liitos-logo.png
     code_fontsize: \scriptsize
+    driver_path: null
     fixed_font_package: sourcecodepro
     font_path: /opt/fonts/
     font_suffix: .otf
-    footer_frame_note: null
+    footer_frame_note: Some Proprietary Information
     footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
     footer_page_number_prefix: Page
     has_approvals: true
@@ -1018,24 +1060,40 @@ document:
     header_issue_revision_combined: null
     header_issue_revision_combined_label: 'Issue, Revision:'
     header_issue_revision_combined_show: true
-    header_title: null
-    header_type: Engineering Document
+    header_title: SOME GENERIC
+    header_type: Type of Document
     issue: '01'
     italic_font: ITCFranklinGothicStd-BookIt
     list_of_figures: '%'  # empty string to enable lof
     list_of_tables: '%'  # empty string to enable lot
     lox_indent: \hspace*{0.40\textwidth}  # old default was '' for left align
     main_font: ITCFranklinGothicStd-Book
+    metadata_path: null
     proprietary_information: /opt/legal/proprietary-information.txt
-    proprietary_information_adjustable_vertical_space: '-0em'
-    proprietary_information_tune_header_sep: '-0em'
+    proprietary_information_adjustable_vertical_space: -1.7em
+    proprietary_information_tune_header_sep: 0.1em
+    publisher_path: null
     revision: '00'
+    setup_path: null
     stretch: '1.04'  # old default was '1.2'
     sub_title: ' '
     title: null
     toc_all_dots: ' '  # old default was not toc all dots, so '%' would restore
     toc_level: 2
 ```
+
+Note: Starting with version 2024.10.6 you can set paths to your own ejected / custom
+templates per `<aspect>_path` value. The following keys are considered:
+
+- `bookmatter_path` overwrites `LIITOS_BOOKMATTER_TEMPLATE` if set (for title page incl. approvals table)
+- `driver_path` overwrites `DRIVER_TEMPLATE` if set (template for general structure)
+- `metadata_path` overwrites `LIITOS_METADATA_TEMPLATE` if set (values to required known keys used on LaTeX level)
+- `publisher_path` overwrites `LIITOS_PUBLISHER_TEMPLATE` if set (for publisher page incl. changes and proprietary info)
+- `setup_path` overwrites `LIITOS_SETUP_TEMPLATE` if set (general layout template)
+
+When the key is missing or the value is falsy the corresponding environment variable value is taken.
+If the environment variable is not set or the value is falsy, then the default templates file is used from the distribution.
+
 ### Including Markdown Files
 
 First things first:
