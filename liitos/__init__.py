@@ -51,7 +51,8 @@ KNOWN_APPROVALS_STRATEGIES = ('south', 'east')
 APPROVALS_STRATEGY = os.getenv('LIITOS_APPROVALS_STRATEGY', '').lower()
 
 PathLike = Union[str, pathlib.Path]
-ExternalsType = dict[str, dict[str, Union[PathLike, bool]]]
+PathLikeOrBool = Union[PathLike, bool
+ExternalsType = dict[str, dict[str, PathLikeOrBool]]
 
 try:
     SHELL = shellingham.detect_shell()
