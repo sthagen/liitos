@@ -47,6 +47,7 @@ document:
     list_of_tables: '%'  # empty string to enable lot
     lox_indent: \hspace*{0.40\textwidth}  # old default was '' for left align
     main_font: ITCFranklinGothicStd-Book
+    metadata_path: null
     proprietary_information: /opt/legal/proprietary-information.txt
     proprietary_information_adjustable_vertical_space: -1.7em
     proprietary_information_tune_header_sep: 0.1em
