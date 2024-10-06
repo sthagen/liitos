@@ -39,11 +39,6 @@ import liitos.template as tpl
 import liitos.tools as too
 from liitos import ENCODING, EXTERNALS, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
 
-BOOKMATTER_TEMPLATE_IS_CUSTOM = bool(EXTERNALS['bookmatter']['is_custom'])
-BOOKMATTER_TEMPLATE = str(EXTERNALS['bookmatter']['id'])
-
-BOOKMATTER_PATH = pathlib.Path('render/pdf/bookmatter.tex')
-
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105
 EXTRA_OFFSET_EM = 24
 TOKEN = r'\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]'  # nosec B105
@@ -288,7 +283,11 @@ def weave(
     pushdown = EXTRA_OFFSET_EM - 2 * len(rows)
     log.info(f'calculated extra pushdown to be {pushdown}em')
 
-    bookmatter_template = tpl.load_resource(BOOKMATTER_TEMPLATE, BOOKMATTER_TEMPLATE_IS_CUSTOM)
+    bookmatter_template_is_custom = bool(EXTERNALS['bookmatter']['is_custom'])
+    bookmatter_template = str(EXTERNALS['bookmatter']['id'])
+    bookmatter_path = pathlib.Path('render/pdf/bookmatter.tex')
+
+    bookmatter_template = tpl.load_resource(bookmatter_template, bookmatter_template_is_custom)
     lines = [line.rstrip() for line in bookmatter_template.split('\n')]
 
     if not layout['layout']['global']['has_approvals']:
@@ -305,7 +304,7 @@ def weave(
         lines = list(too.remove_target_region_gen(lines, LAYOUT_SOUTH_CUT_MARKER_TOP, LAYOUT_SOUTH_CUT_MARKER_BOTTOM))
         inject_eastwards(lines, logical_model, pushdown)
 
-    effective_path = pathlib.Path(layout_path).parent / BOOKMATTER_PATH
+    effective_path = pathlib.Path(layout_path).parent / bookmatter_path
     log.info(f'Writing effective bookmatter file to ({effective_path})')
     with open(effective_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))

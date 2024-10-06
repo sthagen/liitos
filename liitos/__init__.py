@@ -154,37 +154,50 @@ EXTERNALS: ExternalsType = {
     },
 }
 
-DRIVER_TEMPLATE = os.getenv('LIITOS_DRIVER_TEMPLATE', '')
-if DRIVER_TEMPLATE:
-    EXTERNALS['driver'] = {'id': DRIVER_TEMPLATE, 'is_custom': True}
-    ext_driver = 'external ' if EXTERNALS['driver']['is_custom'] else ''
-    log.info(f'loading {ext_driver}driver layout template from {DRIVER_TEMPLATE} for general document structure')
-
 BOOKMATTER_TEMPLATE = os.getenv('LIITOS_BOOKMATTER_TEMPLATE', '')
 if BOOKMATTER_TEMPLATE:
     EXTERNALS['bookmatter'] = {'id': BOOKMATTER_TEMPLATE, 'is_custom': True}
     ext_bookmatter = 'external ' if EXTERNALS['bookmatter']['is_custom'] else ''
     log.info(
-        f'loading {ext_bookmatter}bookmatter layout template from {BOOKMATTER_TEMPLATE} for title page incl. approvals'
+        f'per environment variable value request to load {ext_bookmatter}bookmatter layout template'
+        f' from {BOOKMATTER_TEMPLATE} for title page incl. approvals'
+    )
+
+DRIVER_TEMPLATE = os.getenv('LIITOS_DRIVER_TEMPLATE', '')
+if DRIVER_TEMPLATE:
+    EXTERNALS['driver'] = {'id': DRIVER_TEMPLATE, 'is_custom': True}
+    ext_driver = 'external ' if EXTERNALS['driver']['is_custom'] else ''
+    log.info(
+        f'per environment variable value request to load {ext_driver}driver layout template'
+        f' from {DRIVER_TEMPLATE} for general document structure'
     )
 
 METADATA_TEMPLATE = os.getenv('LIITOS_METADATA_TEMPLATE', '')
 if METADATA_TEMPLATE:
     EXTERNALS['metadata'] = {'id': METADATA_TEMPLATE, 'is_custom': True}
     ext_meta = 'external ' if EXTERNALS['metadata']['is_custom'] else ''
-    log.info(f'loading {ext_meta}metadata template from {METADATA_TEMPLATE} for mapping values to required keys')
+    log.info(
+        f'per environment variable value request to load {ext_meta}metadata template'
+        f' from {METADATA_TEMPLATE} for mapping values to required keys'
+    )
 
 PUBLISHER_TEMPLATE = os.getenv('LIITOS_PUBLISHER_TEMPLATE', '')
 if PUBLISHER_TEMPLATE:
     EXTERNALS['publisher'] = {'id': METADATA_TEMPLATE, 'is_custom': True}
     ext_publisher = 'external ' if EXTERNALS['publisher']['is_custom'] else ''
-    log.info(f'loading {ext_publisher}publisher layout template from {PUBLISHER_TEMPLATE} for changes and notices')
+    log.info(
+        f'per environment variable value request to load {ext_publisher}publisher layout template'
+        f' from {PUBLISHER_TEMPLATE} for changes and notices'
+    )
 
 SETUP_TEMPLATE = os.getenv('LIITOS_SETUP_TEMPLATE', '')
 if SETUP_TEMPLATE:
     EXTERNALS['setup'] = {'id': METADATA_TEMPLATE, 'is_custom': True}
     ext_setup = 'external ' if EXTERNALS['setup']['is_custom'] else ''
-    log.info(f'loading {ext_setup}setup layout template from {SETUP_TEMPLATE} for general document setup')
+    log.info(
+        f'per environment variable value request to load {ext_setup}setup layout template'
+        f' from {SETUP_TEMPLATE} for general document setup'
+    )
 
 TS_FORMAT_LOG = '%Y-%m-%dT%H:%M:%S'
 TS_FORMAT_PAYLOADS = '%Y-%m-%d %H:%M:%S.%f UTC'

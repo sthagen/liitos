@@ -36,11 +36,6 @@ import liitos.template as tpl
 import liitos.tools as too
 from liitos import ENCODING, EXTERNALS, LOG_SEPARATOR, PathLike, log
 
-PUBLISHER_TEMPLATE_IS_CUSTOM = bool(EXTERNALS['publisher']['is_custom'])
-PUBLISHER_TEMPLATE = str(EXTERNALS['publisher']['id'])
-
-PUBLISHER_PATH = pathlib.Path('render/pdf/publisher.tex')
-
 CHANGE_ROW_TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 DEFAULT_REVISION = '00'
 ROW_TEMPLATE_NAMED = r'issue & revision & author & summary \\'
@@ -246,7 +241,11 @@ def weave(
     pushdown = DEFAULT_ADJUSTED_PUSHDOWN_VALUE
     log.info(f'calculated adjusted pushdown to be {pushdown}em')
 
-    publisher_template = tpl.load_resource(PUBLISHER_TEMPLATE, PUBLISHER_TEMPLATE_IS_CUSTOM)
+    publisher_template_is_custom = bool(EXTERNALS['publisher']['is_custom'])
+    publisher_template = str(EXTERNALS['publisher']['id'])
+    publisher_path = pathlib.Path('render/pdf/publisher.tex')
+
+    publisher_template = tpl.load_resource(publisher_template, publisher_template_is_custom)
     lines = [line.rstrip() for line in publisher_template.split(NL)]
 
     if any(TOKEN_ADJUSTED_PUSHDOWN in line for line in lines):
@@ -282,7 +281,7 @@ def weave(
                 break
     if lines[-1]:
         lines.append('\n')
-    with open(PUBLISHER_PATH, 'wt', encoding=ENCODING) as handle:
+    with open(publisher_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
     log.info(LOG_SEPARATOR)
 

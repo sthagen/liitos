@@ -12,21 +12,6 @@ import liitos.template as tpl
 import liitos.tools as too
 from liitos import ENCODING, EXTERNALS, LOG_SEPARATOR, log
 
-DRIVER_TEMPLATE_IS_CUSTOM = EXTERNALS['driver']['is_custom']
-DRIVER_TEMPLATE = str(EXTERNALS['driver']['id'])
-
-DRIVER_PATH = pathlib.Path('driver.tex')
-
-METADATA_TEMPLATE_IS_CUSTOM = EXTERNALS['metadata']['is_custom']
-METADATA_TEMPLATE = str(EXTERNALS['metadata']['id'])
-
-METADATA_PATH = pathlib.Path('metadata.tex')
-
-SETUP_TEMPLATE_IS_CUSTOM = EXTERNALS['setup']['is_custom']
-SETUP_TEMPLATE = str(EXTERNALS['setup']['id'])
-
-SETUP_PATH = pathlib.Path('setup.tex')
-
 VALUE_SLOT = 'VALUE.SLOT'
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
@@ -1177,22 +1162,79 @@ def weave(
     if isinstance(metadata, int):
         return 1
 
-    metadata_template = tpl.load_resource(METADATA_TEMPLATE, METADATA_TEMPLATE_IS_CUSTOM)
+    if 'bookmatter_path' in metadata:
+        bookmatter_path_str = metadata['bookmatter_path']
+        if bookmatter_path_str and isinstance(bookmatter_path_str, str):
+            EXTERNALS['bookmatter'] = {'id': bookmatter_path_str.strip(), 'is_custom': True}
+            log.info(
+                f'per environment variable value request to load external bookmatter layout template'
+                f' from {EXTERNALS["bookmatter"]["id"]} title page incl. approvals'
+            )
+
+    if 'driver_path' in metadata:
+        driver_path_str = metadata['driver_path']
+        if driver_path_str and isinstance(driver_path_str, str):
+            EXTERNALS['driver'] = {'id': driver_path_str.strip(), 'is_custom': True}
+            log.info(
+                f'per environment variable value request to load external driver layout template'
+                f' from {EXTERNALS["driver"]["id"]} for general document structure'
+            )
+
+    if 'metadata_path' in metadata:
+        metadata_path_str = metadata['metadata_path']
+        if metadata_path_str and isinstance(metadata_path_str, str):
+            EXTERNALS['metadata'] = {'id': metadata_path_str.strip(), 'is_custom': True}
+            log.info(
+                f'per environment variable value request to load external metadata template'
+                f' from {EXTERNALS["metadata"]["id"]} for mapping values to required keys'
+            )
+
+    if 'publisher_path' in metadata:
+        publisher_path_str = metadata['publisher_path']
+        if publisher_path_str and isinstance(publisher_path_str, str):
+            EXTERNALS['publisher'] = {'id': publisher_path_str.strip(), 'is_custom': True}
+            log.info(
+                f'per environment variable value request to load external publisher layout template'
+                f' from {EXTERNALS["publisher"]["id"]} for changes and notices'
+            )
+
+    if 'setup_path' in metadata:
+        setup_path_str = metadata['setup_path']
+        if setup_path_str and isinstance(setup_path_str, str):
+            EXTERNALS['setup'] = {'id': setup_path_str.strip(), 'is_custom': True}
+            log.info(
+                f'per environment variable value request to load external setup layout template'
+                f' from {EXTERNALS["setup"]["id"]} for general document setup'
+            )
+
+    metadata_template_is_custom = EXTERNALS['metadata']['is_custom']
+    metadata_template = str(EXTERNALS['metadata']['id'])
+    metadata_path = pathlib.Path('metadata.tex')
+
+    metadata_template = tpl.load_resource(metadata_template, metadata_template_is_custom)
     lines = [line.rstrip() for line in metadata_template.split('\n')]
     lines = weave_meta_meta(metadata, lines)
-    with open(METADATA_PATH, 'wt', encoding=ENCODING) as handle:
+    with open(metadata_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    driver_template = tpl.load_resource(DRIVER_TEMPLATE, DRIVER_TEMPLATE_IS_CUSTOM)
+    driver_template_is_custom = EXTERNALS['driver']['is_custom']
+    driver_template = str(EXTERNALS['driver']['id'])
+    driver_path = pathlib.Path('driver.tex')
+
+    driver_template = tpl.load_resource(driver_template, driver_template_is_custom)
     lines = [line.rstrip() for line in driver_template.split('\n')]
     lines = weave_meta_driver(metadata, lines)
-    with open(DRIVER_PATH, 'wt', encoding=ENCODING) as handle:
+    with open(driver_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
-    setup_template = tpl.load_resource(SETUP_TEMPLATE, SETUP_TEMPLATE_IS_CUSTOM)
+    setup_template_is_custom = EXTERNALS['setup']['is_custom']
+    setup_template = str(EXTERNALS['setup']['id'])
+    setup_path = pathlib.Path('setup.tex')
+
+    setup_template = tpl.load_resource(setup_template, setup_template_is_custom)
     lines = [line.rstrip() for line in setup_template.split('\n')]
     lines = weave_meta_setup(metadata, lines)
-    with open(SETUP_PATH, 'wt', encoding=ENCODING) as handle:
+    with open(setup_path, 'wt', encoding=ENCODING) as handle:
         handle.write('\n'.join(lines))
 
     return 0
