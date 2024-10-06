@@ -1,5 +1,8 @@
 # Changes
 
+2024.10.7
+:    * Fixed the runtime handling of templates feature and removed the eager logging on env read in init
+
 2024.10.6
 :    * Implemented runtime handling of templates per configuration overwriting environment paths
 
