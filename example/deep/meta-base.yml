@@ -34,3 +34,4 @@ document:
     fixed_font_package: sourcecodepro
     code_fontsize: \scriptsize
     chosen_logo: /opt/logo/liitos-logo.png
+    chosen_title_page_logo: /opt/logo/other-logo.png

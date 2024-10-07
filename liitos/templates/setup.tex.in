@@ -253,6 +253,8 @@
   \setlength{\footheight}{18mm}%% ... tuned
 }
 
+% Hook to inject chosen title page logo
+\newcommand{\theChosenTitlePageLogo}{VALUE.SLOT}%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%
 % The liitos title page header and footer style:
 \newpairofpagestyles{liitos-title-header-footer}{%%
   \clearpairofpagestyles
@@ -269,14 +271,14 @@
   \chead*{}
   \ohead*{%%
     \vskip -10mm\begin{tabular*}{64mm}[t]{@{}p{15mm}p{55mm}@{}}%% ... tuned ... effective 70mm
-      \hfill & \hbox{\hspace{-5mm}\includegraphics[width=55mm]{\theChosenLogo}} \\
+      \hfill & \hbox{\hspace{-5mm}\includegraphics[width=55mm]{\theChosenTitlePageLogo}} \\
     \end{tabular*}
   }
-  \ifoot*{}
+  \ifoot*{\upshape{\footnotesize \theMetaPropInfo}}
   \cfoot*{}
-  \ofoot*{}
+  \ofoot*{\upshape{\footnotesize VALUE.SLOT}}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%
   \setlength{\headheight}{29.6mm}%% ... tuned
   \setlength{\footheight}{18mm}%% ... tuned
 }
 
-\pagestyle{liitos-header-footer}% TODO: parametrize back again title
+\pagestyle{liitos-title-header-footer}% TODO: parametrize back again title

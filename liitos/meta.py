@@ -24,6 +24,7 @@ WEAVE_DEFAULTS = {
     'bookmatter_path': '',
     'change_log_tune_header_sep': '-0em',
     'chosen_logo': '/opt/logo/liitos-logo.png',
+    'chosen_title_page_logo': '/opt/logo/liitos-logo.png',
     'code_fontsize': r'\scriptsize',
     'driver_path': '',
     'fixed_font_package': 'sourcecodepro',
@@ -326,6 +327,33 @@ def weave_setup_chosen_logo(
 
 
 @no_type_check
+def weave_setup_chosen_title_page_logo(
+    mapper: dict[str, Union[str, int, bool, None]],
+    text: str,
+) -> str:
+    """Weave in the chosen_logo from mapper or default for driver.
+
+    Trigger is text.rstrip().endswith('%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%')
+    """
+    defaults = {**WEAVE_DEFAULTS}
+    log.warning(text)
+    if mapper.get('chosen_title_page_logo'):
+        chosen_title_page_logo = mapper.get('chosen_title_page_logo')
+        title_page_logo_path = pathlib.Path(chosen_title_page_logo)
+        log.warning(f'found {chosen_title_page_logo}')
+        if not title_page_logo_path.is_file():
+            log.warning(
+                f'chosen_title_page_logo ({chosen_title_page_logo}) is not found'
+                f' as ({title_page_logo_path}) on this system - rendering may not work as intended'
+            )
+        return text.replace(VALUE_SLOT, chosen_title_page_logo)
+    else:
+        log.warning('default logo')
+        log.info(f'chosen_title_page_logo value missing ... setting default ({defaults["chosen_title_page_logo"]})')
+        return text.replace(VALUE_SLOT, defaults['chosen_title_page_logo'])
+
+
+@no_type_check
 def weave_setup_footer_outer_field_normal_pages(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
@@ -380,6 +408,7 @@ def dispatch_setup_weaver(
         '%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%': weave_setup_fixed_font_package,
         '%%_PATCH_%_CODE_%_FONTSIZE_%%': weave_setup_code_fontsize,
         '%%_PATCH_%_CHOSEN_%_LOGO_%%': weave_setup_chosen_logo,
+        '%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%': weave_setup_chosen_title_page_logo,
         '%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%': weave_setup_footer_outer_field_normal_pages,
         '%%_PATCH_%_TOC_ALL_DOTS_%%': weave_setup_toc_all_dots,
     }

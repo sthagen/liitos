@@ -13,7 +13,7 @@
 \pagenumbering{arabic}% TODO make consistent with numbering scheme
 \include{bookmatter.tex}
 
-%\pagestyle{liitos-header-footer}% TODO make consistent with numbering scheme
+\pagestyle{liitos-header-footer}% TODO make consistent with numbering scheme
 \newpage
 \include{publisher.tex}
 
