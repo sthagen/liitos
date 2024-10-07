@@ -1,5 +1,8 @@
 # Changes
 
+2024.10.8
+:    * Enabled a logo slot for first page only (<https://todo.sr.ht/~sthagen/liitos/65>)
+
 2024.10.7
 :    * Fixed the runtime handling of templates feature and removed the eager logging on env read in init
 
