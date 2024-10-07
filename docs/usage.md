@@ -1039,6 +1039,7 @@ document:
     change_log_revision_label: Rev.
     change_log_tune_header_sep: 0.1em
     chosen_logo: /opt/logo/liitos-logo.png
+    chosen_title_page_logo: /opt/logo/liitos-logo.png
     code_fontsize: \scriptsize
     driver_path: null
     fixed_font_package: sourcecodepro
