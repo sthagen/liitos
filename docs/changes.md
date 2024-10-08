@@ -1,5 +1,10 @@
 # Changes
 
+2024.10.9
+:    * Added approvals strategy parameter to configuration (feature)
+* Changed default layouts and amended approvals and changes data processing (breaking changes)
+* Fixed legacy channels to survive newer options (regression)
+
 2024.10.8
 :    * Enabled a logo slot for first page only (<https://todo.sr.ht/~sthagen/liitos/65>)
 
