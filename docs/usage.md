@@ -1028,6 +1028,7 @@ document:
     approvals_department_value: ABC
     approvals_name_label: Name
     approvals_role_label: Approvals
+    approvals_strategy: south  # one of east or south
     bold_font: ITCFranklinGothicStd-Demi
     bold_italic_font: ITCFranklinGothicStd-DemiIt
     bookmark_title: null
