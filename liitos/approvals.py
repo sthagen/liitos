@@ -199,11 +199,26 @@ def normalize(signatures: object, channel: str, columns_expected: list[str]) -> 
                 log.error(f'- but found: ({sorted(approval)}) in slot #{slot}')
                 return []
 
+    default_orga = r'\theApprovalsDepartmentValue'
+
     if channel == JSON_CHANNEL:
-        return [{'role': role, 'name': name} for role, name in signatures[0]['rows']]
+        return [
+            {
+                'orga': default_orga,
+                'role': role,
+                'name': name,
+                'orga_x_name': f'{default_orga} / {name}',
+            }
+            for role, name in signatures[0]['rows']
+        ]
 
     return [
-        {'orga': approval.get('orga', ''), 'role': approval['role'], 'name': approval['name']}
+        {
+            'orga': approval.get('orga', ''),
+            'role': approval['role'],
+            'name': approval['name'],
+            'orga_x_name': f"{approval.get('orga', default_orga)} / {approval['name']}",
+        }
         for approval in signatures[0]['approvals']
     ]
 
@@ -300,7 +315,10 @@ def weave(
     approvals_strategy = options.get('approvals_strategy', KNOWN_APPROVALS_STRATEGIES[0])
     log.info(f'selected approvals layout strategy is ({approvals_strategy})')
     if approvals_strategy == 'south':
-        inject_southwards(lines, rows, pushdown)
+        rows_patch = [
+            ROW_TEMPLATE.replace('role', kv['role']).replace('name', kv['orga_x_name']) for kv in logical_model
+        ]
+        inject_southwards(lines, rows_patch, pushdown)
     else:  # default is east
         lines = list(too.remove_target_region_gen(lines, LAYOUT_SOUTH_CUT_MARKER_TOP, LAYOUT_SOUTH_CUT_MARKER_BOTTOM))
         inject_eastwards(lines, logical_model, pushdown)

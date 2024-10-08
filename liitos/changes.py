@@ -40,7 +40,7 @@ CHANGE_ROW_TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.
 DEFAULT_REVISION = '00'
 ROW_TEMPLATE_NAMED = r'issue & revision & author & summary \\'
 ROW_TEMPLATE_ANONYMOUS = r'issue & revision & summary \\'
-ROW_TEMPLATE_ANONYMOUS_VERSION = r'issue & summary \\'
+ROW_TEMPLATE_ANONYMOUS_VERSION = r'\centering issue & summary \\'
 GLUE = '\n\\hline\n'
 JSON_CHANNEL = 'json'
 YAML_CHANNEL = 'yaml'
@@ -86,7 +86,7 @@ TABLE_ANONYMOUS_VERSION_PRE = r"""\
 \begin{minipage}[b]{\linewidth}\raggedright
 \textbf{\theChangeLogIssLabel}
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-\textbf{\theChangeLogDescLabel}
+\textbf{\hskip 12em \theChangeLogDescLabel}
 \end{minipage} \\
 \hline
 """

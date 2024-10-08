@@ -7,7 +7,7 @@
   american,
   paper=a4,
   captions=tableheading,
-  headsepline=true,
+  headsepline=false,
   footsepline=true,
   draft=false,
   overfullrule=false,
@@ -232,13 +232,14 @@
   \clearpairofpagestyles
   \ihead*{%%
     \upshape
-    \begin{tabular*}{117mm}[t]{@{}p{24mm}p{35mm}p{56mm}@{}}%% ... tuned ... effective 115mm
+    \vskip 0.1em%
+    \begin{tabular*}{117mm}[t]{@{}p{44mm}p{15mm}p{56mm}@{}}%% ... tuned ... effective 115mm
      \strut \\
       \multicolumn{3}{l}{\hskip -0.6em \LARGE\theMetaTitle} \hfill \strut \\%% ... tuned the hskip to align left without gap
       \hline \multicolumn{3}{l}{\hskip -0.6em \footnotesize \textbf{\theMetaType}} \hfill \strut \\
       \hline {\footnotesize \theMetaDocIdLabel} \hfill & {\footnotesize \theMetaIssRevLabel} \hfill & {\footnotesize \theMetaDateLabel} \hfill \strut \\
-      {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\
-    \end{tabular*}
+      {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\\hline
+    \end{tabular*}%
   }
   \chead*{}
   \ohead*{%%
@@ -255,18 +256,20 @@
 
 % Hook to inject chosen title page logo
 \newcommand{\theChosenTitlePageLogo}{VALUE.SLOT}%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%
-% The liitos title page header and footer style:
+%% The liitos title page header and footer style:
 \newpairofpagestyles{liitos-title-header-footer}{%%
   \clearpairofpagestyles
   \ihead*{%%
     \upshape
-    \begin{tabular*}{117mm}[t]{@{}p{24mm}p{35mm}p{56mm}@{}}%% ... tuned ... effective 115mm
+    \vskip 0.2em%
+    \begin{tabular*}{117mm}[t]{@{}p{44mm}p{15mm}p{56mm}@{}}%% ... tuned ... effective 115mm
      \strut \\
       \multicolumn{3}{l}{\hskip -0.6em \LARGE\theMetaTitle} \hfill \strut \\%% ... tuned the hskip to align left without gap
       \hline \multicolumn{3}{l}{\hskip -0.6em \footnotesize \textbf{\theMetaType}} \hfill \strut \\
       \hline {\footnotesize \theMetaDocIdLabel} \hfill & {\footnotesize \theMetaIssRevLabel} \hfill & {\footnotesize \theMetaDateLabel} \hfill \strut \\
-      {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\
-    \end{tabular*}
+      {\footnotesize \theMetaDocId} \hfill & {\footnotesize \theMetaIssRev} \hfill & {\footnotesize \theMetaDate} \hfill \strut \\%
+      \vskip -1.8em\rule{\textwidth}{0.4pt}
+    \end{tabular*}%
   }
   \chead*{}
   \ohead*{%%
@@ -282,3 +285,5 @@
 }
 
 \pagestyle{liitos-title-header-footer}% TODO: parametrize back again title
+
+
