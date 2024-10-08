@@ -4,6 +4,7 @@ document:
   patch:
     approvals_adjustable_vertical_space: '-8.5em'
     approvals_department_value: ABC
+    approvals_strategy: east
     footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
     header_id: P99999
     header_date: PUBLICATIONDATE

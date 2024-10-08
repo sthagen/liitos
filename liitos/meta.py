@@ -10,7 +10,7 @@ import yaml
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, ExternalsType, LOG_SEPARATOR, log
+from liitos import ENCODING, ExternalsType, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, log
 
 VALUE_SLOT = 'VALUE.SLOT'
 DOC_BASE = pathlib.Path('..', '..')
@@ -19,6 +19,7 @@ MAGIC_OF_TODAY = 'PUBLICATIONDATE'
 
 WEAVE_DEFAULTS = {
     'approvals_adjustable_vertical_space': '2.5em',
+    'approvals_strategy': KNOWN_APPROVALS_STRATEGIES[0],
     'bold_font': 'ITCFranklinGothicStd-Demi',
     'bold_italic_font': 'ITCFranklinGothicStd-DemiIt',
     'bookmatter_path': '',
@@ -1273,6 +1274,16 @@ def weave(
             log.info(
                 f'per configuration variable value request to load external setup layout template'
                 f' from {externals["setup"]["id"]} for general document setup'
+            )
+
+    if 'approvals_strategy' in meta_doc_common:
+        approvals_strategy_str = meta_doc_common['approvals_strategy']
+        if approvals_strategy_str and approvals_strategy_str in KNOWN_APPROVALS_STRATEGIES:
+            memo = options.get('approvals_strategy', 'unset')
+            options['approvals_strategy'] = approvals_strategy_str
+            log.info(
+                f'per configuration variable value request for approvals strategy ({approvals_strategy_str})'
+                f' was set before to ({memo}) from default or command line'
             )
 
     metadata_template_is_custom = externals['metadata']['is_custom']
