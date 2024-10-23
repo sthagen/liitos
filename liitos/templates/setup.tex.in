@@ -141,7 +141,7 @@
 \renewcommand{\thefigure}{\arabic{figure}}
 
 \usepackage{layout}
-\usepackage[left=2cm,top=1cm,right=2cm,bottom=1.8cm,includehead=true,includefoot=true,centering]{geometry}%%,showframe %% bottom tuned from 0.8cm to 1.8cm
+\usepackage[left=2cm,top=1cm,right=2cm,bottom=1.8cm,footskip=1.8cm,includehead=true,includefoot=true,centering]{geometry}%%,showframe %% bottom tuned from 0.8cm to 1.8cm
 \usepackage{scrlayer-scrpage}
 
 % patch the paragraph to become a blunt vertically pushing element
