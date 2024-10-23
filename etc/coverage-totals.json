@@ -1,20 +1,20 @@
 {
   "liitos": {
     "format": 3,
-    "coverage_tool_version": "7.6.1",
-    "timestamp": "2024-10-08 19:41:30 +00:00",
+    "coverage_tool_version": "7.6.4",
+    "timestamp": "2024-10-23 17:19:12 +00:00",
     "branch_coverage": true,
     "show_contexts": true,
     "covered_lines": 3357,
     "num_statements": 6160,
-    "percent_covered": 53.20469419995487,
-    "percent_covered_display": "53.20",
+    "percent_covered": 51.05288932419197,
+    "percent_covered_display": "51.05",
     "missing_lines": 2803,
     "excluded_lines": 10,
-    "num_branches": 2702,
-    "num_partial_branches": 182,
-    "covered_branches": 1358,
-    "missing_branches": 1344,
+    "num_branches": 2008,
+    "num_partial_branches": 181,
+    "covered_branches": 813,
+    "missing_branches": 1195,
     "node_id": "c79891e5-aabf-3a83-95b9-588edcd8327f",
     "nfiles": 38,
     "files": [
@@ -57,14 +57,14 @@
       "liitos/template.py",
       "liitos/tools.py"
     ],
-    "blake3": "d634b7af7250afe8cd81fd5e45707599afeb51571a17b5f8a7920ad796c79014",
-    "blake2": "6cf55974a85830811abeb8096f2bb185ed4d64c947cbc58060c20740e48403ba72d8311789cf901babdd5030b6958fbbe875ccf496cf6b206b61fa1700a91a20",
-    "sha512": "6e0bb4a84ac0378501ee5d0bed785e824c573720639f211caf34341167c090806cd21d9739a6a93ea3ea3cc236ad5bb3fc5a90e5cd3490e4584e0b7983605648",
-    "sha384": "e075675124aa6196d8b72d03c8e483b7bc247c139ff8c82b8fed4ea6dccb0fffda053c524b0685a6a7fcffca67b8fddd",
-    "sha256": "996b01172e7c84cb87e001487a93bae0234bbd7cff81ffdd04ec6513c1f16528",
-    "sha1": "8d0d39219ea779aea61e140fdf4a7f79ab9c91be",
-    "md5": "0912b6b11f98baf7947a1c31bd1ef4d1",
+    "blake3": "689e2c03d820012c2f74ac788529c2ec781b7fec5218851203a1cf4a0caadea0",
+    "blake2": "5dde199c43e323be9222128e34dbb45dcc538ebfe79c5be097490bc3b1dee4f56fec805b86f7b5aa5bf7c4339f6af33a68b45645083c960fb791110b1ef1758a",
+    "sha512": "86ddfd2bfd147e06f0ffd2f02d9b586a0b0e5f45f84b24b4368b3d5e65f4b1aa721784d42b82dc5b4e59213ff9fc16f6e5429735e8f12e6a222bfdac34564da9",
+    "sha384": "9738e649aa66488beec01ed29a3f96d444a0117624c0203432347c17910b93160b9aca6163f6299a43aa54a5879d000f",
+    "sha256": "e174bfb145b1f5ccd7fbaeea7b8e104a5ac1288751da0c235987dc6a4c600d17",
+    "sha1": "212f9ce27d9e0926aa5edd9ad9cd1023fc526e73",
+    "md5": "e5f1325e8f88098f0e151124848ddfa4",
     "python_version": "3.12.1",
-    "entropy": 4.931452
+    "entropy": 4.931499
   }
 }
