@@ -1,5 +1,8 @@
 # Changes
 
+2024.10.23
+:    * Fixed the footer run-ins of text from body (<https://todo.sr.ht/~sthagen/liitos/69>)
+
 2024.10.9
 :    * Added approvals strategy parameter to configuration (feature)
 * Changed default layouts and amended approvals and changes data processing (breaking changes)
