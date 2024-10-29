@@ -1,5 +1,8 @@
 # Changes
 
+2024.10.29
+:    * Fixed inconsistent font weight for level 5 headings / subparagraphs (<https://todo.sr.ht/~sthagen/liitos/70>)
+
 2024.10.23
 :    * Fixed the footer run-ins of text from body (<https://todo.sr.ht/~sthagen/liitos/69>)
 
