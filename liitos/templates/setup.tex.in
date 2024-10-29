@@ -186,6 +186,7 @@
 % unbold level 3 and 4 etc sections
 \setkomafont{subsubsection}{\normalfont}
 \setkomafont{paragraph}{\normalfont}
+\setkomafont{subparagraph}{\normalfont}
 % Provide the Shaded and Highlighting environments in case code comes along
 \usepackage{color}
 \usepackage{fancyvrb}
