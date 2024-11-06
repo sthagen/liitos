@@ -58,7 +58,7 @@ document:
     setup_path: null
     stretch: '1.04'  # old default was '1.2'
     sub_title: ' '
+    table_caption_below: false
     title: null
     toc_all_dots: ' '  # old default was not toc all dots, so '%' would restore
     toc_level: 2
-

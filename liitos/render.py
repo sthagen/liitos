@@ -286,51 +286,60 @@ def der(
     with open(LATEX_PAYLOAD_NAME, 'rt', encoding=ENCODING) as handle:
         lines = [line.rstrip() for line in handle.readlines()]
 
-    lines = too.execute_filter(
-        cap.weave,
-        head='move any captions below tables ...',
-        backup='document-before-caps-patch.tex.txt',
-        label='captions-below-tables',
-        text_lines=lines,
-        lookup=None,
-    )
+    patch_counter = 1
+    if options.get('table_caption_below', False):
+        lines = too.execute_filter(
+            cap.weave,
+            head='move any captions below tables ...',
+            backup=f'document-before-caps-patch-{patch_counter}.tex.txt',
+            label='captions-below-tables',
+            text_lines=lines,
+            lookup=None,
+        )
+        patch_counter += 1
+    else:
+        log.info('NOT moving captions below tables!')
 
     lines = too.execute_filter(
         lab.inject,
         head='inject stem (derived from file name) labels ...',
-        backup='document-before-inject-stem-label-patch.tex.txt',
+        backup=f'document-before-inject-stem-label-patch-{patch_counter}.tex.txt',
         label='inject-stem-derived-labels',
         text_lines=lines,
         lookup=mermaid_caption_map,
     )
+    patch_counter += 1
 
     lines = too.execute_filter(
         fig.scale,
         head='scale figures ...',
-        backup='document-before-scale-figures-patch.tex.txt',
+        backup=f'document-before-scale-figures-patch-{patch_counter}.tex.txt',
         label='inject-scale-figures',
         text_lines=lines,
         lookup=None,
     )
+    patch_counter += 1
 
     lines = too.execute_filter(
         dsc.options,
         head='add options to descriptions (definition lists) ...',
-        backup='document-before-description-options-patch.tex.txt',
+        backup=f'document-before-description-options-patch-{patch_counter}.tex.txt',
         label='inject-description-options',
         text_lines=lines,
         lookup=None,
     )
+    patch_counter += 1
 
     if options.get('patch_tables', False):
         lines = too.execute_filter(
             tab.patch,
             head='patching tables EXPERIMENTAL (table-shape) ...',
-            backup='document-before-table-shape-patch.tex.txt',
+            backup=f'document-before-table-shape-patch-{patch_counter}.tex.txt',
             label='changed-table-shape',
             text_lines=lines,
             lookup=None,
         )
+        patch_counter += 1
     else:
         log.info(LOG_SEPARATOR)
         log.info('not patching tables but commenting out (ignoring) any columns command (table-shape) ...')
@@ -344,7 +353,8 @@ def der(
     if need_patching:
         log.info(LOG_SEPARATOR)
         log.info('apply user patches ...')
-        doc_before_user_patch = 'document-before-user-patch.tex.txt'
+        doc_before_user_patch = f'document-before-user-patch-{patch_counter}.tex.txt'
+        patch_counter += 1
         with open(doc_before_user_patch, 'wt', encoding=ENCODING) as handle:
             handle.write('\n'.join(lines))
         patched_lines = pat.apply(patches, lines)

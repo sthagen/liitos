@@ -43,6 +43,7 @@ WEAVE_DEFAULTS = {
     'publisher_path': '',
     'setup_path': '',
     'stretch': '1.04',  # old default was 1.2
+    'table_captions_below': False,
     'toc_all_dots': '',  # old default was not toc all dots, so '%' would restore
 }
 ACROSS = {
@@ -1283,6 +1284,17 @@ def weave(
             options['approvals_strategy'] = approvals_strategy_str
             log.info(
                 f'per configuration variable value request for approvals strategy ({approvals_strategy_str})'
+                f' was set before to ({memo}) from default or command line'
+            )
+
+    if 'table_caption_below' in meta_doc_common:
+        table_caption_below = bool(meta_doc_common['table_caption_below'])
+        if table_caption_below:
+            memo = options.get('table_caption_below', False)
+            options['table_caption_below'] = table_caption_below
+            tc_strategy = 'below' if table_caption_below else 'above'
+            log.info(
+                f'per configuration variable value request for table captions ({tc_strategy})'
                 f' was set before to ({memo}) from default or command line'
             )
 

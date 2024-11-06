@@ -1,5 +1,9 @@
 # Changes
 
+2024.11.6
+:    * Added a patch backup file counter to ease debug for authors (<https://todo.sr.ht/~sthagen/liitos/72>)
+* Added an option to place table captions above or below the table foot (<https://todo.sr.ht/~sthagen/liitos/71>)
+
 2024.10.29
 :    * Fixed inconsistent font weight for level 5 headings / subparagraphs (<https://todo.sr.ht/~sthagen/liitos/70>)
 

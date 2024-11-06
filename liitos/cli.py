@@ -185,6 +185,7 @@ def _verify_call_vector(
         'from_format_spec': from_format_spec if from_format_spec else FROM_FORMAT_SPEC,
         'filter_cs_list': filter_cs_list if filter_cs_list != 'DEFAULT_FILTER' else FILTER_CS_LIST,
         'approvals_strategy': approvals_strategy,
+        'table_caption_below': None,
     }
     log.debug(f'Post verifier: {options=}')
     if verbose:
