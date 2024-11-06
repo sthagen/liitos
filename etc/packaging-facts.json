@@ -41,7 +41,7 @@
     "provides_extra": [
       "dev"
     ],
-    "release_url": "https://pypi.org/project/liitos/2024.10.29/",
+    "release_url": "https://pypi.org/project/liitos/2024.11.6/",
     "requires_dist": [
       "PyYAML>=6.0.1",
       "foran>=2023.6.19",
@@ -60,11 +60,11 @@
     ],
     "requires_python": ">=3.9",
     "summary": "Splice (Finnish liitos) contributions.",
-    "version": "2024.10.29",
+    "version": "2024.11.6",
     "yanked": false,
     "yanked_reason": null
   },
-  "last_serial": 25731891,
+  "last_serial": 25861392,
   "releases": {
     "2022.10.18": [
       {
@@ -2882,6 +2882,50 @@
         "yanked_reason": null
       }
     ],
+    "2024.11.6": [
+      {
+        "comment_text": "",
+        "digests": {
+          "blake2b_256": "c2a9a65fe478f022501a0eee9365f6ee6084a41c23844fa1db1aa61a1df8bb9d",
+          "md5": "2e0bf2e4d789f7637730f53beebb43be",
+          "sha256": "ceb91ec1dadcf06a9dffa2f0309b402e15762afe1cd32828d8f7796578d12ee8"
+        },
+        "downloads": -1,
+        "filename": "liitos-2024.11.6-py3-none-any.whl",
+        "has_sig": false,
+        "md5_digest": "2e0bf2e4d789f7637730f53beebb43be",
+        "packagetype": "bdist_wheel",
+        "python_version": "py3",
+        "requires_python": ">=3.9",
+        "size": 105025,
+        "upload_time": "2024-11-06T21:21:19",
+        "upload_time_iso_8601": "2024-11-06T21:21:19.164059Z",
+        "url": "https://files.pythonhosted.org/packages/c2/a9/a65fe478f022501a0eee9365f6ee6084a41c23844fa1db1aa61a1df8bb9d/liitos-2024.11.6-py3-none-any.whl",
+        "yanked": false,
+        "yanked_reason": null
+      },
+      {
+        "comment_text": "",
+        "digests": {
+          "blake2b_256": "bd8e47ab84ac7c6fc169a847f50a9637e0aa16f327ea289ff612003f3b0799a5",
+          "md5": "b484096b1255c4ab26b3d883fa14bd09",
+          "sha256": "4a2dd47bd511ea0bdc013dbe1ee82b3d5e7caff72c7db62f1f4737d0fd136048"
+        },
+        "downloads": -1,
+        "filename": "liitos-2024.11.6.tar.gz",
+        "has_sig": false,
+        "md5_digest": "b484096b1255c4ab26b3d883fa14bd09",
+        "packagetype": "sdist",
+        "python_version": "source",
+        "requires_python": ">=3.9",
+        "size": 109948,
+        "upload_time": "2024-11-06T21:21:21",
+        "upload_time_iso_8601": "2024-11-06T21:21:21.833317Z",
+        "url": "https://files.pythonhosted.org/packages/bd/8e/47ab84ac7c6fc169a847f50a9637e0aa16f327ea289ff612003f3b0799a5/liitos-2024.11.6.tar.gz",
+        "yanked": false,
+        "yanked_reason": null
+      }
+    ],
     "2024.2.11": [
       {
         "comment_text": "",
@@ -3327,42 +3371,42 @@
     {
       "comment_text": "",
       "digests": {
-        "blake2b_256": "a845226f29bdfe2f6b9b9277644ef414345f1677592e33959eb88f9a8475cd4c",
-        "md5": "a476e03b647f1acb349ae1713315d2e3",
-        "sha256": "9a968d8d91e2c925c28a20f3fa3953af47fdea2828128a0a1cea6d29fcaeecce"
+        "blake2b_256": "c2a9a65fe478f022501a0eee9365f6ee6084a41c23844fa1db1aa61a1df8bb9d",
+        "md5": "2e0bf2e4d789f7637730f53beebb43be",
+        "sha256": "ceb91ec1dadcf06a9dffa2f0309b402e15762afe1cd32828d8f7796578d12ee8"
       },
       "downloads": -1,
-      "filename": "liitos-2024.10.29-py3-none-any.whl",
+      "filename": "liitos-2024.11.6-py3-none-any.whl",
       "has_sig": false,
-      "md5_digest": "a476e03b647f1acb349ae1713315d2e3",
+      "md5_digest": "2e0bf2e4d789f7637730f53beebb43be",
       "packagetype": "bdist_wheel",
       "python_version": "py3",
       "requires_python": ">=3.9",
-      "size": 104853,
-      "upload_time": "2024-10-29T20:05:31",
-      "upload_time_iso_8601": "2024-10-29T20:05:31.197784Z",
-      "url": "https://files.pythonhosted.org/packages/a8/45/226f29bdfe2f6b9b9277644ef414345f1677592e33959eb88f9a8475cd4c/liitos-2024.10.29-py3-none-any.whl",
+      "size": 105025,
+      "upload_time": "2024-11-06T21:21:19",
+      "upload_time_iso_8601": "2024-11-06T21:21:19.164059Z",
+      "url": "https://files.pythonhosted.org/packages/c2/a9/a65fe478f022501a0eee9365f6ee6084a41c23844fa1db1aa61a1df8bb9d/liitos-2024.11.6-py3-none-any.whl",
       "yanked": false,
       "yanked_reason": null
     },
     {
       "comment_text": "",
       "digests": {
-        "blake2b_256": "e493382de16943f71a2e237b6e6634ee187f44b2e17c026f3019ff043c1d081e",
-        "md5": "dff8d6f99a115df2f028e391210d7d5e",
-        "sha256": "f5a4e26263866543ca545b7d02fa71dc7f3e755e2fd0e830eadcc676d90a92d7"
+        "blake2b_256": "bd8e47ab84ac7c6fc169a847f50a9637e0aa16f327ea289ff612003f3b0799a5",
+        "md5": "b484096b1255c4ab26b3d883fa14bd09",
+        "sha256": "4a2dd47bd511ea0bdc013dbe1ee82b3d5e7caff72c7db62f1f4737d0fd136048"
       },
       "downloads": -1,
-      "filename": "liitos-2024.10.29.tar.gz",
+      "filename": "liitos-2024.11.6.tar.gz",
       "has_sig": false,
-      "md5_digest": "dff8d6f99a115df2f028e391210d7d5e",
+      "md5_digest": "b484096b1255c4ab26b3d883fa14bd09",
       "packagetype": "sdist",
       "python_version": "source",
       "requires_python": ">=3.9",
-      "size": 109740,
-      "upload_time": "2024-10-29T20:05:33",
-      "upload_time_iso_8601": "2024-10-29T20:05:33.201942Z",
-      "url": "https://files.pythonhosted.org/packages/e4/93/382de16943f71a2e237b6e6634ee187f44b2e17c026f3019ff043c1d081e/liitos-2024.10.29.tar.gz",
+      "size": 109948,
+      "upload_time": "2024-11-06T21:21:21",
+      "upload_time_iso_8601": "2024-11-06T21:21:21.833317Z",
+      "url": "https://files.pythonhosted.org/packages/bd/8e/47ab84ac7c6fc169a847f50a9637e0aa16f327ea289ff612003f3b0799a5/liitos-2024.11.6.tar.gz",
       "yanked": false,
       "yanked_reason": null
     }
