@@ -50,6 +50,7 @@ CONTEXT: dict[str, str] = {}
 KNOWN_APPROVALS_STRATEGIES = ('south', 'east')
 APPROVALS_STRATEGY = os.getenv('LIITOS_APPROVALS_STRATEGY', '').lower()
 
+OptionsType = dict[str, Union[bool, str, None]]
 PathLike = Union[str, pathlib.Path]
 PathLikeOrBool = Union[PathLike, bool]
 ExternalsType = dict[str, dict[str, PathLikeOrBool]]
@@ -199,6 +200,7 @@ __all__: list[str] = [
     'KNOWN_APPROVALS_STRATEGIES',
     'LATEX_PAYLOAD_NAME',
     'LOG_SEPARATOR',
+    'OptionsType',
     'PathLike',
     'TOOL_VERSION_COMMAND_MAP',
     'ToolKey',

@@ -6,7 +6,6 @@ import logging
 import os
 import pathlib
 import sys
-from typing import Union
 
 import typer
 
@@ -31,6 +30,7 @@ from liitos import (
     QUIET,
     TOOL_VERSION_COMMAND_MAP,
     TS_FORMAT_PAYLOADS,
+    OptionsType,
     log,
 )
 
@@ -140,7 +140,7 @@ def _verify_call_vector(
     from_format_spec: str = FROM_FORMAT_SPEC,
     filter_cs_list: str = '',
     approvals_strategy: str = '',
-) -> tuple[int, str, str, dict[str, Union[bool, str]]]:
+) -> tuple[int, str, str, OptionsType]:
     """DRY"""
     log.debug(f'verifier received: {locals()}')
     doc = doc_root.strip()
@@ -176,7 +176,7 @@ def _verify_call_vector(
             f' not in ({", ".join(KNOWN_APPROVALS_STRATEGIES)}) - using default ({approvals_strategy})'
         )
 
-    options: dict[str, Union[bool, str]] = {
+    options: OptionsType = {
         'quiet': QUIET and not verbose and not strict,
         'strict': strict,
         'verbose': verbose,

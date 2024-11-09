@@ -37,7 +37,7 @@ from typing import Union, no_type_check
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, ExternalsType, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
+from liitos import ENCODING, ExternalsType, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, OptionsType, log
 
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105
 EXTRA_OFFSET_EM = 24
@@ -262,7 +262,7 @@ def weave(
     structure_name: str,
     target_key: str,
     facet_key: str,
-    options: dict[str, Union[bool, str]],
+    options: OptionsType,
     externals: ExternalsType,
 ) -> int:
     """Map the approvals data to a table on the titlepage."""

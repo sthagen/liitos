@@ -34,7 +34,7 @@ from typing import Generator, Union, no_type_check
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, ExternalsType, LOG_SEPARATOR, PathLike, log
+from liitos import ENCODING, ExternalsType, LOG_SEPARATOR, OptionsType, PathLike, log
 
 CHANGE_ROW_TOKEN = r'THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\'  # nosec B105
 DEFAULT_REVISION = '00'
@@ -186,7 +186,7 @@ def weave(
     structure_name: str,
     target_key: str,
     facet_key: str,
-    options: dict[str, Union[bool, str]],
+    options: OptionsType,
     externals: ExternalsType,
 ) -> int:
     """Later alligator."""

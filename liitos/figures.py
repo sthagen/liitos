@@ -12,6 +12,7 @@ def scale(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
     modus = 'copy'
     rescale = NO_RESCALE
     for slot, line in enumerate(incoming):
+        line = line.rstrip('\n')
         if modus == 'copy':
             if line.startswith(r'\scale='):
                 log.info(f'trigger a scale mod for the next figure environment at line #{slot + 1}|{line}')

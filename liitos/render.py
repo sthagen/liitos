@@ -25,6 +25,7 @@ from liitos import (
     FROM_FORMAT_SPEC,
     LATEX_PAYLOAD_NAME,
     LOG_SEPARATOR,
+    OptionsType,
     log,
     parse_csl,
 )
@@ -84,7 +85,7 @@ def der(
     structure_name: str,
     target_key: str,
     facet_key: str,
-    options: dict[str, Union[bool, str]],
+    options: OptionsType,
 ) -> int:
     """Later alligator."""
     log.info(LOG_SEPARATOR)

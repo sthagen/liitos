@@ -16,6 +16,7 @@ from liitos import (
     KEY_META,
     KEYS_REQUIRED,
     ENCODING,
+    OptionsType,
     log,
 )
 
@@ -256,7 +257,7 @@ def verify(
     structure_name: str,
     target_key: str,
     facet_key: str,
-    options: dict[str, Union[bool, str]],
+    options: OptionsType,
 ) -> int:
     """Drive the verification."""
     doc_root = pathlib.Path(doc_root)
