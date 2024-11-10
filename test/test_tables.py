@@ -1,3 +1,4 @@
+import logging
 import os
 import liitos.tables as tables
 
@@ -82,12 +83,31 @@ def test_table():
     assert comment_outs == [92]
 
 
-def test_patch_some():
+def test_patch_some(caplog):
     with open('test/fixtures/random/tables.tex', 'rt', encoding='utf-8') as handle:
         lines_buffer = [line.rstrip() for line in handle.readlines()]
-    out_lines = tables.patch(lines_buffer)
+    caplog.set_level(logging.INFO)
+    out_lines = tables.patch(lines_buffer, lookup=None)
     assert out_lines[92] == r'%CONSIDERED_\columns=,10\%,30\%,50\%'
+    assert 'ugly' not in caplog.text
 
+
+def test_patch_readable(caplog):
+    with open('test/fixtures/random/tables.tex', 'rt', encoding='utf-8') as handle:
+        lines_buffer = [line.rstrip() for line in handle.readlines()]
+    caplog.set_level(logging.INFO)
+    out_lines = tables.patch(lines_buffer, lookup={'table_style': 'readable'})
+    assert out_lines[92] == r'%CONSIDERED_\columns=,10\%,30\%,50\%'
+    assert 'ugly' not in caplog.text
+
+
+def test_patch_ugly(caplog):
+    with open('test/fixtures/random/tables.tex', 'rt', encoding='utf-8') as handle:
+        lines_buffer = [line.rstrip() for line in handle.readlines()]
+    caplog.set_level(logging.INFO)
+    out_lines = tables.patch(lines_buffer, lookup={'table_style': 'ugly'})
+    assert out_lines[92] == r'%CONSIDERED_\columns=,10\%,30\%,50\%'
+    assert 'ugly' in caplog.text
 
 def test_parse_table_font_size_command_unknown():
     line = '\\tablefontsize=unknown'

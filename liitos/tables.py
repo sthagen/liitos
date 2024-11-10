@@ -148,7 +148,15 @@ class Table:
 
     # ---- end of LBP skeleton / shape ---
     @no_type_check
-    def __init__(self, anchor: int, start_line: str, text_lines: Iterator[str], widths: list[float], font_sz: str = ''):
+    def __init__(
+        self,
+        anchor: int,
+        start_line: str,
+        text_lines: Iterator[str],
+        widths: list[float],
+        font_sz: str = '',
+        style: str = 'readable',
+    ):
         """Initialize the table from source text lines anchored at anchor.
         The implementation allows reuse of the iterator on caller site for extracting subsequent tables in one go.
         """
@@ -158,7 +166,8 @@ class Table:
         self.target_widths: list[float] = widths
         self.source_widths: list[float] = []
         self.font_size = font_sz
-        log.info(f'Received {anchor=}, {start_line=}, target {widths=}, and {font_sz=}')
+        self.style: str = style if style in ('readable', 'ugly') else 'readable'
+        log.info(f'Received {anchor=}, {start_line=}, target {widths=}, {font_sz=}, and {style=}')
         local_number = 0
         consumed = False
         while not consumed:
@@ -185,11 +194,15 @@ class Table:
         wrapper = r'\real{'
         postfix = '}}'
         finalize = '@{}}'
+        if self.style == 'ugly':
+            finalize = '|@{}}'
         ranks = list(self.columns)
         for rank in ranks:
             anchor_str = str(self.columns[rank]['col_spec_line'])
             prefix = self.columns[rank]['colspec_prefix']
             value = self.columns[rank]['width']
+            if self.style == 'ugly' and prefix.lstrip().startswith('>{'):
+                prefix = prefix.replace('>{', '|>{', 1)
             # concat PREFIX + r'\real{' + str(column_width_new) + '}}'
             self.cw_patches[anchor_str] = prefix + wrapper + str(value) + postfix
             if rank == ranks[-1]:
@@ -233,12 +246,21 @@ class Table:
             self.target_widths = self.source_widths
             return
         if len(self.target_widths) != len(self.source_widths):
-            log.warning(
-                f'Mismatching {len(self.target_widths)} target widths given - maintaining'
-                f'the {len(self.source_widths)} source column widths'
-            )
-            self.target_widths = self.source_widths
-            return
+            if len(self.source_widths):
+                log.warning(
+                    f'Mismatching {len(self.target_widths)} target widths given - maintaining'
+                    f' the {len(self.source_widths)} source column widths'
+                )
+                self.target_widths = self.source_widths
+                return
+            else:
+                log.warning(
+                    f'Lacking implementation for {len(self.target_widths)} target widths given - maintaining'
+                    f' the {len(self.source_widths)} source column widths'
+                )
+                self.target_widths = self.source_widths
+                return
+
         log.info('Applying target widths given - adapting source column widths')
         for rank, target_width in zip(self.columns, self.target_widths):
             self.columns[rank]['width'] = target_width
@@ -397,6 +419,8 @@ class Table:
             if text.startswith(Table.LBP_STARTSWITH_TAB_ENV_END):
                 break
             if data_section and r'\\' in text:
+                if self.style == 'ugly':
+                    text += r' \hline'
                 self.data_row_ends.append((anchor, text))
                 continue
 
@@ -456,8 +480,8 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
 @no_type_check
 def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
     """Later alligator. \\columns=,0.2,0.7 as mandatory trigger"""
-    table_style = lookup.get('table_style', 'readable')
-    log.info(f'voodoo table style is ({table_style})')
+    table_style = 'readable' if lookup is None else lookup.get('table_style', 'readable')
+    log.info(f'requested table style is ({table_style})')
     table_section, head, annotation = False, False, False
     table_ranges = []
     guess_slot = 0
@@ -567,7 +591,7 @@ def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
                     log.info(f'COLUMNS-WIDTH at <<{n}>>')
             n += 1
         else:
-            table = Table(n, line, reader, widths, font_size)  # sharing the meal - instead of iter(lines_buffer[n:]))
+            table = Table(n, line, reader, widths, font_size, style=table_style)
             tables.append(table)
             n += len(tables[-1].source_map())
             log.debug(f'- incremented n to {n}')
@@ -585,7 +609,7 @@ def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
         for numba, replacement in table.width_patches().items():
             log.info(f'{numba} -> {replacement}')
         for anchor, text in table.data_row_seps():
-            log.info(f'{anchor} -> {text}')
+            log.info(f'[data-row-seps]:{anchor} -> {text}')
         log.info(f'= (fontsize command = "{table.font_size}"):')
     log.info('---')
     log.info(f'Comment out the following {len(comment_outs)} lines (zero based numbers) - punch:')
@@ -668,6 +692,34 @@ def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
         #     next_slot += 1
 
     log.warning('Disabled naive table patching from before version 2023.2.12 for now')
+
+    if table_style == 'ugly':
+        ut_count = 0
+        udr_count = 0
+        in_table_data_rows = False
+        _out = []
+        for n, line in enumerate(out):
+            if in_table_data_rows and line.endswith(r'\\'):
+                if not out[n + 1].startswith(r'\end{longtable}'):
+                    line += r' \hline'
+                    udr_count += 1
+            better_rules = (r'\toprule', r'\midrule', r'\bottomrule')
+            for rule in better_rules:
+                if rule in line:
+                    if rule == r'\bottomrule':
+                        ut_count += 1
+                    line = line.replace(rule, r'\hline')
+            if line.startswith(r'\endlastfoot'):
+                in_table_data_rows = True
+            if line.startswith(r'\end{longtable}'):
+                in_table_data_rows = False
+            _out.append(line)
+        out = [line for line in _out]
+        del _out
+        sp_suffix = '' if ut_count == 1 else 's'
+        log.warning(f'Uglified horizontal rules in {ut_count} table{sp_suffix}')
+        sp_suffix = '' if udr_count == 1 else 's'
+        log.warning(f'Uglified a total of {udr_count} data row{sp_suffix}')
 
     log.debug(' -----> ')
     log.debug('# - - - 8< - - -')
