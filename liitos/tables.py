@@ -723,6 +723,8 @@ def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
                     if rule == r'\bottomrule':
                         ut_count += 1
                     line = line.replace(rule, r'\hline')
+                    if rule == r'\toprule':
+                        line += r'\rowcolor{light-gray}'
             if line.startswith(r'\endlastfoot'):
                 in_table_data_rows = True
             if line.startswith(r'\end{longtable}'):
