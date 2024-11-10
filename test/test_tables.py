@@ -109,6 +109,7 @@ def test_patch_ugly(caplog):
     assert out_lines[92] == r'%CONSIDERED_\columns=,10\%,30\%,50\%'
     assert 'ugly' in caplog.text
 
+
 def test_parse_table_font_size_command_unknown():
     line = '\\tablefontsize=unknown'
     worked, out_line, font_size = tables.parse_table_font_size_command(0, line)

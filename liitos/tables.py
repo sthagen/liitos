@@ -694,11 +694,25 @@ def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -
     log.warning('Disabled naive table patching from before version 2023.2.12 for now')
 
     if table_style == 'ugly':
+        tds_plain = r'\begin{longtable}[]{@{}'
+        tde_plain = r'@{}}'
+        col_placeholders = ('l', 'c', 'r')
         ut_count = 0
         udr_count = 0
         in_table_data_rows = False
         _out = []
         for n, line in enumerate(out):
+            if line.startswith(tds_plain) and line.endswith(tde_plain):
+                probe = line.strip().replace(tds_plain, '').replace(tde_plain, '')
+                robe = probe
+                for col_ph in col_placeholders:
+                    robe = robe.replace(col_ph, '')
+                if not robe:
+                    for col_ph in col_placeholders:
+                        probe = probe.replace(col_ph, f'|{col_ph}')
+                    line = tds_plain + probe + '|' + tde_plain
+                else:
+                    log.warning(f'Encountered pseudo-plain table declaration ({line})')
             if in_table_data_rows and line.endswith(r'\\'):
                 if not out[n + 1].startswith(r'\end{longtable}'):
                     line += r' \hline'
