@@ -1,5 +1,11 @@
 # Changes
 
+2024.11.x
+:    * Enabled shading the header cell background in uglified tables (<https://todo.sr.ht/~sthagen/liitos/75>)
+* Enabled table uglification also for unscaled tables (<https://todo.sr.ht/~sthagen/liitos/74>)
+* Fixed injection of blank lines in mermaid derived figure environments (<https://todo.sr.ht/~sthagen/liitos/56>)
+* Restored uglification of tables as a meta option (<https://todo.sr.ht/~sthagen/liitos/73>)
+
 2024.11.6
 :    * Added a patch backup file counter to ease debug for authors (<https://todo.sr.ht/~sthagen/liitos/72>)
 * Added an option to place table captions above or below the table foot (<https://todo.sr.ht/~sthagen/liitos/71>)
