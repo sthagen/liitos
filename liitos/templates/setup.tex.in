@@ -68,6 +68,8 @@
 
 \usepackage{enumitem}
 \usepackage{xcolor}
+\definecolor{light-gray}{HTML}{E5E4E2}
+\definecolor{white}{HTML}{FFFFFF}
 \usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % correct order of tables after \paragraph or \subparagraph
