@@ -186,6 +186,7 @@ def _verify_call_vector(
         'filter_cs_list': filter_cs_list if filter_cs_list != 'DEFAULT_FILTER' else FILTER_CS_LIST,
         'approvals_strategy': approvals_strategy,
         'table_caption_below': None,
+        'table_uglify': None,
     }
     log.debug(f'Post verifier: {options=}')
     if verbose:

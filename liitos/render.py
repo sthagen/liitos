@@ -332,13 +332,14 @@ def der(
     patch_counter += 1
 
     if options.get('patch_tables', False):
+        lookup_tunnel = {'table_style': 'ugly' if options.get('table_uglify', False) else 'readable'}
         lines = too.execute_filter(
             tab.patch,
             head='patching tables EXPERIMENTAL (table-shape) ...',
             backup=f'document-before-table-shape-patch-{patch_counter}.tex.txt',
             label='changed-table-shape',
             text_lines=lines,
-            lookup=None,
+            lookup=lookup_tunnel,
         )
         patch_counter += 1
     else:

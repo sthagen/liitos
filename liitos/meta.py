@@ -44,6 +44,7 @@ WEAVE_DEFAULTS = {
     'setup_path': '',
     'stretch': '1.04',  # old default was 1.2
     'table_captions_below': False,
+    'table_uglify': False,
     'toc_all_dots': '',  # old default was not toc all dots, so '%' would restore
 }
 ACROSS = {
@@ -1295,6 +1296,17 @@ def weave(
             tc_strategy = 'below' if table_caption_below else 'above'
             log.info(
                 f'per configuration variable value request for table captions ({tc_strategy})'
+                f' was set before to ({memo}) from default or command line'
+            )
+
+    if 'table_uglify' in meta_doc_common:
+        table_uglify = bool(meta_doc_common['table_uglify'])
+        if table_uglify:
+            memo = options.get('table_uglify', False)
+            options['table_uglify'] = table_uglify
+            tc_style = 'ugly' if table_uglify else 'readable'
+            log.info(
+                f'per configuration variable value request for table style ({tc_style})'
                 f' was set before to ({memo}) from default or command line'
             )
 
