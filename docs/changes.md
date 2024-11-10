@@ -1,6 +1,6 @@
 # Changes
 
-2024.11.x
+2024.11.10
 :    * Enabled shading the header cell background in uglified tables (<https://todo.sr.ht/~sthagen/liitos/75>)
 * Enabled table uglification also for unscaled tables (<https://todo.sr.ht/~sthagen/liitos/74>)
 * Fixed injection of blank lines in mermaid derived figure environments (<https://todo.sr.ht/~sthagen/liitos/56>)
