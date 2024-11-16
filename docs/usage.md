@@ -5,32 +5,30 @@
 ```console
 ❯ liitos --help
 
-
  Usage: liitos [OPTIONS] COMMAND [ARGS]...
 
  Splice (Finnish liitos) contributions.
 
-╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --version  -V        Display the application version and exit                                                    │
-│ --help     -h        Show this message and exit.                                                                 │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ approvals  Weave in the approvals for facet of target within document root.                                      │
-│ changes    Weave in the changes for facet of target within document root.                                        │
-│ concat     Concatenate the markdown tree for facet of target within render/pdf below document root.              │
-│ eject      Eject a template. Enter unique part to retrieve, any unknown word to obtain the list of known         │
-│            templates.                                                                                            │
-│ render     Render the markdown tree for facet of target within render/pdf below document root.                   │
-│ verify     Verify the structure definition against the file system.                                              │
-│ version    Display the application version and exit.                                                             │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --version  -V        Display the application version and exit                                                                           │
+│ --help     -h        Show this message and exit.                                                                                        │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ approvals    Weave in the approvals for facet of target within document root.                                                           │
+│ changes      Weave in the changes for facet of target within document root.                                                             │
+│ concat       Concatenate the markdown tree for facet of target within render/pdf below document root.                                   │
+│ eject        Eject a template. Enter unique part to retrieve, any unknown word to obtain the list of known templates.                   │
+│ render       Render the markdown tree for facet of target within render/pdf below document root.                                        │
+│ report       Report on the environment.                                                                                                 │
+│ verify       Verify the structure definition against the file system.                                                                   │
+│ version      Display the application version and exit.                                                                                  │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ## Version
 
 ```console
-❯ Splice (Finnish liitos) contributions. version 2023.1.21+parent.85ecfd90
+❯ Splice (Finnish liitos) contributions. version 2024.11.10+parent.gb6851c37
 ```
 
 ## Eject
@@ -41,8 +39,8 @@ Any unique start of template name will yield, executing the command without argu
 
 ```console
 ❯ liitos eject
-2023-01-14T20:13:40.724659+00:00 ERROR [LIITOS]: eject of template with no name requested
-2023-01-14T20:13:40.726042+00:00 INFO [LIITOS]: templates known: (approvals-yaml, bookmatter-pdf, changes-yaml, driver-pdf, meta-base-yaml, meta-patch-yaml, metadata-pdf, mkdocs-yaml, publisher-pdf, setup-pdf, vocabulary-yaml)
+2024-11-16T16:21:28.569239+00:00 ERROR [LIITOS]: eject of template with no name requested
+2024-11-16T16:21:28.569706+00:00 INFO [LIITOS]: templates known: (approvals-yaml, bookmatter-pdf, changes-yaml, driver-pdf, layout-yaml, meta-base-yaml, meta-patch-yaml, metadata-pdf, mkdocs-yaml, publisher-pdf, setup-pdf, vocabulary-yaml)
 ```
 
 Example fetch the approvals data file by only naming the first letter (as it is unique) of the template name:
@@ -52,191 +50,186 @@ Example fetch the approvals data file by only naming the first letter (as it is 
 approvals:
 - name: An Author
   role: Author
+  orga: Community
 - name: A Reviewer
   role: Review
+  orga: Community
 - name: An App Rover
   role: Approved
+  orga: Core
 
 ```
 
 ## Verification Example
 
-All good:
+All good, well ...:
 
 ```console
 ❯ liitos verify -d test/fixtures/basic -f mn -t abc
-2023-01-14T20:14:05.278964+00:00 INFO [LIITOS]: starting verification of facet (mn) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
-2023-01-14T20:14:05.281152+00:00 INFO [LIITOS]: - target (abc) OK
-2023-01-14T20:14:05.281183+00:00 INFO [LIITOS]: - facet (mn) of target (abc) OK
-2023-01-14T20:14:05.283696+00:00 INFO [LIITOS]: - assets (approvals, bind, changes, meta) for facet (mn) of target (abc) OK
-2023-01-14T20:14:05.283717+00:00 INFO [LIITOS]: loading signatures from signatures_path='approvals.json'
-2023-01-14T20:14:05.283766+00:00 INFO [LIITOS]: signatures=({'columns': ['Approvals', 'Name'], 'rows': [['Author', 'One Author'], ['Review', 'One Reviewer'], ['Approved', 'One Approver']]}, '')
-2023-01-14T20:14:05.283784+00:00 INFO [LIITOS]: loading history from history_path='changes.json'
-2023-01-14T20:14:05.283824+00:00 INFO [LIITOS]: history=({'columns': ['issue', 'author', 'date', 'summary'], 'rows': [['01', 'One Author', '31.12.2024', 'Initial Issue']]}, '')
-2023-01-14T20:14:05.283840+00:00 INFO [LIITOS]: loading metadata from metadata_path='meta-mn.yml'
-2023-01-14T20:14:05.284711+00:00 INFO [LIITOS]: info=({'document': {'short_title': 'The Y', 'long_title': 'The Real Y', 'sub_title': None, 'type': 'Engineering Document', 'id': 'ID-X-1234-00', 'issue': '01', 'revision': '00', 'head_iss_rev': 'Iss @issue, Rev @revision', 'date': '21 OCT 2022', 'blurb_header': 'Some Comp. Proprietary Information', 'page_count_prefix': 'Page', 'toc': True, 'lof': False, 'lot': False}}, '')
-2023-01-14T20:14:05.284729+00:00 INFO [LIITOS]: successful verification
+2024-11-16T16:22:14.845741+00:00 INFO [LIITOS]: Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ()
+2024-11-16T16:22:14.846205+00:00 INFO [LIITOS]: No preference in environment for approvals strategy (APPROVALS_STRATEGY) using default (south)
+2024-11-16T16:22:14.846250+00:00 INFO [LIITOS]: starting verification of facet (mn) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
+2024-11-16T16:22:14.849112+00:00 INFO [LIITOS]: - target (abc) OK
+2024-11-16T16:22:14.849132+00:00 INFO [LIITOS]: - facet (mn) of target (abc) OK
+2024-11-16T16:22:14.851050+00:00 ERROR [LIITOS]: failed verification with: layout asset for facet (mn) of target (abc) is invalid
 ```
 
 Similarly verifying the structural integrity of the deep example:
 
 ```console
 ❯ liitos verify example/deep --target prod_kind --facet deep
-2023-01-14T20:14:31.540469+00:00 INFO [LIITOS]: starting verification of facet (deep) for target (prod_kind) with structure map (structure.yml) in document root (example/deep)
-2023-01-14T20:14:31.541906+00:00 INFO [LIITOS]: - target (prod_kind) OK
-2023-01-14T20:14:31.541934+00:00 INFO [LIITOS]: - facet (deep) of target (prod_kind) OK
-2023-01-14T20:14:31.544819+00:00 INFO [LIITOS]: - assets (approvals, bind, changes, meta) for facet (deep) of target (prod_kind) OK
-2023-01-14T20:14:31.544845+00:00 INFO [LIITOS]: loading signatures from signatures_path='approvals.yml'
-2023-01-14T20:14:31.545356+00:00 INFO [LIITOS]: signatures=({'approvals': [{'name': 'An Author', 'role': 'Author'}, {'name': 'A Reviewer', 'role': 'Review'}, {'name': 'An App Rover', 'role': 'Approved'}]}, '')
-2023-01-14T20:14:31.545379+00:00 INFO [LIITOS]: loading history from history_path='changes.yml'
-2023-01-14T20:14:31.545735+00:00 INFO [LIITOS]: history=({'changes': [{'author': 'An Author', 'date': 'PUBLICATIONDATE', 'issue': '01', 'summary': 'Initial Issue'}]}, '')
-2023-01-14T20:14:31.545754+00:00 INFO [LIITOS]: loading metadata from metadata_path='meta-deep.yml'
-2023-01-14T20:14:31.546280+00:00 INFO [LIITOS]: info=({'document': {'import': 'meta-base.yml', 'patch': {'header_id': 'P99999', 'header_date': 'PUBLICATIONDATE', 'toc_level': 3, 'list_of_figures': '', 'list_of_tables': ''}}}, '')
-2023-01-14T20:14:31.546300+00:00 INFO [LIITOS]: successful verification
+2024-11-16T16:23:33.298479+00:00 INFO [LIITOS]: Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ()
+2024-11-16T16:23:33.298963+00:00 INFO [LIITOS]: No preference in environment for approvals strategy (APPROVALS_STRATEGY) using default (south)
+2024-11-16T16:23:33.299004+00:00 INFO [LIITOS]: starting verification of facet (deep) for target (prod_kind) with structure map (structure.yml) in document root (example/deep)
+2024-11-16T16:23:33.301551+00:00 INFO [LIITOS]: - target (prod_kind) OK
+2024-11-16T16:23:33.301574+00:00 INFO [LIITOS]: - facet (deep) of target (prod_kind) OK
+2024-11-16T16:23:33.305721+00:00 ERROR [LIITOS]: failed verification with: layout asset for facet (deep) of target (prod_kind) is invalid
 ```
+
 Target document key not present in structure (map):
 
 ```console
 ❯ liitos verify -d test/fixtures/basic -f mn -t no-target
-2023-01-14T20:14:59.716205+00:00 INFO [LIITOS]: starting verification of facet (mn) for target (no-target) with structure map (structure.yml) in document root (test/fixtures/basic)
-2023-01-14T20:14:59.718148+00:00 ERROR [LIITOS]: failed verification with: target (no-target) not in ['abc']
+2024-11-16T16:24:15.085502+00:00 INFO [LIITOS]: Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ()
+2024-11-16T16:24:15.086763+00:00 INFO [LIITOS]: No preference in environment for approvals strategy (APPROVALS_STRATEGY) using default (south)
+2024-11-16T16:24:15.086805+00:00 INFO [LIITOS]: starting verification of facet (mn) for target (no-target) with structure map (structure.yml) in document root (test/fixtures/basic)
+2024-11-16T16:24:15.087744+00:00 ERROR [LIITOS]: failed verification with: target (no-target) not in ['abc']
 ```
 
 Facet key for target document not present in structure (map):
 
 ```console
 ❯ liitos verify -d test/fixtures/basic -f no-facet -t abc
-2023-01-14T20:15:22.509602+00:00 INFO [LIITOS]: starting verification of facet (no-facet) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
-2023-01-14T20:15:22.511442+00:00 INFO [LIITOS]: - target (abc) OK
-2023-01-14T20:15:22.511475+00:00 ERROR [LIITOS]: failed verification with: facet (no-facet) of target (abc) not in ['missing', 'mn', 'opq']
+2024-11-16T16:24:45.071038+00:00 INFO [LIITOS]: Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ()
+2024-11-16T16:24:45.071524+00:00 INFO [LIITOS]: No preference in environment for approvals strategy (APPROVALS_STRATEGY) using default (south)
+2024-11-16T16:24:45.071565+00:00 INFO [LIITOS]: starting verification of facet (no-facet) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
+2024-11-16T16:24:45.072539+00:00 INFO [LIITOS]: - target (abc) OK
+2024-11-16T16:24:45.072568+00:00 ERROR [LIITOS]: failed verification with: facet (no-facet) of target (abc) not in ['missing', 'mn', 'opq']
 ```
 
-Invalid asset link of facet for target document key:
+Invalid asset link of facet for target document key, well ...:
 
 ```console
 ❯ liitos verify -d test/fixtures/basic -f opq -t abc
-2023-01-14T20:15:39.656353+00:00 INFO [LIITOS]: starting verification of facet (opq) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
-2023-01-14T20:15:39.658452+00:00 INFO [LIITOS]: - target (abc) OK
-2023-01-14T20:15:39.658477+00:00 INFO [LIITOS]: - facet (opq) of target (abc) OK
-2023-01-14T20:15:39.661172+00:00 INFO [LIITOS]: - assets (approvals, bind, changes, meta) for facet (opq) of target (abc) OK
-2023-01-14T20:15:39.661194+00:00 INFO [LIITOS]: loading signatures from signatures_path='approvals.yml'
-2023-01-14T20:15:39.661708+00:00 INFO [LIITOS]: signatures=({'approvals': [{'role': 'Author', 'name': 'One Author'}, {'role': 'Review', 'name': 'One Reviewer'}, {'role': 'Approved', 'name': 'One Approver'}]}, '')
-2023-01-14T20:15:39.661726+00:00 INFO [LIITOS]: loading history from history_path='changes.yml'
-2023-01-14T20:15:39.662090+00:00 INFO [LIITOS]: history=({'changes': [{'issue': '01', 'author': 'One Author', 'date': '31.12.2024', 'summary': 'Initial Issue'}]}, '')
-2023-01-14T20:15:39.662111+00:00 INFO [LIITOS]: loading metadata from metadata_path='meta-opq.md'
-2023-01-14T20:15:39.662265+00:00 INFO [LIITOS]: info=({'setting': 'special opq value'}, '')
-2023-01-14T20:15:39.662282+00:00 INFO [LIITOS]: successful verification
+2024-11-16T16:25:08.639677+00:00 INFO [LIITOS]: Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ()
+2024-11-16T16:25:08.640066+00:00 INFO [LIITOS]: No preference in environment for approvals strategy (APPROVALS_STRATEGY) using default (south)
+2024-11-16T16:25:08.640108+00:00 INFO [LIITOS]: starting verification of facet (opq) for target (abc) with structure map (structure.yml) in document root (test/fixtures/basic)
+2024-11-16T16:25:08.641087+00:00 INFO [LIITOS]: - target (abc) OK
+2024-11-16T16:25:08.641107+00:00 INFO [LIITOS]: - facet (opq) of target (abc) OK
+2024-11-16T16:25:08.645547+00:00 ERROR [LIITOS]: failed verification with: layout asset for facet (opq) of target (abc) is invalid
 ```
 
 ## Concat
 
 ```console
 ❯ liitos concat example/deep -t prod_kind -f deep
-2023-01-14T20:16:09.761532+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.762162+00:00 INFO [LIITOS]: parsed target (prod_kind) and facet (deep) from request
-2023-01-14T20:16:09.762230+00:00 INFO [LIITOS]: executing prelude of command (concat) for facet (deep) of target (prod_kind) with structure map (structure.yml) in document root (example/deep) coming from (/some/where)
-2023-01-14T20:16:09.763988+00:00 INFO [LIITOS]: prelude teleported processor into the document root at (/some/where/example/deep/)
-2023-01-14T20:16:09.764127+00:00 INFO [LIITOS]: concatenate (this processor) teleported into the render/pdf location (/some/where/example/deep/render/pdf/)
-2023-01-14T20:16:09.764612+00:00 INFO [LIITOS]: found single target (prod_kind) with facets (['deep'])
-2023-01-14T20:16:09.764641+00:00 WARNING [LIITOS]: structure does not strictly provide the expected aspects ['approvals', 'bind', 'changes', 'meta'] for target (prod_kind) and facet (deep)
-2023-01-14T20:16:09.764657+00:00 WARNING [LIITOS]: - found the following aspects instead:                   ['approvals', 'bind', 'changes', 'meta', 'render'] instead
-2023-01-14T20:16:09.772604+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.772630+00:00 INFO [LIITOS]: processing binder ...
-2023-01-14T20:16:09.773043+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.773325+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Yellow](images/yellow.png "Alt Text Yellow")<<-
-2023-01-14T20:16:09.774215+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.774293+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
-2023-01-14T20:16:09.774316+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue](images/blue.png "Alt Text Blue")<<-
-2023-01-14T20:16:09.774337+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.774402+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
-2023-01-14T20:16:09.774417+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue Repeated Image](images/blue.png "Alt Text Blue Same Repeated Image")<<-
-2023-01-14T20:16:09.774436+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.774452+00:00 WARNING [LIITOS]: - INCOMPLETE-MD-IMG_LINE::CAP-MISS-INJECTED <<![](images/blue.png  "Alt Text Blue Same Repeated Image Caption Missing")>>
-2023-01-14T20:16:09.774513+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
-2023-01-14T20:16:09.774528+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT](images/blue.png "Alt Text Blue Same Repeated Image Caption Missing")<<-
-2023-01-14T20:16:09.774593+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.774652+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
-2023-01-14T20:16:09.774670+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue](images/blue.png "Alt Text Blue")<<-
-2023-01-14T20:16:09.774689+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.774746+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
-2023-01-14T20:16:09.774761+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue Repeated Image](images/blue.png "Alt Text Blue Same Repeated Image")<<-
-2023-01-14T20:16:09.774778+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.774793+00:00 WARNING [LIITOS]: - INCOMPLETE-MD-IMG_LINE::CAP-MISS-INJECTED <<![](images/blue.png  "Alt Text Blue Same Repeated Image Caption Missing")>>
-2023-01-14T20:16:09.774847+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
-2023-01-14T20:16:09.774861+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT](images/blue.png "Alt Text Blue Same Repeated Image Caption Missing")<<-
-2023-01-14T20:16:09.775213+00:00 WARNING [LIITOS]: - INCOMPLETE-MD-IMG_LINE::QU-TOK-CNT-LOW <<![Caption for dot dot images in blue](../images/blue.png) <!-- no alt text ... and a comment eol -->>>
-2023-01-14T20:16:09.775232+00:00 INFO [LIITOS]: - SUSPICIOUS-MD-IMG_LINE::MAY-HAVE-UPWARDS-PATH <<![Caption for dot dot images in blue](../images/blue.png) <!-- no alt text ... and a comment eol -->>>
-2023-01-14T20:16:09.775245+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.775310+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
-2023-01-14T20:16:09.775326+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption for dot dot images in blue](images/blue.png "INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC") <!-- no alt text ... and a comment eol --><<-
-2023-01-14T20:16:09.776144+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.776211+00:00 INFO [LIITOS]: images/red.png <--- OK? --- other/images/red.png
-2023-01-14T20:16:09.776227+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Sting Red](images/red.png "Alt Text Sting Red")<<-
-2023-01-14T20:16:09.776842+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.776904+00:00 INFO [LIITOS]: images/red.png <--- OK? --- other/images/red.png
-2023-01-14T20:16:09.776919+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Red](images/red.png "Alt Text Red")<<-
-2023-01-14T20:16:09.776937+00:00 INFO [LIITOS]: - SUSPICIOUS-MD-IMG_LINE::MAY-HAVE-UPWARDS-PATH <<![Caption Text Dot Dot Lime](../images/lime.png "Alt Text Dot Dot Lime")>>
-2023-01-14T20:16:09.776950+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.777028+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Dot Dot Lime](images/lime.png "Alt Text Dot Dot Lime")<<-
-2023-01-14T20:16:09.777047+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.777105+00:00 INFO [LIITOS]: diagrams/squares-and-edges.svg <--- OK? --- other/diagrams/squares-and-edges.svg
-2023-01-14T20:16:09.777121+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text for SVG](diagrams/squares-and-edges.svg "Alt Text for SVG")<<-
-2023-01-14T20:16:09.777140+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
-2023-01-14T20:16:09.777196+00:00 INFO [LIITOS]: diagrams/nuts-and-bolts.app.svg <--- OK? --- other/diagrams/nuts-and-bolts.app.svg
-2023-01-14T20:16:09.777212+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text for app specific SVG](diagrams/nuts-and-bolts.app.svg "Alt Text for app specific SVG")<<-
-2023-01-14T20:16:09.777255+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.777271+00:00 INFO [LIITOS]: resulting tree:
-2023-01-14T20:16:09.777340+00:00 INFO [LIITOS]: /
-2023-01-14T20:16:09.777356+00:00 INFO [LIITOS]: ├── 1.md
-2023-01-14T20:16:09.777369+00:00 INFO [LIITOS]: │   └── part/a.md
-2023-01-14T20:16:09.777382+00:00 INFO [LIITOS]: │       ├── part/a1.md
-2023-01-14T20:16:09.777395+00:00 INFO [LIITOS]: │       │   └── part/a2.md
-2023-01-14T20:16:09.777408+00:00 INFO [LIITOS]: │       └── part/sub/as.md
-2023-01-14T20:16:09.777420+00:00 INFO [LIITOS]: │           └── part/sub/as1.md
-2023-01-14T20:16:09.777432+00:00 INFO [LIITOS]: ├── 2.md
-2023-01-14T20:16:09.777446+00:00 INFO [LIITOS]: │   └── 3.md
-2023-01-14T20:16:09.777458+00:00 INFO [LIITOS]: └── other/b.md
-2023-01-14T20:16:09.777471+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.777485+00:00 INFO [LIITOS]: provisioning chains for the 4 bottom up leaf paths:
-2023-01-14T20:16:09.777498+00:00 INFO [LIITOS]:  0: part/a2.md -> part/a1.md -> part/a.md -> 1.md -> /
-2023-01-14T20:16:09.777512+00:00 INFO [LIITOS]:  1: part/sub/as1.md -> part/sub/as.md -> part/a.md -> 1.md -> /
-2023-01-14T20:16:09.777525+00:00 INFO [LIITOS]:  2: 3.md -> 2.md -> /
-2023-01-14T20:16:09.777538+00:00 INFO [LIITOS]:  3: other/b.md -> /
-2023-01-14T20:16:09.777551+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.777563+00:00 INFO [LIITOS]: dependencies for the 9 document parts:
-2023-01-14T20:16:09.777576+00:00 INFO [LIITOS]: - part 1.md <-( 1 include )-
-2023-01-14T20:16:09.777590+00:00 INFO [LIITOS]:   + between lines   4 and   7 include fragment part/a.md
-2023-01-14T20:16:09.777604+00:00 INFO [LIITOS]: - part part/a.md <--( 2 includes )--
-2023-01-14T20:16:09.777617+00:00 INFO [LIITOS]:   + between lines   4 and   7 include fragment part/a1.md
-2023-01-14T20:16:09.777631+00:00 INFO [LIITOS]:   + between lines  13 and  13 include fragment part/sub/as.md
-2023-01-14T20:16:09.777644+00:00 INFO [LIITOS]: - part part/a1.md <-( 1 include )-
-2023-01-14T20:16:09.777658+00:00 INFO [LIITOS]:   + between lines  38 and  41 include fragment part/a2.md
-2023-01-14T20:16:09.777671+00:00 INFO [LIITOS]: - part part/a2.md (no includes)
-2023-01-14T20:16:09.777685+00:00 INFO [LIITOS]:   * did concat part/a2.md document for insertion
-2023-01-14T20:16:09.777699+00:00 INFO [LIITOS]: - part part/sub/as.md <-( 1 include )-
-2023-01-14T20:16:09.777712+00:00 INFO [LIITOS]:   + between lines   4 and   7 include fragment part/sub/as1.md
-2023-01-14T20:16:09.777725+00:00 INFO [LIITOS]: - part part/sub/as1.md (no includes)
-2023-01-14T20:16:09.777738+00:00 INFO [LIITOS]:   * did concat part/sub/as1.md document for insertion
-2023-01-14T20:16:09.777751+00:00 INFO [LIITOS]: - part 2.md <-( 1 include )-
-2023-01-14T20:16:09.777764+00:00 INFO [LIITOS]:   + between lines   6 and   9 include fragment 3.md
-2023-01-14T20:16:09.777777+00:00 INFO [LIITOS]: - part 3.md (no includes)
-2023-01-14T20:16:09.777790+00:00 INFO [LIITOS]:   * did concat 3.md document for insertion
-2023-01-14T20:16:09.777803+00:00 INFO [LIITOS]: - part other/b.md (no includes)
-2023-01-14T20:16:09.777815+00:00 INFO [LIITOS]:   * did concat other/b.md document for insertion
-2023-01-14T20:16:09.777829+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.777842+00:00 INFO [LIITOS]: starting insertions bottom up for the 4 inclusion chains:
-2023-01-14T20:16:09.777859+00:00 INFO [LIITOS]:   Insertion ongoing with parts (2.md, part/a1.md, part/sub/as.md) remaining
-2023-01-14T20:16:09.777890+00:00 INFO [LIITOS]:   Insertion ongoing with parts (part/a.md, part/a.md) remaining
-2023-01-14T20:16:09.777915+00:00 INFO [LIITOS]:   Insertion ongoing with parts (1.md, 1.md) remaining
-2023-01-14T20:16:09.777934+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.777948+00:00 INFO [LIITOS]: writing final concat markdown to document.md
-2023-01-14T20:16:09.778162+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.778178+00:00 INFO [LIITOS]: collecting assets (images and diagrams)
-2023-01-14T20:16:09.786023+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.786078+00:00 INFO [LIITOS]: concat result document (document.md) and artifacts are within folder (/some/where/example/deep/render/pdf/)
-2023-01-14T20:16:09.786098+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-2023-01-14T20:16:09.786112+00:00 INFO [LIITOS]: processing complete - SUCCESS
-2023-01-14T20:16:09.786126+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.595560+00:00 INFO [LIITOS]: Using value from environment for approvals strategy (APPROVALS_STRATEGY) == ()
+2024-11-16T16:26:13.596026+00:00 INFO [LIITOS]: No preference in environment for approvals strategy (APPROVALS_STRATEGY) using default (south)
+2024-11-16T16:26:13.596054+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.596068+00:00 INFO [LIITOS]: entered concat function ...
+2024-11-16T16:26:13.596078+00:00 INFO [LIITOS]: parsed target (prod_kind) and facet (deep) from request
+2024-11-16T16:26:13.596119+00:00 INFO [LIITOS]: executing prelude of command (concat) for facet (deep) of target (prod_kind) with structure map (structure.yml) in document root (example/deep) coming from (/some/where/liitos)
+2024-11-16T16:26:13.596897+00:00 INFO [LIITOS]: prelude teleported processor into the document root at (/some/where/liitos/example/deep/)
+2024-11-16T16:26:13.597071+00:00 INFO [LIITOS]: concatenate (this processor) teleported into the render/pdf location (/some/where/liitos/example/deep/render/pdf/)
+2024-11-16T16:26:13.597420+00:00 INFO [LIITOS]: found single target (prod_kind) with facets (['deep'])
+2024-11-16T16:26:13.610098+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.610124+00:00 INFO [LIITOS]: processing binder ...
+2024-11-16T16:26:13.610349+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.610438+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Yellow](images/yellow.png "Alt Text Yellow")<<-
+2024-11-16T16:26:13.611015+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.611089+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
+2024-11-16T16:26:13.611105+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue](images/blue.png "Alt Text Blue")<<-
+2024-11-16T16:26:13.611122+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.611175+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
+2024-11-16T16:26:13.611187+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue Repeated Image](images/blue.png "Alt Text Blue Same Repeated Image")<<-
+2024-11-16T16:26:13.611202+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.611217+00:00 WARNING [LIITOS]: - INCOMPLETE-MD-IMG_LINE::CAP-MISS-INJECTED <<![](images/blue.png  "Alt Text Blue Same Repeated Image Caption Missing")>>
+2024-11-16T16:26:13.611266+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
+2024-11-16T16:26:13.611276+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT](images/blue.png "Alt Text Blue Same Repeated Image Caption Missing")<<-
+2024-11-16T16:26:13.611515+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.611569+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
+2024-11-16T16:26:13.611579+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue](images/blue.png "Alt Text Blue")<<-
+2024-11-16T16:26:13.611594+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.611641+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
+2024-11-16T16:26:13.611651+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Blue Repeated Image](images/blue.png "Alt Text Blue Same Repeated Image")<<-
+2024-11-16T16:26:13.611664+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.611675+00:00 WARNING [LIITOS]: - INCOMPLETE-MD-IMG_LINE::CAP-MISS-INJECTED <<![](images/blue.png  "Alt Text Blue Same Repeated Image Caption Missing")>>
+2024-11-16T16:26:13.611719+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
+2024-11-16T16:26:13.611934+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT](images/blue.png "Alt Text Blue Same Repeated Image Caption Missing")<<-
+2024-11-16T16:26:13.612148+00:00 WARNING [LIITOS]: - INCOMPLETE-MD-IMG_LINE::QU-TOK-CNT-LOW <<![Caption for dot dot images in blue](../images/blue.png) <!-- no alt text ... and a comment eol -->>>
+2024-11-16T16:26:13.612162+00:00 INFO [LIITOS]: - SUSPICIOUS-MD-IMG_LINE::MAY-HAVE-UPWARDS-PATH <<![Caption for dot dot images in blue](../images/blue.png) <!-- no alt text ... and a comment eol -->>>
+2024-11-16T16:26:13.612172+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.612225+00:00 INFO [LIITOS]: images/blue.png <--- OK? --- part/images/blue.png
+2024-11-16T16:26:13.612237+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption for dot dot images in blue](images/blue.png "INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC") <!-- no alt text ... and a comment eol --><<-
+2024-11-16T16:26:13.612504+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.612559+00:00 INFO [LIITOS]: images/red.png <--- OK? --- other/images/red.png
+2024-11-16T16:26:13.612571+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Sting Red](images/red.png "Alt Text Sting Red")<<-
+2024-11-16T16:26:13.612815+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.612867+00:00 INFO [LIITOS]: images/red.png <--- OK? --- other/images/red.png
+2024-11-16T16:26:13.612877+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Red](images/red.png "Alt Text Red")<<-
+2024-11-16T16:26:13.612891+00:00 INFO [LIITOS]: - SUSPICIOUS-MD-IMG_LINE::MAY-HAVE-UPWARDS-PATH <<![Caption Text Dot Dot Lime](../images/lime.png "Alt Text Dot Dot Lime")>>
+2024-11-16T16:26:13.612901+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.612954+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text Dot Dot Lime](images/lime.png "Alt Text Dot Dot Lime")<<-
+2024-11-16T16:26:13.612971+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.613018+00:00 INFO [LIITOS]: diagrams/squares-and-edges.svg <--- OK? --- other/diagrams/squares-and-edges.svg
+2024-11-16T16:26:13.613029+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text for SVG](diagrams/squares-and-edges.svg "Alt Text for SVG")<<-
+2024-11-16T16:26:13.613043+00:00 INFO [LIITOS]: - parsing the markdown image text line ...
+2024-11-16T16:26:13.613090+00:00 INFO [LIITOS]: diagrams/nuts-and-bolts.app.svg <--- OK? --- other/diagrams/nuts-and-bolts.app.svg
+2024-11-16T16:26:13.613101+00:00 INFO [LIITOS]: ==> belte-og-seler: ->>![Caption Text for app specific SVG](diagrams/nuts-and-bolts.app.svg "Alt Text for app specific SVG")<<-
+2024-11-16T16:26:13.613143+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.613161+00:00 INFO [LIITOS]: resulting tree:
+2024-11-16T16:26:13.613213+00:00 INFO [LIITOS]: /
+2024-11-16T16:26:13.613229+00:00 INFO [LIITOS]: ├── 1.md
+2024-11-16T16:26:13.613242+00:00 INFO [LIITOS]: │   └── part/a.md
+2024-11-16T16:26:13.613256+00:00 INFO [LIITOS]: │       ├── part/a1.md
+2024-11-16T16:26:13.613269+00:00 INFO [LIITOS]: │       │   └── part/a2.md
+2024-11-16T16:26:13.613282+00:00 INFO [LIITOS]: │       └── part/sub/as.md
+2024-11-16T16:26:13.613294+00:00 INFO [LIITOS]: │           └── part/sub/as1.md
+2024-11-16T16:26:13.613306+00:00 INFO [LIITOS]: ├── 2.md
+2024-11-16T16:26:13.613318+00:00 INFO [LIITOS]: │   └── 3.md
+2024-11-16T16:26:13.613330+00:00 INFO [LIITOS]: └── other/b.md
+2024-11-16T16:26:13.613342+00:00 INFO [LIITOS]:
+2024-11-16T16:26:13.613353+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.613365+00:00 INFO [LIITOS]: provisioning chains for the 4 bottom up leaf paths:
+2024-11-16T16:26:13.613378+00:00 INFO [LIITOS]:  0: part/a2.md -> part/a1.md -> part/a.md -> 1.md -> /
+2024-11-16T16:26:13.613391+00:00 INFO [LIITOS]:  1: part/sub/as1.md -> part/sub/as.md -> part/a.md -> 1.md -> /
+2024-11-16T16:26:13.613403+00:00 INFO [LIITOS]:  2: 3.md -> 2.md -> /
+2024-11-16T16:26:13.613416+00:00 INFO [LIITOS]:  3: other/b.md -> /
+2024-11-16T16:26:13.613428+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.613439+00:00 INFO [LIITOS]: dependencies for the 9 document parts:
+2024-11-16T16:26:13.613452+00:00 INFO [LIITOS]: - part 1.md <-( 1 include )-
+2024-11-16T16:26:13.613465+00:00 INFO [LIITOS]:   + between lines   4 and   7 include fragment part/a.md
+2024-11-16T16:26:13.613478+00:00 INFO [LIITOS]: - part part/a.md <--( 2 includes )--
+2024-11-16T16:26:13.613492+00:00 INFO [LIITOS]:   + between lines   4 and   7 include fragment part/a1.md
+2024-11-16T16:26:13.613505+00:00 INFO [LIITOS]:   + between lines  13 and  13 include fragment part/sub/as.md
+2024-11-16T16:26:13.613517+00:00 INFO [LIITOS]: - part part/a1.md <-( 1 include )-
+2024-11-16T16:26:13.613530+00:00 INFO [LIITOS]:   + between lines  38 and  41 include fragment part/a2.md
+2024-11-16T16:26:13.613542+00:00 INFO [LIITOS]: - part part/a2.md (no includes)
+2024-11-16T16:26:13.613556+00:00 INFO [LIITOS]:   * did concat part/a2.md document for insertion
+2024-11-16T16:26:13.613569+00:00 INFO [LIITOS]: - part part/sub/as.md <-( 1 include )-
+2024-11-16T16:26:13.613582+00:00 INFO [LIITOS]:   + between lines   4 and   7 include fragment part/sub/as1.md
+2024-11-16T16:26:13.613595+00:00 INFO [LIITOS]: - part part/sub/as1.md (no includes)
+2024-11-16T16:26:13.613607+00:00 INFO [LIITOS]:   * did concat part/sub/as1.md document for insertion
+2024-11-16T16:26:13.613619+00:00 INFO [LIITOS]: - part 2.md <-( 1 include )-
+2024-11-16T16:26:13.613632+00:00 INFO [LIITOS]:   + between lines   6 and   9 include fragment 3.md
+2024-11-16T16:26:13.613644+00:00 INFO [LIITOS]: - part 3.md (no includes)
+2024-11-16T16:26:13.613656+00:00 INFO [LIITOS]:   * did concat 3.md document for insertion
+2024-11-16T16:26:13.613668+00:00 INFO [LIITOS]: - part other/b.md (no includes)
+2024-11-16T16:26:13.613681+00:00 INFO [LIITOS]:   * did concat other/b.md document for insertion
+2024-11-16T16:26:13.613693+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.613706+00:00 INFO [LIITOS]: starting insertions bottom up for the 4 inclusion chains:
+2024-11-16T16:26:13.613717+00:00 INFO [LIITOS]:   Insertion ongoing with parts (2.md, part/a1.md, part/sub/as.md) remaining
+2024-11-16T16:26:13.613742+00:00 INFO [LIITOS]:   Insertion ongoing with parts (part/a.md, part/a.md) remaining
+2024-11-16T16:26:13.613760+00:00 INFO [LIITOS]:   Insertion ongoing with parts (1.md, 1.md) remaining
+2024-11-16T16:26:13.613809+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.613823+00:00 INFO [LIITOS]: writing final concat markdown to document.md
+2024-11-16T16:26:13.615817+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.615843+00:00 INFO [LIITOS]: collecting assets (images and diagrams)
+2024-11-16T16:26:13.625891+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.625937+00:00 INFO [LIITOS]: concat result document (document.md) and artifacts are within folder (/some/where/liitos/example/deep/render/pdf/)
+2024-11-16T16:26:13.625956+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2024-11-16T16:26:13.625971+00:00 INFO [LIITOS]: processing complete - SUCCESS
+2024-11-16T16:26:13.625986+00:00 INFO [LIITOS]: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ```
 
 ## Render
@@ -256,27 +249,25 @@ Invalid asset link of facet for target document key:
  - LIITOS_SETUP_TEMPLATE (general layout template)
  - DRIVER_TEMPLATE (template for general structure)
 
-╭─ Arguments ────────────────────────────────────────────────────────────────────────────────────────────────╮
-│   doc_root_pos      [DOC_ROOT_POS]                                                                         │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --document-root       -d      TEXT  Root of the document tree to visit. Optional (default: positional tree │
-│                                     root value)                                                            │
-│ --structure           -s      TEXT  structure mapping file (default: {gat.DEFAULT_STRUCTURE_NAME})         │
-│                                     [default: structure.yml]                                               │
-│ --target              -t      TEXT  target document key                                                    │
-│ --facet               -f      TEXT  facet key of target document                                           │
-│ --label               -l      TEXT  optional label call to execute                                         │
-│ --verbose             -v            Verbose output (default is False)                                      │
-│ --strict                            Ouput noisy warnings on console (default is False)                     │
-│ --patch-tables        -p            Patch tables EXPERIMENTAL (default is False)                           │
-│ --from-format-spec            TEXT  from format specification handed over to pandoc [default: markdown]    │
-│ --filters             -F      TEXT  comma separated list of filters handed over to pandoc (in order) or    │
-│                                     empty to apply no filter                                               │
-│                                     [default: DEFAULT_FILTER]                                              │
-│ --approvals-strategy  -a      TEXT  optional approvals layout strategy in (south, east)                    │
-│ --help                -h            Show this message and exit.                                            │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│   doc_root_pos      [DOC_ROOT_POS]                                                                                                      │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --document-root       -d      TEXT  Root of the document tree to visit. Optional (default: positional tree root value)                  │
+│ --structure           -s      TEXT  structure mapping file (default: {gat.DEFAULT_STRUCTURE_NAME}) [default: structure.yml]             │
+│ --target              -t      TEXT  target document key                                                                                 │
+│ --facet               -f      TEXT  facet key of target document                                                                        │
+│ --label               -l      TEXT  optional label call to execute                                                                      │
+│ --verbose             -v            Verbose output (default is False)                                                                   │
+│ --strict                            Ouput noisy warnings on console (default is False)                                                  │
+│ --patch-tables        -p            Patch tables EXPERIMENTAL (default is False)                                                        │
+│ --from-format-spec            TEXT  from format specification handed over to pandoc [default: markdown]                                 │
+│ --filters             -F      TEXT  comma separated list of filters handed over to pandoc (in order) or empty to apply no filter        │
+│                                     [default: DEFAULT_FILTER]                                                                           │
+│ --approvals-strategy  -a      TEXT  optional approvals layout strategy in (south, east)                                                 │
+│ --help                -h            Show this message and exit.                                                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
 ```
 
 ### Render Example and Notes
@@ -919,10 +910,13 @@ The example `deep` demonstrates this by only including `meta-deep.yml` (indicati
 document:
   import: meta-base.yml
   patch:
+    approvals_adjustable_vertical_space: '-8.5em'
+    approvals_department_value: ABC
+    approvals_strategy: east
     footer_outer_field_normal_pages: \theMetaPageNumPrefix { } \thepage { } / \pageref{LastPage}
     header_id: P99999
     header_date: PUBLICATIONDATE
-    toc_level: 3
+    toc_level: 4
     list_of_figures: ''  # empty string to enable lof
     list_of_tables: ''  # empty string to enable lot
 ```
@@ -958,9 +952,9 @@ in the example `deep` provide most known keys to demonstrate the features:
 ---
 document:
   common:
-    title: Ttt Tt Tt
+    title: Title Wun\\ Title Two\\ Title Line Three
     header_title: Ttt Tt
-    sub_title: The Deep Spec
+    sub_title:
     header_type: Engineering Document
     header_id: null
     issue: '01'
@@ -991,6 +985,7 @@ document:
     fixed_font_package: sourcecodepro
     code_fontsize: \scriptsize
     chosen_logo: /opt/logo/liitos-logo.png
+    chosen_title_page_logo: /opt/logo/other-logo.png
 ```
 
 The special value `null` indicates that either a default shall be taken or that the value on the level of the meta data file makes no sense.
@@ -1079,6 +1074,8 @@ document:
     setup_path: null
     stretch: '1.04'  # old default was '1.2'
     sub_title: ' '
+    table_caption_below: false
+    table_uglify: false
     title: null
     toc_all_dots: ' '  # old default was not toc all dots, so '%' would restore
     toc_level: 2
