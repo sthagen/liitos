@@ -243,31 +243,40 @@ Invalid asset link of facet for target document key, well ...:
 
  Render the markdown tree for facet of target within render/pdf below document root.
  For ejected / customized templates set matching environment variables to the paths:
+
  - LIITOS_BOOKMATTER_TEMPLATE (for title page incl. approvals table)
  - LIITOS_PUBLISHER_TEMPLATE (for publisher page incl. changes and proprietary info)
  - LIITOS_METADATA_TEMPLATE (values to required known keys used on LaTeX level)
  - LIITOS_SETUP_TEMPLATE (general layout template)
  - DRIVER_TEMPLATE (template for general structure)
 
-╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│   doc_root_pos      [DOC_ROOT_POS]                                                                                                      │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --document-root       -d      TEXT  Root of the document tree to visit. Optional (default: positional tree root value)                  │
-│ --structure           -s      TEXT  structure mapping file (default: {gat.DEFAULT_STRUCTURE_NAME}) [default: structure.yml]             │
-│ --target              -t      TEXT  target document key                                                                                 │
-│ --facet               -f      TEXT  facet key of target document                                                                        │
-│ --label               -l      TEXT  optional label call to execute                                                                      │
-│ --verbose             -v            Verbose output (default is False)                                                                   │
-│ --strict                            Ouput noisy warnings on console (default is False)                                                  │
-│ --patch-tables        -p            Patch tables EXPERIMENTAL (default is False)                                                        │
-│ --from-format-spec            TEXT  from format specification handed over to pandoc [default: markdown]                                 │
-│ --filters             -F      TEXT  comma separated list of filters handed over to pandoc (in order) or empty to apply no filter        │
-│                                     [default: DEFAULT_FILTER]                                                                           │
-│ --approvals-strategy  -a      TEXT  optional approvals layout strategy in (south, east)                                                 │
-│ --help                -h            Show this message and exit.                                                                         │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ To not insert PDF digital signature fields set the environment variable
+ LIITOS_NO_DIG_SIG_FIELDS to something truthy.
+ In case the LaTeX package digital-signature-fields is not found some placeholder
+ will be inserted when allowing the insert of such fields in the approvals table.
 
+╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────╮
+│   doc_root_pos      [DOC_ROOT_POS]                                                                  │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────╮
+│ --document-root       -d      TEXT  Root of the document tree to visit. Optional (default:          │
+│                                     positional tree root value)                                     │
+│ --structure           -s      TEXT  structure mapping file (default: {gat.DEFAULT_STRUCTURE_NAME})  │
+│                                     [default: structure.yml]                                        │
+│ --target              -t      TEXT  target document key                                             │
+│ --facet               -f      TEXT  facet key of target document                                    │
+│ --label               -l      TEXT  optional label call to execute                                  │
+│ --verbose             -v            Verbose output (default is False)                               │
+│ --strict                            Ouput noisy warnings on console (default is False)              │
+│ --patch-tables        -p            Patch tables EXPERIMENTAL (default is False)                    │
+│ --from-format-spec            TEXT  from format specification handed over to pandoc                 │
+│                                     [default: markdown]                                             │
+│ --filters             -F      TEXT  comma separated list of filters handed over to pandoc (in       │
+│                                     order) or empty to apply no filter                              │
+│                                     [default: DEFAULT_FILTER]                                       │
+│ --approvals-strategy  -a      TEXT  optional approvals layout strategy in (south, east)             │
+│ --help                -h            Show this message and exit.                                     │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Render Example and Notes

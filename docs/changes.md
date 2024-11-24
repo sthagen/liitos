@@ -1,5 +1,8 @@
 # Changes
 
+2024.11.24
+:    * Added PDF signature block insertion capability (<https://todo.sr.ht/~sthagen/liitos/78>)
+
 2024.11.10
 :    * Enabled shading the header cell background in uglified tables (<https://todo.sr.ht/~sthagen/liitos/75>)
 * Enabled table uglification also for unscaled tables (<https://todo.sr.ht/~sthagen/liitos/74>)
