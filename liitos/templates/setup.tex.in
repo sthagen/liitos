@@ -14,6 +14,7 @@
   sfdefaults=false,%egregdoesnotlikesansseriftitles,
   VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%
 ]{scrartcl}
+%\usepackage{lua-visual-debug}
 \addtokomafont{sectionentrydots}{\bfseries}%%% MAYBE NOT SUCH A GOOD IDEA %%%
 \usepackage{bookmark}
 \bookmarksetup{
@@ -143,6 +144,17 @@
 \renewcommand{\thefigure}{\arabic{figure}}
 
 \usepackage{layout}
+\usepackage{luatex85}% provides emulation of pdfTeX primitives for LuaTeX v0.85+
+
+\IfFileExists{digital-signature-fields.sty}{\usepackage{digital-signature-fields}}{%
+\newcommand*{\digitalsignaturefield}[3]{\hbox{
+ \dimen255=#1\relax\ifdim\dimen255 < 2sp%
+   \dimen255=#2\relax\ifdim\dimen255 < 2sp\fi\fi%
+ \setbox0=\hbox{\rule{0mm}{#2}\kern#1}%
+#3}}%
+}%
+%\usepackage{digital-signature-fields}
+
 \usepackage[left=2cm,top=1cm,right=2cm,bottom=1.8cm,footskip=1.8cm,includehead=true,includefoot=true,centering]{geometry}%%,showframe %% bottom tuned from 0.8cm to 1.8cm
 \usepackage{scrlayer-scrpage}
 

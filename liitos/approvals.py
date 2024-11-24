@@ -31,6 +31,7 @@ from the data inside this module.
 For more than 4 role bearers a second table should be placed below the first, to keep the cell content readable.
 """
 
+import os
 import pathlib
 from typing import Union, no_type_check
 
@@ -39,10 +40,15 @@ import liitos.template as tpl
 import liitos.tools as too
 from liitos import ENCODING, ExternalsType, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, OptionsType, log
 
+NO_DIG_SIG_FIELDS = bool(os.getenv('LIITOS_NO_DIG_SIG_FIELDS', ''))
+
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105
 EXTRA_OFFSET_EM = 24
 TOKEN = r'\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]'  # nosec B105
-ROW_TEMPLATE = r'\ \mbox{role} & \mbox{name} & \mbox{} \\[0.5ex]'
+DSF = r'\begin{Form}\hspace*{-2mm}\fbox{\digitalsignaturefield{71.10mm}{8.00mm}{THE.NAME.SLOT}}\end{Form}'
+if NO_DIG_SIG_FIELDS:
+    DSF = r'\mbox{}'
+ROW_TEMPLATE = r'\ \mbox{role} & \mbox{name} & ' + DSF + r' \\[0.5ex]'
 GLUE = '\n\\hline\n'
 FORMAT_DATE = '%d %b %Y'
 JSON_CHANNEL = 'json'
@@ -91,7 +97,11 @@ HEAD_CELL = r' >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \
 ORGA_CELL = r' & \begin{minipage}[b]{\linewidth}\centering\arraybackslash \textbf{THE.ORGA$RANK$.SLOT}\end{minipage}'
 ROLE_CELL = r' & \centering\arraybackslash \textbf{THE.ROLE$RANK$.SLOT}'
 NAME_CELL = r' & \centering\arraybackslash THE.NAME$RANK$.SLOT'
-SIGN_CELL = r' & \mbox{}'
+SIGN_CELL = (
+    r' & \begin{Form}\hspace*{-2mm}\fbox{\digitalsignaturefield{30.55mm}{6.05mm}{THE.NAME$RANK$.SLOT}}\end{Form}'
+)
+if NO_DIG_SIG_FIELDS:
+    SIGN_CELL = r' & \mbox{}'
 
 
 def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
@@ -114,7 +124,8 @@ def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
     orga_block = NL.join(ORGA_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
     role_block = NL.join(ROLE_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
     name_block = NL.join(NAME_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
-    sign_block = f'{SIGN_CELL}{NL}' * uppers
+    sign_block = NL.join(SIGN_CELL.replace('$RANK$', str(slot)) for slot in range(uppers))
+    # sign_block = f'{SIGN_CELL}{NL}' * uppers
     upper_table = (
         BASE_TABLE.replace('$HEAD.BLOCK$', head_block)
         .replace('$ORGA.BLOCK$', orga_block)
@@ -134,7 +145,8 @@ def eastern_scaffold(normalized: list[dict[str, str]]) -> str:
     orga_block = NL.join(ORGA_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
     role_block = NL.join(ROLE_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
     name_block = NL.join(NAME_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
-    sign_block = f'{SIGN_CELL}{NL}' * lowers
+    sign_block = NL.join(SIGN_CELL.replace('$RANK$', str(slot)) for slot in range(uppers, bearers))
+    # sign_block = f'{SIGN_CELL}{NL}' * lowers
 
     lower_table = (
         BASE_TABLE.replace('$HEAD.BLOCK$', head_block)
