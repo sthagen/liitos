@@ -7,14 +7,14 @@
 :    Added PDF signature block insertion capability (<https://todo.sr.ht/~sthagen/liitos/78>)
 
 2024.11.10
-:    
+:    Enable dtable uglification and fixed mermaid derived figure environments
 * Enabled shading the header cell background in uglified tables (<https://todo.sr.ht/~sthagen/liitos/75>)
 * Enabled table uglification also for unscaled tables (<https://todo.sr.ht/~sthagen/liitos/74>)
 * Fixed injection of blank lines in mermaid derived figure environments (<https://todo.sr.ht/~sthagen/liitos/56>)
 * Restored uglification of tables as a meta option (<https://todo.sr.ht/~sthagen/liitos/73>)
 
 2024.11.6
-:    
+:    Eased debug of patch chains for authors and enabled choice of table caption placement
 * Added a patch backup file counter to ease debug for authors (<https://todo.sr.ht/~sthagen/liitos/72>)
 * Added an option to place table captions above or below the table foot (<https://todo.sr.ht/~sthagen/liitos/71>)
 
@@ -25,7 +25,7 @@
 :    Fixed the footer run-ins of text from body (<https://todo.sr.ht/~sthagen/liitos/69>)
 
 2024.10.9
-:    
+:    Changed and extended approvals strategies and fixed a regression in legacy channels
 * Added approvals strategy parameter to configuration (feature)
 * Changed default layouts and amended approvals and changes data processing (breaking changes)
 * Fixed legacy channels to survive newer options (regression)
@@ -270,19 +270,19 @@
 :    Fixed title token in vocabulary (currently used only in packages interfacing with liitos)
 
 2022.12.13
-:    
+:    Added examples and new meta keys to support users
 * Added new example for showing no date in the header
 * Added new example for showing no date in the header and moving iss-rev field into that slot
 * Added meta data keys to show or hide the three sub header fields coined id, iss_rev, and date
 * Added workaround meta data key to disable the semantics of the header date field
 
 2022.12.12
-:    
+:    Extended logging and fixed inventory bug
 * Added info to error log from image parse
 * Fixed inventory (failed CPSR refactoring)
 
 2022.12.11
-:    
+:    Enhanced logging and markdown image text transformation
 * Enhanced the logging
 * Refactored markdown image text line rewrites for transformed images (formats)
 
