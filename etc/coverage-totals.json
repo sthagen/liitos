@@ -2,7 +2,7 @@
   "liitos": {
     "format": 3,
     "coverage_tool_version": "7.6.8",
-    "timestamp": "2024-11-24 17:40:40 +00:00",
+    "timestamp": "2024-11-25 15:36:26 +00:00",
     "branch_coverage": true,
     "show_contexts": true,
     "covered_lines": 3413,
@@ -57,14 +57,14 @@
       "liitos/template.py",
       "liitos/tools.py"
     ],
-    "blake3": "b0afbdd4aaf4226781c984570451890ac349cd0c5057632b62f1d76843b469f7",
-    "blake2": "f96a6469f84df9335f3ea9cd0ba2008921a8cdbc74d650ced2dd40b49b8878f55b2ef07a0ff718468bc0615e53a4904a41a296d9a69702363fdb310e538743a1",
-    "sha512": "39d37182bb718df1bccb7b9e54afeadca3488bb0268bfa9668d703b702f27ec1d5b380250971aeb09b49d80b4f9194a52040dcdae460372bc85496ce998ef3b8",
-    "sha384": "629f90973b8771fb50eef3356b7584b5e178f80d80cdac3d64820bc77f92928dd213816d99cfcfa2b565f816804d18b7",
-    "sha256": "09d5be415066c995a8ee4efc2beef9d5fbd1098f9470dcc21eba12ddad422f96",
-    "sha1": "4109a8e9d442f1e6b8b83c93a32f727166c2bd73",
-    "md5": "393895c3f0696b938f024f68fef4dc0b",
+    "blake3": "ea0f74f51bfe25d581e4147d1504577b144954a4e9ef61706c9fcf5f1bb67888",
+    "blake2": "ba27e686a09cc7f0b4b14448fe3c00af47bcd9e4edd879c66dde93c175c74c2eb3dc8a06451a8a3e52764fb2b9be567cb35b2d9df0cb179328cc63e116817d0c",
+    "sha512": "0bba6241d65deab6edd5e93380393ca01d57428cc6ef80fda75605e9aa8db828386746f129fcfcdd864aa2124e5f24db622a4d21f3398d16ce9107930f6d823e",
+    "sha384": "03e8e7cb2fe21e4e33a0e8d86ebb45aef03d4b2d7df3e6f4c9bbb49bd587415dfa89a6783a2c911bfd5a501fd095e8b3",
+    "sha256": "53817704ae593beabe660dcc1714ec722473379eeff2629784c2250d2433aea3",
+    "sha1": "3d12527cecd9456820e3cba618952deb4019ee18",
+    "md5": "496b0a13b9460f1b04d6f203eb96de4c",
     "python_version": "3.12.1",
-    "entropy": 4.926921
+    "entropy": 4.926791
   }
 }
