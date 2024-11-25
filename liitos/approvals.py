@@ -45,7 +45,7 @@ NO_DIG_SIG_FIELDS = bool(os.getenv('LIITOS_NO_DIG_SIG_FIELDS', ''))
 TOKEN_EXTRA_PUSHDOWN = r'\ExtraPushdown'  # nosec B105
 EXTRA_OFFSET_EM = 24
 TOKEN = r'\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]'  # nosec B105
-DSF = r'\begin{Form}\hspace*{-2mm}\fbox{\digitalsignaturefield{71.10mm}{8.00mm}{THE.NAME.SLOT}}\end{Form}'
+DSF = r'\begin{Form}\hspace*{-2mm}\fbox{\digitalsignaturefield{71.10mm}{8.00mm}{name}}\end{Form}'
 if NO_DIG_SIG_FIELDS:
     DSF = r'\mbox{}'
 ROW_TEMPLATE = r'\ \mbox{role} & \mbox{name} & ' + DSF + r' \\[0.5ex]'
