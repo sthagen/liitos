@@ -1,5 +1,8 @@
 # Changes
 
+2024.11.25
+:    Fixed digital signature fields for south layout of approvals table (<https://todo.sr.ht/~sthagen/liitos/79>)
+
 2024.11.24
 :    * Added PDF signature block insertion capability (<https://todo.sr.ht/~sthagen/liitos/78>)
 
