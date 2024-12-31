@@ -2,7 +2,6 @@
 import functools
 import json
 import pathlib
-import pkg_resources
 import string
 import subprocess  # nosec
 import sys
@@ -62,9 +61,10 @@ __version__ = '$version$+parent.$revision$'\
 def _fetch_direct_dependency_names():
     with pathlib.Path('requirements.txt').open() as requirements_txt:
         install_requires = [
-            str(requirement)
+            str(requirement.strip())
             for requirement
-            in pkg_resources.parse_requirements(requirements_txt)
+            in requirements_txt.readlines()
+            if requirement.strip()
         ]
     return install_requires
 
