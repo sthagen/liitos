@@ -41,8 +41,20 @@ INTER_PROCESS_SYNC_ATTEMPTS = 10
 IS_BORING = re.compile(r'\(.*texmf-dist/tex.*\.')
 
 
-def hash_file(path: pathlib.Path, hasher: Union[Callable[..., Any], None] = None) -> str:
-    """Return the SHA512 hex digest of the data from file."""
+def hash_file(path: PathLike, hasher: Union[Callable[..., Any], None] = None) -> str:
+    """Return the SHA512 hex digest of the data from file.
+
+    Examples:
+
+    >>> import pathlib, tempfile
+    >>> empty_sha512 = (
+    ...     'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce'
+    ...     '47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e'
+    ... )
+    >>> with tempfile.NamedTemporaryFile() as handle:
+    ...     empty_hash = hash_file(handle.name)
+    >>> assert empty_hash == empty_sha512
+    """
     if hasher is None:
         hasher = hashlib.sha512
     the_hash = hasher()
