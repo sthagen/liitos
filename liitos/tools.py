@@ -116,7 +116,14 @@ def vcs_probe():
 
 
 def node_id() -> str:
-    """Generate the build node identifier."""
+    """Generate the build node identifier.
+
+    Examples:
+
+    >>> nid = node_id()
+    >>> assert len(nid) == 36
+    >>> assert all(c == '-' for c in (nid[8], nid[13], nid[18], nid[23]))
+    """
     return str(uuid.uuid3(uuid.NAMESPACE_DNS, platform.node()))
 
 
@@ -150,7 +157,14 @@ def report_taxonomy(target_path: pathlib.Path) -> None:
 
 @no_type_check
 def unified_diff(left: list[str], right: list[str], left_label: str = 'before', right_label: str = 'after'):
-    """Derive the unified diff between left and right lists of strings as generator of strings."""
+    """Derive the unified diff between left and right lists of strings as generator of strings.
+
+    Examples:
+
+    >>> lines = list(unified_diff(['a', 'b'], ['aa', 'b', 'd'], '-', '+'))
+    >>> lines
+    ['--- -', '+++ +', '@@ -1,2 +1,3 @@', '-a', '+aa', ' b', '+d']
+    """
     for line in difflib.unified_diff(left, right, fromfile=left_label, tofile=right_label):
         yield line.rstrip()
 
@@ -340,7 +354,15 @@ def mermaid_captions_from_json_ast(json_ast_path: Union[str, pathlib.Path]) -> d
 
 
 def remove_target_region_gen(text_lines: list[str], from_cut: str, thru_cut: str) -> Generator[str, None, None]:
-    """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru]."""
+    """Return generator that yields only the lines beyond the cut mark region skipping lines in [from, thru].
+
+    Examples:
+
+    >>> lines = ['a', 'b', 'c', 'd']
+    >>> filtered = list(remove_target_region_gen(lines, 'b', 'c'))
+    >>> filtered
+    ['a', 'd']
+    """
     in_section = False
     for line in text_lines:
         if not in_section:
