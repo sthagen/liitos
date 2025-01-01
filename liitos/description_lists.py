@@ -7,7 +7,7 @@ NO_OPTION: str = ''
 
 
 def parse_options_command(slot: int, text_line: str) -> tuple[bool, str, str]:
-    """Parse the \\option[style=multiline,leftmargin=6em].
+    r"""Parse the \option[style=multiline,leftmargin=6em].
 
     Examples:
 
