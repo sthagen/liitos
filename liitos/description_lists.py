@@ -7,7 +7,23 @@ NO_OPTION: str = ''
 
 
 def parse_options_command(slot: int, text_line: str) -> tuple[bool, str, str]:
-    """Parse the \\option[style=multiline,leftmargin=6em]."""
+    """Parse the \\option[style=multiline,leftmargin=6em].
+
+    Examples:
+
+    >>> in_opts = '[style=multiline,leftmargin=6em]'
+    >>> line = rf'\option{in_opts}'
+    >>> ok, processed, out_opts = parse_options_command(42, line)
+    >>> assert ok
+    >>> assert processed.startswith('%CONSIDERED_')
+    >>> assert out_opts == in_opts
+
+    >>> line = 'foo'
+    >>> ok, processed, out_opts = parse_options_command(-1, line)
+    >>> assert not ok
+    >>> assert processed == line
+    >>> assert out_opts == ''
+    """
     if text_line.startswith(r'\option['):
         log.info(f'trigger an option mod for the next description environment at line #{slot + 1}|{text_line}')
         try:
@@ -23,7 +39,20 @@ def parse_options_command(slot: int, text_line: str) -> tuple[bool, str, str]:
 
 
 def options(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
-    """Later alligator. \\option[style=multiline,leftmargin=6em]"""
+    r"""Later alligator. \option[style=multiline,leftmargin=6em]
+
+    Examples:
+
+    >>> in_opts = '[style=multiline,leftmargin=6em]'
+    >>> opt_line = f'\\option{in_opts}'
+    >>> beg_desc = '\\begin{description}'
+    >>> lines_in = ['a', '', opt_line, '', beg_desc, 'whatever']
+    >>> lines_in
+    ['a', '', '\\option[style=multiline,leftmargin=6em]', '', '\\begin{description}', 'whatever']
+    >>> processed = options(lines_in)
+    >>> processed
+    ['a', '', '', '\\begin{description}[style=multiline,leftmargin=6em]', 'whatever']
+    """
     outgoing = []
     modus = 'copy'
     opt = NO_OPTION
