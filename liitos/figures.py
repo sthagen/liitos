@@ -69,6 +69,12 @@ def filter_seek_figure(line: str, slot: int, modus: str, rescale: float, outgoin
     >>> assert f'textwidth,height={rescale}' in o[0]
     >>> assert m == 'copy'
     >>> assert math.isnan(r)
+
+    >>> o = []
+    >>> m, r = filter_seek_figure(r'\pandocbounded{\includegraphics', 0, 'copy', NAN, o)
+    >>> assert o[0].startswith(r'\pandocbounded{\includegraphics')
+    >>> assert m == 'copy'
+    >>> assert math.isnan(r)
     """
     if line.startswith(r'\includegraphics{'):
         if not math.isnan(rescale):
