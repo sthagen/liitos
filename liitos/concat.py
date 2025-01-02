@@ -5,8 +5,6 @@ import os
 import pathlib
 import re
 import shutil
-import sys
-from io import StringIO
 from typing import Union, no_type_check
 
 import treelib  # type: ignore
@@ -51,28 +49,6 @@ MD_IMG_PATTERN = re.compile(r'^!\[(?P<cap>[^(]*)\]\((?P<src>[^ ]+)\ *\"?(?P<alt>
 MD_IMG_PATTERN_RIGHT_SPLIT = re.compile(r'^(?P<src>[^ ]+)\ *\"?(?P<alt>[^\"]*)\"?\)(?P<rest>.*)?$')
 
 NL = '\n'
-
-
-@no_type_check
-class RedirectedStdout:
-    @no_type_check
-    def __init__(self):
-        self._stdout = None
-        self._string_io = None
-
-    @no_type_check
-    def __enter__(self):
-        self._stdout = sys.stdout
-        sys.stdout = self._string_io = StringIO()
-        return self
-
-    @no_type_check
-    def __exit__(self, type, value, traceback):
-        sys.stdout = self._stdout
-
-    @no_type_check
-    def __str__(self):
-        return self._string_io.getvalue()
 
 
 @no_type_check
