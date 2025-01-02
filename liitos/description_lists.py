@@ -1,25 +1,32 @@
+"""Apply any option command to subsequent description environment.
+
+Implementation Note: The empty string marker is used to indicate absence of option command.
+"""
+
 from collections.abc import Iterable
+from enum import Enum
 from typing import Union
 
 from liitos import log
 
+Modus = Enum('Modus', [('COPY', 1), ('OPTION', 2)])
 NO_OPTION: str = ''
 
 
-def parse_options_command(slot: int, text_line: str) -> tuple[bool, str, str]:
+def parse_option_command(slot: int, text_line: str) -> tuple[bool, str, str]:
     r"""Parse the \option[style=multiline,leftmargin=6em].
 
     Examples:
 
     >>> in_opts = '[style=multiline,leftmargin=6em]'
     >>> line = rf'\option{in_opts}'
-    >>> ok, processed, out_opts = parse_options_command(42, line)
+    >>> ok, processed, out_opts = parse_option_command(42, line)
     >>> assert ok
     >>> assert processed.startswith('%CONSIDERED_')
     >>> assert out_opts == in_opts
 
     >>> line = 'foo'
-    >>> ok, processed, out_opts = parse_options_command(-1, line)
+    >>> ok, processed, out_opts = parse_option_command(-1, line)
     >>> assert not ok
     >>> assert processed == line
     >>> assert out_opts == ''
@@ -50,13 +57,13 @@ def options(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None)
     ['a', '', '', '\\begin{description}[style=multiline,leftmargin=6em]', 'whatever']
     """
     outgoing = []
-    modus = 'copy'
+    modus = Modus.COPY
     opt = NO_OPTION
     for slot, line in enumerate(incoming):
-        if modus == 'copy':
-            has_opt, text_line, opt = parse_options_command(slot, line)
+        if modus == Modus.COPY:
+            has_opt, text_line, opt = parse_option_command(slot, line)
             if has_opt:
-                modus = 'option'
+                modus = Modus.OPTION
             else:
                 outgoing.append(text_line)
             continue
@@ -68,7 +75,7 @@ def options(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None)
                 outgoing.append(f'\\begin{{description}}{opt}')
             else:
                 outgoing.append(line)
-            modus = 'copy'
+            modus = Modus.COPY
             opt = NO_OPTION
         else:
             outgoing.append(line)
