@@ -1,0 +1,5 @@
+---
+document:
+  import: empty-as-meta.yml
+  patch:
+    toc_level: 42

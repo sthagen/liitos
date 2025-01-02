@@ -219,6 +219,12 @@ def process_meta(aspects: dict[str, str]) -> Union[gat.Meta, int]:
     >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
     >>> process_meta(aspects)
     1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> meta_name = 'meta-importing-empty-other-meta.yml'
+    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
+    >>> process_meta(aspects)
+    1
     """
     meta_path = DOC_BASE / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
