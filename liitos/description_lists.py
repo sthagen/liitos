@@ -9,7 +9,7 @@ from typing import Union
 
 from liitos import log
 
-Modus = Enum('Modus', [('COPY', 1), ('OPTION', 2)])
+Modus = Enum('Modus', 'COPY OPTION')
 NO_OPTION: str = ''
 
 

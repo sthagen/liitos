@@ -10,7 +10,7 @@ from typing import Union
 
 from liitos import log
 
-Modus = Enum('Modus', [('COPY', 1), ('SCALE', 2)])
+Modus = Enum('Modus', 'COPY SCALE')
 NAN = float('nan')
 
 
