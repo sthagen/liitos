@@ -6,7 +6,15 @@ from liitos import log
 
 
 def apply(patches: list[tuple[str, str]], incoming: Iterable[str]) -> list[str]:
-    """Later alligator."""
+    """Apply all pairs in patches to incoming strings.
+
+    Examples:
+
+    >>> incoming = ['a', 'b', 'cb', 'd']
+    >>> patches = [('b', 'x'), ('c', ''), ('y', 'foo')]
+    >>> apply(patches, incoming)
+    ['a', 'x', 'x', 'd']
+    """
     outgoing = [line for line in incoming]
 
     log.info(f'applying patches to {len(outgoing)} lines of text')
