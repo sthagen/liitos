@@ -26,14 +26,10 @@ def parse_options_command(slot: int, text_line: str) -> tuple[bool, str, str]:
     """
     if text_line.startswith(r'\option['):
         log.info(f'trigger an option mod for the next description environment at line #{slot + 1}|{text_line}')
-        try:
-            # \option[style=multiline,leftmargin=6em]  --> [style=multiline,leftmargin=6em]
-            opt = text_line.split(r'\option', 1)[1].strip()
-            log.info(f' -> parsed option as ({opt})')
-            return True, f'%CONSIDERED_{text_line}', opt
-        except Exception as err:
-            log.error(f'failed to parse option value from {text_line.strip()} with err: {err}')
-            return False, text_line, ''
+        # \option[style=multiline,leftmargin=6em]  --> [style=multiline,leftmargin=6em]
+        opt = text_line.split(r'\option', 1)[1].strip()
+        log.info(f' -> parsed option as ({opt})')
+        return True, f'%CONSIDERED_{text_line}', opt
     else:
         return False, text_line, ''
 
