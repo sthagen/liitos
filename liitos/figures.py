@@ -1,3 +1,8 @@
+"""Apply any scale command to subsequent figure environment.
+
+Implementation Note: The not a number (NAN) marker is used to indicate absence of scale command.
+"""
+
 from collections.abc import Iterable
 from enum import Enum
 import math
@@ -93,11 +98,7 @@ def filter_seek_figure(line: str, slot: int, modus: Modus, rescale: float, outgo
             log.info(f'- found the scale target start at line #{slot + 1}|{line}')
             target = line.replace(r'\pandocbounded{\includegraphics', '').replace('[keepaspectratio]', '')
             parts = target.split('}}')
-            rest, inside = '', ''
-            if len(parts) > 1:
-                inside = parts[0] + '}'
-                if len(parts) == 2:
-                    rest = parts[1].lstrip('}')
+            rest, inside = ('', '') if len(parts) < 2 else (parts[1].lstrip('}'), parts[0] + '}')
             option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}' '\\textheight,keepaspectratio]'
             outgoing.append(f'\\pandocbounded{{\\includegraphics{option}{inside}}}{rest}')
         else:
