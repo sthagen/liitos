@@ -53,7 +53,31 @@ NL = '\n'
 
 @no_type_check
 def process_approvals(aspects: dict[str, str]) -> Union[gat.Approvals, int]:
-    """TODO."""
+    """Best effort loading of approvals data.
+
+    Examples:
+
+    >>> aspects = {gat.KEY_APPROVALS: 'missing-file'}
+    >>> process_approvals(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> approvals_name = 'empty-as-approvals.yml'
+    >>> aspects = {gat.KEY_APPROVALS: str(DOC_BASE / approvals_name)}
+    >>> process_approvals(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('.')
+    >>> aspects = {gat.KEY_APPROVALS: __file__}
+    >>> process_approvals(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> approvals_name = 'space-as-approvals.yml'
+    >>> aspects = {gat.KEY_APPROVALS: str(DOC_BASE / approvals_name)}
+    >>> process_approvals(aspects)
+    1
+    """
     approvals_path = DOC_BASE / aspects[gat.KEY_APPROVALS]
     if not approvals_path.is_file() or not approvals_path.stat().st_size:
         log.error(f'destructure failed to find non-empty approvals file at {approvals_path}')
@@ -78,7 +102,31 @@ def process_approvals(aspects: dict[str, str]) -> Union[gat.Approvals, int]:
 
 @no_type_check
 def process_binder(aspects: dict[str, str]) -> Union[gat.Binder, int]:
-    """TODO."""
+    """Best effort loading of binder data.
+
+    Examples:
+
+    >>> aspects = {gat.KEY_BIND: 'missing-file'}
+    >>> process_binder(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> binder_name = 'empty-as-bind.txt'
+    >>> aspects = {gat.KEY_BIND: str(DOC_BASE / binder_name)}
+    >>> process_binder(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('.')
+    >>> aspects = {gat.KEY_BIND: __file__}
+    >>> process_binder(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> binder_name = 'space-as-bind.txt'
+    >>> aspects = {gat.KEY_BIND: str(DOC_BASE / binder_name)}
+    >>> process_binder(aspects)
+    1
+    """
     bind_path = DOC_BASE / aspects[gat.KEY_BIND]
     if not bind_path.is_file() or not bind_path.stat().st_size:
         log.error(f'destructure failed to find non-empty bind file at {bind_path}')
@@ -98,7 +146,31 @@ def process_binder(aspects: dict[str, str]) -> Union[gat.Binder, int]:
 
 @no_type_check
 def process_changes(aspects: dict[str, str]) -> Union[gat.Changes, int]:
-    """TODO."""
+    """Best effort loading of changes data.
+
+    Examples:
+
+    >>> aspects = {gat.KEY_CHANGES: 'missing-file'}
+    >>> process_changes(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> changes_name = 'empty-as-changtes.yml'
+    >>> aspects = {gat.KEY_CHANGES: str(DOC_BASE / changes_name)}
+    >>> process_changes(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('.')
+    >>> aspects = {gat.KEY_CHANGES: __file__}
+    >>> process_changes(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> changes_name = 'space-as-changes.yml'
+    >>> aspects = {gat.KEY_CHANGES: str(DOC_BASE / changes_name)}
+    >>> process_changes(aspects)
+    1
+    """
     changes_path = DOC_BASE / aspects[gat.KEY_CHANGES]
     if not changes_path.is_file() or not changes_path.stat().st_size:
         log.error(f'destructure failed to find non-empty changes file at {changes_path}')
@@ -123,7 +195,31 @@ def process_changes(aspects: dict[str, str]) -> Union[gat.Changes, int]:
 
 @no_type_check
 def process_meta(aspects: dict[str, str]) -> Union[gat.Meta, int]:
-    """TODO."""
+    """Best effort loading of meta data.
+
+    Examples:
+
+    >>> aspects = {gat.KEY_META: 'missing-file'}
+    >>> process_meta(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> meta_name = 'empty-as-meta.yml'
+    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
+    >>> process_meta(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('.')
+    >>> aspects = {gat.KEY_META: __file__}
+    >>> process_meta(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> meta_name = 'space-as-meta.yml'
+    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
+    >>> process_meta(aspects)
+    1
+    """
     meta_path = DOC_BASE / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
         log.error(f'destructure failed to find non-empty meta file at {meta_path}')
