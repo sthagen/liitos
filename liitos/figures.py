@@ -91,8 +91,8 @@ def filter_seek_figure(line: str, slot: int, modus: str, rescale: float, outgoin
             log.info(f'- found the scale target start at line #{slot + 1}|{line}')
             target = line.replace(r'\pandocbounded{\includegraphics', '').replace('[keepaspectratio]', '')
             parts = target.split('}}')
-            rest = ''
-            if len(parts) >= 1:
+            rest, inside = '', ''
+            if len(parts) > 1:
                 inside = parts[0] + '}'
                 if len(parts) == 2:
                     rest = parts[1].lstrip('}')
