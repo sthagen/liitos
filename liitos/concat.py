@@ -11,6 +11,7 @@ import treelib  # type: ignore
 import yaml
 
 import liitos.gather as gat
+import liitos.meta as met
 import liitos.placeholder as plh
 import liitos.tools as too
 from liitos import ENCODING, LOG_SEPARATOR, log
@@ -191,69 +192,6 @@ def process_changes(aspects: dict[str, str]) -> Union[gat.Changes, int]:
         with open('changes.json', 'wt', encoding=ENCODING) as handle:
             json.dump(changes, handle, indent=2)
     return changes
-
-
-@no_type_check
-def process_meta(aspects: dict[str, str]) -> Union[gat.Meta, int]:
-    """Best effort loading of meta data.
-
-    Examples:
-
-    >>> aspects = {gat.KEY_META: 'missing-file'}
-    >>> process_meta(aspects)
-    1
-
-    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
-    >>> meta_name = 'empty-as-meta.yml'
-    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
-    >>> process_meta(aspects)
-    1
-
-    >>> DOC_BASE = pathlib.Path('.')
-    >>> aspects = {gat.KEY_META: __file__}
-    >>> process_meta(aspects)
-    1
-
-    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
-    >>> meta_name = 'space-as-meta.yml'
-    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
-    >>> process_meta(aspects)
-    1
-
-    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
-    >>> meta_name = 'meta-importing-empty-other-meta.yml'
-    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
-    >>> process_meta(aspects)
-    1
-    """
-    meta_path = DOC_BASE / aspects[gat.KEY_META]
-    if not meta_path.is_file() or not meta_path.stat().st_size:
-        log.error(f'destructure failed to find non-empty meta file at {meta_path}')
-        return 1
-    if meta_path.suffix.lower() not in ('.yaml', '.yml'):
-        log.error(f'meta file format per suffix ({meta_path.suffix}) not supported')
-        return 1
-    with open(meta_path, 'rt', encoding=ENCODING) as handle:
-        metadata = yaml.safe_load(handle)
-    if not metadata:
-        log.error(f'empty metadata file? Please add metadata to ({meta_path})')
-        return 1
-    if 'import' in metadata['document']:
-        base_meta_path = DOC_BASE / metadata['document']['import']
-        if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
-            log.error(
-                f'metadata declares import of base data from ({base_meta_path.name})'
-                f' but failed to find non-empty base file at {base_meta_path}'
-            )
-            return 1
-        with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
-            base_data = yaml.safe_load(handle)
-        for key, value in metadata['document']['patch'].items():
-            base_data['document']['common'][key] = value
-        metadata = base_data
-    with open('metadata.yml', 'wt', encoding=ENCODING) as handle:
-        yaml.dump(metadata, handle, default_flow_style=False)
-    return metadata
 
 
 @no_type_check
@@ -501,7 +439,7 @@ def concatenate(
     changes = process_changes(aspect_map)
     if isinstance(changes, int):
         return 1
-    metadata = process_meta(aspect_map)
+    metadata = met.load(aspect_map)
     if isinstance(metadata, int):
         return 1
 

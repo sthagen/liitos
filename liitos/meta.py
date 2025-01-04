@@ -54,8 +54,38 @@ ACROSS = {
 
 
 @no_type_check
-def process_meta(aspects: dict[str, str]) -> Union[gat.Meta, int]:
-    """TODO."""
+def load(aspects: dict[str, str]) -> Union[gat.Meta, int]:
+    """Best effort loading of meta data.
+
+    Examples:
+
+    >>> aspects = {gat.KEY_META: 'missing-file'}
+    >>> load(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> meta_name = 'empty-as-meta.yml'
+    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
+    >>> load(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('.')
+    >>> aspects = {gat.KEY_META: __file__}
+    >>> load(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> meta_name = 'space-as-meta.yml'
+    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
+    >>> load(aspects)
+    1
+
+    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> meta_name = 'meta-importing-empty-other-meta.yml'
+    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
+    >>> load(aspects)
+    1
+    """
     meta_path = DOC_BASE / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
         log.error(f'destructure failed to find non-empty meta file at {meta_path}')
@@ -90,9 +120,23 @@ def weave_setup_font_path(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the xxxx from mapper or default for driver.
+    """Weave in the font_path from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FONT_%_PATH_%%')
+
+    Examples:
+
+    >>> mapper = {'font_path': '/fonts/here/'}  # expect warning if folder not present
+    >>> weave_setup_font_path(mapper, 'Path = VALUE.SLOT,%%_PATCH_%_FONT_%_PATH_%%')
+    'Path = /fonts/here/,%%_PATCH_%_FONT_%_PATH_%%'
+    >>> ACROSS['eff_font_folder']
+    '/fonts/here/'
+
+    >>> mapper = {'no_font_path': 'sorry'}
+    >>> weave_setup_font_path(mapper, 'Path = VALUE.SLOT,%%_PATCH_%_FONT_%_PATH_%%')
+    'Path = /opt/fonts/,%%_PATCH_%_FONT_%_PATH_%%'
+    >>> ACROSS['eff_font_folder']
+    '/opt/fonts/'
     """
     defaults = {**WEAVE_DEFAULTS}
     if mapper.get('font_path'):
@@ -115,6 +159,20 @@ def weave_setup_font_suffix(
     """Weave in the font_suffix from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FONT_%_SUFFIX_%%')
+
+    Examples:
+
+    >>> mapper = {'font_suffix': '.xtf'}  # Expect warning because of unknown suffix for fonts
+    >>> weave_setup_font_suffix(mapper, 'Extension = VALUE.SLOT,%%_PATCH_%_FONT_%_SUFFIX_%%')
+    'Extension = .xtf,%%_PATCH_%_FONT_%_SUFFIX_%%'
+    >>> ACROSS['eff_font_suffix']
+    '.xtf'
+
+    >>> mapper = {'no_font_suffix': 'sorry'}
+    >>> weave_setup_font_suffix(mapper, 'Extension = VALUE.SLOT,%%_PATCH_%_FONT_%_SUFFIX_%%')
+    'Extension = .otf,%%_PATCH_%_FONT_%_SUFFIX_%%'
+    >>> ACROSS['eff_font_suffix']
+    '.otf'
     """
     defaults = {**WEAVE_DEFAULTS}
     if mapper.get('font_suffix'):
@@ -137,6 +195,20 @@ def weave_setup_bold_font(
     """Weave in the bold_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_BOLD_%_FONT_%%')
+
+    Examples:
+
+    >>> mapper = {'bold_font': 'MadeUp'}  # Expect warning when file does not exist at font path and suffix
+    >>> weave_setup_bold_font(mapper, 'BoldFont={VALUE.SLOT},%%_PATCH_%_BOLD_%_FONT_%%')
+    'BoldFont={MadeUp},%%_PATCH_%_BOLD_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
+
+    >>> mapper = {'no_bold_font': 'sorry'}
+    >>> weave_setup_bold_font(mapper, 'BoldFont={VALUE.SLOT},%%_PATCH_%_BOLD_%_FONT_%%')
+    'BoldFont={ITCFranklinGothicStd-Demi},%%_PATCH_%_BOLD_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
     """
     defaults = {**WEAVE_DEFAULTS}
     eff_font_folder = ACROSS['eff_font_folder']
@@ -163,6 +235,20 @@ def weave_setup_italic_font(
     """Weave in the italic_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ITALIC_%_FONT_%%')
+
+    Examples:
+
+    >>> mapper = {'italic_font': 'MadeUpToo'}  # Expect warning when file does not exist at font path and suffix
+    >>> weave_setup_italic_font(mapper, 'ItalicFont={VALUE.SLOT},%%_PATCH_%_ITALIC_%_FONT_%%')
+    'ItalicFont={MadeUpToo},%%_PATCH_%_ITALIC_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
+
+    >>> mapper = {'no_italic_font': 'sorry'}
+    >>> weave_setup_italic_font(mapper, 'ItalicFont={VALUE.SLOT},%%_PATCH_%_ITALIC_%_FONT_%%')
+    'ItalicFont={ITCFranklinGothicStd-BookIt},%%_PATCH_%_ITALIC_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
     """
     defaults = {**WEAVE_DEFAULTS}
     eff_font_folder = ACROSS['eff_font_folder']
@@ -189,6 +275,20 @@ def weave_setup_bold_italic_font(
     """Weave in the bold_italic_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_BOLDITALIC_%_FONT_%%')
+
+    Examples:
+
+    >>> mapper = {'bold_italic_font': 'AlsoMadeUp'}  # Expect warning when file does not exist at font path and suffix
+    >>> weave_setup_bold_italic_font(mapper, 'BoldItalicFont={VALUE.SLOT}%%_PATCH_%_BOLDITALIC_%_FONT_%%')
+    'BoldItalicFont={AlsoMadeUp}%%_PATCH_%_BOLDITALIC_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
+
+    >>> mapper = {'no_bold_italic_font': 'sorry'}
+    >>> weave_setup_bold_italic_font(mapper, 'BoldItalicFont={VALUE.SLOT}%%_PATCH_%_BOLDITALIC_%_FONT_%%')
+    'BoldItalicFont={ITCFranklinGothicStd-DemiIt}%%_PATCH_%_BOLDITALIC_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
     """
     defaults = {**WEAVE_DEFAULTS}
     eff_font_folder = ACROSS['eff_font_folder']
@@ -215,6 +315,20 @@ def weave_setup_main_font(
     """Weave in the main_font from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_FONT_%%')
+
+    Examples:
+
+    >>> mapper = {'main_font': 'IsMadeUp'}  # Expect warning when file does not exist at font path and suffix
+    >>> weave_setup_main_font(mapper, ']{VALUE.SLOT}%%_PATCH_%_MAIN_%_FONT_%%')
+    ']{IsMadeUp}%%_PATCH_%_MAIN_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
+
+    >>> mapper = {'no_main_font': 'sorry'}
+    >>> weave_setup_main_font(mapper, ']{VALUE.SLOT}%%_PATCH_%_MAIN_%_FONT_%%')
+    ']{ITCFranklinGothicStd-Book}%%_PATCH_%_MAIN_%_FONT_%%'
+    >>> assert ACROSS['eff_font_folder'] in ('', WEAVE_DEFAULTS['font_path'])
+    >>> assert ACROSS['eff_font_suffix'] in ('', WEAVE_DEFAULTS['font_suffix'])
     """
     defaults = {**WEAVE_DEFAULTS}
     eff_font_folder = ACROSS['eff_font_folder']
@@ -1196,7 +1310,7 @@ def weave(
     if not ok or not aspect_map:
         return 0 if ok else 1
 
-    metadata = process_meta(aspect_map)
+    metadata = load(aspect_map)
     if isinstance(metadata, int):
         return 1
 
