@@ -10,12 +10,13 @@ import yaml
 import liitos.gather as gat
 import liitos.template as tpl
 import liitos.tools as too
-from liitos import ENCODING, ExternalsType, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, log
+from liitos import ENCODING, ExternalsType, KNOWN_APPROVALS_STRATEGIES, LOG_SEPARATOR, PathLike, log
 
 VALUE_SLOT = 'VALUE.SLOT'
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 MAGIC_OF_TODAY = 'PUBLICATIONDATE'
+SLASH = '\\'
 
 WEAVE_DEFAULTS = {
     'approvals_adjustable_vertical_space': '2.5em',
@@ -54,7 +55,7 @@ ACROSS = {
 
 
 @no_type_check
-def load(aspects: dict[str, str]) -> Union[gat.Meta, int]:
+def load(aspects: dict[str, str], doc_base: Union[PathLike, None] = None) -> Union[gat.Meta, int]:
     """Best effort loading of meta data.
 
     Examples:
@@ -63,48 +64,61 @@ def load(aspects: dict[str, str]) -> Union[gat.Meta, int]:
     >>> load(aspects)
     1
 
-    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> doc_base = pathlib.Path('test/fixtures/basic/')
     >>> meta_name = 'empty-as-meta.yml'
-    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
-    >>> load(aspects)
+    >>> aspects = {gat.KEY_META: meta_name}
+    >>> load(aspects, doc_base)
     1
 
-    >>> DOC_BASE = pathlib.Path('.')
+    >>> doc_base = pathlib.Path('.')
     >>> aspects = {gat.KEY_META: __file__}
-    >>> load(aspects)
-    1
+    >>> load(aspects, doc_base)
+    2
 
-    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> doc_base = pathlib.Path('test/fixtures/basic/')
     >>> meta_name = 'space-as-meta.yml'
-    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
-    >>> load(aspects)
+    >>> str(doc_base)
+    'test/fixtures/basic'
+    >>> doc_base.is_dir()
+    True
+    >>> (doc_base / meta_name).is_file()
+    True
+    >>> (doc_base / meta_name).stat().st_size
     1
+    >>> aspects = {gat.KEY_META: meta_name}
+    >>> load(aspects, doc_base)
+    3
 
-    >>> DOC_BASE = pathlib.Path('..') / 'test/fixtures/basic/'
+    >>> doc_base = pathlib.Path('test/fixtures/basic/')
+    >>> str(doc_base)
+    'test/fixtures/basic'
+    >>> doc_base.is_dir()
+    True
     >>> meta_name = 'meta-importing-empty-other-meta.yml'
-    >>> aspects = {gat.KEY_META: str(DOC_BASE / meta_name)}
-    >>> load(aspects)
-    1
+    >>> aspects = {gat.KEY_META: meta_name}
+    >>> load(aspects, doc_base)
+    4
     """
-    meta_path = DOC_BASE / aspects[gat.KEY_META]
+    doc_base = doc_base if doc_base is not None else DOC_BASE
+    meta_path = doc_base / aspects[gat.KEY_META]
     if not meta_path.is_file() or not meta_path.stat().st_size:
         log.error(f'destructure failed to find non-empty meta file at {meta_path}')
         return 1
     if meta_path.suffix.lower() not in ('.yaml', '.yml'):
-        return 1
+        return 2
     with open(meta_path, 'rt', encoding=ENCODING) as handle:
         metadata = yaml.safe_load(handle)
     if not metadata:
         log.error(f'empty metadata file? Please add metadata to ({meta_path})')
-        return 1
+        return 3
     if 'import' in metadata['document']:
-        base_meta_path = DOC_BASE / metadata['document']['import']
+        base_meta_path = doc_base / metadata['document']['import']
         if not base_meta_path.is_file() or not base_meta_path.stat().st_size:
             log.error(
                 f'metadata declares import of base data from ({base_meta_path.name})'
                 f' but failed to find non-empty base file at {base_meta_path}'
             )
-            return 1
+            return 4
         with open(base_meta_path, 'rt', encoding=ENCODING) as handle:
             base_data = yaml.safe_load(handle)
         for key, value in metadata['document']['patch'].items():
@@ -352,9 +366,19 @@ def weave_setup_fixed_font_package(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the fixed_font_package from mapper or default for driver.
+    r"""Weave in the fixed_font_package from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%')
+
+    Examples:
+
+    >>> mapper = {'fixed_font_package': 'MadeUpAgain'}  # Expect warning when font differs from default
+    >>> weave_setup_fixed_font_package(mapper, r'\usepackage{VALUE.SLOT}%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%')
+    '\\usepackage{MadeUpAgain}%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%'
+
+    >>> mapper = {'no_fixed_font_package': 'sorry'}
+    >>> weave_setup_fixed_font_package(mapper, r'\usepackage{VALUE.SLOT}%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%')
+    '\\usepackage{sourcecodepro}%%_PATCH_%_FIXED_%_FONT_%_PACKAGE_%%'
     """
     defaults = {**WEAVE_DEFAULTS}
     if mapper.get('fixed_font_package'):
@@ -375,9 +399,35 @@ def weave_setup_code_fontsize(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the code_fontsize from mapper or default for driver.
+    r"""Weave in the code_fontsize from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CODE_%_FONTSIZE_%%')
+
+    Examples:
+
+    >>> mapper = {'code_fontsize': r'\Huge'}
+    >>> weave_setup_code_fontsize(mapper, 'fontsize=VALUE.SLOT}%%_PATCH_%_CODE_%_FONTSIZE_%%')
+    'fontsize=\\Huge}%%_PATCH_%_CODE_%_FONTSIZE_%%'
+
+    >>> mapper = {'code_fontsize': r'footnotesize'}
+    >>> weave_setup_code_fontsize(mapper, 'fontsize=VALUE.SLOT}%%_PATCH_%_CODE_%_FONTSIZE_%%')
+    'fontsize=\\footnotesize}%%_PATCH_%_CODE_%_FONTSIZE_%%'
+
+    >>> mapper = {'code_fontsize': r'scriptsize'}
+    >>> weave_setup_code_fontsize(mapper, 'fontsize=VALUE.SLOT}%%_PATCH_%_CODE_%_FONTSIZE_%%')
+    'fontsize=\\scriptsize}%%_PATCH_%_CODE_%_FONTSIZE_%%'
+
+    >>> mapper = {'code_fontsize': r'tini'}  # Expect warnings on override with available sizes
+    >>> weave_setup_code_fontsize(mapper, 'fontsize=VALUE.SLOT}%%_PATCH_%_CODE_%_FONTSIZE_%%')
+    'fontsize=\\scriptsize}%%_PATCH_%_CODE_%_FONTSIZE_%%'
+
+    >>> mapper = {'code_fontsize': r'\\LARGE'}
+    >>> weave_setup_code_fontsize(mapper, 'fontsize=VALUE.SLOT}%%_PATCH_%_CODE_%_FONTSIZE_%%')
+    'fontsize=\\LARGE}%%_PATCH_%_CODE_%_FONTSIZE_%%'
+
+    >>> mapper = {'no_code_fontsize': 'sorry'}
+    >>> weave_setup_code_fontsize(mapper, 'fontsize=VALUE.SLOT}%%_PATCH_%_CODE_%_FONTSIZE_%%')
+    'fontsize=\\scriptsize}%%_PATCH_%_CODE_%_FONTSIZE_%%'
     """
     defaults = {**WEAVE_DEFAULTS}
     if mapper.get('code_fontsize'):
@@ -396,8 +446,10 @@ def weave_setup_code_fontsize(
         )
         bs = '\\'
         sizes = tuple(size[1:] for size in valid_code_font_sizes)
-        if code_fontsize.startswith(r'\\'):
+        if code_fontsize.startswith(SLASH + SLASH):
             code_fontsize = code_fontsize[1:]
+        if not code_fontsize.startswith(SLASH):
+            code_fontsize = SLASH + code_fontsize
         if code_fontsize not in valid_code_font_sizes:
             log.error(
                 f'code_fontsize ({code_fontsize}) is not a valid font size value'
@@ -424,9 +476,19 @@ def weave_setup_chosen_logo(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the chosen_logo from mapper or default for driver.
+    r"""Weave in the chosen_logo from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHOSEN_%_LOGO_%%')
+
+    Examples:
+
+    >>> mapper = {'chosen_logo': 'not-found.png'}  # Expect warning when logo path is no file
+    >>> weave_setup_chosen_logo(mapper, r'\newcommand{\theChosenLogo}{VALUE.SLOT}%%_PATCH_%_CHOSEN_%_LOGO_%%')
+    '\\newcommand{\\theChosenLogo}{not-found.png}%%_PATCH_%_CHOSEN_%_LOGO_%%'
+
+    >>> mapper = {'no_chosen_logo': 'sorry'}
+    >>> weave_setup_chosen_logo(mapper, r'\newcommand{\theChosenLogo}{VALUE.SLOT}%%_PATCH_%_CHOSEN_%_LOGO_%%')
+    '\\newcommand{\\theChosenLogo}{/opt/logo/liitos-logo.png}%%_PATCH_%_CHOSEN_%_LOGO_%%'
     """
     defaults = {**WEAVE_DEFAULTS}
     if mapper.get('chosen_logo'):
@@ -448,9 +510,21 @@ def weave_setup_chosen_title_page_logo(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the chosen_logo from mapper or default for driver.
+    r"""Weave in the chosen_logo from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%')
+
+    Examples:
+
+    >>> mapper = {'chosen_title_page_logo': 'not-found.png'}  # Expect warning when logo path is no file
+    >>> t = r'\newcommand{\theChosenTitlePageLogo}{VALUE.SLOT}%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%'
+    >>> weave_setup_chosen_title_page_logo(mapper, t)
+    '\\newcommand{\\theChosenTitlePageLogo}{not-found.png}%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%'
+
+    >>> mapper = {'no_chosen_title_page_logo': 'sorry'}
+    >>> t = r'\newcommand{\theChosenTitlePageLogo}{VALUE.SLOT}%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%'
+    >>> weave_setup_chosen_title_page_logo(mapper, t)
+    '\\newcommand{\\theChosenTitlePageLogo}{/opt/logo/liitos-logo.png}%%_PATCH_%_CHOSEN_%_TITLE_%_PAGE_%_LOGO_%%'
     """
     defaults = {**WEAVE_DEFAULTS}
     log.warning(text)
@@ -475,12 +549,29 @@ def weave_setup_footer_outer_field_normal_pages(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the footer_outer_field_normal_pages from mapper or default for driver.
+    r"""Weave in the footer_outer_field_normal_pages from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%')
+
+    Examples:
+
+    >>> mapper = {'footer_outer_field_normal_pages': 'n/a'}
+    >>> t = ' VALUE.SLOT}}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%'
+    >>> weave_setup_footer_outer_field_normal_pages(mapper, t)
+    ' n/a}}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%'
+
+    >>> mapper = {'footer_outer_field_normal_pages': ''}
+    >>> t = ' VALUE.SLOT}}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%'
+    >>> weave_setup_footer_outer_field_normal_pages(mapper, t)
+    ' }}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%'
+
+    >>> mapper = {'no_footer_outer_field_normal_pages': 'sorry'}
+    >>> t = ' VALUE.SLOT}}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%'
+    >>> weave_setup_footer_outer_field_normal_pages(mapper, t)
+    ' \\theMetaPageNumPrefix { } \\thepage { }}}%%_PATCH_%_NORMAL_%_PAGES_%_OUTER_%_FOOT_%_CONTENT_%_VALUE_%%'
     """
     defaults = {**WEAVE_DEFAULTS}
-    if mapper.get('footer_outer_field_normal_pages'):
+    if mapper.get('footer_outer_field_normal_pages') is not None:
         footer_outer_field_normal_pages = mapper.get('footer_outer_field_normal_pages')
         return text.replace(VALUE_SLOT, footer_outer_field_normal_pages)
     else:
@@ -496,16 +587,45 @@ def weave_setup_toc_all_dots(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the toc_all_dots from mapper or default for driver.
+    r"""Weave in the toc_all_dots from mapper or default for driver.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_TOC_ALL_DOTS_%%')
+
+    Examples:
+
+    >>> mapper = {'toc_all_dots': '%'}  # Comment out the toc dots
+    >>> weave_setup_toc_all_dots(mapper, 'VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%')
+    '%toc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%'
+
+    >>> mapper = {'toc_all_dots': '     '}  # Enable the toc dots
+    >>> weave_setup_toc_all_dots(mapper, 'VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%')
+    '     toc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%'
+
+    >>> mapper = {'toc_all_dots': '%-does-not-matter'}  # Comment out the toc dots
+    >>> weave_setup_toc_all_dots(mapper, 'VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%')
+    '%-does-not-mattertoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%'
+
+    >>> mapper = {'toc_all_dots': 'missing-percent'}  # Default toc dots and a warning
+    >>> weave_setup_toc_all_dots(mapper, 'VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%')
+    'toc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%'
+
+    >>> mapper = {'no_toc_all_dots': 'sorry'}
+    >>> weave_setup_toc_all_dots(mapper, 'VALUE.SLOTtoc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%')
+    'toc=sectionentrywithdots,%%_PATCH_%_TOC_ALL_DOTS_%%'
     """
     defaults = {**WEAVE_DEFAULTS}
-    if mapper.get('toc_all_dots'):
+    if mapper.get('toc_all_dots', None) is not None:
         toc_all_dots = mapper.get('toc_all_dots')
-        return text.replace(VALUE_SLOT, toc_all_dots)
+        if not toc_all_dots.strip() or toc_all_dots.strip().startswith('%'):
+            dis_ = 'dis' if not toc_all_dots.strip() else ''
+            log.info(f'toc_all_dots value received ... {dis_}abling toc dots')
+            return text.replace(VALUE_SLOT, toc_all_dots)
+        log.warning(
+            f"toc_all_dots value is neither '' nor starts with % ... setting default ({defaults['toc_all_dots']})"
+        )
+        return text.replace(VALUE_SLOT, defaults['toc_all_dots'])
     else:
-        log.info('toc_all_dots value missing ...' f' setting default ({defaults["toc_all_dots"]})')
+        log.info(f'toc_all_dots value missing ... setting default ({defaults["toc_all_dots"]})')
         return text.replace(VALUE_SLOT, defaults['toc_all_dots'])
 
 
