@@ -13,6 +13,10 @@ from liitos import log
 Modus = Enum('Modus', 'COPY SCALE')
 NAN = float('nan')
 
+SCALE_START_TRIGGER_STARTSWITH = r'\scale='
+BARE_GRAPHICS_START_STARTSWITH = r'\includegraphics{'
+WRAPPED_GRAPHICS_START_IN = r'\pandocbounded{\includegraphics'
+
 
 def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoing: list[str]) -> tuple[Modus, float]:
     r"""Filter line, seek for a scale command, and return updated mnodus, rescale pair.
@@ -20,7 +24,8 @@ def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoi
     Examples:
 
     >>> o = []
-    >>> m, r = filter_seek_scale(r'\scale=', 0, Modus.COPY, NAN, o)
+    >>> line = SCALE_START_TRIGGER_STARTSWITH  # r'\scale='
+    >>> m, r = filter_seek_scale(line, 0, Modus.COPY, NAN, o)
     >>> assert not o
     >>> assert m == Modus.SCALE
     >>> assert math.isnan(r)
@@ -37,7 +42,7 @@ def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoi
     >>> assert m == Modus.SCALE
     >>> assert r == 0.8
     """
-    if line.startswith(r'\scale='):
+    if line.startswith(SCALE_START_TRIGGER_STARTSWITH):
         log.info(f'trigger a scale mod for the next figure environment at line #{slot + 1}|{line}')
         modus = Modus.SCALE
         scale = line  # only for reporting will not pass the filter
@@ -83,24 +88,24 @@ def filter_seek_figure(line: str, slot: int, modus: Modus, rescale: float, outgo
     >>> assert m == Modus.COPY
     >>> assert math.isnan(r)
     """
-    if line.startswith(r'\includegraphics{'):
+    if line.startswith(BARE_GRAPHICS_START_STARTSWITH):
         if not math.isnan(rescale):
             log.info(f'- found the scale target start at line #{slot + 1}|{line}')
-            target = line.replace(r'\includegraphics', '')
+            target = line.replace(BARE_GRAPHICS_START_STARTSWITH, '{')
             option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}' '\\textheight,keepaspectratio]'
             outgoing.append(f'\\includegraphics{option}{target}')
         else:
             outgoing.append(line)
         modus = Modus.COPY
         rescale = NAN
-    elif r'\pandocbounded{\includegraphics' in line:
+    elif WRAPPED_GRAPHICS_START_IN in line:
         if not math.isnan(rescale):
             log.info(f'- found the scale target start at line #{slot + 1}|{line}')
-            target = line.replace(r'\pandocbounded{\includegraphics', '').replace('[keepaspectratio]', '')
+            target = line.replace(WRAPPED_GRAPHICS_START_IN, '').replace('[keepaspectratio]', '')
             parts = target.split('}}')
             rest, inside = ('', '') if len(parts) < 2 else (parts[1].lstrip('}'), parts[0] + '}')
             option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}' '\\textheight,keepaspectratio]'
-            outgoing.append(f'\\pandocbounded{{\\includegraphics{option}{inside}}}{rest}')
+            outgoing.append(f'{WRAPPED_GRAPHICS_START_IN}{option}{inside}}}{rest}')
         else:
             outgoing.append(line)
         modus = Modus.COPY

@@ -12,6 +12,9 @@ from liitos import log
 Modus = Enum('Modus', 'COPY OPTION')
 NO_OPTION: str = ''
 
+OPTION_STARTT_TRIGGER_STARTSWITH = r'\option['
+DESCRIPTION_START_TRIGGER_STARTSWITH = r'\begin{description}'
+
 
 def filter_seek_option(line: str, slot: int, modus: Modus, opt: str, outgoing: list[str]) -> tuple[Modus, str]:
     r"""Filter line, seek for an option command, and return updated mnodus, opt pair.
@@ -36,13 +39,11 @@ def filter_seek_option(line: str, slot: int, modus: Modus, opt: str, outgoing: l
     >>> assert m == Modus.OPTION
     >>> assert opt == '[foo=bar]'
     """
-    if line.startswith(r'\option['):
+    if line.startswith(OPTION_STARTT_TRIGGER_STARTSWITH):
         log.info(f'trigger an option mod for the next description environment at line #{slot + 1}|{line}')
-        # \option[style=multiline,leftmargin=6em]  --> [style=multiline,leftmargin=6em]
-        opt = line.split(r'\option', 1)[1].strip()
+        opt = '[' + line.split(OPTION_STARTT_TRIGGER_STARTSWITH, 1)[1].strip()
         modus = Modus.OPTION
         log.info(f' -> parsed option as ({opt})')
-        # return True, f'%CONSIDERED_{line}', opt
     else:
         outgoing.append(line)
 
@@ -72,10 +73,10 @@ def filter_seek_description(line: str, slot: int, modus: Modus, opt: str, outgoi
     >>> assert m == Modus.COPY
     >>> assert opt == NO_OPTION
     """
-    if line.startswith(r'\begin{description}'):
+    if line.startswith(DESCRIPTION_START_TRIGGER_STARTSWITH):
         if opt != NO_OPTION:
             log.info(f'- found the option target start at line #{slot + 1}|{line}')
-            outgoing.append(f'\\begin{{description}}{opt}')
+            outgoing.append(f'{DESCRIPTION_START_TRIGGER_STARTSWITH}{opt}')
         else:
             outgoing.append(line)
         modus = Modus.COPY
