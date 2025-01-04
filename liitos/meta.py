@@ -850,9 +850,36 @@ def weave_meta_part_header_id_label(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the header_id_label from mapper or default.
+    r"""Weave in the header_id_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ID_%_LABEL_%%')
+
+    Examples:
+
+    >>> mapper = {'header_id_show': False}
+    >>> t = r'\newcommand{\theMetaDocIdLabel}{VALUE.SLOT}%%_PATCH_%_ID_%_LABEL_%%'
+    >>> weave_meta_part_header_id_label(mapper, t)
+    '\\newcommand{\\theMetaDocIdLabel}{ }%%_PATCH_%_ID_%_LABEL_%%'
+
+    >>> mapper = {'header_id_show': ''}
+    >>> t = r'\newcommand{\theMetaDocIdLabel}{VALUE.SLOT}%%_PATCH_%_ID_%_LABEL_%%'
+    >>> weave_meta_part_header_id_label(mapper, t)
+    '\\newcommand{\\theMetaDocIdLabel}{ }%%_PATCH_%_ID_%_LABEL_%%'
+
+    >>> mapper = {'header_id_show': None, 'header_id_label': '   '}
+    >>> t = r'\newcommand{\theMetaDocIdLabel}{VALUE.SLOT}%%_PATCH_%_ID_%_LABEL_%%'
+    >>> weave_meta_part_header_id_label(mapper, t)
+    '\\newcommand{\\theMetaDocIdLabel}{ }%%_PATCH_%_ID_%_LABEL_%%'
+
+    >>> mapper = {'header_id_show': None, 'header_id_label': '   show-this-stripped   '}
+    >>> t = r'\newcommand{\theMetaDocIdLabel}{VALUE.SLOT}%%_PATCH_%_ID_%_LABEL_%%'
+    >>> weave_meta_part_header_id_label(mapper, t)
+    '\\newcommand{\\theMetaDocIdLabel}{show-this-stripped}%%_PATCH_%_ID_%_LABEL_%%'
+
+    >>> mapper = {'no_header_id_show': 'sorry'}
+    >>> t = r'\newcommand{\theMetaDocIdLabel}{VALUE.SLOT}%%_PATCH_%_ID_%_LABEL_%%'
+    >>> weave_meta_part_header_id_label(mapper, t)
+    '\\newcommand{\\theMetaDocIdLabel}{Doc. ID:}%%_PATCH_%_ID_%_LABEL_%%'
     """
     if mapper.get('header_id_show', None) is not None and not mapper['header_id_show']:
         log.info('header_id_show set to false - hiding id slot in header by setting label to a single space(" ")')
@@ -873,9 +900,36 @@ def weave_meta_part_header_id(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the header_id from mapper or default.
+    r"""Weave in the header_id from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ID_%%')
+
+    Examples:
+
+    >>> mapper = {'header_id_show': False}
+    >>> t = r'\newcommand{\theMetaDocId}{VALUE.SLOT}%%_PATCH_%_ID_%%'
+    >>> weave_meta_part_header_id(mapper, t)
+    '\\newcommand{\\theMetaDocId}{ }%%_PATCH_%_ID_%%'
+
+    >>> mapper = {'header_id_show': ''}
+    >>> t = r'\newcommand{\theMetaDocId}{VALUE.SLOT}%%_PATCH_%_ID_%%'
+    >>> weave_meta_part_header_id(mapper, t)
+    '\\newcommand{\\theMetaDocId}{ }%%_PATCH_%_ID_%%'
+
+    >>> mapper = {'header_id_show': None, 'header_id': '   '}
+    >>> t = r'\newcommand{\theMetaDocId}{VALUE.SLOT}%%_PATCH_%_ID_%%'
+    >>> weave_meta_part_header_id(mapper, t)
+    '\\newcommand{\\theMetaDocId}{   }%%_PATCH_%_ID_%%'
+
+    >>> mapper = {'header_id_show': None, 'header_id': '   show-this-unstripped   '}
+    >>> t = r'\newcommand{\theMetaDocId}{VALUE.SLOT}%%_PATCH_%_ID_%%'
+    >>> weave_meta_part_header_id(mapper, t)
+    '\\newcommand{\\theMetaDocId}{   show-this-unstripped   }%%_PATCH_%_ID_%%'
+
+    >>> mapper = {'no_header_id_show': 'sorry'}
+    >>> t = r'\newcommand{\theMetaDocId}{VALUE.SLOT}%%_PATCH_%_ID_%%'
+    >>> weave_meta_part_header_id(mapper, t)
+    '\\newcommand{\\theMetaDocId}{N/A}%%_PATCH_%_ID_%%'
     """
     if mapper.get('header_id_show', None) is not None and not mapper['header_id_show']:
         log.info('header_id_show set to false - hiding id slot in header by setting value to a single space(" ")')
@@ -925,9 +979,36 @@ def weave_meta_part_header_date_label(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the header_date_label from mapper or default.
+    r"""Weave in the header_date_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_DATE_%_LABEL_%%')
+
+    Examples:
+
+    >>> mapper = {'header_date_show': False}
+    >>> t = r'\newcommand{\theMetaDateLabel}{VALUE.SLOT}%%_PATCH_%_DATE_%_LABEL_%%'
+    >>> weave_meta_part_header_date_label(mapper, t)
+    '\\newcommand{\\theMetaDateLabel}{ }%%_PATCH_%_DATE_%_LABEL_%%'
+
+    >>> mapper = {'header_date_show': ''}
+    >>> t = r'\newcommand{\theMetaDateLabel}{VALUE.SLOT}%%_PATCH_%_DATE_%_LABEL_%%'
+    >>> weave_meta_part_header_date_label(mapper, t)
+    '\\newcommand{\\theMetaDateLabel}{ }%%_PATCH_%_DATE_%_LABEL_%%'
+
+    >>> mapper = {'header_date_show': None, 'header_date_label': '   '}
+    >>> t = r'\newcommand{\theMetaDateLabel}{VALUE.SLOT}%%_PATCH_%_DATE_%_LABEL_%%'
+    >>> weave_meta_part_header_date_label(mapper, t)
+    '\\newcommand{\\theMetaDateLabel}{ }%%_PATCH_%_DATE_%_LABEL_%%'
+
+    >>> mapper = {'header_date_show': None, 'header_date_label': '   show-this-stripped   '}
+    >>> t = r'\newcommand{\theMetaDateLabel}{VALUE.SLOT}%%_PATCH_%_DATE_%_LABEL_%%'
+    >>> weave_meta_part_header_date_label(mapper, t)
+    '\\newcommand{\\theMetaDateLabel}{show-this-stripped}%%_PATCH_%_DATE_%_LABEL_%%'
+
+    >>> mapper = {'no_header_date_show': 'sorry'}
+    >>> t = r'\newcommand{\theMetaDateLabel}{VALUE.SLOT}%%_PATCH_%_DATE_%_LABEL_%%'
+    >>> weave_meta_part_header_date_label(mapper, t)
+    '\\newcommand{\\theMetaDateLabel}{ }%%_PATCH_%_DATE_%_LABEL_%%'
     """
     if mapper.get('header_date_show', None) is not None and not mapper['header_date_show']:
         log.info('header_date_show set to false - hiding date slot in header by setting label to a single space(" ")')
@@ -948,9 +1029,90 @@ def weave_meta_part_header_date(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the header_date from mapper or default.
+    r"""Weave in the header_date from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_DATE_%%')
+
+    Examples:
+
+    >>> mapper = {'header_date_show': False}
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{ }%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {'header_date_show': ''}
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{ }%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {'header_date_show': None, 'header_date': '   '}
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{}%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {'header_date_show': None, 'header_date': '   show-this-stripped   '}
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{show-this-stripped}%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {'no_header_date_show': 'sorry'}
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{ }%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {
+    ...     'no_header_date_show': 'sorry',
+    ...     'header_date_enable_auto': True,
+    ...     'header_date': ' ',
+    ... }
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{}%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {
+    ...     'no_header_date_show': 'sorry',
+    ...     'header_date_enable_auto': True,
+    ...     'header_date': '',
+    ... }
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{ }%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {
+    ...     'no_header_date_show': 'sorry',
+    ...     'header_date_enable_auto': True,
+    ...     'header_date': '  free-form-stripped  ',
+    ... }
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{free-form-stripped}%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {
+    ...     'no_header_date_show': 'sorry',
+    ...     'header_date_enable_auto': False,
+    ...     'header_date': '  free-form-stripped  ',
+    ... }
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{free-form-stripped}%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {
+    ...     'no_header_date_show': 'sorry',
+    ...     'header_date_enable_auto': False,
+    ...     'header_date': '',
+    ... }
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{ }%%_PATCH_%_DATE_%%'
+
+    >>> mapper = {
+    ...     'no_header_date_show': 'sorry',
+    ...     'header_date_enable_auto': False,
+    ...     'header_date': ' ',
+    ... }
+    >>> t = r'\newcommand{\theMetaDate}{VALUE.SLOT}%%_PATCH_%_DATE_%%'
+    >>> weave_meta_part_header_date(mapper, t)
+    '\\newcommand{\\theMetaDate}{ }%%_PATCH_%_DATE_%%'
     """
     if mapper.get('header_date_show', None) is not None and not mapper['header_date_show']:
         log.info('header_date_show set to false - hiding date slot in header by setting value to a single space(" ")')
@@ -1174,9 +1336,31 @@ def weave_meta_part_approvals_department_value(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the approvals_department_value from mapper or default.
+    r"""Weave in the approvals_department_value from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%')
+
+    Examples:
+
+    >>> mapper = {'approvals_department_value': 'AbC'}
+    >>> t = r'\newcommand{\theApprovalsDepartmentValue}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
+    >>> weave_meta_part_approvals_department_value(mapper, t)
+    '\\newcommand{\\theApprovalsDepartmentValue}{AbC}%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
+
+    >>> mapper = {'approvals_department_value': '   '}
+    >>> t = r'\newcommand{\theApprovalsDepartmentValue}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
+    >>> weave_meta_part_approvals_department_value(mapper, t)
+    '\\newcommand{\\theApprovalsDepartmentValue}{   }%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
+
+    >>> mapper = {'approvals_department_value': ''}
+    >>> t = r'\newcommand{\theApprovalsDepartmentValue}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
+    >>> weave_meta_part_approvals_department_value(mapper, t)
+    '\\newcommand{\\theApprovalsDepartmentValue}{ }%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
+
+    >>> mapper = {'no_approvals_department_value': 'sorry'}
+    >>> t = r'\newcommand{\theApprovalsDepartmentValue}{VALUE.SLOT}%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
+    >>> weave_meta_part_approvals_department_value(mapper, t)
+    '\\newcommand{\\theApprovalsDepartmentValue}{ }%%_PATCH_%_APPROVALS_%_DEPARTMENT_%_VALUE_%%'
     """
     if mapper.get('approvals_department_value'):
         return text.replace(VALUE_SLOT, mapper['approvals_department_value'])
@@ -1238,13 +1422,41 @@ def weave_meta_part_header_issue_revision_combined_label(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the header_issue_revision_combined_label from mapper or default.
+    r"""Weave in the header_issue_revision_combined_label from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%')
+
+    Examples:
+
+    >>> mapper = {'header_issue_revision_combined_show': ''}
+    >>> t = r'\newcommand{\theMetaIssRevLabel}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+    >>> weave_meta_part_header_issue_revision_combined_label(mapper, t)
+    '\\newcommand{\\theMetaIssRevLabel}{ }%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+
+    >>> mapper = {
+    ...     'header_issue_revision_combined_show': '    ',
+    ...     'header_issue_revision_combined_label': ' ',
+    ... }
+    >>> t = r'\newcommand{\theMetaIssRevLabel}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+    >>> weave_meta_part_header_issue_revision_combined_label(mapper, t)
+    '\\newcommand{\\theMetaIssRevLabel}{ }%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+
+    >>> mapper = {
+    ...     'header_issue_revision_combined_show': 'well-well-well',
+    ...     'header_issue_revision_combined_label': 'visible-fixed-string',
+    ... }
+    >>> t = r'\newcommand{\theMetaIssRevLabel}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+    >>> weave_meta_part_header_issue_revision_combined_label(mapper, t)
+    '\\newcommand{\\theMetaIssRevLabel}{visible-fixed-string}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+
+    >>> mapper = {'no_header_issue_revision_combined_show': 'sorry'}
+    >>> t = r'\newcommand{\theMetaIssRevLabel}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
+    >>> weave_meta_part_header_issue_revision_combined_label(mapper, t)
+    '\\newcommand{\\theMetaIssRevLabel}{Issue, Revision:}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%_LABEL_%%'
     """
     do_show_key = 'header_issue_revision_combined_show'
     if mapper.get(do_show_key, None) is not None and not mapper[do_show_key]:
-        log.info(f'{do_show_key} set to false' ' - hiding date slot in header by setting label to a single space(" ")')
+        log.info(f'{do_show_key} set to false - hiding date slot in header by setting label to a single space(" ")')
         return text.replace(VALUE_SLOT, ' ')
     log.info(f'{do_show_key} not set - considering header_issue_revision_combined_label ...')
     if mapper.get('header_issue_revision_combined_label'):
@@ -1262,9 +1474,37 @@ def weave_meta_part_header_issue_revision_combined(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the header_issue_revision_combined from mapper or default.
+    r"""Weave in the header_issue_revision_combined from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%')
+
+    Examples:
+
+    >>> mapper = {'header_issue_revision_combined_show': ''}
+    >>> t = r'\newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
+    >>> weave_meta_part_header_issue_revision_combined(mapper, t)
+    '\\newcommand{\\theMetaIssRev}{ }%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
+
+    >>> mapper = {
+    ...     'header_issue_revision_combined_show': '    ',
+    ...     'header_issue_revision_combined': ' ',
+    ... }
+    >>> t = r'\newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
+    >>> weave_meta_part_header_issue_revision_combined(mapper, t)
+    '\\newcommand{\\theMetaIssRev}{ }%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
+
+    >>> mapper = {
+    ...     'header_issue_revision_combined_show': 'well-well-well',
+    ...     'header_issue_revision_combined': 'visible-fixed-string',
+    ... }
+    >>> t = r'\newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
+    >>> weave_meta_part_header_issue_revision_combined(mapper, t)
+    '\\newcommand{\\theMetaIssRev}{visible-fixed-string}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
+
+    >>> mapper = {'no_header_issue_revision_combined_show': 'sorry'}
+    >>> t = r'\newcommand{\theMetaIssRev}{VALUE.SLOT}%%_PATCH_%_ISSUE_%_REVISION_%_COMBINED_%%'
+    >>> weave_meta_part_header_issue_revision_combined(mapper, t)
+    '\\newcommand{\\theMetaIssRev}{Iss \\theMetaIssCode, Rev \\theMetaRevCode}%%_PATCH_%_..._%_COMBINED_%%'
     """
     do_show_key = 'header_issue_revision_combined_show'
     if mapper.get(do_show_key, None) is not None and not mapper[do_show_key]:
@@ -1286,9 +1526,58 @@ def weave_meta_part_proprietary_information(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the proprietary_information from mapper or default.
+    r"""Weave in the proprietary_information from mapper or default.
 
     Trigger is text.rstrip().endswith('%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%')
+
+    Examples:
+
+    >>> mapper = {'proprietary_information': ''}
+    >>> t = r'\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+    >>> weave_meta_part_proprietary_information(mapper, t)
+    '\\newcommand{\\theProprietaryInformation}{This is a notice.\n}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+
+    >>> mapper = {'proprietary_information': __file__}
+    >>> t = r'\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+    >>> weave_meta_part_proprietary_information(mapper, t)
+    '\\newcommand{\\theProprietaryInformation}{...Weave the content of the meta file(s) of metadata.tex.in...'
+
+    >>> mapper = {'proprietary_information': '/path/that/does/not/resolve.txt'}
+    >>> t = r'\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+    >>> weave_meta_part_proprietary_information(mapper, t)
+    '\\newcommand{\\theProprietaryInformation}{/path/that/does/not/resolve.txt}%%_PATCH_...INFORMATION_%_LABEL_%%'
+
+    >>> really_a_png_file = 'liitos/placeholders/this-resource-is-missing.jpg'
+    >>> pathlib.Path(really_a_png_file).is_file()
+    True
+    >>> mapper = {'proprietary_information': really_a_png_file}
+    >>> t = r'\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+    >>> weave_meta_part_proprietary_information(mapper, t)
+    '\\newcommand{\\theProprietaryInformation}{liitos/placeholders/this-resource-is-missing.jpg}%%_PATCH_..._%%'
+
+    >>> mapper = {'bo_proprietary_information': 'sorry'}
+    >>> t = r'\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+    >>> weave_meta_part_proprietary_information(mapper, t)
+    '\\newcommand{\\theProprietaryInformation}{This is a notice.\n}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+
+    >>> restore_value = WEAVE_DEFAULTS['proprietary_information']
+    >>> WEAVE_DEFAULTS['proprietary_information'] = '/path/that/does/not/resolve.txt'
+    >>> mapper = {'no_proprietary_information': 'sorry'}
+    >>> t = r'\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+    >>> weave_meta_part_proprietary_information(mapper, t)
+    '\\newcommand{\\theProprietaryInformation}{/path/that/does/not/resolve.txt}%%_PATCH_...INFORMATION_%_LABEL_%%'
+    >>> WEAVE_DEFAULTS['proprietary_information'] = restore_value
+
+    >>> really_a_png_file = 'liitos/placeholders/this-resource-is-missing.png'
+    >>> pathlib.Path(really_a_png_file).is_file()
+    True
+    >>> restore_value = WEAVE_DEFAULTS['proprietary_information']
+    >>> WEAVE_DEFAULTS['proprietary_information'] = really_a_png_file
+    >>> mapper = {'no_proprietary_information': 'sorry'}
+    >>> t = r'\newcommand{\theProprietaryInformation}{VALUE.SLOT}%%_PATCH_%_PROPRIETARY_%_INFORMATION_%_LABEL_%%'
+    >>> weave_meta_part_proprietary_information(mapper, t)
+    '\\newcommand{\\theProprietaryInformation}{liitos/placeholders/this-resource-is-missing.png}%%_PATCH_..._%%'
+    >>> WEAVE_DEFAULTS['proprietary_information'] = restore_value
     """
     if mapper.get('proprietary_information'):
         prop_info = mapper['proprietary_information']
@@ -1406,7 +1695,148 @@ def weave(
     options: dict[str, bool],
     externals: ExternalsType,
 ) -> int:
-    """Later alligator."""
+    """Weave the metadata received into various targets.
+
+    Examples:
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = '.'
+    >>> sn = 'foo'
+    >>> tk = ''
+    >>> fk = ''
+    >>> op = {'bar': True}
+    >>> ex = {'baz': {'quux': 'nowhere-to-be-found'}}
+    >>> weave(dr, sn, tk, fk, op, ex)
+    2
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'non-existing-facet-key'
+    >>> op = {'bar': True}
+    >>> ex = {'baz': {'quux': 'nowhere-to-be-found'}}
+    >>> weave(dr, sn, tk, fk, op, ex)
+    1
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'test/fixtures/basic/'
+    >>> sn = 'structure.yml'
+    >>> tk = 'abc'
+    >>> fk = 'missing'
+    >>> op = {'bar': True}
+    >>> ex = {'baz': {'quux': 'nowhere-to-be-found'}}
+    >>> weave(dr, sn, tk, fk, op, ex)
+    1
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'tuna'
+    >>> op = {'bar': True}
+    >>> ex = {
+    ...     'bookmatter': {'is_custom': False, 'id': 'templates/bookmatter.tex.in'},
+    ...     'driver': {'is_custom': False, 'id': 'templates/driver.tex.in'},
+    ...     'metadata': {'is_custom': False, 'id': 'templates/metadata.tex.in'},
+    ...     'publisher': {'is_custom': False, 'id': 'templates/publisher.tex.in'},
+    ...     'setup': {'is_custom': False, 'id': 'templates/setup.tex.in'},
+    ... }
+    >>> weave(dr, sn, tk, fk, op, ex)
+    0
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'tuna'
+    >>> op = {'bar': True}
+    >>> abs_here = pathlib.Path().resolve()
+    >>> ex = {
+    ...     'bookmatter': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/bookmatter.tex.in'},
+    ...     'driver': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/driver.tex.in'},
+    ...     'metadata': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/metadata.tex.in'},
+    ...     'publisher': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/publisher.tex.in'},
+    ...     'setup': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/setup.tex.in'},
+    ... }
+    >>> try:
+    ...     code = weave(dr, sn, tk, fk, op, ex)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/ejected-templates'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'ejected-templates'
+    >>> op = {'bar': True}
+    >>> abs_here = pathlib.Path().resolve()
+    >>> ex = {
+    ...     'bookmatter': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/bookmatter.tex.in'},
+    ...     'driver': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/driver.tex.in'},
+    ...     'metadata': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/metadata.tex.in'},
+    ...     'publisher': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/publisher.tex.in'},
+    ...     'setup': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/setup.tex.in'},
+    ... }
+    >>> try:
+    ...     code = weave(dr, sn, tk, fk, op, ex)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/ejected-templates'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'ejected-templates-borked'
+    >>> op = {'bar': True}
+    >>> abs_here = pathlib.Path().resolve()
+    >>> ex = {
+    ...     'bookmatter': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/bookmatter.tex.in'},
+    ...     'driver': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/driver.tex.in'},
+    ...     'metadata': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/metadata.tex.in'},
+    ...     'publisher': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/publisher.tex.in'},
+    ...     'setup': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/setup.tex.in'},
+    ... }
+    >>> try:
+    ...     code = weave(dr, sn, tk, fk, op, ex)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'tuna'
+    >>> op = {'bar': True}
+    >>> abs_here = pathlib.Path().resolve()
+    >>> ex = {
+    ...     'bookmatter': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/bookmatter.tex.in-no'},
+    ...     'driver': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/driver.tex.in-no'},
+    ...     'metadata': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/metadata.tex.in-no'},
+    ...     'publisher': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/publisher.tex.in-no'},
+    ...     'setup': {'is_custom': True, 'id': abs_here / 'example/ejected-templates/setup.tex.in-no'},
+    ... }
+    >>> try:
+    ...     code = weave(dr, sn, tk, fk, op, ex)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
+    """
     log.info(LOG_SEPARATOR)
     log.info('entered meta weave function ...')
     target_code = target_key
@@ -1548,7 +1978,16 @@ def weave(
     metadata_template = str(externals['metadata']['id'])
     metadata_path = pathlib.Path('metadata.tex')
 
-    metadata_template = tpl.load_resource(metadata_template, metadata_template_is_custom)
+    try:
+        metadata_template = tpl.load_resource(metadata_template, metadata_template_is_custom)
+    except FileNotFoundError:
+        log.error(
+            f'could not load metadata template in {os.getcwd()} per'
+            f' tpl.load_resource({metadata_template}, {metadata_template_is_custom})'
+        )
+        if metadata_template_is_custom:
+            existence = 'does exist' if pathlib.Path(metadata_template).is_file() else 'does not exist'
+            log.error(f'detail: external metadata template {existence}')
     lines = [line.rstrip() for line in metadata_template.split('\n')]
     lines = weave_meta_meta(metadata, lines)
     with open(metadata_path, 'wt', encoding=ENCODING) as handle:
@@ -1558,7 +1997,16 @@ def weave(
     driver_template = str(externals['driver']['id'])
     driver_path = pathlib.Path('driver.tex')
 
-    driver_template = tpl.load_resource(driver_template, driver_template_is_custom)
+    try:
+        driver_template = tpl.load_resource(driver_template, driver_template_is_custom)
+    except FileNotFoundError:
+        log.error(
+            f'could not load driver template in {os.getcwd()} per'
+            f' tpl.load_resource({driver_template}, {driver_template_is_custom})'
+        )
+        if driver_template_is_custom:
+            existence = 'does exist' if pathlib.Path(driver_template).is_file() else 'does not exist'
+            log.error(f'detail: external driver template {existence}')
     lines = [line.rstrip() for line in driver_template.split('\n')]
     lines = weave_meta_driver(metadata, lines)
     with open(driver_path, 'wt', encoding=ENCODING) as handle:
@@ -1568,7 +2016,16 @@ def weave(
     setup_template = str(externals['setup']['id'])
     setup_path = pathlib.Path('setup.tex')
 
-    setup_template = tpl.load_resource(setup_template, setup_template_is_custom)
+    try:
+        setup_template = tpl.load_resource(setup_template, setup_template_is_custom)
+    except FileNotFoundError:
+        log.error(
+            f'could not load driver template in {os.getcwd()} per'
+            f' tpl.load_resource({setup_template}, {setup_template_is_custom})'
+        )
+        if setup_template_is_custom:
+            existence = 'does exist' if pathlib.Path(setup_template).is_file() else 'does not exist'
+            log.error(f'detail: external setup template {existence}')
     lines = [line.rstrip() for line in setup_template.split('\n')]
     lines = weave_meta_setup(metadata, lines)
     with open(setup_path, 'wt', encoding=ENCODING) as handle:
