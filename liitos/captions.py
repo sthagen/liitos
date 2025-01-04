@@ -14,6 +14,11 @@ Table = list[str]
 
 Modus = Enum('Modus', 'COPY TABLE CAPTION')
 
+TABLE_START_TRIGGER_STARTSWITH = r'\begin{longtable}'
+CAPTION_START_TRIGGER_STARTSWITH = r'\caption{'
+CAPTION_END_TRIGGER_ENDSWITH = r'}\tabularnewline'
+TABLE_END_TRIGGER_STARTSWITH = r'\end{longtable}'
+
 
 def filter_seek_table(line: str, slot: int, modus: Modus, outgoing: list[str], table: Table, caption: Caption) -> Modus:
     r"""Filter line, seek for a table, if found init table and caption, and return updated mnodus.
@@ -21,7 +26,7 @@ def filter_seek_table(line: str, slot: int, modus: Modus, outgoing: list[str], t
     Examples:
 
     >>> o = []
-    >>> line = r'\begin{longtable}'
+    >>> line = TABLE_START_TRIGGER_STARTSWITH  # r'\begin{longtable}'
     >>> t, c = [], []
     >>> m = filter_seek_table(line, 0, Modus.COPY, o, t, c)
     >>> assert not o
@@ -31,7 +36,7 @@ def filter_seek_table(line: str, slot: int, modus: Modus, outgoing: list[str], t
     ['\\begin{longtable}']
     >>> assert c == []
     """
-    if line.startswith(r'\begin{longtable}'):
+    if line.startswith(TABLE_START_TRIGGER_STARTSWITH):
         log.info(f'start of a table environment at line #{slot + 1}')
         modus = Modus.TABLE
         table.append(line)
@@ -50,7 +55,7 @@ def filter_seek_caption(
     Examples:
 
     >>> o = []
-    >>> line = r'\caption{'
+    >>> line = CAPTION_START_TRIGGER_STARTSWITH  # r'\caption{'
     >>> t, c = [], []
     >>> m = filter_seek_caption(line, 0, Modus.TABLE, o, t, c)
     >>> assert not o
@@ -85,13 +90,13 @@ def filter_seek_caption(
     >>> assert t == []
     >>> assert c == []
     """
-    if line.startswith(r'\caption{'):
+    if line.startswith(CAPTION_START_TRIGGER_STARTSWITH):
         log.info(f'- found the caption start at line #{slot + 1}')
         caption.append(line)
-        if not line.strip().endswith(r'}\tabularnewline'):
+        if not line.strip().endswith(CAPTION_END_TRIGGER_ENDSWITH):
             log.info(f'- multi line caption at line #{slot + 1}')
             modus = Modus.CAPTION
-    elif line.startswith(r'\end{longtable}'):
+    elif line.startswith(TABLE_END_TRIGGER_STARTSWITH):
         log.info(f'end of table env detected at line #{slot + 1}')
         while table:
             stmt = table.pop(0)
@@ -139,7 +144,7 @@ def filter_collect_caption(
     >>> assert c == ['bar', r'}\tabularnewline']
     """
     caption.append(line)
-    if line.strip().endswith(r'}\tabularnewline'):
+    if line.strip().endswith(CAPTION_END_TRIGGER_ENDSWITH):
         log.info(f'- caption read at line #{slot + 1}')
         modus = Modus.TABLE
 
