@@ -1,0 +1,13 @@
+prod_kind:
+- ejected-templates:
+    approvals: approvals.yml
+    bind: bind.txt
+    changes: changes.yml
+    meta: meta.yml
+    render: true
+- ejected-templates-borked:
+    approvals: approvals.yml
+    bind: bind.txt
+    changes: changes.yml
+    meta: meta-borked-paths.yml
+    render: true

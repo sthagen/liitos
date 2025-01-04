@@ -1,0 +1,41 @@
+% |-- changes - cut - marker - top -->
+\pdfbookmark[section]{STATUS AND CHANGE LOG}{status}
+\hypertarget{status-and-change-log}{%
+\section*{\fakesection{\MakeUppercase{Status and Change Log}}}\label{status-and-change-log}}
+\vspace*{\theTuneChangesHeaderSep}
+% |-- layout named - cut - marker - top -->
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0600}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2000}}|
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.6500}}|}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogIssLabel}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogRevLabel}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogAuthorLabel}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{\theChangeLogDescLabel}
+\end{minipage} \\
+\hline
+THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
+\hline
+\end{longtable}
+% <-- layout named - cut - marker - bottom --|
+% |-- layout anonymized - insert - marker --|
+% <-- changes - cut - marker - bottom --|
+
+\vskip \AdustedPushdown% <-- Do not change this line if using liitos to manage the content
+\vspace*{\theBlurbAdjustableVerticalSpace}
+
+% |-- notices - cut - marker - top -->
+\pdfbookmark[section]{PROPRIETARY INFORMATION}{propinfo}
+\hypertarget{proprietary-information}{%
+\section*{\fakesection{\MakeUppercase{Proprietary Information}}}\label{proprietary-information}}
+\vspace*{\theTuneBlurbHeaderSep}
+\theProprietaryInformation
+% <-- notices - cut - marker - bottom --|
+
+%\pagenumbering{arabic}% TODO make consistent with numbering scheme

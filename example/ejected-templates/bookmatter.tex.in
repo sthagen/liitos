@@ -1,0 +1,39 @@
+%% first titlepage (book front matter)
+\pdfbookmark[startatroot,bold]{\theTitleSlug}{doctitle}
+\mbox{}\vskip 10em
+\begin{flushleft}{%%
+  \setstretch{2}
+  \vskip 4em
+  \noindent {\huge \hskip 0em \theBoxedTitle}
+  \vskip 1em
+  \noindent {\Large \hskip 0em \textsf{\theBoxedSubTitle}}
+  \vskip 10em%fill
+}
+\end{flushleft}
+
+% |-- approvals - cut - marker - top -->
+\vskip \theApprovalsAdjustableVerticalSpace%default for single line titles is 2.5em
+\vskip \ExtraPushdown
+% |-- layout south - cut - marker - top -->
+\begin{large}
+\addtolength\aboverulesep{0.15ex}  % extra spacing above and below rules
+\addtolength\belowrulesep{0.35ex}
+\begin{longtable}[]{|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.2000}}|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4000}}|
+  >{\raggedright\arraybackslash}m{(\columnwidth - 12\tabcolsep) * \real{0.4800}}|}
+\hline
+\begin{minipage}[b]{\linewidth}\raggedright
+\ \mbox{\textbf{\theApprovalsRoleLabel}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{\theApprovalsNameLabel}}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\mbox{\textbf{\theApprovalsDateAndSignatureLabel}}
+\end{minipage} \\[0.5ex]
+\hline
+\ \mbox{THE.ROLE.SLOT} & \mbox{THE.NAME.SLOT} & \mbox{} \\[0.5ex]
+\hline
+\end{longtable}
+\end{large}
+% <-- layout south - cut - marker - bottom --|
+% <-- approvals - cut - marker - bottom --|
