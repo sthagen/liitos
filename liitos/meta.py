@@ -790,9 +790,16 @@ def weave_meta_part_title_slug(
     mapper: dict[str, Union[str, int, bool, None]],
     text: str,
 ) -> str:
-    """Weave in the title slug deriving from mapper or default.
+    r"""Weave in the title slug deriving from mapper or default.
 
-    Trigger is text.rstrip().endswith('%%_PATCH_%_MAIN_%_TITLE_%_SLUG_%%')
+    Trigger is text.rstrip().endswith('%%_PATCH_%_TITLE_%_SLUG_%%')
+
+    Examples:
+
+    >>> mapper = {'bookmark_title': 'I aM A BMT'}
+    >>> t = r'\newcommand{\theTitleSlug}{VALUE.SLOT}%%_PATCH_%_TITLE_%_SLUG_%%'
+    >>> weave_meta_part_title_slug(mapper, t)
+    '\\newcommand{\\theTitleSlug}{I aM A BMT}%%_PATCH_%_TITLE_%_SLUG_%%'
     """
     if mapper.get('bookmark_title'):
         return text.replace(VALUE_SLOT, mapper['bookmark_title'])
