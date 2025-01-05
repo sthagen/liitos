@@ -1,5 +1,32 @@
 # Changes
 
+2025.1.5
+:    Added tests, fixed corner cases, fixed small bugs, and corrected wording in log messages
+* a work around a test failure since long time has been fixed for real
+* adapted the render module to share responsibility for asset folder creation
+* added doc_base argument to allow set of the effective doc base
+* added doctest execution to all test runs
+* added doctests
+* added sad path fixtures
+* added some default parameters for better testability
+* added some guards and additional failure path logging around asset handling
+* bumped license year
+* changed the return codes in load to make the error reason explicit in tests and code examples
+* enhanced meta module and added doctests 
+* fixed failed CPSR-coding in meta module
+* fixed test (removed bad work around)
+* handled a corner case and removed tautology
+* made the images and diagrams folder creation lazy
+* migrated to enums for modus operandi in several modules
+* refactored captions, description lists, figures, meta modules
+* removed copy of meta loader function in concat and added import instead
+* removed unreachable code
+* removed unused code from concat module
+* renamed function from *.process_meta to meta.load
+* replaced a placeholder in a docstring
+* replaced use of pkg_resources - untested
+* reworded missing to not set in meta parser logs
+
 2024.11.25
 :    Fixed digital signature fields for south layout of approvals table (<https://todo.sr.ht/~sthagen/liitos/79>)
 
