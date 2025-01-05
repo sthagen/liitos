@@ -160,7 +160,7 @@ def weave_setup_font_path(
         ACROSS['eff_font_folder'] = font_path
         return text.replace(VALUE_SLOT, font_path)
     else:
-        log.warning(f'font_path value missing ... setting default ({defaults["font_path"]})')
+        log.warning(f'font_path value not set ... setting default ({defaults["font_path"]})')
         ACROSS['eff_font_folder'] = defaults['font_path']
         return text.replace(VALUE_SLOT, defaults['font_path'])
 
@@ -196,7 +196,7 @@ def weave_setup_font_suffix(
         ACROSS['eff_font_suffix'] = font_suffix
         return text.replace(VALUE_SLOT, font_suffix)
     else:
-        log.warning(f'font_suffix value missing ... setting default ({defaults["font_suffix"]})')
+        log.warning(f'font_suffix value not set ... setting default ({defaults["font_suffix"]})')
         ACROSS['eff_font_suffix'] = defaults['font_suffix']
         return text.replace(VALUE_SLOT, defaults['font_suffix'])
 
@@ -237,7 +237,7 @@ def weave_setup_bold_font(
             )
         return text.replace(VALUE_SLOT, bold_font)
     else:
-        log.warning(f'bold_font value missing ... setting default ({defaults["bold_font"]})')
+        log.warning(f'bold_font value not set ... setting default ({defaults["bold_font"]})')
         return text.replace(VALUE_SLOT, defaults['bold_font'])
 
 
@@ -277,7 +277,7 @@ def weave_setup_italic_font(
             )
         return text.replace(VALUE_SLOT, italic_font)
     else:
-        log.warning(f'italic_font value missing ... setting default ({defaults["italic_font"]})')
+        log.warning(f'italic_font value not set ... setting default ({defaults["italic_font"]})')
         return text.replace(VALUE_SLOT, defaults['italic_font'])
 
 
@@ -317,7 +317,7 @@ def weave_setup_bold_italic_font(
             )
         return text.replace(VALUE_SLOT, bold_italic_font)
     else:
-        log.warning(f'bold_italic_font value missing ... setting default ({defaults["bold_italic_font"]})')
+        log.warning(f'bold_italic_font value not set ... setting default ({defaults["bold_italic_font"]})')
         return text.replace(VALUE_SLOT, defaults['bold_italic_font'])
 
 
@@ -357,7 +357,7 @@ def weave_setup_main_font(
             )
         return text.replace(VALUE_SLOT, main_font)
     else:
-        log.warning(f'main_font value missing ... setting default ({defaults["main_font"]})')
+        log.warning(f'main_font value not set ... setting default ({defaults["main_font"]})')
         return text.replace(VALUE_SLOT, defaults['main_font'])
 
 
@@ -390,7 +390,7 @@ def weave_setup_fixed_font_package(
             )
         return text.replace(VALUE_SLOT, fixed_font_package)
     else:
-        log.warning(f'fixed_font_package value missing ... setting default ({defaults["fixed_font_package"]})')
+        log.warning(f'fixed_font_package value not set ... setting default ({defaults["fixed_font_package"]})')
         return text.replace(VALUE_SLOT, defaults['fixed_font_package'])
 
 
@@ -465,7 +465,7 @@ def weave_setup_code_fontsize(
             return text.replace(VALUE_SLOT, code_fontsize)
     else:
         log.info(
-            f'code_fontsize value missing ... setting default ({defaults["code_fontsize"]})'
+            f'code_fontsize value not set ... setting default ({defaults["code_fontsize"]})'
             f' - in config that would be {defaults["code_fontsize"]}'
         )
         return text.replace(VALUE_SLOT, defaults['code_fontsize'])
@@ -501,7 +501,7 @@ def weave_setup_chosen_logo(
             )
         return text.replace(VALUE_SLOT, chosen_logo)
     else:
-        log.info(f'chosen_logo value missing ... setting default ({defaults["chosen_logo"]})')
+        log.info(f'chosen_logo value not set ... setting default ({defaults["chosen_logo"]})')
         return text.replace(VALUE_SLOT, defaults['chosen_logo'])
 
 
@@ -540,7 +540,7 @@ def weave_setup_chosen_title_page_logo(
         return text.replace(VALUE_SLOT, chosen_title_page_logo)
     else:
         log.warning('default logo')
-        log.info(f'chosen_title_page_logo value missing ... setting default ({defaults["chosen_title_page_logo"]})')
+        log.info(f'chosen_title_page_logo value not set ... setting default ({defaults["chosen_title_page_logo"]})')
         return text.replace(VALUE_SLOT, defaults['chosen_title_page_logo'])
 
 
@@ -576,7 +576,7 @@ def weave_setup_footer_outer_field_normal_pages(
         return text.replace(VALUE_SLOT, footer_outer_field_normal_pages)
     else:
         log.info(
-            'footer_outer_field_normal_pages value missing ...'
+            'footer_outer_field_normal_pages value not set ...'
             f' setting default ({defaults["footer_outer_field_normal_pages"]})'
         )
         return text.replace(VALUE_SLOT, defaults['footer_outer_field_normal_pages'])
@@ -625,7 +625,7 @@ def weave_setup_toc_all_dots(
         )
         return text.replace(VALUE_SLOT, defaults['toc_all_dots'])
     else:
-        log.info(f'toc_all_dots value missing ... setting default ({defaults["toc_all_dots"]})')
+        log.info(f'toc_all_dots value not set ... setting default ({defaults["toc_all_dots"]})')
         return text.replace(VALUE_SLOT, defaults['toc_all_dots'])
 
 
@@ -688,7 +688,7 @@ def weave_driver_toc_level(
             log.warning(f'toc_level ({mapper["toc_level"]}) not in (1, 2, 3, 4) - resorting to default ({toc_level})')
             log.error(f'error detail: {err}')
     else:
-        log.info(f'toc_level value missing ... setting default ({toc_level})')
+        log.info(f'toc_level value not set ... setting default ({toc_level})')
     return text.replace(VALUE_SLOT, str(toc_level))
 
 
@@ -712,7 +712,7 @@ def weave_driver_list_of_figures(
                 f' - resorting to default ({lof}) i.e. commenting out the list of figures'
             )
     else:
-        log.info('list_of_figures value missing ... setting default (comment out the lof per %)')
+        log.info('list_of_figures value not set ... setting default (comment out the lof per %)')
 
     return text.replace(VALUE_SLOT, '%')
 
@@ -737,7 +737,7 @@ def weave_driver_list_of_tables(
                 f' - resorting to default ({lof}) i.e. commenting out the list of tables'
             )
     else:
-        log.info('list_of_tables value missing ... setting default (comment out the lot per %)')
+        log.info('list_of_tables value not set ... setting default (comment out the lot per %)')
 
     return text.replace(VALUE_SLOT, '%')
 
@@ -781,7 +781,7 @@ def weave_meta_part_header_title(
     if mapper.get('header_title'):
         return text.replace(VALUE_SLOT, mapper['header_title'])
     else:
-        log.info('header_title value missing ... setting default (the title value)')
+        log.info('header_title value not set ... setting default (the title value)')
         return text.replace(VALUE_SLOT, mapper['title'])
 
 
@@ -804,7 +804,7 @@ def weave_meta_part_title_slug(
     if mapper.get('bookmark_title'):
         return text.replace(VALUE_SLOT, mapper['bookmark_title'])
     else:
-        log.info('bookmark_title value missing ... setting default (the slugged title value)')
+        log.info('bookmark_title value not set ... setting default (the slugged title value)')
         return text.replace(VALUE_SLOT, mapper['title'].replace('\\\\', '').replace('  ', ' ').title())
 
 
@@ -832,7 +832,7 @@ def weave_meta_part_sub_title(
     if mapper.get('sub_title'):
         return text.replace(VALUE_SLOT, mapper['sub_title'])
     else:
-        log.info('sub_title value missing ... setting default (single space)')
+        log.info('sub_title value not set ... setting default (single space)')
         return text.replace(VALUE_SLOT, ' ')
 
 
@@ -848,7 +848,7 @@ def weave_meta_part_header_type(
     if mapper.get('header_type'):
         return text.replace(VALUE_SLOT, mapper['header_type'])
     else:
-        log.info('header_type value missing ... setting default (Engineering Document)')
+        log.info('header_type value not set ... setting default (Engineering Document)')
         return text.replace(VALUE_SLOT, 'Engineering Document')
 
 
@@ -898,7 +898,7 @@ def weave_meta_part_header_id_label(
             pub_id_label = ' '  # single space to please the backend parser
         return text.replace(VALUE_SLOT, pub_id_label)
     else:
-        log.info('header_id_label value missing ... setting default(Doc. ID:)')
+        log.info('header_id_label value not set ... setting default(Doc. ID:)')
         return text.replace(VALUE_SLOT, 'Doc. ID:')
 
 
@@ -945,7 +945,7 @@ def weave_meta_part_header_id(
     if mapper.get('header_id'):
         return text.replace(VALUE_SLOT, mapper['header_id'])
     else:
-        log.info('header_id value missing ... setting default (N/A)')
+        log.info('header_id value not set ... setting default (N/A)')
         return text.replace(VALUE_SLOT, 'N/A')
 
 
@@ -961,7 +961,7 @@ def weave_meta_part_issue(
     if mapper.get('issue'):
         return text.replace(VALUE_SLOT, mapper['issue'])
     else:
-        log.info('issue value missing ... setting default (01)')
+        log.info('issue value not set ... setting default (01)')
         return text.replace(VALUE_SLOT, '01')
 
 
@@ -977,7 +977,7 @@ def weave_meta_part_revision(
     if mapper.get('revision'):
         return text.replace(VALUE_SLOT, mapper['revision'])
     else:
-        log.info('revision value missing ... setting default (00)')
+        log.info('revision value not set ... setting default (00)')
         return text.replace(VALUE_SLOT, '00')
 
 
@@ -1027,7 +1027,7 @@ def weave_meta_part_header_date_label(
             pub_date_label = ' '  # single space to please the backend parser
         return text.replace(VALUE_SLOT, pub_date_label)
     else:
-        log.info('header_date_label value missing ... setting default(" ")')
+        log.info('header_date_label value not set ... setting default(" ")')
         return text.replace(VALUE_SLOT, ' ')
 
 
@@ -1133,7 +1133,7 @@ def weave_meta_part_header_date(
                 pub_date_or_any = ' '  # single space to please the backend parser
             return text.replace(VALUE_SLOT, pub_date_or_any)
         else:
-            log.info('header_date value missing and as-is mode ... setting to single space ( ) a.k.a. hiding')
+            log.info('header_date value not set and as-is mode ... setting to single space ( ) a.k.a. hiding')
             return text.replace(VALUE_SLOT, ' ')
     else:
         today = dti.datetime.today()
@@ -1144,7 +1144,7 @@ def weave_meta_part_header_date(
                 pub_date = pub_date_today
             return text.replace(VALUE_SLOT, pub_date)
         else:
-            log.info('header_date value missing ... setting default as empty(" ")')
+            log.info('header_date value not set ... setting default as empty(" ")')
             return text.replace(VALUE_SLOT, ' ')
 
 
@@ -1160,7 +1160,7 @@ def weave_meta_part_footer_frame_note(
     if mapper.get('footer_frame_note'):
         return text.replace(VALUE_SLOT, mapper['footer_frame_note'])
     else:
-        log.info('footer_frame_note value missing ... setting default from module / environment ...')
+        log.info('footer_frame_note value not set ... setting default from module / environment ...')
         return text.replace(VALUE_SLOT, WEAVE_DEFAULTS['footer_frame_note'])
 
 
@@ -1176,7 +1176,7 @@ def weave_meta_part_footer_page_number_prefix(
     if mapper.get('footer_page_number_prefix'):
         return text.replace(VALUE_SLOT, mapper['footer_page_number_prefix'])
     else:
-        log.info('footer_page_number_prefix value missing ... setting default (Page)')
+        log.info('footer_page_number_prefix value not set ... setting default (Page)')
         return text.replace(VALUE_SLOT, 'Page')
 
 
@@ -1192,7 +1192,7 @@ def weave_meta_part_change_log_issue_label(
     if mapper.get('change_log_issue_label'):
         return text.replace(VALUE_SLOT, mapper['change_log_issue_label'])
     else:
-        log.info('change_log_issue_label value missing ... setting default (Iss.)')
+        log.info('change_log_issue_label value not set ... setting default (Iss.)')
         return text.replace(VALUE_SLOT, 'Iss.')
 
 
@@ -1208,7 +1208,7 @@ def weave_meta_part_change_log_revision_label(
     if mapper.get('change_log_revision_label'):
         return text.replace(VALUE_SLOT, mapper['change_log_revision_label'])
     else:
-        log.info('change_log_revision_label value missing ... setting default (Rev.)')
+        log.info('change_log_revision_label value not set ... setting default (Rev.)')
         return text.replace(VALUE_SLOT, 'Rev.')
 
 
@@ -1224,7 +1224,7 @@ def weave_meta_part_change_log_date_label(
     if mapper.get('change_log_date_label'):
         return text.replace(VALUE_SLOT, mapper['change_log_date_label'])
     else:
-        log.info('change_log_date_label value missing ... setting default (Date)')
+        log.info('change_log_date_label value not set ... setting default (Date)')
         return text.replace(VALUE_SLOT, 'Date')
 
 
@@ -1240,7 +1240,7 @@ def weave_meta_part_change_log_author_label(
     if mapper.get('change_log_author_label'):
         return text.replace(VALUE_SLOT, mapper['change_log_author_label'])
     else:
-        log.info('change_log_author_label value missing ... setting default (Author)')
+        log.info('change_log_author_label value not set ... setting default (Author)')
         return text.replace(VALUE_SLOT, 'Author')
 
 
@@ -1256,7 +1256,7 @@ def weave_meta_part_change_log_description_label(
     if mapper.get('change_log_description_label'):
         return text.replace(VALUE_SLOT, mapper['change_log_description_label'])
     else:
-        log.info('change_log_description_label value missing ... setting default (Description)')
+        log.info('change_log_description_label value not set ... setting default (Description)')
         return text.replace(VALUE_SLOT, 'Description')
 
 
@@ -1270,7 +1270,7 @@ def weave_meta_part_with_default_slot(
     if mapper.get(slot):
         return text.replace(VALUE_SLOT, mapper[slot])
     else:
-        log.info(f'{slot} value missing ... setting default ({WEAVE_DEFAULTS[slot]})')
+        log.info(f'{slot} value not set ... setting default ({WEAVE_DEFAULTS[slot]})')
         return text.replace(VALUE_SLOT, WEAVE_DEFAULTS[slot])
 
 
@@ -1334,7 +1334,7 @@ def weave_meta_part_approvals_department_label(
     if mapper.get('approvals_department_label'):
         return text.replace(VALUE_SLOT, mapper['approvals_department_label'])
     else:
-        log.info('approvals_department_label value missing ... setting default (Department)')
+        log.info('approvals_department_label value not set ... setting default (Department)')
         return text.replace(VALUE_SLOT, 'Department')
 
 
@@ -1372,7 +1372,7 @@ def weave_meta_part_approvals_department_value(
     if mapper.get('approvals_department_value'):
         return text.replace(VALUE_SLOT, mapper['approvals_department_value'])
     else:
-        log.info('approvals_department_value value missing ... setting default ( )')
+        log.info('approvals_department_value value not set ... setting default ( )')
         return text.replace(VALUE_SLOT, ' ')
 
 
@@ -1388,7 +1388,7 @@ def weave_meta_part_approvals_role_label(
     if mapper.get('approvals_role_label'):
         return text.replace(VALUE_SLOT, mapper['approvals_role_label'])
     else:
-        log.info('approvals_role_label value missing ... setting default (Approvals)')
+        log.info('approvals_role_label value not set ... setting default (Approvals)')
         return text.replace(VALUE_SLOT, 'Approvals')
 
 
@@ -1404,7 +1404,7 @@ def weave_meta_part_approvals_name_label(
     if mapper.get('approvals_name_label'):
         return text.replace(VALUE_SLOT, mapper['approvals_name_label'])
     else:
-        log.info('approvals_name_label value missing ... setting default (Name)')
+        log.info('approvals_name_label value not set ... setting default (Name)')
         return text.replace(VALUE_SLOT, 'Name')
 
 
@@ -1420,7 +1420,7 @@ def weave_meta_part_approvals_date_and_signature_label(
     if mapper.get('approvals_date_and_signature_label'):
         return text.replace(VALUE_SLOT, mapper['approvals_date_and_signature_label'])
     else:
-        log.info('approvals_date_and_signature_label value missing ... setting default (Date and Signature)')
+        log.info('approvals_date_and_signature_label value not set ... setting default (Date and Signature)')
         return text.replace(VALUE_SLOT, 'Date and Signature')
 
 
@@ -1472,7 +1472,7 @@ def weave_meta_part_header_issue_revision_combined_label(
             head_iss_rev_comb_label = ' '  # single space to please the backend parser
         return text.replace(VALUE_SLOT, head_iss_rev_comb_label)
     else:
-        log.info('header_issue_revision_combined_label value missing ... setting default(Issue, Revision:)')
+        log.info('header_issue_revision_combined_label value not set ... setting default(Issue, Revision:)')
         return text.replace(VALUE_SLOT, 'Issue, Revision:')
 
 
@@ -1522,7 +1522,7 @@ def weave_meta_part_header_issue_revision_combined(
         return text.replace(VALUE_SLOT, mapper['header_issue_revision_combined'])
     else:
         log.info(
-            'header_issue_revision_combined value missing ... setting'
+            'header_issue_revision_combined value not set ... setting'
             ' default (Iss \\theMetaIssCode, Rev \\theMetaRevCode)'
         )
         return text.replace(VALUE_SLOT, r'Iss \theMetaIssCode, Rev \theMetaRevCode')
@@ -1599,7 +1599,7 @@ def weave_meta_part_proprietary_information(
             log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
         return text.replace(VALUE_SLOT, prop_info)
     else:
-        log.warning('proprietary_information value missing ... setting default from module ...')
+        log.warning('proprietary_information value not set ... setting default from module ...')
         prop_info = WEAVE_DEFAULTS['proprietary_information']
         if pathlib.Path(prop_info).is_file():
             try:
