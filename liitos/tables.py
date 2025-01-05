@@ -173,7 +173,7 @@ class Table:
         while not consumed:
             local_number += 1
             pos = local_number + anchor
-            line = next(text_lines).rstrip()
+            line = next(text_lines).rstrip()  # May raise StopIteration, deal with it (later)
             self.src_map.append((pos, line))
             if line.startswith(Table.LBP_STARTSWITH_TAB_ENV_END):
                 consumed = True
@@ -459,11 +459,44 @@ def parse_table_font_size_command(slot: int, text_line: str) -> tuple[bool, str,
 
 
 def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[float]]:
-    """Parse the \\columns=,0.2,0.7 command."""
+    r"""Parse the \\columns=,0.2,0.7 command.
+
+    Examples:
+
+    >>> slot = 0
+    >>> text = '\\columns=,0.2,0.7'
+    >>> parse_columns_command(slot, text)
+    (True, '', [0.1, 0.2, 0.7])
+
+    >>> slot = 0
+    >>> text = '\\columns=0.1,0.2,0.7'
+    >>> parse_columns_command(slot, text)
+    (True, '', [0.1, 0.2, 0.7])
+
+    >>> slot = 0
+    >>> text = '\\columns=0.4,0.7'
+    >>> parse_columns_command(slot, text)
+    (True, '', [0.4, 0.7])
+
+    >>> slot = 0
+    >>> text = r'\columns=    , 20\%,70\%'
+    >>> parse_columns_command(slot, text)
+    (True, '', [0.1, 0.2, 0.7])
+
+    >>> slot = 0
+    >>> text = '\\columns===='
+    >>> parse_columns_command(slot, text)
+    (False, '\\columns====', [])
+
+    >>> slot = 0
+    >>> text = '\\columns=a,42,-1'
+    >>> parse_columns_command(slot, text)
+    (False, '\\columns=a,42,-1', [])
+    """
     if text_line.startswith(r'\columns='):
         log.info(f'trigger a columns mod for the next table environment at line #{slot + 1}|{text_line}')
         try:
-            cols_csv = text_line.split('=', 1)[1].strip()  # r'\columns    =    , 20\%,70\%'  --> r', 20\%,70\%'
+            cols_csv = text_line.split('=', 1)[1].strip()  # r'\columns=    , 20\%,70\%'  --> r', 20\%,70\%'
             cols = [v.strip() for v in cols_csv.split(COMMA)]
             widths = [float(v.replace(r'\%', '')) / 100 if r'\%' in v else (float(v) if v else 0) for v in cols]
             rest = round(1 - sum(round(w, 5) for w in widths), 5)
@@ -479,7 +512,33 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
 
 @no_type_check
 def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
-    """Later alligator. \\columns=,0.2,0.7 as mandatory trigger"""
+    r"""Later alligator. \\columns=,0.2,0.7 as mandatory trigger
+
+    Examples:
+
+    >>> incoming = ['foo', '', '\\columns=,0.5', '', TAB_START_TOK, '', TAB_END_TOK, 'bar', 'baz', 'quux']
+    >>> patch(incoming)
+    ['foo', '', '%CONSIDERED_\\columns=,0.5', '', '\\begin{longtable}[]{', '', '\\end{longtable}', 'bar', 'baz', 'quux']
+
+    >>> incoming = [
+    ...     r'\begin{longtable}[]{@{}lcr@{}}',
+    ...     r'\toprule\noalign{}',
+    ...     r'Foo & Bar & Baz \\',
+    ...     r'\midrule\noalign{}',
+    ...     r'\endfirsthead',
+    ...     r'\toprule\noalign{}',
+    ...     r'Foo & Bar & Baz \\',
+    ...     r'\midrule\noalign{}',
+    ...     r'\endhead',
+    ...     r'\bottomrule\noalign{}',
+    ...     r'\caption{The old tune\label{tab:tuna}}\tabularnewline',
+    ...     r'\endlastfoot',
+    ...     r'Quux & x & 42 \\',
+    ...     r'\end{longtable}',
+    ... ]
+    >>> patch(incoming)
+    ['\\begin{longtable}[]{@{}lcr@{}}', '\\toprule\\noalign{}', 'Foo & Bar & Baz \\\\', ...'\\end{longtable}']
+    """
     table_style = 'readable' if lookup is None else lookup.get('table_style', 'readable')
     log.info(f'requested table style is ({table_style})')
     table_section, head, annotation = False, False, False
