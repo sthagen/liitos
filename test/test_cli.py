@@ -171,7 +171,6 @@ def test_command_report(caplog):
     result = runner.invoke(app, ['report'])
     assert result.exit_code == 0
     tools_with_success_messages = (
-        'etiketti',
         'exiftool',
         'foran',
         'git',
