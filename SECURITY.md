@@ -4,10 +4,10 @@
 
 Versions of liitos currently being supported with security updates.
 
-| Version(s)   | Supported |
-|:-------------|:----------|
-| 2024.11.25   | yes       |
-| < 2024.11.25 | no        |
+| Version(s) | Supported |
+|:-----------|:----------|
+| 2025.1.5   | yes       |
+| < 2025.1.5 | no        |
 
 ## Reporting a Vulnerability
 
