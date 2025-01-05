@@ -390,7 +390,13 @@ def rollup(
 
 @no_type_check
 def collect_assets(collector: list[str]) -> None:
-    """TODO"""
+    """TODO
+
+    EXamples:
+
+    >>> c = ['foo']
+    >>> collect_assets(c)
+    """
     images = pathlib.Path(IMAGES_FOLDER)
     images.mkdir(parents=True, exist_ok=True)
     diagrams = pathlib.Path(DIAGRAMS_FOLDER)
@@ -428,6 +434,88 @@ def concatenate(
     """Later alligator.
 
     Examples:
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = '.'
+    >>> sn = 'foo'
+    >>> tk = ''
+    >>> fk = ''
+    >>> op = {'bar': True}
+    >>> concatenate(dr, sn, tk, fk, op, )
+    2
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'non-existing-facet-key'
+    >>> op = {'bar': True}
+    >>> concatenate(dr, sn, tk, fk, op)
+    1
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'test/fixtures/basic/'
+    >>> sn = 'structure.yml'
+    >>> tk = 'abc'
+    >>> fk = 'missing'
+    >>> op = {'bar': True}
+    >>> concatenate(dr, sn, tk, fk, op)
+    2
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'tuna'
+    >>> op = {'bar': True}
+    >>> concatenate(dr, sn, tk, fk, op)
+    0
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'tuna'
+    >>> op = {'bar': True}
+    >>> try:
+    ...     code = concatenate(dr, sn, tk, fk, op)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/ejected-templates'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'ejected-templates'
+    >>> op = {'bar': True}
+    >>> try:
+    ...     code = concatenate(dr, sn, tk, fk, op)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/ejected-templates'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'ejected-templates-borked'
+    >>> op = {'bar': True}
+    >>> try:
+    ...     code = concatenate(dr, sn, tk, fk, op)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
 
     >>> restore_cwd = os.getcwd()
     >>> dr = 'example/tuna'
