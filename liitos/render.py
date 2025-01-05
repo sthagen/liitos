@@ -145,10 +145,15 @@ def der(
     for path_to_dir in (IMAGES_FOLDER, DIAGRAMS_FOLDER):
         the_folder = pathlib.Path(path_to_dir)
         if not the_folder.is_dir():
-            log.error(
+            log.info(
                 f'svg-to-png directory ({the_folder}) in ({pathlib.Path().cwd()}) does not exist or is no directory'
+                f' - trying to create {the_folder}'
             )
-            continue
+            try:
+                the_folder.mkdir(parents=True, exist_ok=True)
+            except FileExistsError as err:
+                log.error(f'failed to create {the_folder} - detail: {err}')
+                continue
         for svg in pathlib.Path(path_to_dir).iterdir():
             if svg.is_file() and svg.suffix == '.svg':
                 png = str(svg).replace('.svg', '.png')

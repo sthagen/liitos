@@ -14,7 +14,7 @@ import liitos.gather as gat
 import liitos.meta as met
 import liitos.placeholder as plh
 import liitos.tools as too
-from liitos import ENCODING, LOG_SEPARATOR, log
+from liitos import ENCODING, LOG_SEPARATOR, PathLike, log
 
 ALT_INJECTOR_HACK = 'INJECTED-ALT-TEXT-TO-TRIGGER-FIGURE-ENVIRONMENT-AROUND-IMAGE-IN-PANDOC'
 CAP_INJECTOR_HACK = 'INJECTED-CAP-TEXT-TO-MARK-MISSING-CAPTION-IN-OUTPUT'
@@ -345,7 +345,24 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
 def harvest_include(
     text_line: str, slot: int, regions: dict[str, list[tuple[tuple[int, int], str]]], tree: treelib.Tree, parent: str
 ) -> None:
-    """TODO."""
+    r"""TODO.
+
+    Examples:
+
+    >>> text = 'baz\n\\include{c}\nquux'
+    >>> slot = 0
+    >>> regions = {SLASH: [((0, 1), 'b')], 'b': [((0, 1), 'c')], 'c': [((0, 1), 'cx')]}
+    >>> tr = treelib.Tree()
+    >>> root = SLASH
+    >>> tr.create_node(root, root)
+    Node(tag=/, identifier=/, data=None)
+    >>> harvest_include(text, slot, regions, tr, root)
+    >>> print(tr)
+    /
+    └── /c}
+    quux
+    <BLANKLINE>
+    """
     include_local = text_line.split(INCLUDE_SLOT, 1)[1].rstrip('}').strip()
     include = str(pathlib.Path(parent).parent / include_local)
     regions[parent].append(((slot, slot), include))
@@ -359,7 +376,26 @@ def rollup(
     regions: dict[str, list[tuple[tuple[int, int], str]]],
     flat: dict[str, str],
 ) -> list[list[str]]:
-    """TODO."""
+    r"""TODO.
+
+    Examples:
+
+    >>> jobs = [['a', 'b'], ['b', 'c']]
+    >>> docs = {'a': ['a1', 'a2'], 'b': ['b1', 'b2'], 'c': ['c1', 'c2', 'c3']}
+    >>> regions = {'a': [((0, 1), 'b')], 'b': [((0, 1), 'c')], 'c': [((0, 1), 'cx')]}
+    >>> flat = {'a': 'a1\na2', 'b': 'b1\nb2', 'c': 'c1\nc2\nc3'}
+    >>> rollup(jobs, docs, regions, flat)
+    [[], []]
+    >>> flat
+    {'a': 'b1\nb2\n', 'b': 'c1\nc2\nc3\n', 'c': 'c1\nc2\nc3'}
+
+    >>> jobs = [['/', 'b'], ['/', 'c']]
+    >>> docs, regions, flat = {}, {}, {'baz': 'quux'}
+    >>> rollup(jobs, docs, regions, flat)
+    [[]]
+    >>> flat
+    {'baz': 'quux'}
+    """
     tackle = [those[0] for those in jobs if those and those[0] != SLASH]
     if tackle:
         log.info(f'  Insertion ongoing with parts ({", ".join(tuple(sorted(tackle)))}) remaining')
@@ -389,21 +425,54 @@ def rollup(
 
 
 @no_type_check
-def collect_assets(collector: list[str]) -> None:
+def collect_assets(
+    collector: list[str],
+    doc_base: Union[PathLike, None] = None,
+    images_folder: Union[PathLike, None] = None,
+    diagrams_folder: Union[PathLike, None] = None,
+) -> None:
     """TODO
 
-    EXamples:
+    Examples:
 
     >>> c = ['foo']
     >>> collect_assets(c)
+
+    >>> import tempfile
+    >>> with tempfile.TemporaryDirectory() as imaf:
+    ...     c = [imaf + 'foo']
+    ...     collect_assets(c, doc_base='.', images_folder=imaf)
+
+    >>> import tempfile
+    >>> with tempfile.TemporaryDirectory() as imaf:
+    ...     with tempfile.TemporaryDirectory() as diaf:
+    ...         c = [imaf + 'foo', diaf + 'bar']
+    ...         collect_assets(c, doc_base='.', images_folder=imaf, diagrams_folder=diaf)
+
+    >>> import tempfile
+    >>> with tempfile.TemporaryDirectory() as imaf:
+    ...     ima = pathlib.Path(imaf) / 'images'
+    ...     ima.touch()
+    ...     with tempfile.TemporaryDirectory() as diaf:
+    ...         dia = pathlib.Path(diaf) / 'diagrams'
+    ...         dia.touch()
+    ...         c = [str(ima / 'foo'), str(dia / 'bar')]
+    ...         collect_assets(c, doc_base='.', images_folder=ima, diagrams_folder=dia)
     """
-    images = pathlib.Path(IMAGES_FOLDER)
-    images.mkdir(parents=True, exist_ok=True)
-    diagrams = pathlib.Path(DIAGRAMS_FOLDER)
-    diagrams.mkdir(parents=True, exist_ok=True)
+    doc_base = pathlib.Path(doc_base) if doc_base else DOC_BASE
+    images_folder = str(images_folder) if images_folder else IMAGES_FOLDER
+    diagrams_folder = str(diagrams_folder) if diagrams_folder else DIAGRAMS_FOLDER
+
+    images = pathlib.Path(images_folder)
+    diagrams = pathlib.Path(diagrams_folder)
     for img_path in collector:
-        if IMAGES_FOLDER in img_path:
-            source_asset = DOC_BASE / img_path
+        if images_folder in img_path:
+            if not images.is_dir():
+                try:
+                    images.mkdir(parents=True, exist_ok=True)
+                except FileExistsError as err:
+                    log.error(f'failed to create {images} - detail: {err}')
+            source_asset = doc_base / img_path
             target_asset = images / pathlib.Path(img_path).name
             try:
                 shutil.copy(source_asset, target_asset)
@@ -411,13 +480,26 @@ def collect_assets(collector: list[str]) -> None:
                 log.error(err)
                 code, msg = plh.dump_placeholder(target_asset)
                 log.warning(msg) if code else log.info(msg)
+            except NotADirectoryError as err:
+                log.error(err)
+                code, msg = plh.dump_placeholder(target_asset)
+                log.warning(msg) if code else log.info(msg)
             continue
-        if DIAGRAMS_FOLDER in img_path:
-            source_asset = DOC_BASE / img_path
+        if diagrams_folder in img_path:
+            if not diagrams.is_dir():
+                try:
+                    diagrams.mkdir(parents=True, exist_ok=True)
+                except FileExistsError as err:
+                    log.error(f'failed to create {diagrams} - detail: {err}')
+            source_asset = doc_base / img_path
             target_asset = diagrams / pathlib.Path(img_path).name
             try:
                 shutil.copy(source_asset, target_asset)
             except FileNotFoundError as err:
+                log.error(err)
+                code, msg = plh.dump_placeholder(target_asset)
+                log.warning(msg) if code else log.info(msg)
+            except NotADirectoryError as err:
                 log.error(err)
                 code, msg = plh.dump_placeholder(target_asset)
                 log.warning(msg) if code else log.info(msg)
