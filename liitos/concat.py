@@ -196,7 +196,26 @@ def process_changes(aspects: dict[str, str]) -> Union[gat.Changes, int]:
 
 @no_type_check
 def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
-    """Parse a markdown image line within our conventions into caption, src, alt, and optional rest."""
+    """Parse a markdown image line within our conventions into caption, src, alt, and optional rest.
+
+    Examples:
+
+    >>> t = ''
+    >>> parse_markdown_image(t)
+    ('', '', '', '')
+
+    >>> t = '![]()'
+    >>> parse_markdown_image(t)
+    ('', '', '', '![]()')
+
+    >>> t = '![a](b "c")'
+    >>> parse_markdown_image(t)
+    ('a', 'b', 'c', '')
+
+    >>> t = '![a](liitos/placeholders/this-resource-is-missing.png "c")'
+    >>> parse_markdown_image(t)
+    ('a', 'liitos/placeholders/this-resource-is-missing.png', 'c', '')
+    """
     invalid_marker = ('', '', '', text_line)
 
     exclam = '!'
@@ -406,7 +425,26 @@ def concatenate(
     facet_key: str,
     options: dict[str, Union[bool, str]],
 ) -> int:
-    """Later alligator."""
+    """Later alligator.
+
+    Examples:
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/tuna'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'tuna'
+    >>> op = {'bar': True}
+    >>> abs_here = pathlib.Path().resolve()
+    >>> try:
+    ...     code = concatenate(dr, sn, tk, fk, op)
+    ... except FileNotFoundError:
+    ...     code = -1
+    >>> os.chdir(restore_cwd)
+    >>> code
+    0
+
+    """
     log.info(LOG_SEPARATOR)
     log.info('entered concat function ...')
     target_code = target_key
@@ -432,16 +470,16 @@ def concatenate(
 
     approvals = process_approvals(aspect_map)
     if isinstance(approvals, int):
-        return 1
+        return 2
     binder = process_binder(aspect_map)
     if isinstance(binder, int):
-        return 1
+        return 3
     changes = process_changes(aspect_map)
     if isinstance(changes, int):
-        return 1
+        return 4
     metadata = met.load(aspect_map)
     if isinstance(metadata, int):
-        return 1
+        return 5
 
     root = SLASH
     root_path = str(pathlib.Path.cwd().resolve()).rstrip(SLASH) + SLASH
