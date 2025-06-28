@@ -16,6 +16,7 @@ NAN = float('nan')
 SCALE_START_TRIGGER_STARTSWITH = r'\scale='
 BARE_GRAPHICS_START_STARTSWITH = r'\includegraphics{'
 WRAPPED_GRAPHICS_START_IN = r'\pandocbounded{\includegraphics'
+EVEN_MORE_SO = r'\pandocbounded{\includegraphics[keepaspectratio,alt={'  # HACK A DID ACK
 
 
 def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoing: list[str]) -> tuple[Modus, float]:
@@ -98,13 +99,29 @@ def filter_seek_figure(line: str, slot: int, modus: Modus, rescale: float, outgo
             outgoing.append(line)
         modus = Modus.COPY
         rescale = NAN
+    elif EVEN_MORE_SO in line:
+        if not math.isnan(rescale):
+            log.info(f'- found the scale target start at line #{slot + 1}|{line}')
+            target = line.replace(WRAPPED_GRAPHICS_START_IN, '').replace('[keepaspectratio', '')
+            parts = target.split('}}')
+            rest, inside = ('', '') if len(parts) < 2 else (parts[1].lstrip('}'), parts[0] + '}')
+            option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}' '\\textheight,keepaspectratio'
+            patched = f'{WRAPPED_GRAPHICS_START_IN}{option}{inside}}}{rest}'
+            hack = '}}'
+            if not patched.endswith(hack):
+                patched += hack
+            outgoing.append(patched)
+        else:
+            outgoing.append(line)
+        modus = Modus.COPY
+        rescale = NAN
     elif WRAPPED_GRAPHICS_START_IN in line:
         if not math.isnan(rescale):
             log.info(f'- found the scale target start at line #{slot + 1}|{line}')
             target = line.replace(WRAPPED_GRAPHICS_START_IN, '').replace('[keepaspectratio]', '')
             parts = target.split('}}')
             rest, inside = ('', '') if len(parts) < 2 else (parts[1].lstrip('}'), parts[0] + '}')
-            option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}' '\\textheight,keepaspectratio]'
+            option = f'[width={round(rescale, 2)}\\textwidth,height={round(rescale, 2)}' '\\textheight,keepaspectratio'
             outgoing.append(f'{WRAPPED_GRAPHICS_START_IN}{option}{inside}}}{rest}')
         else:
             outgoing.append(line)

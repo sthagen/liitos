@@ -18,11 +18,14 @@ def is_include_graphics(text: str) -> bool:
 
 
 def extract_image_path(include_graphics_line: str) -> str:
-    """We had a bug, so we isolate in a function."""
-    if include_graphics_line and 'pandocbounded{' in include_graphics_line:
-        return include_graphics_line.split('{', 2)[2].rstrip().rstrip('}')
-    if include_graphics_line and '{' in include_graphics_line:
-        return include_graphics_line.split('{', 1)[1].rstrip().rstrip('}')
+    """We had bugs, so we isolate in a function to simplify following upstream fashions."""
+    igl = include_graphics_line
+    if igl and 'pandocbounded{' in igl and ',alt={' in igl:
+        return igl.split('}]{', 1)[1].rstrip().rstrip('}')
+    if igl and 'pandocbounded{' in igl:
+        return igl.split('{', 2)[2].rstrip().rstrip('}')
+    if igl and '{' in igl:
+        return igl.split('{', 1)[1].rstrip().rstrip('}')
     else:
         return 'IMAGE_PATH_NOT_FOUND'
 
