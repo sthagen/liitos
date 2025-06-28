@@ -39,6 +39,8 @@ INTER_PROCESS_SYNC_SECS = 0.1
 INTER_PROCESS_SYNC_ATTEMPTS = 10
 
 IS_BORING = re.compile(r'\(.*texmf-dist/tex.*\.')
+HAS_WARNING = re.compile(r'[Ww]arning')
+HAS_ERROR = re.compile(r'[Ee]rror')
 
 
 def hash_file(path: PathLike, hasher: Union[Callable[..., Any], None] = None) -> str:
@@ -68,24 +70,23 @@ def hash_file(path: PathLike, hasher: Union[Callable[..., Any], None] = None) ->
 def log_subprocess_output(pipe, prefix: str):
     for line in iter(pipe.readline, b''):  # b'\n'-separated lines
         cand = line.decode(encoding=ENCODING).rstrip()
-        if IS_BORING.search(cand):
-            log.debug(cand)
+        if HAS_ERROR.search(cand):
+            log.error(prefix + ': ' + cand)
             continue
-        if cand.strip().strip('[])yex'):
-            if any(
-                [
-                    'microtype' in cand,
-                    'xassoccnt' in cand,
-                    'texlive/2022/texmf-dist/tex/' in cand,
-                    cand == 'erns.sty)',
-                    cand == '(see the transcript file for additional information)',
-                    cand.startswith(r'Overfull \hbox ')
-                    and cand.endswith(r'pt too wide) has occurred while \output is active'),
-                ]
-            ):
-                log.debug(f'{prefix}: %s', cand)
-            else:
-                log.info(f'{prefix}: %s', cand)
+        if HAS_WARNING.search(cand) and not any(
+            (
+                '"calc" is loaded -- this is not' in cand,
+                'Package microtype Warning: Unable to apply patch' in cand,
+                'Unknown document division name (startatroot)' in cand,
+                'Unknown slot number of character' in cand,
+            )
+        ):
+            log.warning(prefix + ': ' + cand)
+            continue
+        if IS_BORING.search(cand):
+            log.debug(prefix + ': ' + cand)
+            continue
+        log.info(prefix + ': ' + cand)
 
 
 @no_type_check

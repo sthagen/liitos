@@ -21,6 +21,7 @@ from liitos import (
     APP_NAME,
     APP_VERSION,
     APPROVALS_STRATEGY,
+    DEBUG,
     DEFAULT_STRUCTURE_NAME,
     EXTERNALS,
     FILTER_CS_LIST,
@@ -142,6 +143,13 @@ def _verify_call_vector(
     approvals_strategy: str = '',
 ) -> tuple[int, str, str, OptionsType]:
     """DRY"""
+    if DEBUG:
+        logging.getLogger().setLevel(logging.DEBUG)
+    elif verbose:
+        logging.getLogger().setLevel(logging.INFO)
+    elif QUIET and not verbose and not strict:
+        logging.getLogger().setLevel(logging.WARNING)
+
     log.debug(f'verifier received: {locals()}')
     doc = doc_root.strip()
     if not doc and doc_root_pos:
@@ -189,10 +197,6 @@ def _verify_call_vector(
         'table_uglify': None,
     }
     log.debug(f'Post verifier: {options=}')
-    if verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
-    elif options.get('quiet'):
-        logging.getLogger().setLevel(logging.ERROR)
     return 0, '', doc, options
 
 

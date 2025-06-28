@@ -19,7 +19,7 @@ APP_ENV = APP_ALIAS.upper()
 APP_NAME = locals()['__doc__']
 DEBUG = bool(os.getenv(f'{APP_ENV}_DEBUG', ''))
 VERBOSE = bool(os.getenv(f'{APP_ENV}_VERBOSE', ''))
-QUIET = False
+QUIET = True  # HACK A DID ACK - the new normal
 STRICT = bool(os.getenv(f'{APP_ENV}_STRICT', ''))
 ENCODING = 'utf-8'
 ENCODING_ERRORS_POLICY = 'ignore'
@@ -184,6 +184,7 @@ __all__: list[str] = [
     'APP_ENV',
     'APP_VERSION',
     'APPROVALS_STRATEGY',
+    'DEBUG',
     'DEFAULT_STRUCTURE_NAME',
     'ENCODING',
     'EXTERNALS',
@@ -202,6 +203,7 @@ __all__: list[str] = [
     'LOG_SEPARATOR',
     'OptionsType',
     'PathLike',
+    'QUIET',
     'TOOL_VERSION_COMMAND_MAP',
     'ToolKey',
     'TS_FORMAT_PAYLOADS',
