@@ -176,12 +176,9 @@ def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[s
     return layout
 
 
-def derive_model(model_path: PathLike) -> tuple[str, list[str]]:
-    """Derive the model as channel type and column model from the given path."""
-    channel = JSON_CHANNEL if str(model_path).endswith('.json') else YAML_CHANNEL
-    columns_expected = ['Approvals', 'Name'] if channel == JSON_CHANNEL else COLUMNS_EXPECTED
-
-    return channel, columns_expected
+def derive_model(model_path: PathLike) -> list[str]:
+    """Derive the column model from the given path."""
+    return COLUMNS_EXPECTED
 
 
 def columns_are_present(columns_present: list[str], columns_expected: list[str]) -> bool:
@@ -190,39 +187,20 @@ def columns_are_present(columns_present: list[str], columns_expected: list[str])
 
 
 @no_type_check
-def normalize(signatures: object, channel: str, columns_expected: list[str]) -> list[dict[str, str]]:
+def normalize(signatures: object, columns_expected: list[str]) -> list[dict[str, str]]:
     """Normalize the channel specific topology of the model into a logical model.
 
     On error an empty logical model is returned.
     """
-    if channel == JSON_CHANNEL:
-        if not columns_are_present(signatures[0]['columns'], columns_expected):
+    for slot, approval in enumerate(signatures[0]['approvals'], start=1):
+        log.debug(f'{slot=}, {approval=}')
+        if not columns_are_present(approval, columns_expected):
             log.error('unexpected column model!')
             log.error(f'-  expected: ({columns_expected})')
-            log.error(f'- but found: ({signatures[0]["columns"]})')
+            log.error(f'- but found: ({sorted(approval)}) in slot #{slot}')
             return []
 
-    if channel == YAML_CHANNEL:
-        for slot, approval in enumerate(signatures[0]['approvals'], start=1):
-            log.debug(f'{slot=}, {approval=}')
-            if not columns_are_present(approval, columns_expected):
-                log.error('unexpected column model!')
-                log.error(f'-  expected: ({columns_expected})')
-                log.error(f'- but found: ({sorted(approval)}) in slot #{slot}')
-                return []
-
     default_orga = r'\theApprovalsDepartmentValue'
-
-    if channel == JSON_CHANNEL:
-        return [
-            {
-                'orga': default_orga,
-                'role': role,
-                'name': name,
-                'orga_x_name': f'{default_orga} / {name}',
-            }
-            for role, name in signatures[0]['rows']
-        ]
 
     return [
         {
@@ -294,17 +272,20 @@ def weave(
 
     log.info(LOG_SEPARATOR)
     signatures_path = asset_map[target_key][facet_key][gat.KEY_APPROVALS]
-    channel, columns_expected = derive_model(signatures_path)
-    log.info(f'detected approvals channel ({channel}) weaving in from ({signatures_path})')
+    columns_expected = derive_model(signatures_path)
+    log.info(f'weaving approvals in from ({signatures_path})')
 
     log.info(f'loading signatures from {signatures_path=}')
     signatures = gat.load_approvals(facet_key, target_key, signatures_path)
+    if not signatures[0] and ' json ' in signatures[1]:
+        log.error(signatures[1])
+        return 2
     log.info(f'{signatures=}')
 
     log.info(LOG_SEPARATOR)
     log.info('plausibility tests for approvals ...')
 
-    logical_model = normalize(signatures, channel=channel, columns_expected=columns_expected)
+    logical_model = normalize(signatures, columns_expected=columns_expected)
 
     rows = [ROW_TEMPLATE.replace('role', kv['role']).replace('name', kv['name']) for kv in logical_model]
 

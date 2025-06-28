@@ -34,22 +34,14 @@ def test_approvals_legacy():
         'externals': EXTERNALS,
     }
     restore = os.getcwd()
-    assert approvals.weave(**parameters) == 0
+    assert approvals.weave(**parameters) == 2
     os.chdir(restore)
 
 
-def test_normalize_json_columns_mismatch():
-    signatures = [{'columns': ['columns', 'are', 'unexpected']}]
-    channel = approvals.JSON_CHANNEL
-    columns_expected = approvals.COLUMNS_EXPECTED
-    assert approvals.normalize(signatures=signatures, channel=channel, columns_expected=columns_expected) == []
-
-
-def test_normalize_yaml_columns_mismatch():
+def test_normalize_columns_mismatch():
     signatures = [{'approvals': [{'columns': 'are', 'not': 'expected'}]}]
-    channel = approvals.YAML_CHANNEL
     columns_expected = approvals.COLUMNS_EXPECTED
-    assert approvals.normalize(signatures=signatures, channel=channel, columns_expected=columns_expected) == []
+    assert approvals.normalize(signatures=signatures, columns_expected=columns_expected) == []
 
 
 def test_eastern_scaffold():

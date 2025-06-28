@@ -1,8 +1,8 @@
 abc:
 - mn:
-    approvals: approvals.json
+    approvals: approvals.yml
     bind: bind-mn.txt
-    changes: changes.json
+    changes: changes.yml
     meta: meta-mn.yml
 - opq:
     approvals: approvals.yml

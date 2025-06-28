@@ -1,6 +1,5 @@
 """Gather the structure and discover the content."""
 
-import json
 import os
 import pathlib
 from typing import Dict, List, Set, Tuple, Union
@@ -143,11 +142,9 @@ def meta(facet: str, target: str, asset_struct: Assets) -> Tuple[Meta, str]:
 def load_approvals(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
     """Yield the approvals for facet of target from path and message (in case of failure)."""
     if str(path).lower().endswith('json'):
-        try:
-            with open(path, 'rt', encoding=ENCODING) as handle:
-                return json.load(handle), ''
-        except FileNotFoundError as err:
-            return error_context({}, 'Approvals', facet, target, path, err)  # type: ignore
+        return error_context(
+            {}, 'Approvals', facet, target, path, ValueError('please transform approvals from json to yaml format')
+        )  # type: ignore
     elif str(path).lower().endswith(('yaml', 'yml')):
         try:
             with open(path, 'rt', encoding=ENCODING) as handle:
@@ -170,11 +167,9 @@ def approvals(facet: str, target: str, asset_struct: Assets) -> Tuple[Approvals,
 def load_changes(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
     """Yield the changes for facet of target from path and message (in case of failure)."""
     if str(path).lower().endswith('json'):
-        try:
-            with open(path, 'rt', encoding=ENCODING) as handle:
-                return json.load(handle), ''
-        except FileNotFoundError as err:
-            return error_context({}, 'Changes', facet, target, path, err)  # type: ignore
+        return error_context(
+            {}, 'Changes', facet, target, path, ValueError('please transform changes from json to yaml format')
+        )  # type: ignore
     elif str(path).lower().endswith(('yaml', 'yml')):
         try:
             with open(path, 'rt', encoding=ENCODING) as handle:

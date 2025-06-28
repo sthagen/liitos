@@ -14,9 +14,9 @@ TEST_FACET = 'mn'
 TEST_STRUCTURE = {
     TEST_TARGET: {
         TEST_FACET: {
-            gather.KEY_APPROVALS: 'approvals.json',
+            gather.KEY_APPROVALS: 'approvals.yml',
             gather.KEY_BIND: 'bind-mn.txt',
-            gather.KEY_CHANGES: 'changes.json',
+            gather.KEY_CHANGES: 'changes.yml',
             gather.KEY_META: 'meta-mn.yml',
         }
     }
@@ -55,11 +55,8 @@ def test_changes():
     assets = gather.assets(structure)
     assets[TEST_TARGET][TEST_FACET][gather.KEY_CHANGES] = str(TEST_PREFIX / 'changes.json')
     changes, message = gather.changes(TEST_FACET, TEST_TARGET, assets)
-    assert not message
-    assert changes == {
-        'columns': ['issue', 'author', 'date', 'summary'],
-        'rows': [['01', 'One Author', '31.12.2024', 'Initial Issue']],
-    }
+    assert message
+    assert changes == []
 
 
 def test_changes_key_missing():
@@ -85,11 +82,8 @@ def test_approvals():
     assets = gather.assets(structure)
     assets[TEST_TARGET][TEST_FACET][gather.KEY_APPROVALS] = str(TEST_PREFIX / 'approvals.json')
     approvals, message = gather.approvals(TEST_FACET, TEST_TARGET, assets)
-    assert not message
-    assert approvals == {
-        'columns': ['Approvals', 'Name'],
-        'rows': [['Author', 'One Author'], ['Review', 'One Reviewer'], ['Approved', 'One Approver']],
-    }
+    assert message
+    assert approvals == []
 
 
 def test_approvals_key_missing():

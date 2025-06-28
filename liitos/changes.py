@@ -110,12 +110,9 @@ def get_layout(layout_path: PathLike, target_key: str, facet_key: str) -> dict[s
     return layout
 
 
-def derive_model(model_path: PathLike) -> tuple[str, list[str]]:
+def derive_model(model_path: PathLike) -> list[str]:
     """Derive the model as channel type and column model from the given path."""
-    channel = JSON_CHANNEL if str(model_path).endswith('.json') else YAML_CHANNEL
-    columns_expected = COLUMNS_MINIMAL if channel == JSON_CHANNEL else COLUMNS_EXPECTED
-
-    return channel, columns_expected
+    return COLUMNS_EXPECTED
 
 
 def columns_are_present(columns_present: list[str], columns_expected: list[str]) -> bool:
@@ -124,41 +121,21 @@ def columns_are_present(columns_present: list[str], columns_expected: list[str])
 
 
 @no_type_check
-def normalize(changes: object, channel: str, columns_expected: list[str]) -> list[dict[str, str]]:
+def normalize(changes: object, columns_expected: list[str]) -> list[dict[str, str]]:
     """Normalize the channel specific topology of the model into a logical model.
 
     On error an empty logical model is returned.
     """
-    if channel == JSON_CHANNEL:
-        for slot, change in enumerate(changes[0]['changes'], start=1):
-            if not set(columns_expected).issubset(set(change)):
-                log.error('unexpected column model!')
-                log.error(f'-  expected: ({columns_expected})')
-                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
-                log.error(f'- but found: ({change}) for entry #{slot}')
-                return []
-
-    if channel == YAML_CHANNEL:
-        for slot, change in enumerate(changes[0]['changes'], start=1):
-            model = sorted(change.keys())
-            if not set(COLUMNS_MINIMAL).issubset(set(model)):
-                log.error('unexpected column model!')
-                log.error(f'-  expected: ({columns_expected})')
-                log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
-                log.error(f'- but found: ({model}) in slot {slot}')
-                return []
+    for slot, change in enumerate(changes[0]['changes'], start=1):
+        model = sorted(change.keys())
+        if not set(COLUMNS_MINIMAL).issubset(set(model)):
+            log.error('unexpected column model!')
+            log.error(f'-  expected: ({columns_expected})')
+            log.error(f'-   minimal: ({COLUMNS_MINIMAL})')
+            log.error(f'- but found: ({model}) in slot {slot}')
+            return []
 
     model = []
-    if channel == JSON_CHANNEL:
-        for change in changes[0]['changes']:
-            issue, author, summary = change['issue'], change.get('author', None), change['summary']
-            revision = change.get('revision', DEFAULT_REVISION)
-            is_version = bool(change.get('version', False))
-            model.append(
-                {'issue': issue, 'revision': revision, 'author': author, 'summary': summary, 'is_version': is_version}
-            )
-        return model
-
     for change in changes[0]['changes']:
         author = change.get('author', None)
         issue = change['issue']
@@ -202,17 +179,20 @@ def weave(
 
     log.info(LOG_SEPARATOR)
     changes_path = asset_map[target_key][facet_key][gat.KEY_CHANGES]
-    channel, columns_expected = derive_model(changes_path)
-    log.info(f'detected changes channel ({channel}) weaving in from ({changes_path})')
+    columns_expected = derive_model(changes_path)
+    log.info(f'weaving changes in from ({changes_path})')
 
     log.info(f'loading changes from {changes_path=}')
     changes = gat.load_changes(facet_key, target_key, changes_path)
+    if not changes[0] and ' json ' in changes[1]:
+        log.error(changes[1])
+        return 2
     log.info(f'{changes=}')
 
     log.info(LOG_SEPARATOR)
     log.info('plausibility tests for changes ...')
 
-    logical_model = normalize(changes, channel=channel, columns_expected=columns_expected)
+    logical_model = normalize(changes, columns_expected=columns_expected)
 
     is_anonymized = any(entry.get('author') is None for entry in logical_model)
     is_version_semantics = False
