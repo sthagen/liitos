@@ -1,5 +1,11 @@
 # Changes
 
+2025.6.28
+:    Adapted to pandoc 3.7.0.2, made quiet the new default, and removed JSON format support of approvals and changes
+* fixed #81: The upstream pandoc version 3.7.0.2 mandates changes
+* implemented #82: Remove chatter from info log level or provide a quiet mode
+* implemented #80: Remove legacy JSON formats for changes and approvals
+
 2025.1.5
 :    Added tests, fixed corner cases, fixed small bugs, and corrected wording in log messages
 * a work around a test failure since long time has been fixed for real
