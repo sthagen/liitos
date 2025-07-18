@@ -27,7 +27,7 @@ THE.ISSUE.CODE & THE.REVISION.CODE & THE.AUTHOR.NAME & THE.DESCRIPTION \\
 % |-- layout anonymized - insert - marker --|
 % <-- changes - cut - marker - bottom --|
 
-\vskip \AdustedPushdown% <-- Do not change this line if using liitos to manage the content
+\vskip \AdjustedPushdown% <-- Do not change this line if using liitos to manage the content
 \vspace*{\theBlurbAdjustableVerticalSpace}
 
 % |-- notices - cut - marker - top -->

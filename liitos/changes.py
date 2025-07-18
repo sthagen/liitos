@@ -50,7 +50,7 @@ CUT_MARKER_CHANGES_TOP = '% |-- changes - cut - marker - top -->'
 CUT_MARKER_CHANGES_BOTTOM = '% <-- changes - cut - marker - bottom --|'
 CUT_MARKER_NOTICES_TOP = '% |-- notices - cut - marker - top -->'
 CUT_MARKER_NOTICES_BOTTOM = '% <-- notices - cut - marker - bottom --|'
-TOKEN_ADJUSTED_PUSHDOWN = r'\AdustedPushdown'  # nosec B105
+TOKEN_ADJUSTED_PUSHDOWN = r'\AdjustedPushdown'  # nosec B105
 DEFAULT_ADJUSTED_PUSHDOWN_VALUE = 14
 
 LAYOUT_NAMED_CUT_MARKER_TOP = '% |-- layout named - cut - marker - top -->'
