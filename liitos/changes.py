@@ -232,7 +232,7 @@ def weave(
     if any(TOKEN_ADJUSTED_PUSHDOWN in line for line in lines):
         lines = list(adjust_pushdown_gen(lines, pushdown))
     else:
-        log.error(f'token ({TOKEN_ADJUSTED_PUSHDOWN}) not found - template mismatch')
+        log.debug(f'token ({TOKEN_ADJUSTED_PUSHDOWN}) not found - template mismatch')
 
     if not layout['layout']['global']['has_changes']:
         log.info('removing changes from document layout')
