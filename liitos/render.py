@@ -118,13 +118,13 @@ def der(
     log.info(f'render (this processor) teleported into the render/pdf location ({os.getcwd()}/)')
 
     log.info(LOG_SEPARATOR)
-    log.info('Assessing the local version control status (compared to upstream) ...')
-    too.ensure_separate_log_lines(too.vcs_probe)
+    log.warning('Assessing the local version control status (compared to upstream) ...')
+    too.ensure_separate_log_lines(too.vcs_probe, log.warning)
     CONTEXT['builder_node_id'] = too.node_id()
-    log.info('Context noted with:')
-    log.info(f'- builder-node-id({CONTEXT.get("builder_node_id")})')
-    log.info(f'- source-hash({CONTEXT.get("source_hash")})')
-    log.info(f'- source-hint({CONTEXT.get("source_hint")})')
+    log.warning('Context noted with:')
+    log.warning(f'- builder-node-id({CONTEXT.get("builder_node_id")})')
+    log.warning(f'- source-hash({CONTEXT.get("source_hash")})')
+    log.warning(f'- source-hint({CONTEXT.get("source_hint")})')
 
     ok, aspect_map = too.load_target(target_code, facet_code)
     if not ok or not aspect_map:
@@ -283,7 +283,7 @@ def der(
         filters = [added_prefix for expr in filter_cs_list for added_prefix in ('--filter', expr)]
         markdown_to_latex_command += filters
     log.info(LOG_SEPARATOR)
-    log.info(f'executing ({" ".join(markdown_to_latex_command)}) ...')
+    log.warning(f'executing ({" ".join(markdown_to_latex_command)}) ...')
     if code := too.delegate(markdown_to_latex_command, 'markdown-to-latex'):
         return code
 

@@ -97,10 +97,8 @@ def vcs_probe():
     try:
         repo = api.Repo('.', search_parent_directories=True)
         status = api.Status(repo)
-        api.local_commits(repo, status)
-        api.local_staged(repo, status)
-        api.local_files(repo, status)
         CONTEXT['source_hash'] = f'sha1:{status.commit}'
+
         try:
             repo_root_folder = repo.git.rev_parse(show_toplevel=True)
             path = pathlib.Path(repo_root_folder)
@@ -112,8 +110,9 @@ def vcs_probe():
             yield 'WARNING - ignored exception when assessing repo root folder location'
         for line in generate_report(status):
             yield line.rstrip()
-    except Exception:  # noqa
-        yield 'WARNING - we seem to not be within a git repository clone'
+
+    except Exception as err:  # noqa
+        yield f'WARNING - we seem to not be within a git repository clone ({err})'
 
 
 def node_id() -> str:
@@ -181,13 +180,13 @@ def log_unified_diff(left: list[str], right: list[str], left_label: str = 'befor
 
 
 @no_type_check
-def ensure_separate_log_lines(sourcer: Callable, *args: Union[list[object], None]):
+def ensure_separate_log_lines(sourcer: Callable, trampoline: Callable = log.info, *args: Union[list[object], None]):
     """Wrapping idiom breaking up any strings containing newlines."""
-    log.info(LOG_SEPARATOR)
+    trampoline(LOG_SEPARATOR)
     for line in sourcer(*args) if args else sourcer():
         for fine in line.split('\n'):
-            log.info(fine)
-    log.info(LOG_SEPARATOR)
+            trampoline(fine)
+    trampoline(LOG_SEPARATOR)
 
 
 @no_type_check

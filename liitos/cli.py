@@ -425,18 +425,17 @@ def report() -> int:
     """
     log.info(LOG_SEPARATOR)
 
-    def linux_distribution():
+    def linux_distribution() -> object:
         try:
-            return platform.linux_distribution()  # noqa
+            return platform.linux_distribution()  # type: ignore
         except AttributeError:
             return NA
 
-    def dist():
+    def dist() -> object:
         try:
-            return platform.dist()  # noqa
+            return platform.dist()  # type: ignore
         except AttributeError:
             return NA
-
 
     log.info('inspecting platform (machine, os, python, and user dirs):')
     log.info(LOG_SEPARATOR)
