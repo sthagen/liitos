@@ -8,8 +8,8 @@ import shellingham  # type: ignore
 from typing import Union, no_type_check
 
 # [[[fill git_describe()]]]
-__version__ = '2025.6.28+parent.g7c51a31c'
-# [[[end]]] (checksum: 9f1d2ee9f510146c8d361ba62f52f039)
+__version__ = '2025.8.9+parent.g3d7edbb4'
+# [[[end]]] (checksum: d5b7a5ccfc2ceaab48b563c1d624928f)
 __version_info__ = tuple(
     e if '-' not in e else e.split('-')[0] for part in __version__.split('+') for e in part.split('.') if e != 'parent'
 )
