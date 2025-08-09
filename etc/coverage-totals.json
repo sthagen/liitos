@@ -1,14 +1,14 @@
 {
   "liitos": {
     "format": 3,
-    "coverage_tool_version": "7.9.1",
-    "timestamp": "2025-06-28 20:14:53 +00:00",
+    "coverage_tool_version": "7.10.2",
+    "timestamp": "2025-08-09 19:19:29 +00:00",
     "branch_coverage": true,
     "show_contexts": true,
-    "covered_lines": 2976,
-    "num_statements": 3261,
-    "percent_covered": 89.78556605948812,
-    "percent_covered_display": "89.79",
+    "covered_lines": 3013,
+    "num_statements": 3298,
+    "percent_covered": 89.87197073616827,
+    "percent_covered_display": "89.87",
     "missing_lines": 285,
     "excluded_lines": 5,
     "num_branches": 1076,
@@ -38,14 +38,14 @@
       "liitos/template.py",
       "liitos/tools.py"
     ],
-    "blake3": "4c9ce67b02afcdb759f27f3a1bc1c94656147418498e561e7426833f4464924a",
-    "blake2": "2ca0f16b58378d6a894727bd2e6461090e08bd218204e5b47feec20a12cc7d5b4e092a3d82e7e22d94de69c67763c8f365d2ad4dbe3896490ddd51e2c93314d3",
-    "sha512": "9a6b134990e17819ba23eb6e76c55174fb457fd3a4e400ac6f1222602d6f619b87de5df68fde808d06c5ba8794c16c55e25bceb392f9bddd51e46ab5ef57de65",
-    "sha384": "231b418400766a435527f7f8ba1a3ed59073aa055c61c7eba2f9144676d79b418001e733112274cad993aaab83992728",
-    "sha256": "7b46dfac11e8107a6f08b9b8a716e7255e01575d7bc72d708ad16e7b18a08140",
-    "sha1": "c223e32bc207c87a085613cd785c664f9e840e40",
-    "md5": "da69e49d3a1050ead5af2d111969b315",
+    "blake3": "2fbb94517f84c071729f24d5e0d3ce3d5bb984372946b9e2f6791c243644ef4b",
+    "blake2": "b4727c1634bf8f4cd25e942643dfccccde327d4668b8308d0b565dc89ee737f3391c7a1b2d6c950a5328ea95a060e70464c133a433260938547d8b68a234a651",
+    "sha512": "4c2b145776ba2e65b185da2f570b3b7cbcdde3ceda7cd2d874f6b90de41875793a82114cb7d2b0db0e542a4a8b54b7ca858b2a48081752f4c91a8e6783406229",
+    "sha384": "75a805de369ddeba2e4a5f93e3967a649edcc848887b783a49675affe3905e67164fb7bbb409022fee2cffeaf2765fd2",
+    "sha256": "5e29b89863f5c6ca2a981e3d22619abac54576b1fa9ca72ef61116ac61af6ae1",
+    "sha1": "c4e2d95ae73da584745154d184cfbc8e0ecc7572",
+    "md5": "747b6a3cce40b0bfbb7d947821e7672d",
     "python_version": "3.12.1",
-    "entropy": 5.018754
+    "entropy": 5.019029
   }
 }
