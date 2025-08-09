@@ -1,0 +1,17 @@
+approvals:
+- name: An Author
+  role: Author
+- name: A Reviewer
+  role: Review
+- name: 2nd Reviewer
+  role: Review
+- name: 3rd Reviewer
+  role: Review
+- name: 4th Reviewer
+  role: Review
+- name: 5th Reviewer
+  role: Review
+- name: 6th Reviewer
+  role: Review
+- name: An App Rover
+  role: Approved
