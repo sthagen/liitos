@@ -5,6 +5,8 @@ import datetime as dti
 import logging
 import os
 import pathlib
+import platform
+import platformdirs as pfd
 import sys
 
 import typer
@@ -34,6 +36,9 @@ from liitos import (
     OptionsType,
     log,
 )
+
+NA = 'n/a'
+NL = '\n'
 
 app = typer.Typer(
     add_completion=False,
@@ -419,6 +424,48 @@ def report() -> int:
     Report on the environment.
     """
     log.info(LOG_SEPARATOR)
+
+    def linux_distribution():
+        try:
+            return platform.linux_distribution()  # noqa
+        except AttributeError:
+            return NA
+
+    def dist():
+        try:
+            return platform.dist()  # noqa
+        except AttributeError:
+            return NA
+
+
+    log.info('inspecting platform (machine, os, python, and user dirs):')
+    log.info(LOG_SEPARATOR)
+    log.info(f'- python.version: {sys.version.split(NL)}')
+    log.info(f'- dist: {str(dist())}')
+    log.info(f'- linux_distribution: {linux_distribution()}')
+    log.info(f'- system: {platform.system()}')
+    log.info(f'- machine: {platform.machine()}')
+    log.info(f'- platform: {platform.platform()}')
+    log.info(f'- uname: {platform.uname()}')
+    log.info(f'- version: {platform.version()}')
+    log.info(f'- mac_ver: {platform.mac_ver()}')
+
+    log.info(f'- user_data_dir: "{pfd.user_data_dir()}"')
+    log.info(f'- user_config_dir: "{pfd.user_config_dir()}"')
+    log.info(f'- user_cache_dir: "{pfd.user_cache_dir()}"')
+    log.info(f'- site_data_dir: "{pfd.site_data_dir()}"')
+    log.info(f'- site_config_dir: "{pfd.site_config_dir()}"')
+    log.info(f'- user_log_dir: "{pfd.user_log_dir()}"')
+    log.info(f'- user_documents_dir: "{pfd.user_documents_dir()}"')
+    log.info(f'- user_downloads_dir: "{pfd.user_downloads_dir()}"')
+    log.info(f'- user_pictures_dir: "{pfd.user_pictures_dir()}"')
+    log.info(f'- user_videos_dir: "{pfd.user_videos_dir()}"')
+    log.info(f'- user_music_dir: "{pfd.user_music_dir()}"')
+    log.info(f'- user_desktop_dir: "{pfd.user_desktop_dir()}"')
+    log.info(f'- user_runtime_dir: "{pfd.user_runtime_dir()}"')
+    log.info(f'- present_working_directory: "{os.getcwd()}"')
+    log.info(LOG_SEPARATOR)
+
     log.info('inspecting environment (tool version information):')
     for tool_key in TOOL_VERSION_COMMAND_MAP:
         too.report(tool_key)

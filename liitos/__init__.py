@@ -109,9 +109,17 @@ TOOL_VERSION_COMMAND_MAP = {
         'command': 'pandoc --version',
         'banner': 'Pandoc for transforming markdown to LaTeX',
     },
+    'pandoc-filter': {
+        'command': 'npm view pandoc-filter',
+        'banner': 'Pandoc base filter for mermaid diagram tools (interface module to pandoc filtering)',
+    },
     'pdfinfo': {
         'command': 'pdfinfo -v',
         'banner': 'Show PDF file information',
+    },
+    'puppeteer': {
+        'command': 'npm view puppeteer',
+        'banner': 'Headless browser driver used by svgexport',
     },
     'python': {
         'command': 'python -V',
