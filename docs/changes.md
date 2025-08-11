@@ -1,5 +1,8 @@
 # Changes
 
+2025.8.11
+:    Lush Life edition - added phantom dependency and bumped some other dependencies
+
 2025.8.9
 :    Fixed the VCS probing function, extended the report query set, and suppressed a noisy error log corner case
 - the vcs_probe function failed to detect repositories when executed in a branch with no commit yet
