@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "liitos"
-version = "2025.8.9"
+version = "2025.8.11"
 description = "Splice (Finnish liitos) contributions."
 readme = "README.md"
 license = "MIT"
@@ -24,10 +24,11 @@ keywords = ["developer-tools", "validation", "verification"]
 dependencies = [
     "PyYAML >= 6.0.2",
     "foran >= 2023.6.19",
+    "platformdirs >= 4.3.8",
     "shellingham >= 1.5.4",
     "taksonomia >= 2023.6.18",
-    "treelib >= 1.7.0",
-    "typer >= 0.15.1",
+    "treelib >= 1.8.0",
+    "typer >= 0.16.0",
 ]
 requires-python = ">=3.9"
 
