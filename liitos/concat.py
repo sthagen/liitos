@@ -7,7 +7,7 @@ import re
 import shutil
 from typing import Union, no_type_check
 
-import treelib  # type: ignore
+import treelib
 import yaml
 
 import liitos.gather as gat
