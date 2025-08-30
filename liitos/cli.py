@@ -90,7 +90,7 @@ Verbosity = typer.Option(
 Strictness = typer.Option(
     False,
     '--strict',
-    help='Ouput noisy warnings on console (default is False)',
+    help='Output noisy warnings on console (default is False)',
 )
 OutputPath = typer.Option(
     '',
@@ -115,6 +115,11 @@ ApprovalsStrategy = typer.Option(
     '-a',
     '--approvals-strategy',
     help=f'optional approvals layout strategy in ({", ".join(KNOWN_APPROVALS_STRATEGIES)})',
+)
+Forcedness = typer.Option(
+    False,
+    '--force',
+    help='Force rendering regardless of render value in structure files (default is False)',
 )
 
 
@@ -146,6 +151,7 @@ def _verify_call_vector(
     from_format_spec: str = FROM_FORMAT_SPEC,
     filter_cs_list: str = '',
     approvals_strategy: str = '',
+    force: bool = False,
 ) -> tuple[int, str, str, OptionsType]:
     """DRY"""
     if DEBUG:
@@ -190,6 +196,7 @@ def _verify_call_vector(
         )
 
     options: OptionsType = {
+        'force': force,
         'quiet': QUIET and not verbose and not strict,
         'strict': strict,
         'verbose': verbose,
@@ -304,12 +311,13 @@ def concat(  # noqa
     facet: str = FacetName,
     verbose: bool = Verbosity,
     strict: bool = Strictness,
+    force: bool = Forcedness,
 ) -> int:
     """
     Concatenate the markdown tree for facet of target within render/pdf below document root.
     """
     code, message, doc, options = _verify_call_vector(
-        doc_root=doc_root, doc_root_pos=doc_root_pos, verbose=verbose, strict=strict
+        doc_root=doc_root, doc_root_pos=doc_root_pos, verbose=verbose, strict=strict, force=force
     )
     if code:
         log.error(message)
@@ -334,6 +342,7 @@ def render(  # noqa
     from_format_spec: str = FromFormatSpec,
     filter_cs_list: str = FilterCSList,
     approvals_strategy: str = ApprovalsStrategy,
+    force: bool = Forcedness,
 ) -> int:
     """
         Render the markdown tree for facet of target within render/pdf below document root.
@@ -361,6 +370,7 @@ def render(  # noqa
         from_format_spec=from_format_spec,
         filter_cs_list=filter_cs_list,
         approvals_strategy=approvals_strategy,
+        force=force,
     )
     if code:
         log.error(message)

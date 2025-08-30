@@ -616,7 +616,7 @@ def concatenate(
 
     """
     log.info(LOG_SEPARATOR)
-    log.info('entered concat function ...')
+    log.warning('entered concat function ...')
     target_code = target_key
     facet_code = facet_key
     if not facet_code.strip() or not target_code.strip():
@@ -637,6 +637,15 @@ def concatenate(
     ok, aspect_map = too.load_target(target_code, facet_code)
     if not ok or not aspect_map:
         return 0 if ok else 1
+
+    may_render = aspect_map.get('render', True)
+    if not may_render:
+        topic = f'structure({pathlib.Path(doc_root) / structure_name}) for target: {target_key} and facet: {facet_key}'
+        log.warning(f'- render is declared as false in {topic}')
+        if not options['force']:
+            return 42
+        else:
+            log.warning('  + overwritten by force mode')
 
     approvals = process_approvals(aspect_map)
     if isinstance(approvals, int):

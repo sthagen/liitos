@@ -134,8 +134,9 @@ def der(
     if do_render is not None:
         log.info(f'found render instruction with value ({aspect_map["render"]})')
 
-    if do_render is None or do_render:
-        log.info('we will render ...')
+    if do_render is None or do_render or options['force']:
+        why = 'default-render' if do_render is None else ('render-true' if do_render else 'render-force')
+        log.warning(f'we will render ({why=}) ...')
     else:
         log.warning('we will not render ...')
         return 0xFADECAFE
