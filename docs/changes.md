@@ -1,5 +1,8 @@
 # Changes
 
+2025.8.30
+:    Added force mode and faster skip for render-false else
+
 2025.8.11
 :    Lush Life edition - added phantom dependency and bumped some other dependencies
 
