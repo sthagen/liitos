@@ -1,7 +1,10 @@
 # Changes
 
 2025.8.31
-:    Added media overwrite warnings
+:    Added media overwrite warnings and provide enhanced logs on error from buffer even in quiet mode
+- added media overwrite warnings on concat collection and format conversion of visuals
+- enforced long lines in lualatex logs to keep context (<https://todo.sr.ht/~sthagen/liitos/83>)
+- enhanced logging to backtrack to a log buffer on error when in quiet mode
 
 2025.8.30
 :    Added force mode and faster skip for render-false else
