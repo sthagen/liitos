@@ -1,13 +1,13 @@
 name: liitos
 description: Splice (Finnish: liitos) contributions.
 license_spdx: MIT
-version: 2025.8.30
+version: 2025.8.31
 spec_version: 1.0
 home_url: https://git.sr.ht/~sthagen/liitos
 news_url: https://libraries.io/pypi/liitos/versions.atom
-date: 2025-08-30
+date: 2025-08-31
 about_resource: ./
-libraries_io_url: https://libraries.io/pypi/liitos?number=2025.8.30
+libraries_io_url: https://libraries.io/pypi/liitos?number=2025.8.31
 vcs_tool: git
 vcs_repository: https://git.sr.ht/~sthagen/liitos
 vcs_branch: default
