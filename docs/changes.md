@@ -1,5 +1,8 @@
 # Changes
 
+2025.8.31
+:    Added media overwrite warnings
+
 2025.8.30
 :    Added force mode and faster skip for render-false else
 
