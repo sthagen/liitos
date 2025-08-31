@@ -9,21 +9,24 @@
 
  Splice (Finnish liitos) contributions.
 
-╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --version  -V        Display the application version and exit                                                                           │
-│ --help     -h        Show this message and exit.                                                                                        │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ approvals    Weave in the approvals for facet of target within document root.                                                           │
-│ changes      Weave in the changes for facet of target within document root.                                                             │
-│ concat       Concatenate the markdown tree for facet of target within render/pdf below document root.                                   │
-│ eject        Eject a template. Enter unique part to retrieve, any unknown word to obtain the list of known templates.                   │
-│ render       Render the markdown tree for facet of target within render/pdf below document root.                                        │
-│ report       Report on the environment.                                                                                                 │
-│ verify       Verify the structure definition against the file system.                                                                   │
-│ version      Display the application version and exit.                                                                                  │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-```
+
+╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --version  -V        Display the application version and exit                                                       │
+│ --help     -h        Show this message and exit.                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ──────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ verify      Verify the structure definition against the file system.                                                │
+│ approvals   Weave in the approvals for facet of target within document root.                                        │
+│ changes     Weave in the changes for facet of target within document root.                                          │
+│ concat      Concatenate the markdown tree for facet of target within render/pdf below document root.                │
+│ render      Render the markdown tree for facet of target within render/pdf below document root.                     │
+│ report      Report on the environment.                                                                              │
+│ eject       Eject a template. Enter unique part to retrieve, any unknown word to obtain the list of known           │
+│             templates.                                                                                              │
+│ version     Display the application version and exit.                                                               │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+(```
 
 ## Version
 
