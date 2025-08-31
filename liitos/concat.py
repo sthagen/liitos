@@ -424,6 +424,29 @@ def rollup(
     return [[job for job in chain if job not in flat] for chain in jobs]
 
 
+def copy_eventually(src_base: pathlib.Path, tgt_base: pathlib.Path, local_path: PathLike) -> None:
+    """Copy visual assets eventually and warn on overwrites."""
+    if not tgt_base.is_dir():
+        try:
+            tgt_base.mkdir(parents=True, exist_ok=True)
+        except FileExistsError as err:
+            log.error(f'failed to create folder {tgt_base} - detail: {err}')
+    source_asset = src_base / local_path
+    target_asset = tgt_base / pathlib.Path(local_path).name
+    if target_asset.is_file():
+        log.warning(f'overwriting existing {target_asset} from {source_asset}')
+    try:
+        shutil.copy(source_asset, target_asset)
+    except FileNotFoundError as err:
+        log.error(err)
+        code, msg = plh.dump_placeholder(target_asset)
+        log.warning(msg) if code else log.info(msg)
+    except NotADirectoryError as err:
+        log.error(err)
+        code, msg = plh.dump_placeholder(target_asset)
+        log.warning(msg) if code else log.info(msg)
+
+
 @no_type_check
 def collect_assets(
     collector: list[str],
@@ -431,7 +454,7 @@ def collect_assets(
     images_folder: Union[PathLike, None] = None,
     diagrams_folder: Union[PathLike, None] = None,
 ) -> None:
-    """TODO
+    """Collect assets into the rendering space.
 
     Examples:
 
@@ -460,49 +483,14 @@ def collect_assets(
     ...         collect_assets(c, doc_base='.', images_folder=ima, diagrams_folder=dia)
     """
     doc_base = pathlib.Path(doc_base) if doc_base else DOC_BASE
-    images_folder = str(images_folder) if images_folder else IMAGES_FOLDER
-    diagrams_folder = str(diagrams_folder) if diagrams_folder else DIAGRAMS_FOLDER
-
-    images = pathlib.Path(images_folder)
-    diagrams = pathlib.Path(diagrams_folder)
+    img_part = str(images_folder) if images_folder else IMAGES_FOLDER
+    dia_part = str(diagrams_folder) if diagrams_folder else DIAGRAMS_FOLDER
     for img_path in collector:
-        if images_folder in img_path:
-            if not images.is_dir():
-                try:
-                    images.mkdir(parents=True, exist_ok=True)
-                except FileExistsError as err:
-                    log.error(f'failed to create {images} - detail: {err}')
-            source_asset = doc_base / img_path
-            target_asset = images / pathlib.Path(img_path).name
-            try:
-                shutil.copy(source_asset, target_asset)
-            except FileNotFoundError as err:
-                log.error(err)
-                code, msg = plh.dump_placeholder(target_asset)
-                log.warning(msg) if code else log.info(msg)
-            except NotADirectoryError as err:
-                log.error(err)
-                code, msg = plh.dump_placeholder(target_asset)
-                log.warning(msg) if code else log.info(msg)
-            continue
-        if diagrams_folder in img_path:
-            if not diagrams.is_dir():
-                try:
-                    diagrams.mkdir(parents=True, exist_ok=True)
-                except FileExistsError as err:
-                    log.error(f'failed to create {diagrams} - detail: {err}')
-            source_asset = doc_base / img_path
-            target_asset = diagrams / pathlib.Path(img_path).name
-            try:
-                shutil.copy(source_asset, target_asset)
-            except FileNotFoundError as err:
-                log.error(err)
-                code, msg = plh.dump_placeholder(target_asset)
-                log.warning(msg) if code else log.info(msg)
-            except NotADirectoryError as err:
-                log.error(err)
-                code, msg = plh.dump_placeholder(target_asset)
-                log.warning(msg) if code else log.info(msg)
+        where_to = img_part if img_part in img_path else (dia_part if dia_part in img_path else None)
+        if where_to is not None:
+            copy_eventually(doc_base, pathlib.Path(where_to), img_path)
+        else:
+            log.error(f'asset collection for neither images nor diagrams requested per {img_path} - ignoring')
 
 
 @no_type_check
@@ -525,6 +513,16 @@ def concatenate(
     >>> op = {'bar': True}
     >>> concatenate(dr, sn, tk, fk, op, )
     2
+    >>> os.chdir(restore_cwd)
+
+    >>> restore_cwd = os.getcwd()
+    >>> dr = 'example/no-renda'
+    >>> sn = 'structure.yml'
+    >>> tk = 'prod_kind'
+    >>> fk = 'no-renda'
+    >>> op = {'force': True}
+    >>> concatenate(dr, sn, tk, fk, op)
+    0
     >>> os.chdir(restore_cwd)
 
     >>> restore_cwd = os.getcwd()
