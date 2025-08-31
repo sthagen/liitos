@@ -10,13 +10,15 @@ from typing import Union
 from liitos import log
 
 Modus = Enum('Modus', 'COPY OPTION')
+ModusOption = tuple[Modus, str]
+
 NO_OPTION: str = ''
 
-OPTION_STARTT_TRIGGER_STARTSWITH = r'\option['
+OPTION_START_TRIGGER_STARTSWITH = r'\option['
 DESCRIPTION_START_TRIGGER_STARTSWITH = r'\begin{description}'
 
 
-def filter_seek_option(line: str, slot: int, modus: Modus, opt: str, outgoing: list[str]) -> tuple[Modus, str]:
+def filter_seek_option(line: str, slot: int, modus: Modus, opt: str, outgoing: list[str]) -> ModusOption:
     r"""Filter line, seek for an option command, and return updated mnodus, opt pair.
 
     Examples:
@@ -39,9 +41,9 @@ def filter_seek_option(line: str, slot: int, modus: Modus, opt: str, outgoing: l
     >>> assert m == Modus.OPTION
     >>> assert opt == '[foo=bar]'
     """
-    if line.startswith(OPTION_STARTT_TRIGGER_STARTSWITH):
+    if line.startswith(OPTION_START_TRIGGER_STARTSWITH):
         log.info(f'trigger an option mod for the next description environment at line #{slot + 1}|{line}')
-        opt = '[' + line.split(OPTION_STARTT_TRIGGER_STARTSWITH, 1)[1].strip()
+        opt = '[' + line.split(OPTION_START_TRIGGER_STARTSWITH, 1)[1].strip()
         modus = Modus.OPTION
         log.info(f' -> parsed option as ({opt})')
     else:
@@ -50,7 +52,7 @@ def filter_seek_option(line: str, slot: int, modus: Modus, opt: str, outgoing: l
     return modus, opt
 
 
-def filter_seek_description(line: str, slot: int, modus: Modus, opt: str, outgoing: list[str]) -> tuple[Modus, str]:
+def filter_seek_description(line: str, slot: int, modus: Modus, opt: str, outgoing: list[str]) -> ModusOption:
     r"""Filter line, seek for a description, add options if applicable, and return updated mnodus, option pair.
 
     Examples:
