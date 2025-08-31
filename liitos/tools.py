@@ -2,6 +2,7 @@ import datetime as dti
 import difflib
 import hashlib
 import json
+import os
 import pathlib
 import platform
 import re
@@ -67,29 +68,6 @@ def hash_file(path: PathLike, hasher: Union[Callable[..., Any], None] = None) ->
 
 
 @no_type_check
-def log_subprocess_output(pipe, prefix: str):
-    for line in iter(pipe.readline, b''):  # b'\n'-separated lines
-        cand = line.decode(encoding=ENCODING).rstrip()
-        if HAS_ERROR.search(cand):
-            log.error(prefix + ': ' + cand)
-            continue
-        if HAS_WARNING.search(cand) and not any(
-            (
-                '"calc" is loaded -- this is not' in cand,
-                'Package microtype Warning: Unable to apply patch' in cand,
-                'Unknown document division name (startatroot)' in cand,
-                'Unknown slot number of character' in cand,
-            )
-        ):
-            log.warning(prefix + ': ' + cand)
-            continue
-        if IS_BORING.search(cand):
-            log.debug(prefix + ': ' + cand)
-            continue
-        log.info(prefix + ': ' + cand)
-
-
-@no_type_check
 def vcs_probe():
     """Are we in front, on par, or behind with the upstream?"""
     CONTEXT['source_hash'] = 'info:plain:built-outside-of-version-control'
@@ -132,7 +110,7 @@ def report_taxonomy(target_path: pathlib.Path) -> None:
     taxonomy = Taxonomy(target_path, excludes='', key_function='md5')
     for path in sorted(target_path.parent.rglob('*')):
         taxonomy.add_branch(path) if path.is_dir() else taxonomy.add_leaf(path)
-    log.info('- Writing render/pdf folder taxonomy to inventory.json ...')
+    log.warning('- Writing render/pdf folder taxonomy to inventory.json ...')
     taxonomy.dump(sink='inventory', format_type='json', base64_encode=False)
 
     stat = target_path.stat()
@@ -142,17 +120,17 @@ def report_taxonomy(target_path: pathlib.Path) -> None:
     sha256_hash = hash_file(target_path, hashlib.sha256)
     sha1_hash = hash_file(target_path, hashlib.sha1)
     md5_hash = hash_file(target_path, hashlib.md5)
-    log.info('- Ephemeral:')
-    log.info(f'  + name: {target_path.name}')
-    log.info(f'  + size: {size_bytes} bytes')
-    log.info(f'  + date: {mod_time}')
-    log.info('- Characteristic:')
-    log.info('  + Checksums:')
-    log.info(f'    sha512:{sha612_hash}')
-    log.info(f'    sha256:{sha256_hash}')
-    log.info(f'      sha1:{sha1_hash}')
-    log.info(f'       md5:{md5_hash}')
-    log.info('  + Fonts:')
+    log.warning('- Ephemeral:')
+    log.warning(f'  + name: {target_path.name}')
+    log.warning(f'  + size: {size_bytes} bytes')
+    log.warning(f'  + date: {mod_time}')
+    log.warning('- Characteristic:')
+    log.warning('  + Checksums:')
+    log.warning(f'    sha512:{sha612_hash}')
+    log.warning(f'    sha256:{sha256_hash}')
+    log.warning(f'      sha1:{sha1_hash}')
+    log.warning(f'       md5:{md5_hash}')
+    log.warning('  + Fonts:')
 
 
 @no_type_check
@@ -190,24 +168,107 @@ def ensure_separate_log_lines(sourcer: Callable, trampoline: Callable = log.info
 
 
 @no_type_check
-def delegate(command: list[str], marker: str, do_shell: bool = False) -> int:
-    """Execute command in subprocess and follow requests."""
+def log_subprocess_output(pipe, prefix: str) -> list[str]:
+    log_buffer = []
+    for line in iter(pipe.readline, b''):  # b'\n'-separated lines
+        cand = line.decode(encoding=ENCODING).rstrip()
+        msg = prefix + ': ' + cand
+        log_buffer.append(msg)
+        if HAS_ERROR.search(cand):
+            log.error(msg)
+            continue
+        if HAS_WARNING.search(cand) and not (
+            'latex' in prefix
+            and any(
+                (
+                    '"calc" is loaded -- this is not' in cand,
+                    'Package microtype Warning: Unable to apply patch' in cand,
+                    'Unknown document division name (startatroot)' in cand,
+                    'Unknown slot number of character' in cand,
+                )
+            )
+        ):
+            log.warning(msg)
+            continue
+        if IS_BORING.search(cand):
+            log.debug(msg)
+            continue
+        log.info(msg)
+
+    return log_buffer
+
+
+@no_type_check
+def delegate(command: list[str], marker: str, do_shell: bool = False, is_quiet: bool = False) -> int:
+    """Execute command in subprocess and follow requests.
+
+    Hints on LaTeX noise reduction per special variables:
+
+    - max_print_line=1000
+    - error_line=254
+    - half_error_line=238
+
+    So, in texmf.copf or in shell process, these reduce the amount of lines ...
+
+    max_print_line=1000 error_line=254 half_error_line=238
+    """
     try:
-        process = subprocess.Popen(
-            command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell  # nosec B602
-        )
+        if 'latex' in marker:
+            env = dict(os.environ)
+            env['max_print_line'] = '1000'
+            env['error_line'] = '254'
+            env['half_error_line'] = '238'
+            process = subprocess.Popen(
+                command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell, env=env  # nosec B602
+            )
+        else:
+            process = subprocess.Popen(
+                command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=do_shell  # nosec B602
+            )
         with process.stdout:
-            log_subprocess_output(process.stdout, marker)
+            log_buffer = log_subprocess_output(process.stdout, marker)
         code = process.wait()
         if code < 0:
-            log.error(f'{marker} process ({command}) was terminated by signal {-code}')
+            log.error(f'{marker} process ({command}) was terminated by signal {-code}; (cf. below for hints)')
         elif code > 0:
-            log.error(f'{marker} process ({command}) returned {code}')
+            log.error(f'{marker} process ({command}) returned {code}; (cf. below for hints)')
         else:
             log.info(f'{marker} process succeeded')
     except Exception as err:
-        log.error(f'failed executing tool with error: {err}')
+        log.error(f'failed executing tool with error: {err}; (cf. below for hints)')
         code = 42
+
+    if code != 0 and is_quiet:
+        for msg in log_buffer:
+            if 'latex' in marker:
+                payload = msg.replace(f'{marker}:', '').strip()
+                if not payload:
+                    continue
+                if '(microtype)' in payload:
+                    continue
+                if 'Package microtype Warning: Unknown slot number of character' in payload:
+                    continue
+                if IS_BORING.search(payload):
+                    continue
+                if any(
+                    (
+                        '"calc" is loaded -- this is not' in payload,
+                        'Package microtype Warning: Unable to apply patch' in payload,
+                        'Unknown document division name (startatroot)' in payload,
+                        'Unknown slot number of character' in payload,
+                    )
+                ):
+                    continue
+                cleansed = payload.replace('[', '').replace(']', '').replace('|', '')
+                if not cleansed.strip():
+                    continue
+                if not payload.replace(')', ''):
+                    continue
+            log.error(msg)
+
+    if code == 0 and is_quiet and marker in ('label-pdf', '', 'assess-pdf-fonts'):
+        for msg in log_buffer:
+            log.warning(msg)
 
     return code
 

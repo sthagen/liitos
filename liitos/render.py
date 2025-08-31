@@ -42,7 +42,7 @@ VENDORED_SVG_PAT = re.compile(r'^.+\]\([^.]+\.[^.]+\.svg\ .+$')
 
 @no_type_check
 def read_patches(folder_path: pathlib.Path, patches_path: pathlib.Path) -> tuple[list[tuple[str, str]], bool]:
-    """Ja ja."""
+    """Obtain any search-replace pairs from user patching file."""
     patches = []
     need_patching = False
     log.info(f'inspecting any patch spec file ({patches_path}) ...')
@@ -87,7 +87,7 @@ def der(
     facet_key: str,
     options: OptionsType,
 ) -> int:
-    """Later alligator."""
+    """Render the document as PDF, eventually."""
     log.info(LOG_SEPARATOR)
     log.info('entered render function ...')
     target_code = target_key
@@ -130,6 +130,7 @@ def der(
     if not ok or not aspect_map:
         return 0 if ok else 1
 
+    is_quiet = options.get('quiet', False)
     do_render = aspect_map.get('render', None)
     if do_render is not None:
         log.info(f'found render instruction with value ({aspect_map["render"]})')
@@ -159,7 +160,7 @@ def der(
             if svg.is_file() and svg.suffix == '.svg':
                 png = str(svg).replace('.svg', '.png')
                 svg_to_png_command = ['svgexport', svg, png, '100%']
-                too.delegate(svg_to_png_command, 'svg-to-png')
+                too.delegate(svg_to_png_command, 'svg-to-png', is_quiet=is_quiet)
 
     special_patching = []
     log.info(LOG_SEPARATOR)
@@ -181,7 +182,6 @@ def der(
                     lines[slot] = fine
                     dia_path_old = src.replace('.svg', '.png')
                     dia_path_new = f'{stem}.png'
-                    dia_fine_rstrip = dia_path_new.rstrip()
                     if dia_path_old and dia_path_new:
                         special_patching.append((dia_path_old, dia_path_new))
                         log.info(
@@ -190,7 +190,7 @@ def der(
                         )
                     else:
                         log.warning(f'- old: {src.rstrip()}')
-                        log.warning(f'- new: {dia_fine_rstrip}')
+                        log.warning(f'- new: {dia_path_new.rstrip()}')
                     continue
             if '.svg' in line:
                 fine = line.replace('.svg', '.png')
@@ -229,12 +229,13 @@ def der(
                     f' as seen from ({os.getcwd()}) after {remaining_attempts} attempts'
                     f' and ({round(remaining_attempts * INTER_PROCESS_SYNC_SECS, 0) :.0f} seconds waiting)'
                 )
+            elif target_asset.is_file():
+                log.warning(f'overwriting existing {target_asset} from {source_asset}')
             shutil.move(source_asset, target_asset)
     else:
         log.info('post-action queue (from reference renaming) is empty - nothing to move')
     log.info(LOG_SEPARATOR)
 
-    # prototyping >>>
     fmt_spec = from_format_spec
     in_doc = 'document.md'
     out_doc = 'ast-no-filter.json'
@@ -251,7 +252,7 @@ def der(
     ]
     log.info(LOG_SEPARATOR)
     log.info(f'executing ({" ".join(markdown_to_ast_command)}) ...')
-    if code := too.delegate(markdown_to_ast_command, 'markdown-to-ast'):
+    if code := too.delegate(markdown_to_ast_command, 'markdown-to-ast', is_quiet=is_quiet):
         return code
 
     log.info(LOG_SEPARATOR)
@@ -263,8 +264,6 @@ def der(
         for fine in line.split('\n'):
             log.info(fine)
     log.info(LOG_SEPARATOR)
-
-    # <<< prototyping
 
     fmt_spec = from_format_spec
     in_doc = 'document.md'
@@ -285,7 +284,7 @@ def der(
         markdown_to_latex_command += filters
     log.info(LOG_SEPARATOR)
     log.warning(f'executing ({" ".join(markdown_to_latex_command)}) ...')
-    if code := too.delegate(markdown_to_latex_command, 'markdown-to-latex'):
+    if code := too.delegate(markdown_to_latex_command, 'markdown-to-latex', is_quiet=is_quiet):
         return code
 
     log.info(LOG_SEPARATOR)
@@ -386,18 +385,18 @@ def der(
 
     latex_to_pdf_command = ['lualatex', '--shell-escape', 'this.tex']
     log.info(LOG_SEPARATOR)
-    log.info('1/3) lualatex --shell-escape this.tex ...')
-    if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(1/3)'):
+    log.warning('1/3) lualatex --shell-escape this.tex ...')
+    if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(1/3)', is_quiet=is_quiet):
         return code
 
     log.info(LOG_SEPARATOR)
-    log.info('2/3) lualatex --shell-escape this.tex ...')
-    if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(2/3)'):
+    log.warning('2/3) lualatex --shell-escape this.tex ...')
+    if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(2/3)', is_quiet=is_quiet):
         return code
 
     log.info(LOG_SEPARATOR)
-    log.info('3/3) lualatex --shell-escape this.tex ...')
-    if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(3/3)'):
+    log.warning('3/3) lualatex --shell-escape this.tex ...')
+    if code := too.delegate(latex_to_pdf_command, 'latex-to-pdf(3/3)', is_quiet=is_quiet):
         return code
 
     if str(options.get('label', '')).strip():
@@ -413,25 +412,25 @@ def der(
             ]
         )
         log.info(LOG_SEPARATOR)
-        log.info(f'Labeling the resulting pdf file per ({" ".join(labeling_call)})')
-        too.delegate(labeling_call, 'label-pdf')
+        log.warning(f'Labeling the resulting pdf file per ({" ".join(labeling_call)})')
+        too.delegate(labeling_call, 'label-pdf', is_quiet=is_quiet)
         log.info(LOG_SEPARATOR)
 
     log.info(LOG_SEPARATOR)
-    log.info('Moving stuff around (result phase) ...')
+    log.warning('Moving stuff around (result phase) ...')
     source_asset = 'this.pdf'
     target_asset = '../index.pdf'
     shutil.copy(source_asset, target_asset)
 
     log.info(LOG_SEPARATOR)
-    log.info('Deliverable taxonomy: ...')
+    log.warning('Deliverable taxonomy: ...')
     too.report_taxonomy(pathlib.Path(target_asset))
 
     pdffonts_command = ['pdffonts', target_asset]
-    too.delegate(pdffonts_command, 'assess-pdf-fonts')
+    too.delegate(pdffonts_command, 'assess-pdf-fonts', is_quiet=is_quiet)
 
     log.info(LOG_SEPARATOR)
-    log.info('done.')
+    log.warning('done.')
     log.info(LOG_SEPARATOR)
 
     return 0
