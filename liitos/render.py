@@ -231,7 +231,13 @@ def der(
                 )
             elif target_asset.is_file():
                 log.warning(f'overwriting existing {target_asset} from {source_asset}')
-            shutil.move(source_asset, target_asset)
+            if not target_asset.is_file() and source_asset.is_file():
+                try:
+                    shutil.move(source_asset, target_asset)
+                except FileNotFoundError as err:
+                    log.error(f'{source_asset} (existing) to {target_asset} (not-yet) move failed with: {err}')
+            elif:
+                log.warning(f'Houston, we have a problem> {source_asset} missing, but {target_asset} present (ignored)')
     else:
         log.info('post-action queue (from reference renaming) is empty - nothing to move')
     log.info(LOG_SEPARATOR)
