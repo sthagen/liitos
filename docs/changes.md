@@ -1,5 +1,11 @@
 # Changes
 
+2025.9.21
+:    Added asset teleportation race and incoherent math in capation detectors
+- detect and avoid attenmpts to move a non-existing source to a target
+- detect and warn about probably unwanted undescores and carets in captions (outside of math mode)
+- increased test coverage
+
 2025.8.31
 :    Added media overwrite warnings and provide enhanced logs on error from buffer even in quiet mode
 - added media overwrite warnings on concat collection and format conversion of visuals
