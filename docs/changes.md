@@ -1,7 +1,7 @@
 # Changes
 
 2025.9.21
-:    Added asset teleportation race and incoherent math in capation detectors
+:    Added asset teleportation race and incoherent math in caption detectors
 - detect and avoid attenmpts to move a non-existing source to a target
 - detect and warn about probably unwanted undescores and carets in captions (outside of math mode)
 - increased test coverage
