@@ -172,6 +172,8 @@ def der(
             if VENDORED_SVG_PAT.match(line):
                 if '.svg' in line and line.count('.') >= 2:
                     caption, src, alt, rest = con.parse_markdown_image(line)
+                    for msg in too.incoherent_math_mode_in_caption(caption, phase_info=f'for SVG image ({src})'):
+                        log.warning(msg)
                     stem, app_indicator, format_suffix = src.rsplit('.', 2)
                     log.info(f'- removing application indicator ({app_indicator}) from src ...')
                     if format_suffix != 'svg':
@@ -237,7 +239,7 @@ def der(
                 except FileNotFoundError as err:
                     log.error(f'{source_asset} (existing) to {target_asset} (not-yet) move failed with: {err}')
             elif target_asset.is_file() and not source_asset.is_file():
-                log.warning(f'Houston, we have a problem> {source_asset} missing, but {target_asset} present (ignored)')
+                log.warning(f'Houston, we have a problem> {source_asset} missing and {target_asset} present (ignored)')
     else:
         log.info('post-action queue (from reference renaming) is empty - nothing to move')
     log.info(LOG_SEPARATOR)

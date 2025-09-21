@@ -72,3 +72,47 @@ def test_report_missing():
 
 def test_report_git():
     assert too.report('git') == 0
+
+
+def test_incoherent_math_mode_in_caption_empty():
+    assert too.incoherent_math_mode_in_caption('', '') == []
+
+
+def test_incoherent_math_mode_in_caption_none():
+    assert too.incoherent_math_mode_in_caption(None, '') == []
+
+
+def test_incoherent_math_mode_in_caption_caret():
+    expected = ['Caret (^) and no LaTeX math mode tokens in caption (^)']
+    assert too.incoherent_math_mode_in_caption('^', '') == expected
+
+
+def test_incoherent_math_mode_in_caption_underscore():
+    expected = ['Underscore (_) and no LaTeX math mode tokens in caption (_)']
+    assert too.incoherent_math_mode_in_caption('_', '') == expected
+
+
+def test_incoherent_math_mode_in_caption_caret_and_underscore_and_math():
+    assert too.incoherent_math_mode_in_caption('$y^2_i$', '') == []
+
+
+def test_incoherent_math_mode_in_caption_caret_and_underscore_and_no_math():
+    expected = [
+        'Underscore (_) and no LaTeX math mode tokens in caption (y^2_i)',
+        'Caret (^) and no LaTeX math mode tokens in caption (y^2_i)',
+    ]
+    assert too.incoherent_math_mode_in_caption('y^2_i', '') == expected
+
+
+def test_incoherent_math_mode_in_caption_caret_but_math():
+    assert too.incoherent_math_mode_in_caption('$^2$', '') == []
+
+
+def test_incoherent_math_mode_in_caption_caret_but_odd_math():
+    expected = ['Caret (^) and no LaTeX math mode tokens in caption ($^2$$$$$$$$)']
+    assert too.incoherent_math_mode_in_caption('$^2$$$$$$$$', '') == expected
+
+
+def test_incoherent_math_mode_in_caption_caret_but_invalid_math():
+    expected = ['Caret (^) and no LaTeX math mode tokens in caption ($^2 and then no end token)']
+    assert too.incoherent_math_mode_in_caption('$^2 and then no end token', '') == expected

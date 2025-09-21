@@ -28,6 +28,8 @@ from liitos import (
 
 PathLike = Union[str, pathlib.Path]
 
+SPACE = ' '
+
 DOC_BASE = pathlib.Path('..', '..')
 STRUCTURE_PATH = DOC_BASE / 'structure.yml'
 IMAGES_FOLDER = 'images/'
@@ -377,6 +379,18 @@ def load_target(
     return True, aspect_map
 
 
+def incoherent_math_mode_in_caption(caption: str, phase_info: str = '') -> list[str]:
+    """Heuristics to warn on underscores and carets oustide of math mode in captions."""
+    findings: list[str] = []
+    if phase_info and not phase_info[0] == SPACE:
+        phase_info = SPACE + phase_info
+    if caption and '_' in caption and not ('$' in caption and not caption.count('$') % 2):
+        findings.append(f'Underscore (_) and no LaTeX math mode tokens in caption ({caption}){phase_info}')
+    if caption and '^' in caption and not ('$' in caption and not caption.count('$') % 2):
+        findings.append(f'Caret (^) and no LaTeX math mode tokens in caption ({caption}){phase_info}')
+    return findings
+
+
 @no_type_check
 def mermaid_captions_from_json_ast(json_ast_path: Union[str, pathlib.Path]) -> dict[str, str]:
     """Separation of concerns."""
@@ -410,6 +424,8 @@ def mermaid_captions_from_json_ast(json_ast_path: Union[str, pathlib.Path]) -> d
                 log.warning('Duplicate token, same caption?')
                 log.warning(f'-   prior: {token} -> {m_caption}')
                 log.warning(f'- current: {token} -> {mermaid_caption_map[token]}')
+            for msg in incoherent_math_mode_in_caption(m_caption, phase_info=f'for mermaid image ({token})'):
+                log.warning(msg)
             mermaid_caption_map[token] = m_caption
     return mermaid_caption_map
 

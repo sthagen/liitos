@@ -292,6 +292,8 @@ def parse_markdown_image(text_line: str) -> tuple[str, str, str, str]:
         if orb in alt or crb in alt:
             log.warning(f'- MAYBE-MD-IMG_LINE::ALT-TRUNCATED-PARTIAL-MATCH <<{text_line.rstrip()}>>')
             log.warning(f'  + parsed as ({cap=}, {src=}, {alt=}, {rest=}')
+        for msg in too.incoherent_math_mode_in_caption(cap, phase_info=f'detected in markdown image ({src}) parsing'):
+            log.warning(msg)
 
         return cap, src, alt, rest
 
