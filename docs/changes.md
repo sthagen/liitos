@@ -1,5 +1,8 @@
 # Changes
 
+2025.10.7
+:    Fixed import with non-local image references
+
 2025.9.21
 :    Added asset teleportation race and incoherent math in caption detectors
 - detect and avoid attenmpts to move a non-existing source to a target
