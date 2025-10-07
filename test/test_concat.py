@@ -24,7 +24,7 @@ def test_adapt_image_images():
     alt_text = '"Alt..."'
     text = f'![{caption}]({img_path} {alt_text})'
     assert concat.adapt_image(text, collector, 'x', root='y') == f'![{caption}](images/abc.def {alt_text})'
-    assert collector == [f'{pathlib.Path().cwd()}/x/images/abc.def']
+    assert collector == ['../../' + img_path]
 
 
 def test_adapt_image_diagrams():
@@ -34,7 +34,7 @@ def test_adapt_image_diagrams():
     alt_text = '"Alt..."'
     text = f'![{caption}]({img_path} {alt_text})'
     assert concat.adapt_image(text, collector, 'x', root='y') == f'![{caption}](diagrams/abc.def {alt_text})'
-    assert collector == [f'{pathlib.Path().cwd()}/x/diagrams/abc.def']
+    assert collector == ['../../' + img_path]
 
 
 def test_adapt_image_other():
@@ -44,11 +44,8 @@ def test_adapt_image_other():
     img_path = 'x/other/abc.def'
     alt_text = '"Alt..."'
     text = f'![{caption}]({img_path} {alt_text})'
-    assert (
-        concat.adapt_image(text, collector, 'x', root='y')
-        == f'![{caption}]({pathlib.Path().cwd()}/x/other/abc.def {alt_text})'
-    )
-    assert collector == [f'{pathlib.Path().cwd()}/x/other/abc.def']
+    assert concat.adapt_image(text, collector, 'x', root='y') == f'![{caption}]({"../../" + img_path} {alt_text})'
+    assert collector == ['../../' + img_path]
 
 
 def test_adapt_image_dot_dot():
@@ -58,11 +55,8 @@ def test_adapt_image_dot_dot():
     img_path = '../other/abc.def'
     alt_text = '"Alt..."'
     text = f'![{caption}]({img_path} {alt_text})'
-    assert (
-        concat.adapt_image(text, collector, 'part/x.md', root='y')
-        == f'![{caption}]({pathlib.Path().cwd()}/other/abc.def {alt_text})'
-    )
-    assert collector == [f'{pathlib.Path().cwd()}/other/abc.def']
+    assert concat.adapt_image(text, collector, 'part/x.md', root='y') == f'![{caption}]({"../" + img_path} {alt_text})'
+    assert collector == ['../' + img_path]
 
 
 def test_adapt_image_dot_dot_complete():
@@ -73,7 +67,7 @@ def test_adapt_image_dot_dot_complete():
     alt_text = '"Alt Text Dot Dot Lime"'
     text = f'![{caption}]({img_path} {alt_text})'
     assert concat.adapt_image(text, collector, 'other/b.md', root='y') == f'![{caption}](images/lime.png {alt_text})'
-    assert collector == [f'{pathlib.Path().cwd()}/images/lime.png']
+    assert collector == ['../' + img_path]
 
 
 def test_parse_markdown_image():

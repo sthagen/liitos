@@ -326,7 +326,13 @@ def adapt_image(text_line: str, collector: list[str], upstream: str, root: str) 
         log.error(f'parse of markdown image text line failed - empty src, and rest is <<{rest.rstrip()}>>')
         return text_line
 
-    img_path = str((pathlib.Path(upstream).parent / src).resolve()).replace(root, '')
+    log.info(f'called adapt_image({text_line}, ..., {upstream=}, {root=}) --> {src=}')
+    the_aquarium = pathlib.Path(upstream).parent
+    the_bowl = pathlib.Path(src).parent
+    the_fish = pathlib.Path(src).name
+    dest_path = (pathlib.Path(root) / '../../' / the_aquarium / the_bowl).resolve() / the_fish
+    img_path = os.path.relpath(dest_path, start=root)
+    log.info(f'path remapped to {img_path}')
     collector.append(img_path)
     img_hack = img_path
     if f'/{IMAGES_FOLDER}' in img_path:
@@ -434,6 +440,9 @@ def copy_eventually(src_base: pathlib.Path, tgt_base: pathlib.Path, local_path: 
         except FileExistsError as err:
             log.error(f'failed to create folder {tgt_base} - detail: {err}')
     source_asset = src_base / local_path
+    if not source_asset.is_file():
+        log.info(f'falling back to {local_path} instead of {source_asset=}, ignoring {src_base=}')
+        source_asset = pathlib.Path(local_path)  # TODO: Since adapt_image fix receive paths incl. src_base
     target_asset = tgt_base / pathlib.Path(local_path).name
     if target_asset.is_file():
         log.warning(f'overwriting existing {target_asset} from {source_asset}')
@@ -490,6 +499,7 @@ def collect_assets(
     for img_path in collector:
         where_to = img_part if img_part in img_path else (dia_part if dia_part in img_path else None)
         if where_to is not None:
+            log.info(f'calling copy_eventually({doc_base}, {pathlib.Path(where_to)}, {img_path})')
             copy_eventually(doc_base, pathlib.Path(where_to), img_path)
         else:
             log.error(f'asset collection for neither images nor diagrams requested per {img_path} - ignoring')
