@@ -1,5 +1,8 @@
 # Changes
 
+2025.10.14
+:    Accepting a space or equal sign for scale and columns commands (implemented #84 and #85)
+
 2025.10.7
 :    Fixed import with non-local image references
 
