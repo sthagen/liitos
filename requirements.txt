@@ -1,6 +1,6 @@
 PyYAML==6.0.3
 foran==2023.6.19
-platformdirs==4.4.0
+platformdirs==4.5.0
 shellingham==1.5.4
 taksonomia==2023.6.18
 treelib==1.8.0
