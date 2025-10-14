@@ -99,6 +99,8 @@ ANNOTATION
 \end{footnotesize}"""
 
 COMMA = ','
+EQ = '='
+SP = ' '
 
 
 class Table:
@@ -459,7 +461,7 @@ def parse_table_font_size_command(slot: int, text_line: str) -> tuple[bool, str,
 
 
 def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[float]]:
-    r"""Parse the \\columns=,0.2,0.7 command.
+    r"""Parse the \\columns=,0.2,0.7 or \\columns ,0.2,0.7command.
 
     Examples:
 
@@ -479,6 +481,11 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
     (True, '', [0.4, 0.7])
 
     >>> slot = 0
+    >>> text = r'\columns    , 20\%,70\%'
+    >>> parse_columns_command(slot, text)
+    (True, '', [0.1, 0.2, 0.7])
+
+    >>> slot = 0
     >>> text = r'\columns=    , 20\%,70\%'
     >>> parse_columns_command(slot, text)
     (True, '', [0.1, 0.2, 0.7])
@@ -493,10 +500,16 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
     >>> parse_columns_command(slot, text)
     (False, '\\columns=a,42,-1', [])
     """
-    if text_line.startswith(r'\columns='):
+    if any(text_line.startswith(r'\columns' + other) for other in (EQ, SP)):
         log.info(f'trigger a columns mod for the next table environment at line #{slot + 1}|{text_line}')
         try:
-            cols_csv = text_line.split('=', 1)[1].strip()  # r'\columns=    , 20\%,70\%'  --> r', 20\%,70\%'
+            # r'\columns=    , 20\%,70\%'  --> r', 20\%,70\%'
+            # r'\columns    , 20\%,70\%'  --> r', 20\%,70\%'
+            cols_csv = (
+                text_line.split(EQ, 1)[1].strip()
+                if EQ in text_line
+                else SP.join(text_line.split()).split(SP, 1)[1].strip()
+            )
             cols = [v.strip() for v in cols_csv.split(COMMA)]
             widths = [float(v.replace(r'\%', '')) / 100 if r'\%' in v else (float(v) if v else 0) for v in cols]
             rest = round(1 - sum(round(w, 5) for w in widths), 5)
