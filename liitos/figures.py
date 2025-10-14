@@ -13,7 +13,9 @@ from liitos import log
 Modus = Enum('Modus', 'COPY SCALE')
 NAN = float('nan')
 
-SCALE_START_TRIGGER_STARTSWITH = r'\scale='
+EQ = '='
+SP = ' '
+SCALE_START_TRIGGER_STARTSWITH = r'\scale'
 BARE_GRAPHICS_START_STARTSWITH = r'\includegraphics{'
 WRAPPED_GRAPHICS_START_IN = r'\pandocbounded{\includegraphics'
 EVEN_MORE_SO = r'\pandocbounded{\includegraphics[keepaspectratio,alt={'  # HACK A DID ACK
@@ -25,7 +27,7 @@ def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoi
     Examples:
 
     >>> o = []
-    >>> line = SCALE_START_TRIGGER_STARTSWITH  # r'\scale='
+    >>> line = SCALE_START_TRIGGER_STARTSWITH + EQ # r'\scale='
     >>> m, r = filter_seek_scale(line, 0, Modus.COPY, NAN, o)
     >>> assert not o
     >>> assert m == Modus.SCALE
@@ -42,13 +44,27 @@ def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoi
     >>> assert not o
     >>> assert m == Modus.SCALE
     >>> assert r == 0.8
+
+    >>> o = []
+    >>> m, r = filter_seek_scale(r'\scale   80\%', 0, Modus.COPY, NAN, o)
+    >>> assert not o
+    >>> assert m == Modus.SCALE
+    >>> assert r == 0.8
+
+    >>> o = []
+    >>> m, r = filter_seek_scale(r'\scale =  0.8', 0, Modus.COPY, NAN, o)
+    >>> assert not o
+    >>> assert m == Modus.SCALE
+    >>> assert r == 0.8
     """
-    if line.startswith(SCALE_START_TRIGGER_STARTSWITH):
+    if any(line.startswith(SCALE_START_TRIGGER_STARTSWITH + other) for other in (EQ, SP)):
         log.info(f'trigger a scale mod for the next figure environment at line #{slot + 1}|{line}')
         modus = Modus.SCALE
         scale = line  # only for reporting will not pass the filter
         try:
-            sca = scale.split('=', 1)[1].strip()  # \scale    =    75\%  --> 75\%
+            # \scale    =    75\%  --> 75\%
+            # \scale         75\%  --> 75\%
+            sca = scale.split(EQ, 1)[1].strip() if EQ in scale else SP.join(scale.split()).split(SP, 1)[1].strip()
             rescale = float(sca.replace(r'\%', '')) / 100 if r'\%' in sca else float(sca)
         except Exception as err:
             log.error(f'failed to parse scale value from {line.strip()} with err: {err}')
