@@ -67,12 +67,10 @@ strict = true
 implicit_reexport = true
 
 [tool.pytest]
-testpaths = "test"
-filterwarnings = "error"
-
-[tool.pytest.ini_options]
+testpaths = ["test"]
+filterwarnings = ["error"]
 asyncio_default_fixture_loop_scope = "function"
-addopts = "--doctest-modules"
+addopts = ["--doctest-modules"]
 
 [tool.ruff]
 line-length = 120
