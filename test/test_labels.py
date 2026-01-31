@@ -74,8 +74,11 @@ def test_extract_image_path():
 
 
 def test_inject_regression_bug48():
-    lookup = json.load(open('test/fixtures/bugs/labels/lookup.json', 'rt', encoding='utf-8'))
-    incoming = open('test/fixtures/bugs/labels/document-pre-labels.tex', 'rt', encoding='utf-8').readlines()
-    reference = open('test/fixtures/bugs/labels/document-post-labels.tex', 'rt', encoding='utf-8').readlines()
+    with open('test/fixtures/bugs/labels/lookup.json', 'rt', encoding='utf-8', errors='ignore') as handle:
+        lookup = json.load(handle)
+    with open('test/fixtures/bugs/labels/document-pre-labels.tex', 'rt', encoding='utf-8', errors='ignore') as handle:
+        incoming = handle.readlines()
+    with open('test/fixtures/bugs/labels/document-post-labels.tex', 'rt', encoding='utf-8', errors='ignore') as handle:
+        reference = handle.readlines()
     outgoing = labels.inject(incoming, lookup)
     assert outgoing == reference

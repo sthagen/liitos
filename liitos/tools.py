@@ -19,6 +19,7 @@ from taksonomia.taksonomia import Taxonomy  # type: ignore
 from liitos import (
     CONTEXT,
     ENCODING,
+    ENCODING_ERRORS_POLICY,
     KEYS_REQUIRED,
     LATEX_PAYLOAD_NAME,
     TOOL_VERSION_COMMAND_MAP,
@@ -309,10 +310,10 @@ def execute_filter(
     log.info(LOG_SEPARATOR)
     log.info(head)
     doc_before_caps_patch = backup
-    with open(doc_before_caps_patch, 'wt', encoding=ENCODING) as handle:
+    with open(doc_before_caps_patch, 'wt', encoding=ENCODING, errors=ENCODING_ERRORS_POLICY) as handle:
         handle.write('\n'.join(text_lines))
     patched_lines = the_filter(text_lines, lookup=lookup)
-    with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING) as handle:
+    with open(LATEX_PAYLOAD_NAME, 'wt', encoding=ENCODING, errors=ENCODING_ERRORS_POLICY) as handle:
         handle.write('\n'.join(patched_lines))
     log.info(f'diff of the ({label}) filter result:')
     log_unified_diff(text_lines, patched_lines)
@@ -329,7 +330,7 @@ def load_target(
         log.error(f'render failed to find non-empty structure file at {structure_path}')
         return False, {}
 
-    with open(structure_path, 'rt', encoding=ENCODING) as handle:
+    with open(structure_path, 'rt', encoding=ENCODING, errors=ENCODING_ERRORS_POLICY) as handle:
         structure = yaml.safe_load(handle)
 
     targets = sorted(structure.keys())
@@ -394,7 +395,8 @@ def incoherent_math_mode_in_caption(caption: str, phase_info: str = '') -> list[
 @no_type_check
 def mermaid_captions_from_json_ast(json_ast_path: Union[str, pathlib.Path]) -> dict[str, str]:
     """Separation of concerns."""
-    doc = json.load(open(json_ast_path, 'rt', encoding=ENCODING))
+    with open(json_ast_path, 'rt', encoding=ENCODING, errors=ENCODING_ERRORS_POLICY) as handle:
+        doc = json.load(handle)
     blocks = doc['blocks']
     mermaid_caption_map = {}
     for b in blocks:

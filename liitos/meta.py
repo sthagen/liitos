@@ -1588,26 +1588,30 @@ def weave_meta_part_proprietary_information(
     """
     if mapper.get('proprietary_information'):
         prop_info = mapper['proprietary_information']
-        if pathlib.Path(prop_info).is_file():
-            try:
-                prop_info_from_file = pathlib.Path(prop_info).open().read()
-                prop_info = prop_info_from_file
-            except (OSError, UnicodeDecodeError) as err:
-                log.error(f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}')
-                log.warning(f'using value ({prop_info}) directly for proprietary_information')
+        prop_info_path = pathlib.Path(prop_info)
+        if prop_info_path.is_file():
+            with open(prop_info_path) as handle:
+                try:
+                    prop_info_from_file = handle.read()
+                    prop_info = prop_info_from_file
+                except (OSError, UnicodeDecodeError) as err:
+                    log.error(f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}')
+                    log.warning(f'using value ({prop_info}) directly for proprietary_information')
         else:
             log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
         return text.replace(VALUE_SLOT, prop_info)
     else:
         log.warning('proprietary_information value not set ... setting default from module ...')
         prop_info = WEAVE_DEFAULTS['proprietary_information']
-        if pathlib.Path(prop_info).is_file():
-            try:
-                prop_info_from_file = pathlib.Path(prop_info).open().read()
-                prop_info = prop_info_from_file
-            except (OSError, UnicodeDecodeError) as err:
-                log.error(f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}')
-                log.warning(f'using value ({prop_info}) directly for proprietary_information')
+        prop_info_path = pathlib.Path(prop_info)
+        if prop_info_path.is_file():
+            with open(prop_info_path) as handle:
+                try:
+                    prop_info_from_file = handle.read()
+                    prop_info = prop_info_from_file
+                except (OSError, UnicodeDecodeError) as err:
+                    log.error(f'interpretation of proprietary_information value ({prop_info}) failed with error: {err}')
+                    log.warning(f'using value ({prop_info}) directly for proprietary_information')
         else:
             log.info(f'using value ({prop_info}) directly for proprietary_information (no file)')
         return text.replace(VALUE_SLOT, prop_info)
