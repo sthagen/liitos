@@ -6,7 +6,7 @@ import pathlib
 import re
 import shutil
 import time
-from typing import Union, no_type_check
+from typing import no_type_check
 
 import yaml
 
@@ -81,7 +81,7 @@ def read_patches(folder_path: pathlib.Path, patches_path: pathlib.Path) -> tuple
 
 @no_type_check
 def der(
-    doc_root: Union[str, pathlib.Path],
+    doc_root: str | pathlib.Path,
     structure_name: str,
     target_key: str,
     facet_key: str,

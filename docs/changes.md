@@ -1,5 +1,8 @@
 # Changes
 
+2026.2.1
+:    Fixed resource handling for newer runtime environments and removed python 3.9 support
+
 2025.10.14
 :    Accepting a space or equal sign for scale and columns commands (#84 and #85)
 

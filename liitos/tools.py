@@ -8,7 +8,7 @@ import platform
 import re
 import subprocess  # nosec B404
 import uuid
-from typing import Any, Callable, Generator, Union, no_type_check
+from typing import Any, Callable, Generator, no_type_check
 
 import yaml
 
@@ -22,12 +22,11 @@ from liitos import (
     ENCODING_ERRORS_POLICY,
     KEYS_REQUIRED,
     LATEX_PAYLOAD_NAME,
+    PathLike,
     TOOL_VERSION_COMMAND_MAP,
     ToolKey,
     log,
 )
-
-PathLike = Union[str, pathlib.Path]
 
 SPACE = ' '
 
@@ -47,7 +46,7 @@ HAS_WARNING = re.compile(r'[Ww]arning')
 HAS_ERROR = re.compile(r'[Ee]rror')
 
 
-def hash_file(path: PathLike, hasher: Union[Callable[..., Any], None] = None) -> str:
+def hash_file(path: PathLike, hasher: Callable[..., Any] | None = None) -> str:
     """Return the SHA512 hex digest of the data from file.
 
     Examples:
@@ -161,7 +160,7 @@ def log_unified_diff(left: list[str], right: list[str], left_label: str = 'befor
 
 
 @no_type_check
-def ensure_separate_log_lines(sourcer: Callable, trampoline: Callable = log.info, *args: Union[list[object], None]):
+def ensure_separate_log_lines(sourcer: Callable, trampoline: Callable = log.info, *args: list[object] | None):
     """Wrapping idiom breaking up any strings containing newlines."""
     trampoline(LOG_SEPARATOR)
     for line in sourcer(*args) if args else sourcer():
@@ -304,7 +303,7 @@ def execute_filter(
     backup: str,
     label: str,
     text_lines: list[str],
-    lookup: Union[dict[str, str], None] = None,
+    lookup: dict[str, str] | None = None,
 ) -> list[str]:
     """Chain filter calls by storing in and out lies in files and return the resulting lines."""
     log.info(LOG_SEPARATOR)
@@ -393,7 +392,7 @@ def incoherent_math_mode_in_caption(caption: str, phase_info: str = '') -> list[
 
 
 @no_type_check
-def mermaid_captions_from_json_ast(json_ast_path: Union[str, pathlib.Path]) -> dict[str, str]:
+def mermaid_captions_from_json_ast(json_ast_path: PathLike) -> dict[str, str]:
     """Separation of concerns."""
     with open(json_ast_path, 'rt', encoding=ENCODING, errors=ENCODING_ERRORS_POLICY) as handle:
         doc = json.load(handle)

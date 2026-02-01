@@ -2,7 +2,6 @@
 
 import pathlib
 import pkgutil
-from typing import Union
 
 from liitos import ENCODING, PathLike, log
 
@@ -15,7 +14,7 @@ RESOURCES = (
     'placeholders/this-resource-is-missing.webp',
 )
 
-READING_OPTIONS: dict[str, dict[str, Union[list[str], dict[str, str], None]]] = {
+READING_OPTIONS: dict[str, dict[str, list[str] | dict[str, str] | None]] = {
     '.jpg': {'args': ['rb'], 'kwargs': None},
     '.pdf': {'args': ['rb'], 'kwargs': None},
     '.png': {'args': ['rb'], 'kwargs': None},
@@ -24,7 +23,7 @@ READING_OPTIONS: dict[str, dict[str, Union[list[str], dict[str, str], None]]] = 
     '.webp': {'args': ['rb'], 'kwargs': None},
 }
 
-WRITING_OPTIONS: dict[str, dict[str, Union[list[str], dict[str, str], None]]] = {
+WRITING_OPTIONS: dict[str, dict[str, list[str] | dict[str, str] | None]] = {
     '.jpg': {'args': ['wb'], 'kwargs': None},
     '.pdf': {'args': ['wb'], 'kwargs': None},
     '.png': {'args': ['wb'], 'kwargs': None},
@@ -34,7 +33,7 @@ WRITING_OPTIONS: dict[str, dict[str, Union[list[str], dict[str, str], None]]] = 
 }
 
 
-def load_resource(resource: PathLike, is_complete_path: bool = False) -> tuple[str, Union[bytes, str]]:
+def load_resource(resource: PathLike, is_complete_path: bool = False) -> tuple[str, bytes | str]:
     """Load the template either from the package resources or an external path."""
     from_path = pathlib.Path(resource)
     suffix = from_path.suffix
@@ -60,7 +59,7 @@ def load_resource(resource: PathLike, is_complete_path: bool = False) -> tuple[s
     return 'bytes', pkgutil.get_data(__package__, str(resource))  # type: ignore
 
 
-def eject(argv: Union[list[str], None] = None) -> int:
+def eject(argv: list[str] | None = None) -> int:
     """Eject the templates into the folder given (default MISSING) and create the folder if it does not exist."""
     argv = argv if argv else ['']
     into = argv[0]

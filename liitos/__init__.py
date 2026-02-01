@@ -5,7 +5,7 @@ import logging
 import os
 import pathlib
 import shellingham  # type: ignore
-from typing import Union, no_type_check
+from typing import no_type_check
 
 # [[[fill git_describe()]]]
 __version__ = '2025.10.14+parent.gc32377be'
@@ -50,9 +50,9 @@ CONTEXT: dict[str, str] = {}
 KNOWN_APPROVALS_STRATEGIES = ('south', 'east')
 APPROVALS_STRATEGY = os.getenv('LIITOS_APPROVALS_STRATEGY', '').lower()
 
-OptionsType = dict[str, Union[bool, str, None]]
-PathLike = Union[str, pathlib.Path]
-PathLikeOrBool = Union[PathLike, bool]
+OptionsType = dict[str, bool | str | None]
+PathLike = str | pathlib.Path
+PathLikeOrBool = PathLike | bool
 ExternalsType = dict[str, dict[str, PathLikeOrBool]]
 
 try:

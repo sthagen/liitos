@@ -29,7 +29,7 @@ from the data inside this module.
 """
 
 import pathlib
-from typing import Generator, Union, no_type_check
+from typing import Generator, no_type_check
 
 import liitos.gather as gat
 import liitos.template as tpl
@@ -159,7 +159,7 @@ def adjust_pushdown_gen(text_lines: list[str], pushdown: float) -> Generator[str
 
 
 def weave(
-    doc_root: Union[str, pathlib.Path],
+    doc_root: PathLike,
     structure_name: str,
     target_key: str,
     facet_key: str,

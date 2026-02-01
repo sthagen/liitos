@@ -1,5 +1,4 @@
 from collections.abc import Iterable
-from typing import Union
 
 from liitos import log
 
@@ -30,7 +29,7 @@ def extract_image_path(include_graphics_line: str) -> str:
         return 'IMAGE_PATH_NOT_FOUND'
 
 
-def inject(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
+def inject(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     """Later alligator."""
     outgoing = []
     modus = 'copy'

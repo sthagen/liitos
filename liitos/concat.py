@@ -5,7 +5,7 @@ import os
 import pathlib
 import re
 import shutil
-from typing import Union, no_type_check
+from typing import no_type_check
 
 import treelib
 import yaml
@@ -53,7 +53,7 @@ NL = '\n'
 
 
 @no_type_check
-def process_approvals(aspects: dict[str, str]) -> Union[gat.Approvals, int]:
+def process_approvals(aspects: dict[str, str]) -> gat.Approvals | int:
     """Best effort loading of approvals data.
 
     Examples:
@@ -102,7 +102,7 @@ def process_approvals(aspects: dict[str, str]) -> Union[gat.Approvals, int]:
 
 
 @no_type_check
-def process_binder(aspects: dict[str, str]) -> Union[gat.Binder, int]:
+def process_binder(aspects: dict[str, str]) -> gat.Binder | int:
     """Best effort loading of binder data.
 
     Examples:
@@ -146,7 +146,7 @@ def process_binder(aspects: dict[str, str]) -> Union[gat.Binder, int]:
 
 
 @no_type_check
-def process_changes(aspects: dict[str, str]) -> Union[gat.Changes, int]:
+def process_changes(aspects: dict[str, str]) -> gat.Changes | int:
     """Best effort loading of changes data.
 
     Examples:
@@ -461,9 +461,9 @@ def copy_eventually(src_base: pathlib.Path, tgt_base: pathlib.Path, local_path: 
 @no_type_check
 def collect_assets(
     collector: list[str],
-    doc_base: Union[PathLike, None] = None,
-    images_folder: Union[PathLike, None] = None,
-    diagrams_folder: Union[PathLike, None] = None,
+    doc_base: PathLike | None = None,
+    images_folder: PathLike | None = None,
+    diagrams_folder: PathLike | None = None,
 ) -> None:
     """Collect assets into the rendering space.
 
@@ -507,11 +507,11 @@ def collect_assets(
 
 @no_type_check
 def concatenate(
-    doc_root: Union[str, pathlib.Path],
+    doc_root: PathLike,
     structure_name: str,
     target_key: str,
     facet_key: str,
-    options: dict[str, Union[bool, str]],
+    options: dict[str, bool | str],
 ) -> int:
     """Later alligator.
 

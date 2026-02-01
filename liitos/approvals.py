@@ -33,7 +33,7 @@ For more than 4 role bearers a second table should be placed below the first, to
 
 import os
 import pathlib
-from typing import Union, no_type_check
+from typing import no_type_check
 
 import liitos.gather as gat
 import liitos.template as tpl
@@ -248,7 +248,7 @@ def inject_eastwards(lines: list[str], normalized: list[dict[str, str]], pushdow
 
 
 def weave(
-    doc_root: Union[str, pathlib.Path],
+    doc_root: PathLike,
     structure_name: str,
     target_key: str,
     facet_key: str,

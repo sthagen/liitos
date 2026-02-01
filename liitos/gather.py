@@ -2,7 +2,6 @@
 
 import os
 import pathlib
-from typing import Dict, List, Set, Tuple, Union
 
 import yaml
 
@@ -16,22 +15,21 @@ from liitos import (
     KEYS_REQUIRED,
     ENCODING,
     OptionsType,
+    PathLike,
     log,
 )
 
-PathLike = Union[str, pathlib.Path]
-
-Approvals = Dict[str, Union[List[str], List[List[str]]]]
-Assets = Dict[str, Dict[str, Dict[str, str]]]
-Binder = List[str]
-Changes = Dict[str, Union[List[str], List[List[str]]]]
-Layout = Dict[str, str]
-Meta = Dict[str, str]
-Structure = Dict[str, List[Dict[str, str]]]
-Targets = Set[str]
-Facets = Dict[str, Targets]
-Payload = Union[Approvals, Binder, Changes, Meta]
-Verification = Tuple[bool, str]
+Approvals = dict[str, list[str] | list[list[str]]]
+Assets = dict[str, dict[str, dict[str, str]]]
+Binder = list[str]
+Changes = dict[str, list[str] | list[list[str]]]
+Layout = dict[str, str]
+Meta = dict[str, str]
+Structure = dict[str, list[dict[str, str]]]
+Targets = set[str]
+Facets = dict[str, Targets]
+Payload = Approvals | Binder | Changes | Meta
+Verification = tuple[bool, str]
 
 
 def load_structure(path: PathLike = DEFAULT_STRUCTURE_NAME) -> Structure:
@@ -73,8 +71,8 @@ def error_context(
     facet: str,
     target: str,
     path: PathLike,
-    err: Union[FileNotFoundError, KeyError, ValueError],
-) -> Tuple[Payload, str]:
+    err: FileNotFoundError | KeyError | ValueError,
+) -> tuple[Payload, str]:
     """Provide harmonized context for the error situation as per parameters."""
     if isinstance(err, FileNotFoundError):
         return payload, f'{label} link not found at ({path}) or invalid for facet ({facet}) of target ({target})'
@@ -85,7 +83,7 @@ def error_context(
     raise NotImplementedError(f'error context not implemented for error ({err})')
 
 
-def load_binder(facet: str, target: str, path: PathLike) -> Tuple[Binder, str]:
+def load_binder(facet: str, target: str, path: PathLike) -> tuple[Binder, str]:
     """Yield the binder for facet of target from path and message (in case of failure)."""
     try:
         with open(path, 'rt', encoding=ENCODING) as handle:
@@ -94,7 +92,7 @@ def load_binder(facet: str, target: str, path: PathLike) -> Tuple[Binder, str]:
         return error_context([], 'Binder', facet, target, path, err)  # type: ignore
 
 
-def binder(facet: str, target: str, asset_struct: Assets) -> Tuple[Binder, str]:
+def binder(facet: str, target: str, asset_struct: Assets) -> tuple[Binder, str]:
     """Yield the binder for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(asset_struct[target][facet][KEY_BIND])
@@ -103,7 +101,7 @@ def binder(facet: str, target: str, asset_struct: Assets) -> Tuple[Binder, str]:
     return load_binder(facet, target, path)
 
 
-def load_layout(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
+def load_layout(facet: str, target: str, path: PathLike) -> tuple[Meta, str]:
     """Yield the layout for facet of target from path and message (in case of failure)."""
     try:
         with open(path, 'rt', encoding=ENCODING) as handle:
@@ -112,7 +110,7 @@ def load_layout(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
         return error_context({}, 'Metadata', facet, target, path, err)  # type: ignore
 
 
-def layout(facet: str, target: str, asset_struct: Assets) -> Tuple[Meta, str]:
+def layout(facet: str, target: str, asset_struct: Assets) -> tuple[Meta, str]:
     """Yield the layout for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(asset_struct[target][facet][KEY_LAYOUT])
@@ -121,7 +119,7 @@ def layout(facet: str, target: str, asset_struct: Assets) -> Tuple[Meta, str]:
     return load_layout(facet, target, path)
 
 
-def load_meta(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
+def load_meta(facet: str, target: str, path: PathLike) -> tuple[Meta, str]:
     """Yield the metadata for facet of target from path and message (in case of failure)."""
     try:
         with open(path, 'rt', encoding=ENCODING) as handle:
@@ -130,7 +128,7 @@ def load_meta(facet: str, target: str, path: PathLike) -> Tuple[Meta, str]:
         return error_context({}, 'Metadata', facet, target, path, err)  # type: ignore
 
 
-def meta(facet: str, target: str, asset_struct: Assets) -> Tuple[Meta, str]:
+def meta(facet: str, target: str, asset_struct: Assets) -> tuple[Meta, str]:
     """Yield the metadata for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(asset_struct[target][facet][KEY_META])
@@ -139,7 +137,7 @@ def meta(facet: str, target: str, asset_struct: Assets) -> Tuple[Meta, str]:
     return load_meta(facet, target, path)
 
 
-def load_approvals(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
+def load_approvals(facet: str, target: str, path: PathLike) -> tuple[Approvals, str]:
     """Yield the approvals for facet of target from path and message (in case of failure)."""
     if str(path).lower().endswith('json'):
         return error_context(
@@ -155,7 +153,7 @@ def load_approvals(facet: str, target: str, path: PathLike) -> Tuple[Approvals, 
     return error_context({}, 'Approvals', facet, target, path, ValueError('json or yaml required'))  # type: ignore
 
 
-def approvals(facet: str, target: str, asset_struct: Assets) -> Tuple[Approvals, str]:
+def approvals(facet: str, target: str, asset_struct: Assets) -> tuple[Approvals, str]:
     """Yield the approvals for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(asset_struct[target][facet][KEY_APPROVALS])
@@ -164,7 +162,7 @@ def approvals(facet: str, target: str, asset_struct: Assets) -> Tuple[Approvals,
     return load_approvals(facet, target, path)
 
 
-def load_changes(facet: str, target: str, path: PathLike) -> Tuple[Approvals, str]:
+def load_changes(facet: str, target: str, path: PathLike) -> tuple[Approvals, str]:
     """Yield the changes for facet of target from path and message (in case of failure)."""
     if str(path).lower().endswith('json'):
         return error_context(
@@ -180,7 +178,7 @@ def load_changes(facet: str, target: str, path: PathLike) -> Tuple[Approvals, st
     return error_context({}, 'Changes', facet, target, path, ValueError('json or yaml required'))  # type: ignore
 
 
-def changes(facet: str, target: str, asset_struct: Assets) -> Tuple[Changes, str]:
+def changes(facet: str, target: str, asset_struct: Assets) -> tuple[Changes, str]:
     """Yield the changes for facet of target from link in assets and message (in case of failure)."""
     try:
         path = pathlib.Path(asset_struct[target][facet][KEY_CHANGES])
@@ -231,7 +229,7 @@ def verify_assets(facet: str, target: str, asset_struct: Assets) -> Verification
 
 
 def prelude(
-    doc_root: Union[str, pathlib.Path], structure_name: str, target_key: str, facet_key: str, command: str
+    doc_root: PathLike, structure_name: str, target_key: str, facet_key: str, command: str
 ) -> tuple[Structure, Assets]:
     """DRY."""
     doc_root = pathlib.Path(doc_root)
@@ -248,7 +246,7 @@ def prelude(
 
 
 def verify(
-    doc_root: Union[str, pathlib.Path],
+    doc_root: PathLike,
     structure_name: str,
     target_key: str,
     facet_key: str,

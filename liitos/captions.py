@@ -5,7 +5,6 @@ Implementer note: We use a three state machine with transitions COPY [-> TABLE [
 
 from collections.abc import Iterable
 from enum import Enum
-from typing import Union
 
 from liitos import log
 
@@ -151,7 +150,7 @@ def filter_collect_caption(
     return modus
 
 
-def weave(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
+def weave(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     r"""Weave the table caption inside foot from (default) head of table.
 
     Examples:

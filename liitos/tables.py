@@ -2,7 +2,7 @@
 
 import re
 from collections.abc import Iterable, Iterator
-from typing import Union, no_type_check
+from typing import no_type_check
 
 from liitos import log
 
@@ -107,7 +107,7 @@ class Table:
     """Some adhoc structure to encapsulate the source and target table."""
 
     SourceMapType = list[tuple[int, str]]
-    ColumnsType = dict[str, dict[str, Union[float, int, str]]]
+    ColumnsType = dict[str, dict[str, float | int | str]]
 
     # ---- begin of LBP skeleton / shape ---
     LBP_STARTSWITH_TAB_ENV_BEGIN = r'\begin{longtable}[]{'
@@ -524,7 +524,7 @@ def parse_columns_command(slot: int, text_line: str) -> tuple[bool, str, list[fl
 
 
 @no_type_check
-def patch(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
+def patch(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     r"""Later alligator. \\columns=,0.2,0.7 as mandatory trigger
 
     Examples:

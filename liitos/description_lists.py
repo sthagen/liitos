@@ -5,7 +5,6 @@ Implementation Note: The empty string marker is used to indicate absence of opti
 
 from collections.abc import Iterable
 from enum import Enum
-from typing import Union
 
 from liitos import log
 
@@ -89,7 +88,7 @@ def filter_seek_description(line: str, slot: int, modus: Modus, opt: str, outgoi
     return modus, opt
 
 
-def options(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
+def options(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     r"""Later alligator. \option[style=multiline,leftmargin=6em]
 
     Examples:

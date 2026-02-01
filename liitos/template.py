@@ -2,7 +2,6 @@
 
 import pathlib
 import pkgutil
-from typing import Union
 
 from liitos import ENCODING, PathLike
 
@@ -31,7 +30,7 @@ def load_resource(resource: PathLike, is_complete_path: bool = False) -> str:
         return pkgutil.get_data(__package__, str(resource)).decode(encoding=ENCODING)  # type: ignore
 
 
-def eject(argv: Union[list[str], None] = None) -> int:
+def eject(argv: list[str] | None = None) -> int:
     """Eject the templates into the folder given (default EJECTED) and create the folder if it does not exist."""
     argv = argv if argv else ['']
     into = argv[0]

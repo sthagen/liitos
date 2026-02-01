@@ -6,7 +6,6 @@ Implementation Note: The not a number (NAN) marker is used to indicate absence o
 from collections.abc import Iterable
 from enum import Enum
 import math
-from typing import Union
 
 from liitos import log
 
@@ -149,7 +148,7 @@ def filter_seek_figure(line: str, slot: int, modus: Modus, rescale: float, outgo
     return modus, rescale
 
 
-def scale(incoming: Iterable[str], lookup: Union[dict[str, str], None] = None) -> list[str]:
+def scale(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> list[str]:
     r"""Scan for scale command and if, apply it to the includegraphics LaTeX command.
 
     Examples:
