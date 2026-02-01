@@ -7,7 +7,7 @@ NO_LABEL = 'no-label-found-ERROR'
 
 def is_include_graphics(text: str) -> bool:
     """Only DRY."""
-    ntoken = r'\pandocbounded'  # nosec B105
+    ntoken = r'\pandocbounded'
     pos_after = len(ntoken)
     if len(text) > len(ntoken) and text.startswith(ntoken) and text[pos_after] in ('[', '{'):
         return True
