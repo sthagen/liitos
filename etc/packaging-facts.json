@@ -10,7 +10,7 @@
       "Programming Language :: Python :: 3.11",
       "Programming Language :: Python :: 3.12",
       "Programming Language :: Python :: 3.13",
-      "Programming Language :: Python :: 3.9"
+      "Programming Language :: Python :: 3.14"
     ],
     "description": "# Liitos\n\nSplice (Finnish: liitos) contributions.\n\n[![License](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/license-spdx-mit.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/LICENSE)\n[![Country of Origin](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/country-of-origin-name-switzerland-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/COUNTRY-OF-ORIGIN)\n[![Export Classification Control Number (ECCN)](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/export-control-classification-number_eccn-ear99-neutral.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/EXPORT-CONTROL-CLASSIFICATION-NUMBER)\n[![Configuration](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/configuration-sbom.svg)](https://git.sr.ht/~sthagen/liitos/tree/default/item/docs/third-party/README.md)\n\n[![Version](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/latest-release.svg)](https://pypi.python.org/pypi/liitos/)\n[![Downloads](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/downloads-per-month.svg)](https://pepy.tech/project/liitos)\n[![Python](https://git.sr.ht/~sthagen/liitos/blob/default/docs//badges/python-versions.svg)](https://pypi.python.org/pypi/liitos/)\n[![Maintenance Status](https://git.sr.ht/~sthagen/liitos/blob/default/docs/badges/commits-per-year.svg)](https://git.sr.ht/~sthagen/liitos/log)\n\n## Documentation\n\nUser and developer [documentation of liitos](https://codes.dilettant.life/docs/liitos).\n\n## Bug Tracker\n\nAny feature requests or bug reports shall go to the [todos of liitos](https://todo.sr.ht/~sthagen/liitos).\n\n## Primary Source repository\n\nThe main source of `liitos` is on a mountain in central Switzerland.\nWe use distributed version control (git).\nThere is no central hub.\nEvery clone can become a new source for the benefit of all.\nThe preferred public clone of `liitos` is:\n\n* [at sourcehut](https://git.sr.ht/~sthagen/liitos) - a collection of tools useful for software development.\n\n## Contributions\n\nPlease do not submit \"pull requests\" (I found no way to disable that \"feature\" on GitHub).\nIf you like to share small changes under the repositories license please kindly do so by sending a patchset.\nYou can either send such a patchset per email using [git send-email](https://git-send-email.io) or \nif you are a sourcehut user by selecting \"Prepare a patchset\" on the summary page of your fork at [sourcehut](https://git.sr.ht/).\n\n## Support\n\nPlease kindly submit issues at https://todo.sr.ht/~sthagen/liitos or write plain text email to ~sthagen/liitos@lists.sr.ht to submit patches and request support. Thanks.\n\n# Status\n\nExperimental.\n\n**Note**: The default branch is `default`. \n",
     "description_content_type": "text/markdown",
@@ -47,15 +47,15 @@
     "provides_extra": [
       "dev"
     ],
-    "release_url": "https://pypi.org/project/liitos/2025.10.14/",
+    "release_url": "https://pypi.org/project/liitos/2026.2.1/",
     "requires_dist": [
       "PyYAML>=6.0.3",
       "foran>=2023.6.19",
-      "platformdirs>=4.5.0",
+      "platformdirs>=4.5.1",
       "shellingham>=1.5.4",
       "taksonomia>=2023.6.18",
       "treelib>=1.8.0",
-      "typer>=0.19.2",
+      "typer>=0.21.1",
       "black; extra == \"dev\"",
       "coverage; extra == \"dev\"",
       "hypothesis; extra == \"dev\"",
@@ -65,13 +65,13 @@
       "pytest-flake8; extra == \"dev\"",
       "ruff; extra == \"dev\""
     ],
-    "requires_python": ">=3.9",
+    "requires_python": ">=3.10",
     "summary": "Splice (Finnish liitos) contributions.",
-    "version": "2025.10.14",
+    "version": "2026.2.1",
     "yanked": false,
     "yanked_reason": null
   },
-  "last_serial": 31802705,
+  "last_serial": 33967857,
   "releases": {
     "2022.10.18": [
       {
@@ -3900,48 +3900,92 @@
         "yanked": false,
         "yanked_reason": null
       }
+    ],
+    "2026.2.1": [
+      {
+        "comment_text": null,
+        "digests": {
+          "blake2b_256": "86614266e8c880981616a7da0909d18aa1c9727fd52b2b9715dbe804453870eb",
+          "md5": "af91be34dc31eeddb32ccbbfc22ee30c",
+          "sha256": "92c621d855e65f199d4e94cb948ea1af0c8c391e2df53068397a5b6590d6c969"
+        },
+        "downloads": -1,
+        "filename": "liitos-2026.2.1-py3-none-any.whl",
+        "has_sig": false,
+        "md5_digest": "af91be34dc31eeddb32ccbbfc22ee30c",
+        "packagetype": "bdist_wheel",
+        "python_version": "py3",
+        "requires_python": ">=3.10",
+        "size": 114651,
+        "upload_time": "2026-02-01T17:26:28",
+        "upload_time_iso_8601": "2026-02-01T17:26:28.427679Z",
+        "url": "https://files.pythonhosted.org/packages/86/61/4266e8c880981616a7da0909d18aa1c9727fd52b2b9715dbe804453870eb/liitos-2026.2.1-py3-none-any.whl",
+        "yanked": false,
+        "yanked_reason": null
+      },
+      {
+        "comment_text": null,
+        "digests": {
+          "blake2b_256": "85c06dd96683a2f1be769ed10cf902fdf98ddee2ebc73b25f4ed746451ed8a27",
+          "md5": "bd51f4fe99da03dd829741539a470bff",
+          "sha256": "607ab69f27ab2af5381bbac974880d6b80d40d37223881187587d3d241e42b77"
+        },
+        "downloads": -1,
+        "filename": "liitos-2026.2.1.tar.gz",
+        "has_sig": false,
+        "md5_digest": "bd51f4fe99da03dd829741539a470bff",
+        "packagetype": "sdist",
+        "python_version": "source",
+        "requires_python": ">=3.10",
+        "size": 120490,
+        "upload_time": "2026-02-01T17:26:29",
+        "upload_time_iso_8601": "2026-02-01T17:26:29.886770Z",
+        "url": "https://files.pythonhosted.org/packages/85/c0/6dd96683a2f1be769ed10cf902fdf98ddee2ebc73b25f4ed746451ed8a27/liitos-2026.2.1.tar.gz",
+        "yanked": false,
+        "yanked_reason": null
+      }
     ]
   },
   "urls": [
     {
       "comment_text": null,
       "digests": {
-        "blake2b_256": "97d642e63729a57f8d93bb11511adf93b79198739488bd56d32f9fa2391d0592",
-        "md5": "c654d742d52803b32004b03d33481177",
-        "sha256": "98a8bc04f8e20b90fd2e9e19d946d132bd28d9d45f3f565f6b75e17f7a39081a"
+        "blake2b_256": "86614266e8c880981616a7da0909d18aa1c9727fd52b2b9715dbe804453870eb",
+        "md5": "af91be34dc31eeddb32ccbbfc22ee30c",
+        "sha256": "92c621d855e65f199d4e94cb948ea1af0c8c391e2df53068397a5b6590d6c969"
       },
       "downloads": -1,
-      "filename": "liitos-2025.10.14-py3-none-any.whl",
+      "filename": "liitos-2026.2.1-py3-none-any.whl",
       "has_sig": false,
-      "md5_digest": "c654d742d52803b32004b03d33481177",
+      "md5_digest": "af91be34dc31eeddb32ccbbfc22ee30c",
       "packagetype": "bdist_wheel",
       "python_version": "py3",
-      "requires_python": ">=3.9",
-      "size": 114779,
-      "upload_time": "2025-10-14T21:42:15",
-      "upload_time_iso_8601": "2025-10-14T21:42:15.076766Z",
-      "url": "https://files.pythonhosted.org/packages/97/d6/42e63729a57f8d93bb11511adf93b79198739488bd56d32f9fa2391d0592/liitos-2025.10.14-py3-none-any.whl",
+      "requires_python": ">=3.10",
+      "size": 114651,
+      "upload_time": "2026-02-01T17:26:28",
+      "upload_time_iso_8601": "2026-02-01T17:26:28.427679Z",
+      "url": "https://files.pythonhosted.org/packages/86/61/4266e8c880981616a7da0909d18aa1c9727fd52b2b9715dbe804453870eb/liitos-2026.2.1-py3-none-any.whl",
       "yanked": false,
       "yanked_reason": null
     },
     {
       "comment_text": null,
       "digests": {
-        "blake2b_256": "fdec3a768e9b9ebd77b5aa29388b29b3699d913478a08b8eaec12f50262e6fc3",
-        "md5": "107e9f994e05e8d15d7c290c4c71979f",
-        "sha256": "72e144e39f54f5c6f9ee273104b9b53836446bfa280a0777f8e2c528de8bebc0"
+        "blake2b_256": "85c06dd96683a2f1be769ed10cf902fdf98ddee2ebc73b25f4ed746451ed8a27",
+        "md5": "bd51f4fe99da03dd829741539a470bff",
+        "sha256": "607ab69f27ab2af5381bbac974880d6b80d40d37223881187587d3d241e42b77"
       },
       "downloads": -1,
-      "filename": "liitos-2025.10.14.tar.gz",
+      "filename": "liitos-2026.2.1.tar.gz",
       "has_sig": false,
-      "md5_digest": "107e9f994e05e8d15d7c290c4c71979f",
+      "md5_digest": "bd51f4fe99da03dd829741539a470bff",
       "packagetype": "sdist",
       "python_version": "source",
-      "requires_python": ">=3.9",
-      "size": 120600,
-      "upload_time": "2025-10-14T21:42:16",
-      "upload_time_iso_8601": "2025-10-14T21:42:16.541346Z",
-      "url": "https://files.pythonhosted.org/packages/fd/ec/3a768e9b9ebd77b5aa29388b29b3699d913478a08b8eaec12f50262e6fc3/liitos-2025.10.14.tar.gz",
+      "requires_python": ">=3.10",
+      "size": 120490,
+      "upload_time": "2026-02-01T17:26:29",
+      "upload_time_iso_8601": "2026-02-01T17:26:29.886770Z",
+      "url": "https://files.pythonhosted.org/packages/85/c0/6dd96683a2f1be769ed10cf902fdf98ddee2ebc73b25f4ed746451ed8a27/liitos-2026.2.1.tar.gz",
       "yanked": false,
       "yanked_reason": null
     }
