@@ -76,6 +76,16 @@ def inject(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> lis
                     log.error(
                         f'failed to extract file path token for caption lookup from {line.strip()} with err: {err}'
                     )
+
+                if captain == 'MISSING-CAPTION-IN-MARKDOWN':  # ... still
+                    # \pandocbounded{\includegraphics[keepaspectratio,alt={text}]{image-path}}
+                    if line.startswith(r'\pandocbounded{\includegraphics[keepaspectratio,alt={'):
+                        try:
+                            capitano = line.replace(r'\pandocbounded{\includegraphics[keepaspectratio,alt={', '').split('}]{')[0]
+                            captain = capitano
+                        except Exception as well:
+                            log.error(f'hack-a-did-ack failed with ({well})')
+
                 outgoing.append(r'\begin{figure}' + '\n')
                 outgoing.append(r'\centering' + '\n')
                 outgoing.append(line)

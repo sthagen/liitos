@@ -286,6 +286,7 @@ def der(
         in_doc,
         '-o',
         out_doc,
+        '--wrap=none',
     ]
     if filter_cs_list:
         filters = [added_prefix for expr in filter_cs_list for added_prefix in ('--filter', expr)]

@@ -1,5 +1,8 @@
 # Changes
 
+2026.4.19
+:    Warped LaTeX writer line length into the 21st century and added handling of HTML comment wrapped scale commands
+
 2026.2.1
 :    Fixed resource handling for newer runtime environments and removed python 3.9 support
 

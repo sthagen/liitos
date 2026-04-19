@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "liitos"
-version = "2026.2.1"
+version = "2026.4.19"
 description = "Splice (Finnish liitos) contributions."
 readme = "README.md"
 license = "MIT"

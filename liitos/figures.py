@@ -15,6 +15,7 @@ NAN = float('nan')
 EQ = '='
 SP = ' '
 SCALE_START_TRIGGER_STARTSWITH = r'\scale'
+WRAPPED_SCALE = f'<!--{SCALE_START_TRIGGER_STARTSWITH}'
 BARE_GRAPHICS_START_STARTSWITH = r'\includegraphics{'
 WRAPPED_GRAPHICS_START_IN = r'\pandocbounded{\includegraphics'
 EVEN_MORE_SO = r'\pandocbounded{\includegraphics[keepaspectratio,alt={'  # HACK A DID ACK
@@ -56,7 +57,11 @@ def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoi
     >>> assert m == Modus.SCALE
     >>> assert r == 0.8
     """
-    if any(line.startswith(SCALE_START_TRIGGER_STARTSWITH + other) for other in (EQ, SP)):
+    if any(
+        line.startswith(SCALE_START_TRIGGER_STARTSWITH + other)
+        or line.startswith(WRAPPED_SCALE + other)
+        for other in (EQ, SP)
+    ):
         log.info(f'trigger a scale mod for the next figure environment at line #{slot + 1}|{line}')
         modus = Modus.SCALE
         scale = line  # only for reporting will not pass the filter
