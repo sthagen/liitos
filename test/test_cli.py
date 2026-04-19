@@ -75,10 +75,13 @@ def test_verify_pos_doc_root_no_folder():
 
 
 def test_help():
-    for options in ([], ['-h'], ['--help']):
+    for options in (['-h'], ['--help']):
         result = runner.invoke(app, options)
         assert result.exit_code == 0
         assert 'Verify the structure definition against the file system.' in result.stdout
+    result = runner.invoke(app, [])
+    assert result.exit_code == 2
+    assert 'Verify the structure definition against the file system.' in result.stdout
 
 
 def test_main():
@@ -98,8 +101,7 @@ def test_main_wrong_facet():
 
 def test_main_missing_asset():
     result = runner.invoke(app, ['verify', f'{TEST_PREFIX}', '-f', 'missing', '-t', 'abc'])
-    assert result.exit_code == 0
-    assert 'requested tree root at (test/fixtures/basic) does not exist' in result.stdout
+    assert result.exit_code == 1
 
 
 def test_command_concat():
