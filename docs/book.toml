@@ -1,19 +1,19 @@
 [book]
 authors = ["Stefan Hagen"]
 language = "en"
-multilingual = false
+# multilingual = false # removed in mdbook at some version ...
 src = "."
 title = "Liitos"
 
-[preprocessor.embed]
+# [preprocessor.embed]  # lead to exit status 1 of that preprocessor with mdbook at some version ...
 
 [build]
-builddir = "book"
+build-dir = "book"  # key changed in mdbook at some version ...
 
 [output.html]
 default-theme = "coal"
 git-repository-url = "https://git.sr.ht/~sthagen/liitos"
-git-repository-icon = "fa-code-fork"
+git-repository-icon = "fas-code-fork"  # wow, fa-code-fork was working before mdbook at some version ...
 mathjax-support = true
 no-section-label = true
 preferred-dark-theme = "navy"
