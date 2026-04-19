@@ -1,0 +1,451 @@
+{
+  "data": [
+    {
+      "category": "2.7",
+      "date": "2025-10",
+      "downloads": 147
+    },
+    {
+      "category": "2.7",
+      "date": "2025-11",
+      "downloads": 373
+    },
+    {
+      "category": "2.7",
+      "date": "2025-12",
+      "downloads": 426
+    },
+    {
+      "category": "2.7",
+      "date": "2026-01",
+      "downloads": 423
+    },
+    {
+      "category": "2.7",
+      "date": "2026-02",
+      "downloads": 306
+    },
+    {
+      "category": "2.7",
+      "date": "2026-03",
+      "downloads": 273
+    },
+    {
+      "category": "2.7",
+      "date": "2026-04",
+      "downloads": 164
+    },
+    {
+      "category": "3.10",
+      "date": "2025-10",
+      "downloads": 16325
+    },
+    {
+      "category": "3.10",
+      "date": "2025-11",
+      "downloads": 26445
+    },
+    {
+      "category": "3.10",
+      "date": "2025-12",
+      "downloads": 26144
+    },
+    {
+      "category": "3.10",
+      "date": "2026-01",
+      "downloads": 32494
+    },
+    {
+      "category": "3.10",
+      "date": "2026-02",
+      "downloads": 18170
+    },
+    {
+      "category": "3.10",
+      "date": "2026-03",
+      "downloads": 7012
+    },
+    {
+      "category": "3.10",
+      "date": "2026-04",
+      "downloads": 4447
+    },
+    {
+      "category": "3.11",
+      "date": "2025-10",
+      "downloads": 24119
+    },
+    {
+      "category": "3.11",
+      "date": "2025-11",
+      "downloads": 46438
+    },
+    {
+      "category": "3.11",
+      "date": "2025-12",
+      "downloads": 35838
+    },
+    {
+      "category": "3.11",
+      "date": "2026-01",
+      "downloads": 33987
+    },
+    {
+      "category": "3.11",
+      "date": "2026-02",
+      "downloads": 51671
+    },
+    {
+      "category": "3.11",
+      "date": "2026-03",
+      "downloads": 61726
+    },
+    {
+      "category": "3.11",
+      "date": "2026-04",
+      "downloads": 33536
+    },
+    {
+      "category": "3.12",
+      "date": "2025-10",
+      "downloads": 11551
+    },
+    {
+      "category": "3.12",
+      "date": "2025-11",
+      "downloads": 31276
+    },
+    {
+      "category": "3.12",
+      "date": "2025-12",
+      "downloads": 32400
+    },
+    {
+      "category": "3.12",
+      "date": "2026-01",
+      "downloads": 40318
+    },
+    {
+      "category": "3.12",
+      "date": "2026-02",
+      "downloads": 50511
+    },
+    {
+      "category": "3.12",
+      "date": "2026-03",
+      "downloads": 62736
+    },
+    {
+      "category": "3.12",
+      "date": "2026-04",
+      "downloads": 44740
+    },
+    {
+      "category": "3.13",
+      "date": "2025-10",
+      "downloads": 3679
+    },
+    {
+      "category": "3.13",
+      "date": "2025-11",
+      "downloads": 9807
+    },
+    {
+      "category": "3.13",
+      "date": "2025-12",
+      "downloads": 12047
+    },
+    {
+      "category": "3.13",
+      "date": "2026-01",
+      "downloads": 11147
+    },
+    {
+      "category": "3.13",
+      "date": "2026-02",
+      "downloads": 11054
+    },
+    {
+      "category": "3.13",
+      "date": "2026-03",
+      "downloads": 10318
+    },
+    {
+      "category": "3.13",
+      "date": "2026-04",
+      "downloads": 7443
+    },
+    {
+      "category": "3.14",
+      "date": "2025-10",
+      "downloads": 514
+    },
+    {
+      "category": "3.14",
+      "date": "2025-11",
+      "downloads": 1342
+    },
+    {
+      "category": "3.14",
+      "date": "2025-12",
+      "downloads": 1274
+    },
+    {
+      "category": "3.14",
+      "date": "2026-01",
+      "downloads": 1506
+    },
+    {
+      "category": "3.14",
+      "date": "2026-02",
+      "downloads": 1655
+    },
+    {
+      "category": "3.14",
+      "date": "2026-03",
+      "downloads": 2440
+    },
+    {
+      "category": "3.14",
+      "date": "2026-04",
+      "downloads": 1123
+    },
+    {
+      "category": "3.15",
+      "date": "2025-10",
+      "downloads": 3
+    },
+    {
+      "category": "3.15",
+      "date": "2025-11",
+      "downloads": 10
+    },
+    {
+      "category": "3.15",
+      "date": "2025-12",
+      "downloads": 15
+    },
+    {
+      "category": "3.15",
+      "date": "2026-01",
+      "downloads": 25
+    },
+    {
+      "category": "3.15",
+      "date": "2026-02",
+      "downloads": 17
+    },
+    {
+      "category": "3.15",
+      "date": "2026-03",
+      "downloads": 22
+    },
+    {
+      "category": "3.15",
+      "date": "2026-04",
+      "downloads": 15
+    },
+    {
+      "category": "3.4",
+      "date": "2025-11",
+      "downloads": 2
+    },
+    {
+      "category": "3.4",
+      "date": "2026-01",
+      "downloads": 1
+    },
+    {
+      "category": "3.4",
+      "date": "2026-02",
+      "downloads": 1
+    },
+    {
+      "category": "3.5",
+      "date": "2025-11",
+      "downloads": 1
+    },
+    {
+      "category": "3.5",
+      "date": "2026-01",
+      "downloads": 1
+    },
+    {
+      "category": "3.6",
+      "date": "2025-10",
+      "downloads": 16
+    },
+    {
+      "category": "3.6",
+      "date": "2025-11",
+      "downloads": 27
+    },
+    {
+      "category": "3.6",
+      "date": "2025-12",
+      "downloads": 35
+    },
+    {
+      "category": "3.6",
+      "date": "2026-01",
+      "downloads": 36
+    },
+    {
+      "category": "3.6",
+      "date": "2026-02",
+      "downloads": 36
+    },
+    {
+      "category": "3.6",
+      "date": "2026-03",
+      "downloads": 55
+    },
+    {
+      "category": "3.6",
+      "date": "2026-04",
+      "downloads": 33
+    },
+    {
+      "category": "3.7",
+      "date": "2025-10",
+      "downloads": 327
+    },
+    {
+      "category": "3.7",
+      "date": "2025-11",
+      "downloads": 830
+    },
+    {
+      "category": "3.7",
+      "date": "2025-12",
+      "downloads": 745
+    },
+    {
+      "category": "3.7",
+      "date": "2026-01",
+      "downloads": 726
+    },
+    {
+      "category": "3.7",
+      "date": "2026-02",
+      "downloads": 446
+    },
+    {
+      "category": "3.7",
+      "date": "2026-03",
+      "downloads": 457
+    },
+    {
+      "category": "3.7",
+      "date": "2026-04",
+      "downloads": 308
+    },
+    {
+      "category": "3.8",
+      "date": "2025-10",
+      "downloads": 315
+    },
+    {
+      "category": "3.8",
+      "date": "2025-11",
+      "downloads": 825
+    },
+    {
+      "category": "3.8",
+      "date": "2025-12",
+      "downloads": 556
+    },
+    {
+      "category": "3.8",
+      "date": "2026-01",
+      "downloads": 460
+    },
+    {
+      "category": "3.8",
+      "date": "2026-02",
+      "downloads": 432
+    },
+    {
+      "category": "3.8",
+      "date": "2026-03",
+      "downloads": 452
+    },
+    {
+      "category": "3.8",
+      "date": "2026-04",
+      "downloads": 345
+    },
+    {
+      "category": "3.9",
+      "date": "2025-10",
+      "downloads": 800
+    },
+    {
+      "category": "3.9",
+      "date": "2025-11",
+      "downloads": 4743
+    },
+    {
+      "category": "3.9",
+      "date": "2025-12",
+      "downloads": 6826
+    },
+    {
+      "category": "3.9",
+      "date": "2026-01",
+      "downloads": 5366
+    },
+    {
+      "category": "3.9",
+      "date": "2026-02",
+      "downloads": 4334
+    },
+    {
+      "category": "3.9",
+      "date": "2026-03",
+      "downloads": 8801
+    },
+    {
+      "category": "3.9",
+      "date": "2026-04",
+      "downloads": 4604
+    },
+    {
+      "category": "null",
+      "date": "2025-10",
+      "downloads": 4391
+    },
+    {
+      "category": "null",
+      "date": "2025-11",
+      "downloads": 10895
+    },
+    {
+      "category": "null",
+      "date": "2025-12",
+      "downloads": 8296
+    },
+    {
+      "category": "null",
+      "date": "2026-01",
+      "downloads": 8256
+    },
+    {
+      "category": "null",
+      "date": "2026-02",
+      "downloads": 8293
+    },
+    {
+      "category": "null",
+      "date": "2026-03",
+      "downloads": 7917
+    },
+    {
+      "category": "null",
+      "date": "2026-04",
+      "downloads": 4804
+    }
+  ],
+  "package": "pyproject-toml",
+  "type": "python_minor_downloads"
+}
