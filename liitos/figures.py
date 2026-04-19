@@ -58,8 +58,7 @@ def filter_seek_scale(line: str, slot: int, modus: Modus, rescale: float, outgoi
     >>> assert r == 0.8
     """
     if any(
-        line.startswith(SCALE_START_TRIGGER_STARTSWITH + other)
-        or line.startswith(WRAPPED_SCALE + other)
+        line.startswith(SCALE_START_TRIGGER_STARTSWITH + other) or line.startswith(WRAPPED_SCALE + other)
         for other in (EQ, SP)
     ):
         log.info(f'trigger a scale mod for the next figure environment at line #{slot + 1}|{line}')

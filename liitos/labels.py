@@ -79,9 +79,10 @@ def inject(incoming: Iterable[str], lookup: dict[str, str] | None = None) -> lis
 
                 if captain == 'MISSING-CAPTION-IN-MARKDOWN':  # ... still
                     # \pandocbounded{\includegraphics[keepaspectratio,alt={text}]{image-path}}
-                    if line.startswith(r'\pandocbounded{\includegraphics[keepaspectratio,alt={'):
+                    captn_prefix = r'\pandocbounded{\includegraphics[keepaspectratio,alt={'
+                    if line.startswith(captn_prefix):
                         try:
-                            capitano = line.replace(r'\pandocbounded{\includegraphics[keepaspectratio,alt={', '').split('}]{')[0]
+                            capitano = line.replace(captn_prefix, '').split('}]{')[0]
                             captain = capitano
                         except Exception as well:
                             log.error(f'hack-a-did-ack failed with ({well})')
